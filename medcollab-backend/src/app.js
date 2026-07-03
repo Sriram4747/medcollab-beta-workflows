@@ -117,6 +117,18 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ── Health Check ──────────────────────────────────────────────────────────────
 /**
+ * Root — browsers hitting the Railway domain see a helpful response (not 404).
+ */
+app.get('/', (req, res) => {
+  res.status(200).json({
+    name: 'MedCollab API',
+    status: 'online',
+    health: '/health',
+    api: '/api',
+  });
+});
+
+/**
  * Railway and Render use this endpoint to verify the service is alive.
  * Must be unauthenticated and return 200 quickly.
  * Returns DB connection state for monitoring.
