@@ -30,18 +30,21 @@ if (-not $SkipAnalyze) {
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 
-$defines = @(
-    "--dart-define=API_BASE_URL=$ApiBaseUrl",
-    "--dart-define=ENABLE_API_LOGGING=false",
-    "--dart-define=MSG91_WIDGET_ID=$Msg91WidgetId",
-    "--dart-define=MSG91_WIDGET_TOKEN=$Msg91WidgetToken"
-)
-if ($SocketUrl) {
-    $defines += "--dart-define=SOCKET_URL=$($SocketUrl.TrimEnd('/'))"
+# Use dart-define-from-file so PowerShell does not strip `//` from https:// URLs.
+$defineFile = Join-Path $PSScriptRoot "dart-defines.release.json"
+$defines = @{
+    API_BASE_URL         = $ApiBaseUrl
+    ENABLE_API_LOGGING   = "false"
+    MSG91_WIDGET_ID      = $Msg91WidgetId
+    MSG91_WIDGET_TOKEN   = $Msg91WidgetToken
 }
+if ($SocketUrl) {
+    $defines.SOCKET_URL = $SocketUrl.TrimEnd("/")
+}
+$defines | ConvertTo-Json | Set-Content -Path $defineFile -Encoding UTF8
 
 Write-Host "`n==> flutter build apk --release"
-flutter build apk --release @defines
+flutter build apk --release "--dart-define-from-file=$defineFile"
 
 $apk = "build/app/outputs/flutter-apk/app-release.apk"
 Write-Host "`nDone. APK: $apk"

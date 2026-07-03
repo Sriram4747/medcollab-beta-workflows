@@ -39,10 +39,23 @@ abstract final class EnvConfig {
 
   /// REST API base URL (no trailing slash).
   static String get apiBaseUrl {
-    if (_apiBaseUrlFromDefine.isNotEmpty) {
-      return _apiBaseUrlFromDefine.replaceAll(RegExp(r'/+$'), '');
+    final raw = _apiBaseUrlFromDefine.isNotEmpty
+        ? _apiBaseUrlFromDefine
+        : _defaultApiBaseUrl;
+    return _normalizeUrl(raw);
+  }
+
+  static String _normalizeUrl(String url) {
+    var trimmed = url.trim().replaceAll(RegExp(r'/+$'), '');
+
+    // Windows dart-define can mangle `https://` into `https:` or `https:/`.
+    if (trimmed.startsWith('https:') && !trimmed.startsWith('https://')) {
+      trimmed = 'https://${trimmed.substring('https:'.length).replaceFirst(RegExp(r'^/+'), '')}';
+    } else if (trimmed.startsWith('http:') && !trimmed.startsWith('http://')) {
+      trimmed = 'http://${trimmed.substring('http:'.length).replaceFirst(RegExp(r'^/+'), '')}';
     }
-    return _defaultApiBaseUrl.replaceAll(RegExp(r'/+$'), '');
+
+    return trimmed;
   }
 
   static String get _defaultApiBaseUrl {
@@ -62,7 +75,7 @@ abstract final class EnvConfig {
   /// Socket.io host (no `/api` prefix). Defaults to [apiBaseUrl].
   static String get socketUrl {
     if (_socketUrlFromDefine.isNotEmpty) {
-      return _socketUrlFromDefine.replaceAll(RegExp(r'/+$'), '');
+      return _normalizeUrl(_socketUrlFromDefine);
     }
     return apiBaseUrl;
   }
