@@ -6,6 +6,7 @@ class ThreadState extends Equatable {
     this.replies = const [],
     this.isLoading = false,
     this.isSending = false,
+    this.isUploading = false,
     this.hasMore = false,
     this.error,
   });
@@ -14,6 +15,7 @@ class ThreadState extends Equatable {
   final List<MessageModel> replies;
   final bool isLoading;
   final bool isSending;
+  final bool isUploading;
   final bool hasMore;
   final String? error;
 
@@ -22,6 +24,7 @@ class ThreadState extends Equatable {
     List<MessageModel>? replies,
     bool? isLoading,
     bool? isSending,
+    bool? isUploading,
     bool? hasMore,
     String? error,
   }) {
@@ -30,6 +33,7 @@ class ThreadState extends Equatable {
       replies: replies ?? this.replies,
       isLoading: isLoading ?? this.isLoading,
       isSending: isSending ?? this.isSending,
+      isUploading: isUploading ?? this.isUploading,
       hasMore: hasMore ?? this.hasMore,
       error: error,
     );
@@ -37,5 +41,5 @@ class ThreadState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [rootMessage, replies, isLoading, isSending, hasMore, error];
+      [rootMessage, replies, isLoading, isSending, isUploading, hasMore, error];
 }

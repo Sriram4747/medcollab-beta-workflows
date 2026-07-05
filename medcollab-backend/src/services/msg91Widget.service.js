@@ -156,6 +156,12 @@ const verifyWidgetAccessToken = async (accessToken) => {
     throw new Error('Access token is required');
   }
 
+  // Fast path: MSG91 widget JWT already verified on device — decode phone locally.
+  const jwtPhone = extractPhoneFromJwt(token);
+  if (jwtPhone) {
+    return { phone: jwtPhone, raw: { type: 'success', source: 'jwt' } };
+  }
+
   const response = await callVerifyAccessToken(authKey, token);
   const data = response.data;
 

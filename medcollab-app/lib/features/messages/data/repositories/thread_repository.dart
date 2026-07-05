@@ -1,4 +1,6 @@
 import 'package:medcollab_app/core/constants/api_endpoints.dart';
+import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/features/media/data/models/media_upload_result.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 import 'package:medcollab_app/features/messages/data/models/thread_detail.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
@@ -42,6 +44,36 @@ class ThreadRepository extends BaseRepository {
         data: {
           'type': 'text',
           'content': {'text': text},
+        },
+        parser: (json) =>
+            parseNested(json, 'message', MessageModel.fromJson),
+      ),
+    );
+  }
+
+  Future<MessageModel> sendReplyMedia({
+    required String channelId,
+    required String rootMessageId,
+    required MessageType type,
+    required MediaUploadResult upload,
+    String? caption,
+  }) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.messageReply(channelId, rootMessageId),
+        data: {
+          'type': type.value,
+          'content': {
+            if (caption != null) 'text': caption,
+            'mediaUrl': upload.url,
+            if (upload.thumbnailUrl != null)
+              'thumbnailUrl': upload.thumbnailUrl,
+            'fileName': upload.fileName,
+            'fileSize': upload.fileSize,
+            'mimeType': upload.mimeType,
+            if (upload.width != null) 'width': upload.width,
+            if (upload.height != null) 'height': upload.height,
+          },
         },
         parser: (json) =>
             parseNested(json, 'message', MessageModel.fromJson),

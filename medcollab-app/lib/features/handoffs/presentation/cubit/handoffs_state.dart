@@ -5,7 +5,7 @@ class HandoffsState extends Equatable {
     this.handoffs = const [],
     this.isLoading = false,
     this.isBusy = false,
-    this.filter = HandoffListFilter.active,
+    this.filter = HandoffListFilter.pending,
     this.searchQuery = '',
     this.error,
   });
@@ -21,8 +21,9 @@ class HandoffsState extends Equatable {
     final q = searchQuery.toLowerCase();
     return handoffs.where((h) {
       final matchesFilter = switch (filter) {
-        HandoffListFilter.active => h.isActive,
-        HandoffListFilter.archived => h.isArchived,
+        HandoffListFilter.pending => h.status == HandoffStatus.submitted,
+        HandoffListFilter.active => h.status == HandoffStatus.acknowledged,
+        HandoffListFilter.drafts => h.status == HandoffStatus.draft,
       };
       if (!matchesFilter) return false;
       if (q.isEmpty) return true;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -99,6 +100,62 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     _scrollToBottom(force: true);
   }
 
+  Future<void> _confirmDeleteMessage(
+    BuildContext context,
+    MessageModel message,
+  ) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete message?'),
+        content: const Text('This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (ok == true && context.mounted) {
+      await context.read<ChannelChatCubit>().deleteMessage(message.id);
+    }
+  }
+
+  Future<void> _editMessage(BuildContext context, MessageModel message) async {
+    final controller = TextEditingController(text: message.content.text ?? '');
+    final updated = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Edit message'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          maxLines: 4,
+          decoration: const InputDecoration(hintText: 'Message'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (updated != null && updated.isNotEmpty && context.mounted) {
+      await context.read<ChannelChatCubit>().editMessage(message.id, updated);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final deps = AppDependencies.instance;
@@ -141,7 +198,8 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                 Expanded(
                   child: BlocConsumer<ChannelChatCubit, ChannelChatState>(
                     listenWhen: (prev, next) =>
-                        prev.messages.length != next.messages.length,
+                        prev.messages.length != next.messages.length ||
+                        prev.messages != next.messages,
                     listener: (_, state) {
                       final grew = state.messages.length > _lastMessageCount;
                       _lastMessageCount = state.messages.length;
@@ -190,6 +248,20 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                             showSender: showSender,
                                             onOpenThread: () =>
                                                 _openThread(context, message),
+                                            onEdit: isMine &&
+                                                    message.type ==
+                                                        MessageType.text
+                                                ? () => _editMessage(
+                                                      context,
+                                                      message,
+                                                    )
+                                                : null,
+                                            onDelete: isMine
+                                                ? () => _confirmDeleteMessage(
+                                                      context,
+                                                      message,
+                                                    )
+                                                : null,
                                           ),
                                       };
                                     },
@@ -224,6 +296,12 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         context,
                         _mediaPicker.pickDocument,
                       ),
+                      onEmojiSelected: (emoji) {
+                        _textController.text = '${_textController.text}$emoji';
+                        _textController.selection = TextSelection.collapsed(
+                          offset: _textController.text.length,
+                        );
+                      },
                     );
                   },
                 ),

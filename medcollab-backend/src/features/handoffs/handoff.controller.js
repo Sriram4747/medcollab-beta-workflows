@@ -232,10 +232,6 @@ const submitHandoff = asyncHandler(async (req, res) => {
   // Post-response async side-effects
   setImmediate(async () => {
     try {
-      const channel = await Channel.findById(handoff.channelId);
-      if (channel) {
-        await postHandoffSystemMessage({ channel, handoff, fromUser, toUser, action: 'submitted' });
-      }
       await notifyHandoffReceived({ toUser, fromUser, handoff });
     } catch (err) {
       logger.error(`Handoff submit side-effects failed: ${err.message}`);
@@ -288,10 +284,6 @@ const acknowledgeHandoff = asyncHandler(async (req, res) => {
 
   setImmediate(async () => {
     try {
-      const channel = await Channel.findById(handoff.channelId);
-      if (channel) {
-        await postHandoffSystemMessage({ channel, handoff, fromUser, toUser, action: 'acknowledged' });
-      }
       await notifyHandoffAcknowledged({ fromUser, toUser, handoff });
     } catch (err) {
       logger.error(`Handoff acknowledge side-effects failed: ${err.message}`);

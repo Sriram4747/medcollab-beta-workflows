@@ -16,6 +16,11 @@ import 'package:medcollab_app/core/constants/app_constants.dart';
 /// - Android emulator: `http://10.0.2.2:5000`
 /// - Physical phone: `--dart-define=API_BASE_URL=http://<PC_IP>:5000`
 abstract final class EnvConfig {
+  /// Beta production API — used by release APKs so Windows dart-define issues
+  /// cannot bake a broken URL into the build.
+  static const String betaProductionApiUrl =
+      'https://medcollab.up.railway.app';
+
   static const String _apiBaseUrlFromDefine = String.fromEnvironment(
     'API_BASE_URL',
   );
@@ -39,6 +44,10 @@ abstract final class EnvConfig {
 
   /// REST API base URL (no trailing slash).
   static String get apiBaseUrl {
+    if (kReleaseMode && !kIsWeb) {
+      return betaProductionApiUrl;
+    }
+
     final raw = _apiBaseUrlFromDefine.isNotEmpty
         ? _apiBaseUrlFromDefine
         : _defaultApiBaseUrl;
@@ -74,6 +83,9 @@ abstract final class EnvConfig {
 
   /// Socket.io host (no `/api` prefix). Defaults to [apiBaseUrl].
   static String get socketUrl {
+    if (kReleaseMode && !kIsWeb) {
+      return betaProductionApiUrl;
+    }
     if (_socketUrlFromDefine.isNotEmpty) {
       return _normalizeUrl(_socketUrlFromDefine);
     }

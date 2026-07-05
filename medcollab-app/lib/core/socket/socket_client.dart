@@ -54,7 +54,7 @@ class SocketClient {
       EnvConfig.socketUrl,
       io.OptionBuilder()
           // Polling first helps Flutter web when websocket handshake is flaky.
-          .setTransports(['polling', 'websocket'])
+          .setTransports(['websocket', 'polling'])
           .disableAutoConnect()
           // Reconnect is managed manually so we always handshake with a fresh JWT.
           .setAuth({'token': accessToken})

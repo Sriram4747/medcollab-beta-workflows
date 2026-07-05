@@ -55,7 +55,7 @@ class PresenceCubit extends Cubit<Map<String, PresenceInfo>> {
     for (final entry in snapshot.entries) {
       final existing = updated[entry.key];
       updated[entry.key] = PresenceInfo(
-        isOnline: existing?.isOnline ?? entry.value.isOnline,
+        isOnline: (existing?.isOnline ?? false) || entry.value.isOnline,
         status: entry.value.status ?? existing?.status,
         updatedAt: _latest(
           entry.value.updatedAt,
@@ -117,7 +117,7 @@ class PresenceCubit extends Cubit<Map<String, PresenceInfo>> {
 
     final isOnline = data.containsKey('isOnline')
         ? data['isOnline'] as bool? ?? false
-        : (existing?.isOnline ?? false);
+        : (existing?.isOnline ?? true);
 
     updated[userId] = PresenceInfo(
       isOnline: isOnline,

@@ -11,7 +11,7 @@ import 'package:medcollab_app/features/handoffs/data/repositories/handoff_reposi
 
 part 'handoffs_state.dart';
 
-enum HandoffListFilter { active, archived }
+enum HandoffListFilter { pending, active, drafts }
 
 class HandoffsCubit extends Cubit<HandoffsState> {
   HandoffsCubit({

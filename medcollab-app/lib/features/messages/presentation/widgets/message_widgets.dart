@@ -20,6 +20,7 @@ class MessageComposer extends StatelessWidget {
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
+    this.onEmojiSelected,
     this.hintText = 'Message…',
     this.isBusy = false,
     super.key,
@@ -30,8 +31,42 @@ class MessageComposer extends StatelessWidget {
   final VoidCallback? onPickGallery;
   final VoidCallback? onPickCamera;
   final VoidCallback? onPickDocument;
+  final ValueChanged<String>? onEmojiSelected;
   final String hintText;
   final bool isBusy;
+
+  static const _quickEmojis = [
+    '👍', '❤️', '😂', '🙏', '✅', '🏥', '💊', '🩺', '⚠️', '👏',
+  ];
+
+  void _showEmojiPicker(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: _quickEmojis.map((emoji) {
+              return InkWell(
+                onTap: () {
+                  Navigator.pop(ctx);
+                  onEmojiSelected?.call(emoji);
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(emoji, style: const TextStyle(fontSize: 28)),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
 
   void _showAttachMenu(BuildContext context) {
     showModalBottomSheet<void>(
@@ -91,12 +126,21 @@ class MessageComposer extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (onPickGallery != null || onPickDocument != null)
+              if (onPickGallery != null ||
+                  onPickDocument != null ||
+                  onPickCamera != null)
                 IconButton(
                   onPressed: isBusy ? null : () => _showAttachMenu(context),
                   icon: const Icon(Icons.add_circle_outline),
                   color: AppColors.textSecondary,
                   tooltip: 'Attach',
+                ),
+              if (onEmojiSelected != null)
+                IconButton(
+                  onPressed: isBusy ? null : () => _showEmojiPicker(context),
+                  icon: const Icon(Icons.emoji_emotions_outlined),
+                  color: AppColors.textSecondary,
+                  tooltip: 'Emoji',
                 ),
               Expanded(
                 child: TextField(
@@ -199,9 +243,14 @@ class DateSeparatorChip extends StatelessWidget {
 
 /// Root message pinned at the top of a thread screen.
 class ParentMessagePreview extends StatelessWidget {
-  const ParentMessagePreview({required this.message, super.key});
+  const ParentMessagePreview({
+    required this.message,
+    required this.isMine,
+    super.key,
+  });
 
   final MessageModel message;
+  final bool isMine;
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +270,7 @@ class ParentMessagePreview extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Thread',
+              'Original message',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
@@ -230,7 +279,7 @@ class ParentMessagePreview extends StatelessWidget {
             const SizedBox(height: 8),
             MessageBubbleContent(
               message: message,
-              isMine: false,
+              isMine: isMine,
               showSender: true,
               showTimestamp: true,
               onImageTap: (url) => _openImage(context, url, message),
@@ -252,6 +301,8 @@ class MessageBubble extends StatelessWidget {
     this.showTimestamp = true,
     this.onOpenThread,
     this.onImageTap,
+    this.onEdit,
+    this.onDelete,
     super.key,
   });
 
@@ -261,10 +312,47 @@ class MessageBubble extends StatelessWidget {
   final bool showTimestamp;
   final VoidCallback? onOpenThread;
   final void Function(String url)? onImageTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+
+  Future<void> _showActions(BuildContext context) async {
+    if (!isMine || message.isDeleted || message.localOnly) return;
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (message.type == MessageType.text && onEdit != null)
+              ListTile(
+                leading: const Icon(Icons.edit_outlined),
+                title: const Text('Edit message'),
+                onTap: () => Navigator.pop(ctx, 'edit'),
+              ),
+            if (onDelete != null)
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: AppColors.error),
+                title: const Text('Delete message'),
+                onTap: () => Navigator.pop(ctx, 'delete'),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (!context.mounted || action == null) return;
+    if (action == 'edit') {
+      onEdit?.call();
+    } else if (action == 'delete') {
+      onDelete?.call();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return GestureDetector(
+      onLongPress: () => _showActions(context),
+      child: Align(
       alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: EdgeInsets.only(
@@ -312,6 +400,7 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }
@@ -376,7 +465,7 @@ class MessageBubbleContent extends StatelessWidget {
                 children: [
                   if (time.isNotEmpty)
                     Text(
-                      time,
+                      message.isEdited ? '$time · edited' : time,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: AppColors.textSecondary,
                           ),
@@ -739,7 +828,16 @@ class _ImagePreviewRoute extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: title != null ? Text(title!) : null,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: title != null
+            ? Text(
+                title!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            : null,
       ),
       body: Center(
         child: InteractiveViewer(

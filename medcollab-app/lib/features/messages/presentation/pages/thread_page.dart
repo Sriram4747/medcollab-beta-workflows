@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:medcollab_app/features/media/data/services/media_picker_service.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 import 'package:medcollab_app/features/messages/presentation/cubit/thread_cubit.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/message_widgets.dart';
@@ -41,6 +42,7 @@ class ThreadPage extends StatefulWidget {
 class _ThreadPageState extends State<ThreadPage> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
+  final _mediaPicker = MediaPickerService();
 
   @override
   void dispose() {
@@ -60,6 +62,20 @@ class _ThreadPageState extends State<ThreadPage> {
     });
   }
 
+  Future<void> _sendAttachment(
+    BuildContext context,
+    Future<PickedAttachment?> Function() pick,
+  ) async {
+    final picked = await pick();
+    if (picked == null || !context.mounted) return;
+    await context.read<ThreadCubit>().sendAttachment(
+          bytes: picked.bytes,
+          fileName: picked.fileName,
+          mimeType: picked.mimeType,
+        );
+    _scrollToBottom();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deps = AppDependencies.instance;
@@ -69,9 +85,11 @@ class _ThreadPageState extends State<ThreadPage> {
     return BlocProvider(
       create: (_) => ThreadCubit(
         threadRepository: deps.threadRepository,
+        mediaRepository: deps.mediaRepository,
         socketClient: deps.socketClient,
         channelId: widget.channelId,
         rootMessageId: widget.rootMessageId,
+        currentUserId: currentUserId,
         initialRoot: widget.initialRoot,
       ),
       child: Builder(
@@ -111,57 +129,97 @@ class _ThreadPageState extends State<ThreadPage> {
                         return const Center(child: Text('Thread not found'));
                       }
 
-                      return Column(
+                      return ListView(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.only(bottom: 8),
                         children: [
                           if (state.error != null)
                             Padding(
                               padding: const EdgeInsets.all(8),
                               child: ErrorBanner(message: state.error!),
                             ),
-                          ParentMessagePreview(message: root),
-                          const Divider(height: 1),
-                          Expanded(
-                            child: state.replies.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      'No replies yet.\nStart the discussion.',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: AppColors.textSecondary,
-                                          ),
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    controller: _scrollController,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 8,
-                                    ),
-                                    itemCount: state.replies.length,
-                                    itemBuilder: (context, index) {
-                                      final reply = state.replies[index];
-                                      return ThreadReplyBubble(
-                                        message: reply,
-                                        isMine:
-                                            reply.sender.id == currentUserId,
-                                      );
-                                    },
-                                  ),
+                          ParentMessagePreview(
+                            message: root,
+                            isMine: root.sender.id == currentUserId,
                           ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                            child: Text(
+                              state.replies.isEmpty
+                                  ? 'Replies'
+                                  : '${state.replies.length} ${state.replies.length == 1 ? 'reply' : 'replies'}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(
+                                    color: AppColors.textSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                          if (state.replies.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Text(
+                                'No replies yet. Start the discussion.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: AppColors.textSecondary),
+                              ),
+                            )
+                          else
+                            ...state.replies.map(
+                              (reply) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                child: ThreadReplyBubble(
+                                  message: reply,
+                                  isMine: reply.sender.id == currentUserId,
+                                ),
+                              ),
+                            ),
                         ],
                       );
                     },
                   ),
                 ),
-                MessageComposer(
-                  controller: _textController,
-                  hintText: 'Reply in thread…',
-                  onSend: (text) {
-                    context.read<ThreadCubit>().sendReply(text);
-                    _textController.clear();
+                BlocBuilder<ThreadCubit, ThreadState>(
+                  buildWhen: (p, n) =>
+                      p.isSending != n.isSending ||
+                      p.isUploading != n.isUploading,
+                  builder: (context, state) {
+                    return MessageComposer(
+                      controller: _textController,
+                      hintText: 'Reply in thread…',
+                      isBusy: state.isSending || state.isUploading,
+                      onSend: (text) {
+                        context.read<ThreadCubit>().sendReply(text);
+                        _textController.clear();
+                        _scrollToBottom();
+                      },
+                      onPickGallery: () => _sendAttachment(
+                        context,
+                        _mediaPicker.pickFromGallery,
+                      ),
+                      onPickCamera: () => _sendAttachment(
+                        context,
+                        _mediaPicker.captureFromCamera,
+                      ),
+                      onPickDocument: () => _sendAttachment(
+                        context,
+                        _mediaPicker.pickDocument,
+                      ),
+                      onEmojiSelected: (emoji) {
+                        _textController.text =
+                            '${_textController.text}$emoji';
+                        _textController.selection = TextSelection.collapsed(
+                          offset: _textController.text.length,
+                        );
+                      },
+                    );
                   },
                 ),
               ],

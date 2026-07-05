@@ -216,11 +216,13 @@ class ApiClient {
       case DioExceptionType.receiveTimeout:
         return const NetworkException('Connection timed out');
       case DioExceptionType.connectionError:
-        if (EnvConfig.hasProductionApiUrl) {
+        final detail = error.message?.trim();
+        if (EnvConfig.isProduction || EnvConfig.hasProductionApiUrl) {
           return NetworkException(
             'Cannot reach the server at ${EnvConfig.apiBaseUrl}. '
             'Check your internet connection and try again. '
-            'If this keeps happening, reinstall the latest app build.',
+            'If this keeps happening, reinstall the latest app build.'
+            '${detail != null && detail.isNotEmpty ? ' ($detail)' : ''}',
           );
         }
         return NetworkException(

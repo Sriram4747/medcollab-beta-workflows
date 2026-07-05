@@ -84,4 +84,32 @@ class MessageRepository extends BaseRepository {
       ),
     );
   }
+
+  Future<MessageModel> editMessage({
+    required String channelId,
+    required String messageId,
+    required String text,
+  }) {
+    return execute(
+      () => apiClient.put(
+        ApiEndpoints.messageById(channelId, messageId),
+        data: {'content': {'text': text}},
+        parser: (json) =>
+            parseNested(json, 'message', MessageModel.fromJson),
+      ),
+    );
+  }
+
+  Future<MessageModel> deleteMessage({
+    required String channelId,
+    required String messageId,
+  }) {
+    return execute(
+      () => apiClient.delete(
+        ApiEndpoints.messageById(channelId, messageId),
+        parser: (json) =>
+            parseNested(json, 'message', MessageModel.fromJson),
+      ),
+    );
+  }
 }

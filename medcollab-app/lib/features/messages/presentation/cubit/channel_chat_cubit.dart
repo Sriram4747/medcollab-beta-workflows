@@ -30,6 +30,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         _socketClient = socketClient,
         super(const ChannelChatState()) {
     _listenForSocketMessages();
+    _listenForSocketUpdates();
     _connectionSub = _socketClient.connectionStream.listen((connected) {
       if (connected) {
         _socketClient.joinChannel(channelId);
@@ -49,6 +50,8 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   final String currentUserId;
 
   StreamSubscription<Map<String, dynamic>>? _messageSub;
+  StreamSubscription<Map<String, dynamic>>? _messageUpdatedSub;
+  StreamSubscription<Map<String, dynamic>>? _messageDeletedSub;
 
   Future<void> loadMessages({bool silent = false}) async {
     if (!silent) {
@@ -155,6 +158,53 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         ),
       );
     }
+  }
+
+  Future<void> editMessage(String messageId, String text) async {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return;
+    try {
+      final updated = await _messageRepository.editMessage(
+        channelId: channelId,
+        messageId: messageId,
+        text: trimmed,
+      );
+      _upsertRootMessage(updated);
+    } on AppException catch (e) {
+      emit(state.copyWith(error: e.message));
+    }
+  }
+
+  Future<void> deleteMessage(String messageId) async {
+    try {
+      final deleted = await _messageRepository.deleteMessage(
+        channelId: channelId,
+        messageId: messageId,
+      );
+      _upsertRootMessage(deleted);
+    } on AppException catch (e) {
+      emit(state.copyWith(error: e.message));
+    }
+  }
+
+  void _listenForSocketUpdates() {
+    _messageUpdatedSub =
+        _socketClient.onMapEvent(SocketEvents.messageUpdated).listen((data) {
+      final message = _parseSocketMessage(data);
+      if (message == null || message.channelId != channelId) return;
+      if (message.isThreadReply) {
+        _applyThreadReplyToRoot(message);
+      } else {
+        _upsertRootMessage(message);
+      }
+    });
+
+    _messageDeletedSub =
+        _socketClient.onMapEvent(SocketEvents.messageDeleted).listen((data) {
+      final message = _parseSocketMessage(data);
+      if (message == null || message.channelId != channelId) return;
+      _upsertRootMessage(message);
+    });
   }
 
   void _markFailed(String tempId) {
@@ -288,6 +338,8 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     _connectionSub?.cancel();
     _socketClient.leaveChannel(channelId);
     _messageSub?.cancel();
+    _messageUpdatedSub?.cancel();
+    _messageDeletedSub?.cancel();
     return super.close();
   }
 }

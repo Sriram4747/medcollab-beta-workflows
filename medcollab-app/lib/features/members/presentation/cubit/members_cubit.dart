@@ -174,7 +174,11 @@ class MembersCubit extends Cubit<MembersState> {
       _presenceCubit.applyLocal(
         userId: currentUserId,
         status: status,
+        isOnline: _socketClient.isConnected,
       );
+      if (_socketClient.isConnected) {
+        _socketClient.updateAvailability(status: status.value);
+      }
       emit(state.copyWith(isUpdatingAvailability: false));
       applyPresenceUpdate();
     } on AppException catch (e) {

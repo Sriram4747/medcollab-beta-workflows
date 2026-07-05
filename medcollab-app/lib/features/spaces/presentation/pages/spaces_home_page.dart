@@ -25,14 +25,29 @@ class SpacesHomePage extends StatefulWidget {
   State<SpacesHomePage> createState() => _SpacesHomePageState();
 }
 
-class _SpacesHomePageState extends State<SpacesHomePage> {
+class _SpacesHomePageState extends State<SpacesHomePage>
+    with WidgetsBindingObserver {
   final _spaceRepository = AppDependencies.instance.spaceRepository;
   late Future<List<SpaceModel>> _spacesFuture;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _spacesFuture = _spaceRepository.getMySpaces();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _reload();
+    }
   }
 
   void _reload() {
@@ -148,8 +163,10 @@ class _SpacesHomePageState extends State<SpacesHomePage> {
                       color: AppColors.textTertiary,
                       size: 20,
                     ),
-                    onTap: () =>
-                        context.push(AppRoutes.spaceDetailPath(space.id)),
+                    onTap: () async {
+                      await context.push(AppRoutes.spaceDetailPath(space.id));
+                      if (mounted) _reload();
+                    },
                   ),
                 );
               },

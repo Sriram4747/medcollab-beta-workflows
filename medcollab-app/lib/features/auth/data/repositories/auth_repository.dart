@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:medcollab_app/core/constants/api_endpoints.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/socket/socket_client.dart';
@@ -54,7 +56,7 @@ class AuthRepository extends BaseRepository {
     );
 
     await _persistSession(session);
-    await _socketClient.connect(session.accessToken);
+    unawaited(_connectSocketInBackground(session.accessToken));
 
     return AuthLoginResult(session: session, isNewUser: result.isNewUser);
   }
@@ -78,9 +80,18 @@ class AuthRepository extends BaseRepository {
     );
 
     await _persistSession(session);
-    await _socketClient.connect(session.accessToken);
+    unawaited(_connectSocketInBackground(session.accessToken));
 
     return AuthLoginResult(session: session, isNewUser: result.isNewUser);
+  }
+
+  Future<void> _connectSocketInBackground(String accessToken) async {
+    try {
+      await _socketClient.connect(accessToken);
+      _socketClient.syncSpaceRooms();
+    } catch (_) {
+      // Socket connects in background; chat/presence retry on resume.
+    }
   }
 
   /// `POST /api/auth/refresh`

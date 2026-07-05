@@ -133,13 +133,18 @@ class HandoffListTile extends StatelessWidget {
               ),
                 if (onArchive != null)
                   IconButton(
-                    tooltip:
-                        handoff.isDraft ? 'Delete draft' : 'Archive',
+                    tooltip: handoff.isDraft
+                        ? 'Delete draft'
+                        : (handoff.status == HandoffStatus.submitted
+                            ? 'Accept handoff'
+                            : 'Archive'),
                     onPressed: onArchive,
                     icon: Icon(
                       handoff.isDraft
                           ? Icons.delete_outline
-                          : Icons.archive_outlined,
+                          : (handoff.status == HandoffStatus.submitted
+                              ? Icons.check_circle_outline
+                              : Icons.archive_outlined),
                       color: AppColors.textTertiary,
                       size: 20,
                     ),

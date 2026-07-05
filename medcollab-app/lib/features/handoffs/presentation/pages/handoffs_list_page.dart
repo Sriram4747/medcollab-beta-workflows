@@ -99,14 +99,19 @@ class _HandoffsListPageState extends State<HandoffsListPage> {
                       child: SegmentedButton<HandoffListFilter>(
                         segments: const [
                           ButtonSegment(
-                            value: HandoffListFilter.active,
-                            label: Text('Active'),
-                            icon: Icon(Icons.pending_actions),
+                            value: HandoffListFilter.pending,
+                            label: Text('Pending'),
+                            icon: Icon(Icons.hourglass_top_outlined),
                           ),
                           ButtonSegment(
-                            value: HandoffListFilter.archived,
-                            label: Text('Archived'),
-                            icon: Icon(Icons.archive_outlined),
+                            value: HandoffListFilter.active,
+                            label: Text('Active'),
+                            icon: Icon(Icons.assignment_turned_in_outlined),
+                          ),
+                          ButtonSegment(
+                            value: HandoffListFilter.drafts,
+                            label: Text('Drafts'),
+                            icon: Icon(Icons.edit_note_outlined),
                           ),
                         ],
                         selected: {state.filter},
@@ -140,7 +145,14 @@ class _HandoffsListPageState extends State<HandoffsListPage> {
                                   ? AppEmptyState(
                                       icon: Icons.assignment_outlined,
                                       title: state.searchQuery.isEmpty
-                                          ? 'No ${state.filter == HandoffListFilter.active ? 'active' : 'archived'} handoffs'
+                                          ? switch (state.filter) {
+                                              HandoffListFilter.pending =>
+                                                'No pending handoffs',
+                                              HandoffListFilter.active =>
+                                                'No active handoffs',
+                                              HandoffListFilter.drafts =>
+                                                'No drafts',
+                                            }
                                           : 'No matches found',
                                       subtitle: state.searchQuery.isEmpty
                                           ? 'Create a handoff to transfer patient responsibility.'

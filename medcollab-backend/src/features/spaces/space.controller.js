@@ -4,6 +4,7 @@
 
 const Space = require('./space.model');
 const Channel = require('../channels/channel.model');
+const { accessibleChannelFilter } = require('../../utils/accessibleChannels');
 const { joinUserToSpaceRoom } = require('../../socket');
 const { respond } = require('../../utils/apiResponse');
 const asyncHandler = require('../../utils/asyncHandler');
@@ -89,7 +90,7 @@ const getMySpaces = asyncHandler(async (req, res) => {
   const spaceIds = spaces.map((s) => s._id);
   const allChannels = await Channel.find({
     spaceId: { $in: spaceIds },
-    isArchived: false,
+    ...accessibleChannelFilter(req.user._id),
   })
     .sort({ position: 1 })
     .lean();
@@ -127,7 +128,9 @@ const getSpaceById = asyncHandler(async (req, res) => {
   );
   if (!isMember) return respond.forbidden(res, 'You are not a member of this space');
 
-  const channels = await Channel.find({ spaceId: space._id, isArchived: false })
+  const channels = await Channel.find(
+    accessibleChannelFilter(req.user._id, { spaceId: space._id }),
+  )
     .sort({ position: 1 })
     .lean();
 
@@ -173,7 +176,9 @@ const joinSpace = asyncHandler(async (req, res) => {
   space.members.push({ userId: req.user._id, role: SPACE_ROLES.MEMBER });
   await space.save();
 
-  const channels = await Channel.find({ spaceId: space._id, isArchived: false })
+  const channels = await Channel.find(
+    accessibleChannelFilter(req.user._id, { spaceId: space._id }),
+  )
     .sort({ position: 1 })
     .lean();
 

@@ -51,7 +51,7 @@ abstract final class HandoffPriorityColors {
   static String handoffStatusLabel(HandoffStatus status) => switch (status) {
         HandoffStatus.draft => 'Draft',
         HandoffStatus.submitted => 'Pending',
-        HandoffStatus.acknowledged => 'Archived',
+        HandoffStatus.acknowledged => 'Active',
       };
 
   static Color handoffStatusColor(HandoffStatus status) => switch (status) {

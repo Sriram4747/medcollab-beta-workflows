@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/auth/msg91_otp_service.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
@@ -61,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       final user = await _userRepository.getMe();
-      await _authRepository.restoreSocketConnection();
+      unawaited(_authRepository.restoreSocketConnection());
 
       if (user.hasMinimumProfile) {
         final activeUser = await _ensureAvailableOnSessionStart(user);
@@ -196,8 +198,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final user = result.session.user;
       final needsProfile = result.isNewUser || !user.hasMinimumProfile;
-      final activeUser =
-          needsProfile ? user : await _ensureAvailableOnSessionStart(user);
+      final activeUser = needsProfile ? user : user;
 
       emit(AuthState(
         status:
@@ -205,6 +206,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         user: activeUser,
         phoneE164: phone,
       ));
+
+      if (!needsProfile) {
+        unawaited(_ensureAvailableOnSessionStart(user).then((updated) {
+          if (!isClosed && state.status == AuthStatus.authenticated) {
+            emit(state.copyWith(user: updated));
+          }
+        }));
+      }
     } on AppException catch (e) {
       emit(AuthState(
         status: AuthStatus.otpSent,
