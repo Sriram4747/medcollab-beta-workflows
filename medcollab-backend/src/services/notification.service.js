@@ -228,9 +228,42 @@ const shouldSendPush = (notificationType, prefs) => {
   };
 
   const prefKey = typeMap[notificationType];
-  if (!prefKey) return true; // Unknown types always send
+  if (prefKey && prefs[prefKey] === false) return false;
 
-  return prefs[prefKey] !== false; // Default to true if preference not set
+  // Emergency alerts always bypass quiet hours
+  if (notificationType === NOTIFICATION_TYPES.EMERGENCY_ALERT) return true;
+
+  if (isInQuietHours(prefs.quietHoursStart, prefs.quietHoursEnd)) {
+    return false;
+  }
+
+  return true; // Default to true if preference not set
+};
+
+/**
+ * Quiet hours check — local device timezone approximation using server local time.
+ * Format: "HH:mm" (24h). Supports overnight ranges (e.g. 22:00 → 07:00).
+ */
+const isInQuietHours = (start, end) => {
+  if (!start || !end) return false;
+  const parse = (s) => {
+    const [h, m] = String(s).split(':').map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) return null;
+    return h * 60 + m;
+  };
+  const startMin = parse(start);
+  const endMin = parse(end);
+  if (startMin == null || endMin == null) return false;
+
+  const now = new Date();
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+
+  if (startMin === endMin) return false;
+  if (startMin < endMin) {
+    return nowMin >= startMin && nowMin < endMin;
+  }
+  // Overnight window
+  return nowMin >= startMin || nowMin < endMin;
 };
 
 /**
@@ -273,7 +306,13 @@ const notifyNewMessage = async ({ recipientIds, message, sender, channel }) => {
 };
 
 const notifyMention = async ({ mentionedUserIds, message, sender, channel }) => {
-  await sendBulkNotification(mentionedUserIds, {
+  const senderId = sender?._id?.toString?.() || sender?._id || '';
+  const recipients = (mentionedUserIds || []).filter(
+    (id) => id && id.toString() !== senderId.toString()
+  );
+  if (recipients.length === 0) return;
+
+  await sendBulkNotification(recipients, {
     type: NOTIFICATION_TYPES.MENTION,
     title: `${sender.name} mentioned you`,
     body: message.content?.text?.slice(0, 100) || 'Mentioned you in a message',

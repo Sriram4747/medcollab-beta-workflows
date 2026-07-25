@@ -79,7 +79,8 @@ const errorHandler = (err, req, res, next) => {
     message = `File too large. Maximum size is ${process.env.MAX_FILE_SIZE_MB || 25}MB`;
   }
 
-  // In production, don't leak internal error details for 500s
+  // In production, don't leak internal error details for unexpected 500s.
+  // Preserve intentional status codes (e.g. 503 OTP provider unavailable).
   if (statusCode === 500 && process.env.NODE_ENV === 'production') {
     message = 'Something went wrong. Please try again.';
   }

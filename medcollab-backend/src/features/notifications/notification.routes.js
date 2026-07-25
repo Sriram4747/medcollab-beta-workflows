@@ -91,6 +91,13 @@ router.put('/read-all', notificationController.markAllAsRead);
 router.put('/:id/read', validateMongoId('id'), notificationController.markAsRead);
 
 /**
+ * @route   PUT /api/notifications/:id/unread
+ * @desc    Mark a single notification as unread
+ * @access  Protected + Must own the notification
+ */
+router.put('/:id/unread', validateMongoId('id'), notificationController.markAsUnread);
+
+/**
  * @route   DELETE /api/notifications/:id
  * @desc    Delete a single notification from the inbox
  * @access  Protected + Must own the notification

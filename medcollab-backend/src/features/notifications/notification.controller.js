@@ -15,10 +15,12 @@ const getNotifications = asyncHandler(async (req, res) => {
   const limit = Math.min(parseInt(req.query.limit) || PAGINATION.DEFAULT_LIMIT, 100);
   const before = req.query.before;
   const unreadOnly = req.query.unreadOnly === 'true';
+  const type = req.query.type;
 
   const query = { userId: req.user._id };
   if (before) query._id = { $lt: before };
   if (unreadOnly) query.read = false;
+  if (type) query.type = type;
 
   const notifications = await Notification.find(query)
     .sort({ _id: -1 })
@@ -74,6 +76,24 @@ const markAllAsRead = asyncHandler(async (req, res) => {
 });
 
 /**
+ * PUT /api/notifications/:id/unread
+ * Mark a single notification as unread
+ */
+const markAsUnread = asyncHandler(async (req, res) => {
+  const notification = await Notification.findOne({
+    _id: req.params.id,
+    userId: req.user._id,
+  });
+
+  if (!notification) return respond.notFound(res, 'Notification not found');
+
+  notification.read = false;
+  notification.readAt = null;
+  await notification.save();
+  return respond.ok(res, 'Notification marked as unread');
+});
+
+/**
  * DELETE /api/notifications/:id
  * Delete a single notification
  */
@@ -92,5 +112,5 @@ const deleteNotification = asyncHandler(async (req, res) => {
 
 module.exports = {
   getNotifications, getUnreadCount,
-  markAsRead, markAllAsRead, deleteNotification,
+  markAsRead, markAsUnread, markAllAsRead, deleteNotification,
 };

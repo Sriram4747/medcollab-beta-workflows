@@ -223,6 +223,7 @@ userSchema.methods.toPublicProfile = function () {
     avatarUrl: this.avatarUrl,
     bio: this.bio,
     availability: this.availability,
+    notifications: this.notifications,
     lastSeenAt: this.lastSeenAt,
     isOnboarded: this.isOnboarded,
     isVerified: this.isVerified,

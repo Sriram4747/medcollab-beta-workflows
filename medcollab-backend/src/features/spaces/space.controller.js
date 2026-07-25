@@ -189,6 +189,36 @@ const joinSpace = asyncHandler(async (req, res) => {
 });
 
 /**
+ * GET /api/spaces/invite/:code
+ * Preview a space invite before joining (name, type, member count)
+ */
+const previewInvite = asyncHandler(async (req, res) => {
+  const code = (req.params.code || '').toUpperCase();
+  const space = await Space.findOne({
+    inviteCode: code,
+    isActive: true,
+  }).lean();
+
+  if (!space) return respond.notFound(res, 'Invalid invite code');
+
+  const alreadyMember = (space.members || []).some(
+    (m) => m.userId.toString() === req.user._id.toString()
+  );
+
+  return respond.ok(res, 'Invite preview', {
+    invite: {
+      inviteCode: space.inviteCode,
+      name: space.name,
+      type: space.type,
+      description: space.description || '',
+      memberCount: (space.members || []).length,
+      alreadyMember,
+      joinUrl: `https://medcollab.up.railway.app/join/${space.inviteCode}`,
+    },
+  });
+});
+
+/**
  * POST /api/spaces/:id/invite
  * Regenerate the invite code (admin only)
  */
@@ -200,7 +230,10 @@ const regenerateInviteCode = asyncHandler(async (req, res) => {
   space.inviteCode = await Space.generateInviteCode();
   await space.save();
 
-  return respond.ok(res, 'Invite code regenerated', { inviteCode: space.inviteCode });
+  return respond.ok(res, 'Invite code regenerated', {
+    inviteCode: space.inviteCode,
+    joinUrl: `https://medcollab.up.railway.app/join/${space.inviteCode}`,
+  });
 });
 
 /**
@@ -304,6 +337,6 @@ const leaveSpace = asyncHandler(async (req, res) => {
 
 module.exports = {
   createSpace, getMySpaces, getSpaceById,
-  joinSpace, regenerateInviteCode, updateSpace,
+  joinSpace, previewInvite, regenerateInviteCode, updateSpace,
   getMembers, removeMember, leaveSpace,
 };

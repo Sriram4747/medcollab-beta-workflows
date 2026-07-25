@@ -68,6 +68,15 @@ router.get('/', spaceController.getMySpaces);
 router.post('/join', validateJoinSpace, spaceController.joinSpace);
 
 /**
+ * @route   GET /api/spaces/invite/:code
+ * @desc    Preview space invite before joining
+ * @access  Protected + Onboarded
+ *
+ * NOTE: Must be before /:id so "invite" is not treated as an ObjectId.
+ */
+router.get('/invite/:code', spaceController.previewInvite);
+
+/**
  * @route   GET /api/spaces/:id
  * @desc    Get full space detail with channels
  * @access  Protected + Must be a space member

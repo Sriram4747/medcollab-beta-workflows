@@ -63,8 +63,13 @@ const sendOtp = async (phone) => {
     return { success: true, message: 'OTP sent successfully' };
   } catch (smsError) {
     logger.error(`SMS delivery failed for ${phone}: ${smsError.message}`);
-    // OTP is in DB — they can retry. Don't expose the error to the client.
-    throw new Error('Failed to send OTP. Please try again in a moment.');
+    if (smsError.statusCode) {
+      throw smsError;
+    }
+    // OTP is in DB — they can retry. Don't expose raw provider errors.
+    const err = new Error('Failed to send OTP. Please try again in a moment.');
+    err.statusCode = 503;
+    throw err;
   }
 };
 
@@ -77,6 +82,9 @@ const sendOtp = async (phone) => {
  * - Template must be pre-approved
  * - For development, use MSG91's sandbox/test mode
  *
+ * Production beta uses Flutter MSG91 widget SDK instead of this path
+ * (no DLT template required for widget). Keep this for optional server OTP.
+ *
  * @param {string} phone - E.164 format phone number
  * @param {string} otpCode - 6-digit OTP
  */
@@ -85,7 +93,11 @@ const sendViaMSG91 = async (phone, otpCode) => {
   const templateId = process.env.MSG91_TEMPLATE_ID;
 
   if (!authKey || !templateId) {
-    throw new Error('MSG91 credentials not configured');
+    const err = new Error(
+      'Server SMS OTP is not configured. Use the MedCollab Android app built with MSG91 widget login, or set MSG91_TEMPLATE_ID on the server.',
+    );
+    err.statusCode = 503;
+    throw err;
   }
 
   // Strip the + from E.164 format — MSG91 expects digits only

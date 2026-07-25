@@ -61,6 +61,15 @@ spaceChannelRouter.get('/', channelController.getSpaceChannels);
 channelRouter.use(protect, requireOnboarding);
 
 /**
+ * @route   GET /api/channels/dm
+ * @desc    List all DM conversations for the current user
+ * @access  Protected + Onboarded
+ *
+ * NOTE: Must be before /:id so "dm" is not treated as an ObjectId.
+ */
+channelRouter.get('/dm', channelController.getMyDMs);
+
+/**
  * @route   POST /api/channels/dm
  * @desc    Create a DM channel with another user, or return existing one
  * @access  Protected + Onboarded

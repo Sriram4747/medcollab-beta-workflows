@@ -132,6 +132,43 @@ const archiveChannel = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Enrich a DM channel lean doc with peer + display name for the caller.
+ */
+const enrichDM = (channel, currentUserId) => {
+  const members = channel.members || [];
+  const peer = members.find(
+    (m) => (m._id || m).toString() !== currentUserId.toString()
+  );
+  const peerName = peer?.name || peer?.displayTitle || 'Direct message';
+  return {
+    ...channel,
+    peer: peer || null,
+    name: channel.name || peerName,
+  };
+};
+
+/**
+ * GET /api/channels/dm
+ * List all DM conversations for the authenticated user
+ */
+const getMyDMs = asyncHandler(async (req, res) => {
+  const channels = await Channel.find({
+    type: CHANNEL_TYPES.DIRECT,
+    members: req.user._id,
+    isArchived: false,
+  })
+    .populate(
+      'members',
+      'name displayTitle role speciality avatarUrl availability lastSeenAt'
+    )
+    .sort({ 'lastMessage.sentAt': -1, updatedAt: -1 })
+    .lean();
+
+  const enriched = channels.map((ch) => enrichDM(ch, req.user._id));
+  return respond.ok(res, 'DMs fetched', { channels: enriched });
+});
+
+/**
  * POST /api/channels/dm
  * Create or retrieve a 1:1 DM channel between two users
  * Idempotent — always returns the same channel for the same pair
@@ -142,6 +179,10 @@ const createOrGetDM = asyncHandler(async (req, res) => {
   if (targetUserId === req.user._id.toString()) {
     return respond.badRequest(res, 'Cannot create a DM with yourself');
   }
+
+  const User = require('../users/user.model');
+  const target = await User.findById(targetUserId).select('_id');
+  if (!target) return respond.notFound(res, 'User not found');
 
   // Check if DM already exists
   let channel = await Channel.findDMChannel(req.user._id, targetUserId);
@@ -156,7 +197,16 @@ const createOrGetDM = asyncHandler(async (req, res) => {
     });
   }
 
-  return respond.ok(res, 'DM channel ready', { channel });
+  const populated = await Channel.findById(channel._id)
+    .populate(
+      'members',
+      'name displayTitle role speciality avatarUrl availability lastSeenAt'
+    )
+    .lean();
+
+  return respond.ok(res, 'DM channel ready', {
+    channel: enrichDM(populated, req.user._id),
+  });
 });
 
 /**
@@ -226,6 +276,6 @@ const unpinMessage = asyncHandler(async (req, res) => {
 
 module.exports = {
   createChannel, getSpaceChannels, getChannelById,
-  updateChannel, archiveChannel, createOrGetDM,
+  updateChannel, archiveChannel, getMyDMs, createOrGetDM,
   getChannelMembers, pinMessage, unpinMessage,
 };
