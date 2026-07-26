@@ -169,20 +169,8 @@ const globalSearch = asyncHandler(async (req, res) => {
     }
 
     if (doctors.length === 0) {
-      doctors = await User.find({
-        _id: { $ne: userId },
-        isOnboarded: true,
-        $or: [
-          { name: regex },
-          { speciality: regex },
-          { institution: regex },
-        ],
-      })
-        .select(
-          'name displayTitle role speciality institution avatarUrl availability'
-        )
-        .limit(limit)
-        .lean();
+      // No global directory fallback — keep discovery inside the caller's groups.
+      doctors = [];
     }
 
     result.doctors = doctors;
