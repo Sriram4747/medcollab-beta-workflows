@@ -137,10 +137,10 @@ const sendBulkNotification = async (userIds, options) => {
  * Uses FCM v1 HTTP API via Firebase Admin SDK
  */
 const sendFCMPush = async ({ tokens, title, body, data = {}, priority }) => {
-  let admin;
+  let messaging;
   try {
-    const { getFirebaseAdmin } = require('../config/firebase');
-    admin = getFirebaseAdmin();
+    const { getFirebaseMessaging } = require('../config/firebase');
+    messaging = getFirebaseMessaging();
   } catch {
     logger.debug('Firebase not initialised — skipping FCM push');
     return;
@@ -160,7 +160,7 @@ const sendFCMPush = async ({ tokens, title, body, data = {}, priority }) => {
   await Promise.allSettled(
     tokens.map(async (token) => {
       try {
-        await admin.messaging().send({
+        await messaging.send({
           token,
           notification: { title, body },
           data: stringData,
