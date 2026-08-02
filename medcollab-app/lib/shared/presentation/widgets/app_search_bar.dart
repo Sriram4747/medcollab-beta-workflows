@@ -12,6 +12,8 @@ class AppSearchBar extends StatefulWidget {
     required this.hintText,
     required this.onChanged,
     this.onClear,
+    this.focusNode,
+    this.autofocus = false,
     super.key,
   });
 
@@ -19,6 +21,8 @@ class AppSearchBar extends StatefulWidget {
   final String hintText;
   final ValueChanged<String> onChanged;
   final VoidCallback? onClear;
+  final FocusNode? focusNode;
+  final bool autofocus;
 
   @override
   State<AppSearchBar> createState() => _AppSearchBarState();
@@ -65,6 +69,8 @@ class _AppSearchBarState extends State<AppSearchBar> {
         decoration: AppDecorations.searchField(),
         child: TextField(
           controller: widget.controller,
+          focusNode: widget.focusNode,
+          autofocus: widget.autofocus,
           onChanged: widget.onChanged,
           style: AppTextStyles.bodyMedium,
           textInputAction: TextInputAction.search,

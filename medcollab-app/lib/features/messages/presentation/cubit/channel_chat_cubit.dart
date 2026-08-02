@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medcollab_app/core/chat/active_chat_tracker.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/constants/socket_events.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
@@ -31,6 +32,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         super(const ChannelChatState()) {
     _listenForSocketMessages();
     _listenForSocketUpdates();
+    _listenForTyping();
     _connectionSub = _socketClient.connectionStream.listen((connected) {
       if (connected) {
         _socketClient.joinChannel(channelId);
@@ -40,6 +42,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     if (_socketClient.isConnected) {
       _socketClient.joinChannel(channelId);
     }
+    ActiveChatTracker.instance.enter(channelId);
     loadMessages();
   }
 
@@ -52,6 +55,10 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   StreamSubscription<Map<String, dynamic>>? _messageSub;
   StreamSubscription<Map<String, dynamic>>? _messageUpdatedSub;
   StreamSubscription<Map<String, dynamic>>? _messageDeletedSub;
+  StreamSubscription<Map<String, dynamic>>? _typingSub;
+  StreamSubscription<Map<String, dynamic>>? _stoppedTypingSub;
+
+  final Map<String, String> _typingUsers = {};
 
   Future<void> loadMessages({bool silent = false}) async {
     if (!silent) {
@@ -72,7 +79,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     }
   }
 
-  Future<void> sendMessage(String text) async {
+  Future<void> sendMessage(String text, {List<String> mentions = const []}) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty || state.isSending) return;
 
@@ -93,6 +100,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       final message = await _messageRepository.sendTextMessage(
         channelId: channelId,
         text: trimmed,
+        mentions: mentions,
       );
       _replaceLocalMessage(tempId, message);
       emit(state.copyWith(isSending: false));
@@ -176,15 +184,52 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   }
 
   Future<void> deleteMessage(String messageId) async {
+    final index = state.messages.indexWhere((m) => m.id == messageId);
+    if (index < 0) return;
+    final existing = state.messages[index];
+    // Optimistic soft-delete — API does not return the deleted message body.
+    _upsertRootMessage(existing.copyWith(isDeleted: true));
     try {
-      final deleted = await _messageRepository.deleteMessage(
+      await _messageRepository.deleteMessage(
         channelId: channelId,
         messageId: messageId,
       );
-      _upsertRootMessage(deleted);
     } on AppException catch (e) {
+      _upsertRootMessage(existing);
       emit(state.copyWith(error: e.message));
     }
+  }
+
+  void _listenForTyping() {
+    _typingSub =
+        _socketClient.onMapEvent(SocketEvents.userTyping).listen((data) {
+      final msgChannelId = data['channelId']?.toString() ?? '';
+      if (msgChannelId != channelId) return;
+      final userId = data['userId']?.toString() ?? '';
+      if (userId.isEmpty || userId == currentUserId) return;
+      final userName = data['userName']?.toString() ?? 'Someone';
+      _typingUsers[userId] = userName;
+      emit(state.copyWith(typingUserNames: _typingUsers.values.toList()));
+    });
+
+    _stoppedTypingSub = _socketClient
+        .onMapEvent(SocketEvents.userStoppedTyping)
+        .listen((data) {
+      final msgChannelId = data['channelId']?.toString() ?? '';
+      if (msgChannelId != channelId) return;
+      final userId = data['userId']?.toString() ?? '';
+      if (userId.isEmpty) return;
+      _typingUsers.remove(userId);
+      emit(state.copyWith(typingUserNames: _typingUsers.values.toList()));
+    });
+  }
+
+  void emitTypingStart() {
+    _socketClient.emitTypingStart(channelId);
+  }
+
+  void emitTypingStop() {
+    _socketClient.emitTypingStop(channelId);
   }
 
   void _listenForSocketUpdates() {
@@ -201,9 +246,19 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
 
     _messageDeletedSub =
         _socketClient.onMapEvent(SocketEvents.messageDeleted).listen((data) {
-      final message = _parseSocketMessage(data);
-      if (message == null || message.channelId != channelId) return;
-      _upsertRootMessage(message);
+      final messageId =
+          data['messageId']?.toString() ?? data['_id']?.toString() ?? '';
+      if (messageId.isEmpty) return;
+      final index = state.messages.indexWhere((m) => m.id == messageId);
+      if (index < 0) {
+        // May be a thread reply — refresh counts softly when possible.
+        final parsed = _parseSocketMessage(data);
+        if (parsed != null && parsed.channelId == channelId) {
+          _upsertRootMessage(parsed.copyWith(isDeleted: true));
+        }
+        return;
+      }
+      _upsertRootMessage(state.messages[index].copyWith(isDeleted: true));
     });
   }
 
@@ -335,11 +390,15 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
 
   @override
   Future<void> close() {
+    emitTypingStop();
+    ActiveChatTracker.instance.leave(channelId);
     _connectionSub?.cancel();
     _socketClient.leaveChannel(channelId);
     _messageSub?.cancel();
     _messageUpdatedSub?.cancel();
     _messageDeletedSub?.cancel();
+    _typingSub?.cancel();
+    _stoppedTypingSub?.cancel();
     return super.close();
   }
 }

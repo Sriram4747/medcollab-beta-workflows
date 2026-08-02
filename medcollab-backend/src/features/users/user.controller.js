@@ -127,7 +127,8 @@ const getUserById = asyncHandler(async (req, res) => {
 
 /**
  * GET /api/users/search?q=priya&spaceId=...
- * Search users by name or institution for @mentions and DM creation
+ * Search known users only (shared spaces ∪ DMs ∪ same institution).
+ * Optional spaceId further narrows to that group's members ∩ known set.
  */
 const searchUsers = asyncHandler(async (req, res) => {
   const { q, spaceId } = req.query;
@@ -137,33 +138,21 @@ const searchUsers = asyncHandler(async (req, res) => {
   }
 
   const searchRegex = new RegExp(escapeRegex(q.trim()), 'i');
+  const { resolveKnownUserIds } = require('../../utils/knownUsers');
   const Space = require('../spaces/space.model');
 
-  // Privacy default: only people who share at least one active space with the caller.
-  // Optional spaceId further narrows to that group's members.
-  let memberIds;
+  let filteredIds = await resolveKnownUserIds(req.user._id);
+
   if (spaceId) {
     const space = await Space.findById(spaceId).select('members');
     if (!space) {
       return respond.ok(res, 'Search results', { users: [] });
     }
-    memberIds = space.members.map((m) => m.userId);
-  } else {
-    const spaces = await Space.find(
-      { 'members.userId': req.user._id, isActive: true },
-      { members: 1 }
-    ).lean();
-    memberIds = [
-      ...new Set(
-        spaces.flatMap((s) => (s.members || []).map((m) => m.userId.toString()))
-      ),
-    ];
+    const spaceMemberIds = new Set(
+      (space.members || []).map((m) => m.userId.toString())
+    );
+    filteredIds = filteredIds.filter((id) => spaceMemberIds.has(id));
   }
-
-  const selfId = req.user._id.toString();
-  const filteredIds = memberIds
-    .map((id) => id.toString())
-    .filter((id) => id !== selfId);
 
   if (filteredIds.length === 0) {
     return respond.ok(res, 'Search results', { users: [] });
@@ -173,7 +162,11 @@ const searchUsers = asyncHandler(async (req, res) => {
     _id: { $in: filteredIds },
     isActive: true,
     isOnboarded: true,
-    $or: [{ name: searchRegex }, { institution: searchRegex }],
+    $or: [
+      { name: searchRegex },
+      { displayTitle: searchRegex },
+      { speciality: searchRegex },
+    ],
   })
     .select('name displayTitle role speciality institution avatarUrl availability')
     .limit(20)

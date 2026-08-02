@@ -38,6 +38,7 @@ abstract final class ApiEndpoints {
 
   // Channels
   static const String createDm = '$channels/dm';
+  static const String listDms = '$channels/dm';
 
   static String channelById(String id) => '$channels/$id';
   static String channelMembers(String id) => '$channels/$id/members';
@@ -74,4 +75,13 @@ abstract final class ApiEndpoints {
 
   static String notificationById(String id) => '$notifications/$id';
   static String markNotificationRead(String id) => '$notifications/$id/read';
+  static String markNotificationUnread(String id) =>
+      '$notifications/$id/unread';
+
+  // Search
+  static const String search = '/api/search';
+
+  // Invite preview
+  static String spaceInvitePreview(String code) =>
+      '$spaces/invite/${Uri.encodeComponent(code)}';
 }

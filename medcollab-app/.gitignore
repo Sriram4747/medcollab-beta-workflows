@@ -44,6 +44,15 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Firebase client config (download from Firebase Console — do not commit)
+/android/app/google-services.json
+**/GoogleService-Info.plist
+**/*service-account*.json
+
+# Local Maven mirror for google-services (machine network workaround)
+/android/offline-m2/
+/android/app/libs/
+
 # Machine-local Gradle truststore (Avast / HTTPS scanning CA)
 /android/gradle-truststore.jks
 /android/avast-root.cer

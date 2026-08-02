@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/constants/app_constants.dart';
+import 'package:medcollab_app/core/theme/app_colors.dart';
+import 'package:medcollab_app/core/theme/app_radius.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/core/utils/phone_utils.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
@@ -40,8 +43,8 @@ class _PhoneEntryPageState extends State<PhoneEntryPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         return AuthScaffold(
-          title: 'Welcome',
-          subtitle: 'Enter your mobile number to sign in or create an account.',
+          subtitle: 'For doctors. Built for India.',
+          logoWidth: 220,
           child: Form(
             key: _formKey,
             child: Column(
@@ -65,38 +68,68 @@ class _PhoneEntryPageState extends State<PhoneEntryPage> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textPrimary,
+                  ),
                   decoration: const InputDecoration(
                     labelText: 'Mobile number',
+                    labelStyle: TextStyle(color: AppColors.textMuted),
                     prefixText: '${AppConstants.defaultCountryCode} ',
+                    prefixStyle: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary,
+                    ),
                     hintText: '9876543210',
+                    hintStyle: TextStyle(color: AppColors.textMuted),
+                    filled: true,
+                    fillColor: AppColors.surfaceCard,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 14,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: AppRadius.card,
+                      borderSide: BorderSide(color: AppColors.borderDefault),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: AppRadius.card,
+                      borderSide: BorderSide(color: AppColors.borderDefault),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: AppRadius.card,
+                      borderSide: BorderSide(
+                        color: AppColors.tealPrimary,
+                        width: 1.5,
+                      ),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: AppRadius.card,
+                      borderSide: BorderSide(color: AppColors.borderDefault),
+                    ),
                   ),
                   validator: PhoneUtils.validateLocalNumber,
                   onFieldSubmitted: (_) => _submit(),
                 ),
                 const SizedBox(height: 24),
-                FilledButton(
-                  onPressed: state.isLoading ? null : _submit,
-                  child: state.isLoading
-                      ? const SizedBox(
-                          height: 22,
-                          width: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Continue'),
+                AuthPrimaryButton(
+                  label: 'Continue',
+                  isLoading: state.isLoading,
+                  onPressed: _submit,
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'We will send a 6-digit OTP to verify your number.',
-                  style: Theme.of(context).textTheme.bodySmall,
+                const Text(
+                  "We'll send a 6-digit OTP",
+                  style: AppTextStyles.caption,
                   textAlign: TextAlign.center,
                 ),
                 if (kDebugMode) ...[
                   const SizedBox(height: 12),
                   Text(
                     'Dev API: ${EnvConfig.apiBaseUrl}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).hintColor,
-                        ),
+                    style: AppTextStyles.timestamp,
                     textAlign: TextAlign.center,
                   ),
                 ],

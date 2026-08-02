@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/auth/msg91_otp_service.dart';
+import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
+import 'package:medcollab_app/core/notifications/fcm_service.dart';
 import 'package:medcollab_app/core/utils/phone_utils.dart';
 import 'package:medcollab_app/features/auth/data/models/auth_login_result.dart';
 import 'package:medcollab_app/features/auth/data/models/request_otp_request.dart';
@@ -23,10 +25,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required UserRepository userRepository,
     Msg91OtpService? msg91OtpService,
     bool useMsg91Widget = false,
+    FcmService? fcmService,
   })  : _authRepository = authRepository,
         _userRepository = userRepository,
         _msg91OtpService = msg91OtpService,
         _useMsg91Widget = useMsg91Widget,
+        _fcmService = fcmService,
         super(const AuthState.unknown()) {
     on<AuthStarted>(_onStarted);
     on<AuthPhoneSubmitted>(_onPhoneSubmitted);
@@ -38,14 +42,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthChangePhoneRequested>(_onChangePhoneRequested);
     on<AuthSessionExpired>(_onSessionExpired);
     on<AuthAvailabilityUpdated>(_onAvailabilityUpdated);
+    on<AuthUserUpdated>(_onUserUpdated);
   }
 
   final AuthRepository _authRepository;
   final UserRepository _userRepository;
   final Msg91OtpService? _msg91OtpService;
   final bool _useMsg91Widget;
+  final FcmService? _fcmService;
 
   bool _sessionCheckStarted = false;
+
+  void _registerPush() {
+    final fcm = _fcmService;
+    if (fcm == null) return;
+    unawaited(fcm.registerTokenWithBackend());
+  }
 
   Future<void> _onStarted(AuthStarted event, Emitter<AuthState> emit) async {
     if (_sessionCheckStarted && state.status != AuthStatus.unknown) {
@@ -68,6 +80,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user.hasMinimumProfile) {
         final activeUser = await _ensureAvailableOnSessionStart(user);
         emit(AuthState(status: AuthStatus.authenticated, user: activeUser));
+        _registerPush();
       } else {
         emit(AuthState(status: AuthStatus.needsProfile, user: user));
       }
@@ -125,6 +138,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
+      // Production Railway has no DLT SMS template — server request-otp fails.
+      // Release APKs must be built with MSG91 widget id + token.
+      if (_isProductionApiWithoutWidget()) {
+        emit(AuthState(
+          status: AuthStatus.unauthenticated,
+          phoneE164: phoneE164,
+          errorMessage:
+              'This app build cannot send OTP. Reinstall a release APK built with MSG91 widget credentials (see build-release-apk.ps1).',
+        ));
+        return;
+      }
+
       await _authRepository.requestOtp(RequestOtpRequest(phone: phoneE164));
       emit(AuthState(status: AuthStatus.otpSent, phoneE164: phoneE164));
     } on AppException catch (e) {
@@ -140,6 +165,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         errorMessage: 'Failed to send OTP. Please try again.',
       ));
     }
+  }
+
+  bool _isProductionApiWithoutWidget() {
+    final base = EnvConfig.apiBaseUrl.toLowerCase();
+    return base.contains('railway.app') || base.contains('medcollab');
   }
 
   Future<void> _onOtpSubmitted(
@@ -208,6 +238,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ));
 
       if (!needsProfile) {
+        _registerPush();
         unawaited(_ensureAvailableOnSessionStart(user).then((updated) {
           if (!isClosed && state.status == AuthStatus.authenticated) {
             emit(state.copyWith(user: updated));
@@ -260,6 +291,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         user: user,
         phoneE164: state.phoneE164,
       ));
+      _registerPush();
     } on AppException catch (e) {
       emit(AuthState(
         status: AuthStatus.needsProfile,
@@ -288,11 +320,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(AuthState.loading(user: state.user));
 
+    final fcmToken = await _fcmService?.prepareLogoutToken();
     try {
-      await _authRepository.logout();
+      await _authRepository.logout(fcmToken: fcmToken);
     } catch (_) {
       // Clear local session even if API call fails.
     }
+    await _fcmService?.clearLocalToken();
 
     emit(const AuthState(status: AuthStatus.unauthenticated));
   }
@@ -365,11 +399,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthSessionExpired event,
     Emitter<AuthState> emit,
   ) async {
+    final fcmToken = await _fcmService?.prepareLogoutToken();
     try {
-      await _authRepository.logout();
+      await _authRepository.logout(fcmToken: fcmToken);
     } catch (_) {
       // Ensure local session is cleared even if API fails.
     }
+    await _fcmService?.clearLocalToken();
     emit(const AuthState(status: AuthStatus.unauthenticated));
   }
 
@@ -384,6 +420,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         user: user.copyWith(availability: event.availability),
       ),
     );
+  }
+
+  void _onUserUpdated(AuthUserUpdated event, Emitter<AuthState> emit) {
+    emit(state.copyWith(user: event.user));
   }
 
   /// After login or cold start, return to Available if still marked Off Duty.

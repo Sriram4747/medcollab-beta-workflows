@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:medcollab_app/features/auth/data/models/availability_model.dart';
+import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 
 enum AuthStatus {
   unknown,
@@ -86,4 +87,14 @@ final class AuthAvailabilityUpdated extends AuthEvent {
 
   @override
   List<Object?> get props => [availability];
+}
+
+/// User profile refreshed locally (e.g. notification preferences saved).
+final class AuthUserUpdated extends AuthEvent {
+  const AuthUserUpdated(this.user);
+
+  final UserModel user;
+
+  @override
+  List<Object?> get props => [user];
 }

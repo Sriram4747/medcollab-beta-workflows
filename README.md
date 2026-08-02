@@ -15,11 +15,14 @@ Medical collaboration platform for hospital teams — Slack-like messaging built
 
 ```
 MedCollab/
-├── medcollab-app/       # Flutter client (iOS, Android, Web)
-├── medcollab-backend/   # Node.js REST + Socket.io API
-├── DEPLOYMENT.md        # Beta deploy guide (start here for production)
-├── CLAUDE.md            # AI agent context
-└── .gitlab-ci.yml       # CI: analyze, test, web build
+├── medcollab-app/              # Flutter client (iOS, Android, Web)
+├── medcollab-backend/          # Node.js REST + Socket.io API
+├── PROJECT_LEAD_SUMMARY.md     # Shareable project-lead status
+├── AI_HANDOFF.md               # Tech handoff
+├── PUSH_NOTIFICATIONS.md       # FCM setup
+├── DEPLOYMENT.md               # Beta deploy guide
+├── CLAUDE.md                   # AI agent context
+└── .gitlab-ci.yml              # CI: analyze, test, web build
 ```
 
 ---
@@ -51,21 +54,22 @@ flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:5000
 flutter run --dart-define=API_BASE_URL=https://medcollab.up.railway.app
 ```
 
-*Login requires MSG91 OTP on production (`OTP_BYPASS=false`).*
+*Login uses MSG91 OTP widget on production (`OTP_BYPASS=false`).*
 
 ---
 
-## Current status (2026-06-28)
+## Current status (2026-08-02)
 
 | Component | Status |
 |-----------|--------|
-| Backend API (local) | ✅ Complete |
-| **Backend API (Railway)** | ✅ **Live** — Atlas + Cloudinary |
-| Flutter app (features) | ✅ MVP — auth, chat, media, handoffs, presence |
-| **MSG91 OTP (production)** | ⏳ MSG91 dashboard IP blocked at signup |
-| **Flutter production APK** | ⬜ Pending MSG91 |
+| Backend API (Railway) | ✅ Live — Atlas + Cloudinary + Sprint 8 APIs + FCM |
+| Flutter app | ✅ Sprint 10 — Vocle UX, DMs, handoffs, search, **Android push** |
+| MSG91 OTP | ✅ Widget SDK + API verify |
+| Production APK | ✅ `D:\MedCollab\MedCollab-beta.apk` (~56 MB, FCM) |
+| FCM push | ✅ LIVE (Android QA-confirmed) |
 
-See [medcollab-app/PROJECT_STATE.md](medcollab-app/PROJECT_STATE.md) and [DEPLOYMENT.md](DEPLOYMENT.md).
+Share with project lead: [PROJECT_LEAD_SUMMARY.md](PROJECT_LEAD_SUMMARY.md).  
+Also: [medcollab-app/PROJECT_STATE.md](medcollab-app/PROJECT_STATE.md), [AI_HANDOFF.md](AI_HANDOFF.md), [PUSH_NOTIFICATIONS.md](PUSH_NOTIFICATIONS.md), [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ---
 
@@ -78,7 +82,7 @@ See [medcollab-app/PROJECT_STATE.md](medcollab-app/PROJECT_STATE.md) and [DEPLOY
 | Hosting | Railway (production), local dev |
 | Auth | Phone OTP (MSG91) + JWT |
 | Media | Cloudinary |
-| Push | Firebase (optional, not configured) |
+| Push | Firebase Cloud Messaging (Android LIVE) |
 
 ---
 

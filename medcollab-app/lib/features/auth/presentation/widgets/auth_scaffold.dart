@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
+import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 
 /// Shared layout for auth screens.
 class AuthScaffold extends StatelessWidget {
   const AuthScaffold({
-    required this.title,
     required this.subtitle,
     required this.child,
     super.key,
+    this.title,
     this.showBack = false,
     this.onBack,
+    this.logoWidth = 200,
   });
 
-  final String title;
+  /// When null or empty, title is omitted (login uses logo + subtitle only).
+  final String? title;
   final String subtitle;
   final Widget child;
   final bool showBack;
   final VoidCallback? onBack;
+  final double logoWidth;
 
   @override
   Widget build(BuildContext context) {
+    final hasTitle = title != null && title!.isNotEmpty;
+
     return Scaffold(
+      backgroundColor: AppColors.backgroundApp,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -45,34 +53,33 @@ class AuthScaffold extends StatelessWidget {
                     ),
                   const SizedBox(height: AppSpacing.xs),
                   Center(
-                    child: Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryMuted,
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.radiusMd),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: const Icon(
-                        Icons.medical_services_outlined,
-                        size: 28,
-                        color: AppColors.primary,
-                      ),
+                    child: Image.asset(
+                      'assets/branding/vocle_full_logo.jpeg',
+                      width: logoWidth,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
+                  if (hasTitle) ...[
+                    Text(
+                      title!,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                  ],
                   Text(
                     subtitle,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                    style: AppTextStyles.body.copyWith(
+                      color: hasTitle
+                          ? AppColors.textMuted
+                          : AppColors.textSecondary,
+                      fontSize: 13,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppSpacing.xxl),
@@ -82,6 +89,52 @@ class AuthScaffold extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Full-width navy primary CTA used on auth screens.
+class AuthPrimaryButton extends StatelessWidget {
+  const AuthPrimaryButton({
+    required this.label,
+    required this.onPressed,
+    this.isLoading = false,
+    super.key,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: FilledButton(
+        onPressed: isLoading ? null : onPressed,
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.navyPrimary,
+          foregroundColor: AppColors.textOnDark,
+          disabledBackgroundColor:
+              AppColors.navyPrimary.withValues(alpha: 0.5),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadius.card),
+          textStyle: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        child: isLoading
+            ? const SizedBox(
+                height: 22,
+                width: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : Text(label),
       ),
     );
   }

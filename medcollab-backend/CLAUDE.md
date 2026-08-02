@@ -1,27 +1,32 @@
 # MedCollab Backend — Claude Code Context
 
-## Production (2026-06-28)
+## Production (2026-08-02)
 
 | | |
 |---|---|
 | **API** | https://medcollab.up.railway.app |
 | **Health** | https://medcollab.up.railway.app/health |
-| **Deploy** | Railway via GitHub `mathiharan29/medcollab-beta`, root `medcollab-backend` |
+| **Deploy** | Railway Hobby via GitHub `mathiharan29/medcollab-beta` **`master`**, root `medcollab-backend` |
 | **Database** | MongoDB Atlas `medcollab-beta` |
 | **Media** | Cloudinary `denbnijqe` |
-| **MSG91** | Not configured — dashboard IP blocked at signup |
+| **MSG91** | Widget OTP live (verify-msg91-token) |
+| **FCM** | ✅ Firebase Admin connected (`FIREBASE_*` env) |
 
 ## What this project is
-Medical collaboration API — Node.js + Express + MongoDB + Socket.io.
+Medical collaboration API — Node.js + Express + MongoDB + Socket.io. Product UI name: **Vocle**.
 
 ## Tech stack
 - Node.js + Express + MongoDB Atlas + Socket.io
 - Cloudinary (production media)
-- MSG91 OTP (pending)
+- MSG91 OTP (widget)
+- Firebase Admin (FCM push)
 - Railway hosting
 
 ## What is DONE
 - All models, controllers, routes, socket handlers
+- Sprint 8: DMs, search, invite preview, notification unread/prefs
+- Sprint 10: FCM send for messages / mentions / handoffs / emergency
+- Modular Firebase init (`src/config/firebase.js` — `firebase-admin/app`)
 - Production deploy on Railway with env validation
 - Realtime: JWT socket refresh, space rooms, presence snapshot, handoff acknowledge events
 - `nixpacks.toml`, `Procfile`, `scripts/validate-env.js`
@@ -37,7 +42,8 @@ See `.env.example`. Production requires:
 - `MONGODB_URI`, `JWT_SECRET`, `JWT_REFRESH_SECRET`
 - `API_BASE_URL=https://medcollab.up.railway.app`
 - `CLOUDINARY_*`
-- `MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID` (when MSG91 works)
+- `MSG91_*` / widget verify path as configured
+- `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`
 - `OTP_BYPASS=false`
 
 ## Local dev
@@ -47,5 +53,7 @@ npm run dev              # in-memory MongoDB, OTP 123456
 ```
 
 ## Docs
+- `../PROJECT_LEAD_SUMMARY.md` — shareable status
+- `../PUSH_NOTIFICATIONS.md` — FCM setup
 - `../DEPLOYMENT.md` — full beta guide
 - `../medcollab-app/PROJECT_STATE.md` — project status

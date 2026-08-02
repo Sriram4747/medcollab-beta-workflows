@@ -36,7 +36,8 @@ enum AvailabilityStatus {
   inIcu('in_icu'),
   onRounds('on_rounds'),
   offDuty('off_duty'),
-  doNotDisturb('do_not_disturb');
+  doNotDisturb('do_not_disturb'),
+  offline('offline');
 
   const AvailabilityStatus(this.value);
   final String value;
@@ -64,6 +65,13 @@ enum SpaceType {
       orElse: () => SpaceType.department,
     );
   }
+
+  String get label => switch (this) {
+        SpaceType.department => 'Department',
+        SpaceType.college => 'College',
+        SpaceType.hospital => 'Hospital',
+        SpaceType.community => 'Community',
+      };
 }
 
 enum SpaceRole {

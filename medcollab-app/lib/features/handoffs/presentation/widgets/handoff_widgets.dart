@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
-import 'package:medcollab_app/core/theme/app_decorations.dart';
-import 'package:medcollab_app/core/theme/app_spacing.dart';
+import 'package:medcollab_app/core/theme/app_radius.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_model.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_patient_model.dart';
 import 'package:medcollab_app/features/handoffs/presentation/utils/handoff_priority_colors.dart';
+import 'package:medcollab_app/features/handoffs/presentation/widgets/handoff_card.dart';
 
 class HandoffListTile extends StatelessWidget {
   const HandoffListTile({
@@ -22,165 +22,15 @@ class HandoffListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priorityColor = HandoffPriorityColors.forHandoff(handoff);
-    final patient = handoff.primaryPatient;
-    final updated = handoff.lastUpdated;
-    final timeLabel = updated != null
-        ? DateFormat('d MMM, h:mm a').format(updated.toLocal())
-        : '';
-
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.xxs,
+        horizontal: AppGaps.screenH,
+        vertical: AppGaps.itemGap / 2,
       ),
-      child: Material(
-        color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(color: priorityColor, width: 4),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.sm,
-                      AppSpacing.sm,
-                      AppSpacing.xs,
-                      AppSpacing.sm,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                patient?.patientIdentifier ??
-                                    '${handoff.patients.length} patients',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(fontWeight: FontWeight.w600),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            _StatusChip(status: handoff.status),
-                            if (handoff.hasFlaggedPatient) ...[
-                              const SizedBox(width: AppSpacing.xs),
-                              const Icon(
-                                Icons.flag_outlined,
-                                size: 15,
-                                color: AppColors.emergency,
-                              ),
-                            ],
-                          ],
-                        ),
-                        if (patient?.diagnosis.isNotEmpty == true) ...[
-                          const SizedBox(height: AppSpacing.xxs),
-                          Text(
-                            patient!.diagnosis,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                        const SizedBox(height: AppSpacing.xs),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.person_outline,
-                              size: 14,
-                              color: AppColors.textTertiary,
-                            ),
-                            const SizedBox(width: AppSpacing.xxs),
-                            Expanded(
-                              child: Text(
-                                handoff.toUser.displayName,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(color: AppColors.textSecondary),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (timeLabel.isNotEmpty) ...[
-                          const SizedBox(height: AppSpacing.xxs),
-                          Text(
-                            'Updated $timeLabel',
-                            style:
-                                Theme.of(context).textTheme.labelSmall,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-                if (onArchive != null)
-                  IconButton(
-                    tooltip: handoff.isDraft
-                        ? 'Delete draft'
-                        : (handoff.status == HandoffStatus.submitted
-                            ? 'Accept handoff'
-                            : 'Archive'),
-                    onPressed: onArchive,
-                    icon: Icon(
-                      handoff.isDraft
-                          ? Icons.delete_outline
-                          : (handoff.status == HandoffStatus.submitted
-                              ? Icons.check_circle_outline
-                              : Icons.archive_outlined),
-                      color: AppColors.textTertiary,
-                      size: 20,
-                    ),
-                  ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.status});
-
-  final HandoffStatus status;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = HandoffPriorityColors.handoffStatusColor(status);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xs,
-        vertical: 2,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Text(
-        HandoffPriorityColors.handoffStatusLabel(status),
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
-            ),
+      child: HandoffCard(
+        handoff: handoff,
+        onTap: onTap,
+        onArchive: onArchive,
       ),
     );
   }
@@ -201,11 +51,15 @@ class HandoffPatientCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = HandoffPriorityColors.forPatient(patient);
+    final statusBg = color.withValues(alpha: 0.12);
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: AppSpacing.xxs),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      decoration: AppDecorations.card(),
+      padding: const EdgeInsets.all(AppGaps.cardH),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceCard,
+        borderRadius: AppRadius.card,
+        border: Border.all(color: AppColors.borderDefault, width: 0.5),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -216,73 +70,94 @@ class HandoffPatientCard extends StatelessWidget {
                 height: 8,
                 decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
-              const SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   patient.patientIdentifier,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: AppTextStyles.cardTitle.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               if (patient.isFlagged)
                 const Icon(
                   Icons.flag_outlined,
-                  size: 15,
-                  color: AppColors.emergency,
+                  size: 16,
+                  color: AppColors.emergencyRed,
                 ),
               if (onEdit != null)
                 IconButton(
                   icon: const Icon(Icons.edit_outlined, size: 18),
-                  color: AppColors.textTertiary,
+                  color: AppColors.textMuted,
                   onPressed: onEdit,
                   visualDensity: VisualDensity.compact,
                 ),
               if (onDelete != null)
                 IconButton(
                   icon: const Icon(Icons.close, size: 18),
-                  color: AppColors.textTertiary,
+                  color: AppColors.textMuted,
                   onPressed: onDelete,
                   visualDensity: VisualDensity.compact,
                 ),
             ],
           ),
           if (patient.diagnosis.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.xxs),
-            Text(
-              patient.diagnosis,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            const SizedBox(height: 6),
+            Text(patient.diagnosis, style: AppTextStyles.body),
           ],
-          const SizedBox(height: AppSpacing.xxs),
-          Text(
-            HandoffPriorityColors.statusLabel(patient.status),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: statusBg,
+              borderRadius: AppRadius.pill,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  patient.status == PatientStatus.critical
+                      ? Icons.warning_amber_rounded
+                      : Icons.monitor_heart_outlined,
+                  size: 12,
                   color: color,
-                  fontWeight: FontWeight.w600,
                 ),
+                const SizedBox(width: 4),
+                Text(
+                  HandoffPriorityColors.statusLabel(patient.status),
+                  style: AppTextStyles.badge.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
           if (patient.pendingTasks.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: 12),
             Text(
               'Pending tasks',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
+              style: AppTextStyles.cardTitle.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             ...patient.pendingTasks.map(
               (t) => Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xxs),
+                padding: const EdgeInsets.only(top: 6),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '· ',
-                      style: Theme.of(context).textTheme.bodySmall,
+                    const Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: Icon(
+                        Icons.check_circle,
+                        size: 14,
+                        color: AppColors.tealPrimary,
+                      ),
                     ),
+                    const SizedBox(width: 8),
                     Expanded(
-                      child: Text(t, style: Theme.of(context).textTheme.bodySmall),
+                      child: Text(t, style: AppTextStyles.body),
                     ),
                   ],
                 ),
@@ -290,10 +165,13 @@ class HandoffPatientCard extends StatelessWidget {
             ),
           ],
           if (patient.notes.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: 8),
             Text(
               patient.notes,
-              style: Theme.of(context).textTheme.bodySmall,
+              style: AppTextStyles.caption.copyWith(
+                fontStyle: FontStyle.italic,
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ],
@@ -301,3 +179,4 @@ class HandoffPatientCard extends StatelessWidget {
     );
   }
 }
+

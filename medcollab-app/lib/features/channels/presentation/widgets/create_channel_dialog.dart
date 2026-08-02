@@ -83,16 +83,23 @@ class _CreateChannelDialogState extends State<CreateChannelDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Create channel'),
+      title: const Text('Create subgroup'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Text(
+              'Subgroups live inside this group (e.g. #general, #emergency).',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Name',
+                labelText: 'Subgroup name',
                 hintText: 'e.g. cardiology-rounds',
                 prefixText: '# ',
               ),
@@ -104,14 +111,14 @@ class _CreateChannelDialogState extends State<CreateChannelDialog> {
               controller: _descController,
               decoration: const InputDecoration(
                 labelText: 'Description (optional)',
-                hintText: 'What is this channel for?',
+                hintText: 'What is this subgroup for?',
               ),
               maxLines: 2,
             ),
             const SizedBox(height: 8),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              title: const Text('Private channel'),
+              title: const Text('Private subgroup'),
               subtitle: const Text('Only invited members can see it'),
               value: _isPrivate,
               onChanged: _isSubmitting

@@ -42,14 +42,19 @@ class _HandoffFormPageState extends State<HandoffFormPage> {
 
   Future<_FormBootstrap> _loadBootstrap() async {
     final deps = AppDependencies.instance;
-    final space = await deps.spaceRepository.getSpaceById(widget.spaceId);
-    final members = await deps.memberRepository.getSpaceMembers(widget.spaceId);
-    final channelId =
-        space.channels.isNotEmpty ? space.channels.first.id : '';
+    final spaceFuture = deps.spaceRepository.getSpaceById(widget.spaceId);
+    final membersFuture =
+        deps.memberRepository.getSpaceMembers(widget.spaceId);
 
     if (widget.handoffId != null) {
-      final handoff =
-          await deps.handoffRepository.getHandoffById(widget.handoffId!);
+      final results = await Future.wait([
+        spaceFuture,
+        membersFuture,
+        deps.handoffRepository.getHandoffById(widget.handoffId!),
+      ]);
+      final space = results[0] as SpaceModel;
+      final members = results[1] as List<SpaceMemberModel>;
+      final handoff = results[2] as HandoffModel;
       return _FormBootstrap(
         space: space,
         members: members,
@@ -57,6 +62,12 @@ class _HandoffFormPageState extends State<HandoffFormPage> {
         existingHandoff: handoff,
       );
     }
+
+    final results = await Future.wait([spaceFuture, membersFuture]);
+    final space = results[0] as SpaceModel;
+    final members = results[1] as List<SpaceMemberModel>;
+    final channelId =
+        space.channels.isNotEmpty ? space.channels.first.id : '';
 
     return _FormBootstrap(
       space: space,
@@ -312,10 +323,24 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
         bottomNavigationBar: AppBottomBar(
           child: BlocBuilder<HandoffFormCubit, HandoffFormState>(
             builder: (context, state) {
+              // Theme FilledButton uses minWidth: infinity — override so both
+              // buttons share the row evenly instead of Submit overflowing right.
+              final draftStyle = OutlinedButton.styleFrom(
+                minimumSize: const Size(0, 48),
+                foregroundColor: AppColors.navyPrimary,
+                side: const BorderSide(color: AppColors.navyPrimary),
+              );
+              final submitStyle = FilledButton.styleFrom(
+                minimumSize: const Size(0, 48),
+                backgroundColor: AppColors.navyPrimary,
+                foregroundColor: AppColors.textOnDark,
+              );
+
               return Row(
                 children: [
                   Expanded(
                     child: OutlinedButton(
+                      style: draftStyle,
                       onPressed: state.isSaving
                           ? null
                           : () async {
@@ -342,6 +367,7 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: FilledButton(
+                      style: submitStyle,
                       onPressed: state.isSaving
                           ? null
                           : () async {

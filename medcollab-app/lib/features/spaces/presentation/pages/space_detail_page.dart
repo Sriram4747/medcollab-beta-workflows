@@ -14,6 +14,7 @@ import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
+import 'package:medcollab_app/features/spaces/presentation/widgets/space_invite_share_sheet.dart';
 
 class SpaceDetailPage extends StatefulWidget {
   const SpaceDetailPage({required this.spaceId, super.key});
@@ -161,29 +162,40 @@ class _SpaceDetailPageState extends State<SpaceDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (space.inviteCode != null)
-                Container(
-                  decoration: const BoxDecoration(
-                    color: AppColors.primaryMuted,
-                    border: Border(
-                      bottom: BorderSide(color: AppColors.border),
+                Material(
+                  color: AppColors.primaryMuted,
+                  child: InkWell(
+                    onTap: () => SpaceInviteShareSheet.show(
+                      context,
+                      spaceName: space.name,
+                      inviteCode: space.inviteCode!,
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                      vertical: AppSpacing.sm,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.link, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            'Invite code: ${space.inviteCode}',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: AppColors.border),
                         ),
-                      ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: AppSpacing.sm,
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.link, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Invite: ${space.inviteCode}',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            const Icon(Icons.qr_code_2_outlined, size: 20),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),

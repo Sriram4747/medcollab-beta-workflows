@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
+import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/media/data/services/media_picker_service.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
@@ -21,15 +24,15 @@ class ThreadRouteArgs {
 /// Focused thread view — parent message + replies for one discussion topic.
 class ThreadPage extends StatefulWidget {
   const ThreadPage({
-    required this.spaceId,
     required this.channelId,
     required this.rootMessageId,
+    this.spaceId,
     this.channel,
     this.initialRoot,
     super.key,
   });
 
-  final String spaceId;
+  final String? spaceId;
   final String channelId;
   final String rootMessageId;
   final ChannelModel? channel;
@@ -43,9 +46,67 @@ class _ThreadPageState extends State<ThreadPage> {
   final _textController = TextEditingController();
   final _scrollController = ScrollController();
   final _mediaPicker = MediaPickerService();
+  Timer? _draftDebounce;
+  Timer? _typingStopDebounce;
+  bool _isTyping = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _textController.addListener(_onDraftChanged);
+    _loadDraft();
+  }
+
+  void _onDraftChanged() {
+    final text = _textController.text;
+    _draftDebounce?.cancel();
+    _draftDebounce = Timer(const Duration(milliseconds: 400), () {
+      AppDependencies.instance.draftMessageService.saveDraft(
+        widget.channelId,
+        text,
+        threadId: widget.rootMessageId,
+      );
+    });
+  }
+
+  Future<void> _loadDraft() async {
+    final draft = await AppDependencies.instance.draftMessageService.getDraft(
+      widget.channelId,
+      threadId: widget.rootMessageId,
+    );
+    if (!mounted || draft == null || draft.isEmpty) return;
+    _textController.text = draft;
+    _textController.selection = TextSelection.collapsed(offset: draft.length);
+  }
+
+  void _handleTyping(ThreadCubit cubit) {
+    final text = _textController.text;
+    if (text.trim().isEmpty) {
+      if (_isTyping) {
+        _isTyping = false;
+        cubit.emitTypingStop();
+      }
+      _typingStopDebounce?.cancel();
+      return;
+    }
+
+    if (!_isTyping) {
+      _isTyping = true;
+      cubit.emitTypingStart();
+    }
+    _typingStopDebounce?.cancel();
+    _typingStopDebounce = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      _isTyping = false;
+      cubit.emitTypingStop();
+    });
+  }
 
   @override
   void dispose() {
+    _draftDebounce?.cancel();
+    _typingStopDebounce?.cancel();
+    _textController.removeListener(_onDraftChanged);
     _textController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -74,6 +135,13 @@ class _ThreadPageState extends State<ThreadPage> {
           mimeType: picked.mimeType,
         );
     _scrollToBottom();
+  }
+
+  Future<void> _clearDraft() async {
+    await AppDependencies.instance.draftMessageService.clearDraft(
+      widget.channelId,
+      threadId: widget.rootMessageId,
+    );
   }
 
   @override
@@ -189,36 +257,72 @@ class _ThreadPageState extends State<ThreadPage> {
                 BlocBuilder<ThreadCubit, ThreadState>(
                   buildWhen: (p, n) =>
                       p.isSending != n.isSending ||
-                      p.isUploading != n.isUploading,
+                      p.isUploading != n.isUploading ||
+                      p.typingUserNames != n.typingUserNames,
                   builder: (context, state) {
-                    return MessageComposer(
-                      controller: _textController,
-                      hintText: 'Reply in thread…',
-                      isBusy: state.isSending || state.isUploading,
-                      onSend: (text) {
-                        context.read<ThreadCubit>().sendReply(text);
-                        _textController.clear();
-                        _scrollToBottom();
-                      },
-                      onPickGallery: () => _sendAttachment(
-                        context,
-                        _mediaPicker.pickFromGallery,
-                      ),
-                      onPickCamera: () => _sendAttachment(
-                        context,
-                        _mediaPicker.captureFromCamera,
-                      ),
-                      onPickDocument: () => _sendAttachment(
-                        context,
-                        _mediaPicker.pickDocument,
-                      ),
-                      onEmojiSelected: (emoji) {
-                        _textController.text =
-                            '${_textController.text}$emoji';
-                        _textController.selection = TextSelection.collapsed(
-                          offset: _textController.text.length,
-                        );
-                      },
+                    final cubit = context.read<ThreadCubit>();
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (state.typingLabel.isNotEmpty)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: AppSpacing.xxs,
+                            ),
+                            color: AppColors.surfaceMuted,
+                            child: Text(
+                              state.typingLabel,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: AppColors.textSecondary,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                            ),
+                          ),
+                        _ThreadTypingBinder(
+                          controller: _textController,
+                          cubit: cubit,
+                          onTyping: _handleTyping,
+                          child: MessageComposer(
+                            controller: _textController,
+                            hintText: 'Reply in thread…',
+                            isBusy: state.isSending || state.isUploading,
+                            onSend: (text) async {
+                              await cubit.sendReply(text);
+                              _textController.clear();
+                              await _clearDraft();
+                              _isTyping = false;
+                              cubit.emitTypingStop();
+                              _scrollToBottom();
+                            },
+                            onPickGallery: () => _sendAttachment(
+                              context,
+                              _mediaPicker.pickFromGallery,
+                            ),
+                            onPickCamera: () => _sendAttachment(
+                              context,
+                              _mediaPicker.captureFromCamera,
+                            ),
+                            onPickDocument: () => _sendAttachment(
+                              context,
+                              _mediaPicker.pickDocument,
+                            ),
+                            onEmojiSelected: (emoji) {
+                              _textController.text =
+                                  '${_textController.text}$emoji';
+                              _textController.selection =
+                                  TextSelection.collapsed(
+                                offset: _textController.text.length,
+                              );
+                              _handleTyping(cubit);
+                            },
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -229,4 +333,40 @@ class _ThreadPageState extends State<ThreadPage> {
       ),
     );
   }
+}
+
+class _ThreadTypingBinder extends StatefulWidget {
+  const _ThreadTypingBinder({
+    required this.controller,
+    required this.cubit,
+    required this.onTyping,
+    required this.child,
+  });
+
+  final TextEditingController controller;
+  final ThreadCubit cubit;
+  final void Function(ThreadCubit cubit) onTyping;
+  final Widget child;
+
+  @override
+  State<_ThreadTypingBinder> createState() => _ThreadTypingBinderState();
+}
+
+class _ThreadTypingBinderState extends State<_ThreadTypingBinder> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onTextChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onTextChanged);
+    super.dispose();
+  }
+
+  void _onTextChanged() => widget.onTyping(widget.cubit);
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }

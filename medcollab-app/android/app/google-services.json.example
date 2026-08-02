@@ -1,0 +1,6 @@
+# Place google-services.json here
+#
+# Download from Firebase Console → Project settings → Your apps → Android
+# Package name must be: com.example.medcollab_app
+#
+# Full steps: ../../PUSH_NOTIFICATIONS.md

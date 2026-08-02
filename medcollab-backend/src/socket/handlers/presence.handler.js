@@ -78,7 +78,7 @@ const registerPresenceHandlers = (io, socket) => {
       // Validate status is a known value
       const validStatuses = [
         'available', 'on_call', 'in_ot', 'in_icu',
-        'on_rounds', 'off_duty', 'do_not_disturb',
+        'on_rounds', 'off_duty', 'do_not_disturb', 'offline',
       ];
 
       if (!validStatuses.includes(status)) {

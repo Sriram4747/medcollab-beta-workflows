@@ -88,6 +88,28 @@ class HandoffModel extends Equatable {
   bool get isActive =>
       status == HandoffStatus.draft || status == HandoffStatus.submitted;
 
+  /// True when the handoff's calendar shift day is before today (local).
+  bool get isShiftPast {
+    if (shiftDate == null) return false;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final shiftDay =
+        DateTime(shiftDate!.year, shiftDate!.month, shiftDate!.day);
+    return shiftDay.isBefore(today);
+  }
+
+  /// Clinical lifecycle label combining status + whether the shift day passed.
+  String get lifecycleLabel {
+    if (status == HandoffStatus.draft) return 'Draft';
+    if (status == HandoffStatus.submitted) {
+      return isShiftPast ? 'Not attended' : 'Pending';
+    }
+    if (status == HandoffStatus.acknowledged) {
+      return isShiftPast ? 'Completed' : 'Active';
+    }
+    return status.value;
+  }
+
   DateTime? get lastUpdated => updatedAt ?? submittedAt ?? createdAt;
 
   /// Highest-priority patient drives list accent colour.

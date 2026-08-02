@@ -181,8 +181,17 @@ const createOrGetDM = asyncHandler(async (req, res) => {
   }
 
   const User = require('../users/user.model');
+  const { canMessageUser } = require('../../utils/knownUsers');
   const target = await User.findById(targetUserId).select('_id');
   if (!target) return respond.notFound(res, 'User not found');
+
+  const allowed = await canMessageUser(req.user._id, targetUserId);
+  if (!allowed) {
+    return respond.forbidden(
+      res,
+      'You can only message doctors you share a group with, already DM, or who are at your institution'
+    );
+  }
 
   // Check if DM already exists
   let channel = await Channel.findDMChannel(req.user._id, targetUserId);

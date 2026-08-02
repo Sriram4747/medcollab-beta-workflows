@@ -110,4 +110,11 @@ abstract final class EnvConfig {
       !kIsWeb &&
       _msg91WidgetId.isNotEmpty &&
       _msg91WidgetToken.isNotEmpty;
+
+  /// Developer Mode route + unlock UI (debug builds, or release with flag).
+  ///
+  /// Pass `--dart-define=ENABLE_DEV_TOOLS=true` on beta APKs when needed.
+  static const bool enableDeveloperTools =
+      kDebugMode ||
+      bool.fromEnvironment('ENABLE_DEV_TOOLS', defaultValue: false);
 }

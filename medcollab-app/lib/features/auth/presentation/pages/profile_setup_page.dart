@@ -19,6 +19,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final _nameController = TextEditingController();
   final _specialityController = TextEditingController();
   final _institutionController = TextEditingController();
+  final _customRoleController = TextEditingController();
   UserRole _role = UserRole.intern;
 
   @override
@@ -26,16 +27,25 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     _nameController.dispose();
     _specialityController.dispose();
     _institutionController.dispose();
+    _customRoleController.dispose();
     super.dispose();
   }
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
+
+    // When "Other" is chosen the free-text role is stored in speciality so it
+    // is still captured (backend `role` is a fixed enum).
+    final customRole = _customRoleController.text.trim();
+    final speciality = _role == UserRole.other && customRole.isNotEmpty
+        ? customRole
+        : _specialityController.text.trim();
+
     context.read<AuthBloc>().add(
           AuthProfileSubmitted(
             name: _nameController.text.trim(),
             role: _role.value,
-            speciality: _specialityController.text.trim(),
+            speciality: speciality,
             institution: _institutionController.text.trim(),
           ),
         );
@@ -78,12 +88,9 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 const SizedBox(height: 16),
                 DropdownButtonFormField<UserRole>(
                   value: _role,
+                  isExpanded: true,
                   decoration: const InputDecoration(labelText: 'Role'),
-                  items: [
-                    UserRole.intern,
-                    UserRole.pgResident,
-                    UserRole.juniorConsultant,
-                  ]
+                  items: UserRole.values
                       .map(
                         (r) => DropdownMenuItem(
                           value: r,
@@ -95,6 +102,25 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                       ? null
                       : (v) => setState(() => _role = v ?? UserRole.intern),
                 ),
+                if (_role == UserRole.other) ...[
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _customRoleController,
+                    enabled: !state.isLoading,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                      labelText: 'Your role',
+                      hintText: 'e.g. Physiotherapist, Pharmacist',
+                    ),
+                    validator: (v) {
+                      if (_role == UserRole.other &&
+                          (v == null || v.trim().length < 2)) {
+                        return 'Please describe your role';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _specialityController,

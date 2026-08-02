@@ -8,6 +8,7 @@ const Message = require('../messages/message.model');
 const Channel = require('../channels/channel.model');
 const Space = require('../spaces/space.model');
 const User = require('../users/user.model');
+const Handoff = require('../handoffs/handoff.model');
 const { respond } = require('../../utils/apiResponse');
 const asyncHandler = require('../../utils/asyncHandler');
 const escapeRegex = require('../../utils/escapeRegex');
@@ -40,7 +41,7 @@ async function accessibleChannelIds(userId) {
 }
 
 /**
- * GET /api/search?q=...&type=all|messages|doctors|channels|attachments
+ * GET /api/search?q=...&type=all|messages|doctors|channels|attachments|handoffs
  */
 const globalSearch = asyncHandler(async (req, res) => {
   const q = (req.query.q || '').trim();
@@ -68,12 +69,14 @@ const globalSearch = asyncHandler(async (req, res) => {
     doctors: [],
     channels: [],
     attachments: [],
+    handoffs: [],
   };
 
   const wantMessages = type === 'all' || type === 'messages';
   const wantAttachments = type === 'all' || type === 'attachments';
   const wantDoctors = type === 'all' || type === 'doctors';
   const wantChannels = type === 'all' || type === 'channels';
+  const wantHandoffs = type === 'all' || type === 'handoffs';
 
   if ((wantMessages || wantAttachments) && channelIds.length > 0) {
     if (wantMessages) {
@@ -138,42 +141,26 @@ const globalSearch = asyncHandler(async (req, res) => {
   }
 
   if (wantDoctors) {
-    // Prefer doctors who share a space with the caller; fall back to global name search.
-    let doctors = [];
-    if (spaceIds.length > 0) {
-      const spaces = await Space.find({ _id: { $in: spaceIds } })
-        .select('members.userId')
-        .lean();
-      const memberIds = [
-        ...new Set(
-          spaces.flatMap((s) =>
-            (s.members || []).map((m) => m.userId.toString())
-          )
-        ),
-      ].filter((id) => id !== userId.toString());
-
-      doctors = await User.find({
-        _id: { $in: memberIds },
-        $or: [
-          { name: regex },
-          { speciality: regex },
-          { institution: regex },
-          { displayTitle: regex },
-        ],
-      })
-        .select(
-          'name displayTitle role speciality institution avatarUrl availability'
-        )
-        .limit(limit)
-        .lean();
-    }
-
-    if (doctors.length === 0) {
-      // No global directory fallback — keep discovery inside the caller's groups.
-      doctors = [];
-    }
-
-    result.doctors = doctors;
+    const { resolveKnownUserIds } = require('../../utils/knownUsers');
+    const knownIds = await resolveKnownUserIds(userId);
+    result.doctors =
+      knownIds.length === 0
+        ? []
+        : await User.find({
+            _id: { $in: knownIds },
+            isActive: true,
+            isOnboarded: true,
+            $or: [
+              { name: regex },
+              { speciality: regex },
+              { displayTitle: regex },
+            ],
+          })
+            .select(
+              'name displayTitle role speciality institution avatarUrl availability'
+            )
+            .limit(limit)
+            .lean();
   }
 
   if (wantChannels) {
@@ -202,6 +189,73 @@ const globalSearch = asyncHandler(async (req, res) => {
           ? spaceNameById[c.spaceId.toString()] || null
           : null,
       }));
+  }
+
+  if (wantHandoffs) {
+    // Prefer membership spaces (not only channels that already exist).
+    const memberSpaces = await Space.find(
+      { 'members.userId': userId, isActive: true },
+      { _id: 1, name: 1 }
+    ).lean();
+    const handoffSpaceIds = memberSpaces.map((s) => s._id);
+    const spaceNameById = Object.fromEntries(
+      memberSpaces.map((s) => [s._id.toString(), s.name])
+    );
+
+    if (handoffSpaceIds.length > 0) {
+      const handoffs = await Handoff.find({
+        spaceId: { $in: handoffSpaceIds },
+        $or: [
+          { shiftSummary: regex },
+          { 'patients.clinicalAlias': regex },
+          { 'patients.diagnosis': regex },
+          { 'patients.notes': regex },
+          { 'patients.bedNumber': regex },
+          { 'patients.ward': regex },
+        ],
+      })
+        .populate('fromUserId', 'name displayTitle role avatarUrl')
+        .populate('toUserId', 'name displayTitle role avatarUrl')
+        .sort({ updatedAt: -1 })
+        .limit(limit)
+        .lean();
+
+      result.handoffs = handoffs.map((h) => {
+        const matchedPatient = (h.patients || []).find(
+          (p) =>
+            regex.test(p.clinicalAlias || '') ||
+            regex.test(p.diagnosis || '') ||
+            regex.test(p.notes || '') ||
+            regex.test(p.bedNumber || '') ||
+            regex.test(p.ward || '')
+        );
+        const title = matchedPatient
+          ? [
+              matchedPatient.ward,
+              matchedPatient.bedNumber
+                ? `Bed ${matchedPatient.bedNumber}`
+                : null,
+              matchedPatient.clinicalAlias,
+            ]
+              .filter(Boolean)
+              .join(' · ')
+          : h.shiftSummary || 'Handoff';
+
+        return {
+          _id: h._id,
+          spaceId: h.spaceId,
+          channelId: h.channelId,
+          status: h.status,
+          title,
+          shiftSummary: h.shiftSummary || '',
+          spaceName: spaceNameById[h.spaceId?.toString()] || null,
+          fromUser: h.fromUserId,
+          toUser: h.toUserId,
+          shiftDate: h.shiftDate,
+          updatedAt: h.updatedAt,
+        };
+      });
+    }
   }
 
   return respond.ok(res, 'Search results', { query: q, ...result });

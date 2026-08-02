@@ -26,6 +26,7 @@ const AVAILABILITY_STATUS = {
   ON_ROUNDS: 'on_rounds',
   OFF_DUTY: 'off_duty',
   DO_NOT_DISTURB: 'do_not_disturb',
+  OFFLINE: 'offline',      // Explicitly offline / not reachable via Vocle
 };
 
 // ─── Space Types ───────────────────────────────────────────────────────────────

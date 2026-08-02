@@ -2,6 +2,7 @@ import 'package:medcollab_app/core/constants/api_endpoints.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/features/auth/data/models/availability_model.dart';
+import 'package:medcollab_app/features/auth/data/models/notification_preferences_model.dart';
 import 'package:medcollab_app/features/auth/data/models/update_profile_request.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
@@ -33,6 +34,20 @@ class UserRepository extends BaseRepository {
     );
   }
 
+  /// `PUT /api/users/me` — notification preferences only.
+  Future<UserModel> updateNotificationPreferences(
+    NotificationPreferencesModel prefs,
+  ) {
+    return execute(
+      () => apiClient.put(
+        ApiEndpoints.me,
+        data: {'notifications': prefs.toJson()},
+        parser: (json) =>
+            UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      ),
+    );
+  }
+
   /// `PUT /api/users/me/availability`
   Future<AvailabilityModel> updateAvailability({
     required AvailabilityStatus status,
@@ -56,6 +71,16 @@ class UserRepository extends BaseRepository {
           }
           throw const UnknownException('Unexpected response format');
         },
+      ),
+    );
+  }
+
+  /// `PUT /api/users/me/fcm-token` — register this device for push.
+  Future<void> registerFcmToken(String token) {
+    return executeVoid(
+      () => apiClient.put(
+        ApiEndpoints.myFcmToken,
+        data: {'token': token},
       ),
     );
   }

@@ -1,0 +1,117 @@
+import 'package:equatable/equatable.dart';
+import 'package:medcollab_app/core/utils/json_map_utils.dart';
+
+enum AppNotificationCategory {
+  mention,
+  reply,
+  message,
+  invite,
+  handoff,
+  announcement,
+  other,
+}
+
+class NotificationMetadata extends Equatable {
+  const NotificationMetadata({
+    this.spaceId,
+    this.channelId,
+    this.messageId,
+    this.handoffId,
+  });
+
+  factory NotificationMetadata.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const NotificationMetadata();
+    return NotificationMetadata(
+      spaceId: json['spaceId']?.toString(),
+      channelId: json['channelId']?.toString(),
+      messageId: json['messageId']?.toString(),
+      handoffId: json['handoffId']?.toString(),
+    );
+  }
+
+  final String? spaceId;
+  final String? channelId;
+  final String? messageId;
+  final String? handoffId;
+
+  @override
+  List<Object?> get props => [spaceId, channelId, messageId, handoffId];
+}
+
+class AppNotificationModel extends Equatable {
+  const AppNotificationModel({
+    required this.id,
+    required this.type,
+    required this.title,
+    required this.body,
+    required this.read,
+    this.createdAt,
+    this.actorName,
+    this.metadata = const NotificationMetadata(),
+  });
+
+  factory AppNotificationModel.fromJson(Map<String, dynamic> json) {
+    final id = json['_id'] ?? json['id'];
+    return AppNotificationModel(
+      id: id.toString(),
+      type: json['type'] as String? ?? 'new_message',
+      title: json['title'] as String? ?? '',
+      body: json['body'] as String? ?? '',
+      read: json['read'] as bool? ?? false,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'].toString())
+          : null,
+      actorName: json['actorName'] as String?,
+      metadata: NotificationMetadata.fromJson(asJsonMap(json['metadata'])),
+    );
+  }
+
+  final String id;
+  final String type;
+  final String title;
+  final String body;
+  final bool read;
+  final DateTime? createdAt;
+  final String? actorName;
+  final NotificationMetadata metadata;
+
+  AppNotificationCategory get category {
+    return switch (type) {
+      'mention' => AppNotificationCategory.mention,
+      'thread_reply' => AppNotificationCategory.reply,
+      'space_invite' => AppNotificationCategory.invite,
+      'handoff_received' || 'handoff_acknowledged' =>
+        AppNotificationCategory.handoff,
+      'emergency_alert' || 'new_message' when title.toLowerCase().contains('announce') =>
+        AppNotificationCategory.announcement,
+      'new_message' || 'emergency_alert' => AppNotificationCategory.message,
+      _ => AppNotificationCategory.other,
+    };
+  }
+
+  String get categoryLabel => switch (category) {
+        AppNotificationCategory.mention => 'Mention',
+        AppNotificationCategory.reply => 'Reply',
+        AppNotificationCategory.message => 'Message',
+        AppNotificationCategory.invite => 'Invite',
+        AppNotificationCategory.handoff => 'Handoff',
+        AppNotificationCategory.announcement => 'Announcement',
+        AppNotificationCategory.other => 'Activity',
+      };
+
+  @override
+  List<Object?> get props =>
+      [id, type, title, body, read, createdAt, actorName, metadata];
+}
+
+class NotificationsPageResult {
+  const NotificationsPageResult({
+    required this.notifications,
+    required this.hasMore,
+    required this.unreadCount,
+  });
+
+  final List<AppNotificationModel> notifications;
+  final bool hasMore;
+  final int unreadCount;
+}

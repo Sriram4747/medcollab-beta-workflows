@@ -4,7 +4,7 @@ import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_design_system.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
 
-/// Standard avatar — clinical initials, optional presence ring.
+/// Vocle avatar — navy circle, white initials.
 class AppAvatar extends StatelessWidget {
   const AppAvatar({
     required this.name,
@@ -12,6 +12,8 @@ class AppAvatar extends StatelessWidget {
     this.size = AppDesignSystem.avatarMd,
     this.showPresence = false,
     this.isOnline = false,
+    this.backgroundColor,
+    this.foregroundColor,
     super.key,
   });
 
@@ -20,6 +22,8 @@ class AppAvatar extends StatelessWidget {
   final double size;
   final bool showPresence;
   final bool isOnline;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   String get _initial {
     final trimmed = name.trim();
@@ -33,9 +37,8 @@ class AppAvatar extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: AppColors.primaryContainer,
-        borderRadius: BorderRadius.circular(size / 2),
-        border: Border.all(color: AppColors.bubbleBorderMine),
+        color: backgroundColor ?? VocleColors.navy,
+        shape: BoxShape.circle,
       ),
       clipBehavior: Clip.antiAlias,
       child: imageUrl != null && imageUrl!.isNotEmpty
@@ -44,10 +47,17 @@ class AppAvatar extends StatelessWidget {
               fit: BoxFit.cover,
               width: size,
               height: size,
-              errorWidget: (_, __, ___) =>
-                  _Initials(initial: _initial, size: size),
+              errorWidget: (_, __, ___) => _Initials(
+                initial: _initial,
+                size: size,
+                color: foregroundColor ?? Colors.white,
+              ),
             )
-          : _Initials(initial: _initial, size: size),
+          : _Initials(
+              initial: _initial,
+              size: size,
+              color: foregroundColor ?? Colors.white,
+            ),
     );
 
     if (!showPresence) return avatar;
@@ -76,10 +86,15 @@ class AppAvatar extends StatelessWidget {
 }
 
 class _Initials extends StatelessWidget {
-  const _Initials({required this.initial, required this.size});
+  const _Initials({
+    required this.initial,
+    required this.size,
+    required this.color,
+  });
 
   final String initial;
   final double size;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +102,9 @@ class _Initials extends StatelessWidget {
       child: Text(
         initial,
         style: TextStyle(
-          fontSize: size * 0.36,
+          fontSize: size * 0.38,
           fontWeight: FontWeight.w600,
-          color: AppColors.onPrimaryContainer,
+          color: color,
           letterSpacing: -0.2,
         ),
       ),

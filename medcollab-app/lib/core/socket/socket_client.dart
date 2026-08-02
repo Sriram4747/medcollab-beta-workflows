@@ -55,6 +55,9 @@ class SocketClient {
       io.OptionBuilder()
           // Polling first helps Flutter web when websocket handshake is flaky.
           .setTransports(['websocket', 'polling'])
+          // Critical: without forceNew, dispose + reconnect reuses a dead manager
+          // and realtime (messages, presence) silently stops.
+          .enableForceNew()
           .disableAutoConnect()
           // Reconnect is managed manually so we always handshake with a fresh JWT.
           .setAuth({'token': accessToken})

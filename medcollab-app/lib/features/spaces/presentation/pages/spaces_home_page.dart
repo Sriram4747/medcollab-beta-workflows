@@ -115,11 +115,28 @@ class _SpacesHomePageState extends State<SpacesHomePage>
 
           final spaces = snapshot.data ?? [];
           if (spaces.isEmpty) {
-            return const AppEmptyState(
+            return AppEmptyState(
               icon: Icons.domain_outlined,
-              title: 'No spaces yet',
+              title: 'Your clinical groups live here',
               subtitle:
-                  'Create a department space or join with an invite code.',
+                  'Join with an invite code from a colleague, or create a '
+                  'department space to start collaborating.',
+              action: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  FilledButton.icon(
+                    onPressed: () => _showJoinDialog(context),
+                    icon: const Icon(Icons.group_add_outlined, size: 18),
+                    label: const Text('Join with invite code'),
+                  ),
+                  const SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    onPressed: () => _showCreateDialog(context),
+                    icon: const Icon(Icons.add, size: 18),
+                    label: const Text('Create a group'),
+                  ),
+                ],
+              ),
             );
           }
 
@@ -155,7 +172,7 @@ class _SpacesHomePageState extends State<SpacesHomePage>
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
-                      '${space.channels.length} channels · ${space.type.value}',
+                      '${space.channels.length} channels · ${space.type.label}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     trailing: const Icon(
@@ -164,6 +181,11 @@ class _SpacesHomePageState extends State<SpacesHomePage>
                       size: 20,
                     ),
                     onTap: () async {
+                      await AppDependencies.instance.recentItemsService
+                          .recordSpaceVisit(
+                        spaceId: space.id,
+                        name: space.name,
+                      );
                       await context.push(AppRoutes.spaceDetailPath(space.id));
                       if (mounted) _reload();
                     },
@@ -205,7 +227,7 @@ class _SpacesHomePageState extends State<SpacesHomePage>
                     .map(
                       (t) => DropdownMenuItem(
                         value: t,
-                        child: Text(t.value),
+                        child: Text(t.label),
                       ),
                     )
                     .toList(),

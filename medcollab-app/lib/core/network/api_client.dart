@@ -172,18 +172,47 @@ class ApiClient {
     Future<Response<Map<String, dynamic>>> Function() call, {
     T Function(Map<String, dynamic> json)? parser,
   }) async {
-    try {
-      final response = await call();
-      final body = response.data;
+    DioException? lastError;
 
-      if (body == null) {
-        throw const UnknownException('Empty response from server');
+    for (var attempt = 0; attempt <= AppConstants.networkMaxRetries; attempt++) {
+      try {
+        final response = await call();
+        final body = response.data;
+
+        if (body == null) {
+          throw const UnknownException('Empty response from server');
+        }
+
+        return ApiResponse.fromJson(body, parser);
+      } on DioException catch (e) {
+        lastError = e;
+
+        // Only retry when the request never reached the server (safe to resend).
+        // A cold-starting host refuses/stalls the first connections, then wakes.
+        if (!_isRetryableConnectionError(e) ||
+            attempt == AppConstants.networkMaxRetries) {
+          throw _mapDioError(e);
+        }
+
+        final delay = AppConstants.networkRetryBaseDelay * (attempt + 1);
+        developer.log(
+          '[Dio] connection failed (attempt ${attempt + 1}) — '
+          'retrying in ${delay.inSeconds}s (server may be waking up)',
+        );
+        await Future<void>.delayed(delay);
       }
-
-      return ApiResponse.fromJson(body, parser);
-    } on DioException catch (e) {
-      throw _mapDioError(e);
     }
+
+    // Unreachable, but keeps the analyzer satisfied.
+    throw _mapDioError(lastError!);
+  }
+
+  /// True when the request failed to reach the server (no partial send).
+  /// These are safe to retry even for POST/PUT because the server never
+  /// received the request.
+  bool _isRetryableConnectionError(DioException e) {
+    return e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.connectionTimeout;
   }
 
   AppException _mapDioError(DioException error) {

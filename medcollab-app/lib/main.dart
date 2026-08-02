@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:medcollab_app/app.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
@@ -16,6 +16,8 @@ void main() {
   );
 
   AppDependencies.instance.init();
+  // Soft-fail if google-services.json / Firebase not configured yet.
+  await AppDependencies.instance.fcmService.initialize();
 
   runApp(const MedCollabApp());
 }

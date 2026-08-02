@@ -7,9 +7,12 @@ import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
+import 'package:medcollab_app/core/theme/app_radius.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_model.dart';
 import 'package:medcollab_app/features/handoffs/presentation/utils/handoff_priority_colors.dart';
+import 'package:medcollab_app/features/handoffs/presentation/widgets/handoff_card.dart';
 import 'package:medcollab_app/features/handoffs/presentation/widgets/handoff_widgets.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
 
@@ -77,35 +80,116 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUserId =
-        context.read<AuthBloc>().state.user?.id ?? '';
+    final currentUserId = context.read<AuthBloc>().state.user?.id ?? '';
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Handoff')),
-      body: FutureBuilder<HandoffModel>(
-        future: _handoffFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return FutureBuilder<HandoffModel>(
+      future: _handoffFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            backgroundColor: AppColors.backgroundApp,
+            appBar: AppBar(
+              backgroundColor: AppColors.navyPrimary,
+              foregroundColor: AppColors.textOnDark,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 18,
+                  color: AppColors.textOnDark,
+                ),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
 
-          if (snapshot.hasError || !snapshot.hasData) {
-            final message = snapshot.error is AppException
-                ? (snapshot.error as AppException).message
-                : 'Handoff not found';
-            return Center(child: Text(message));
-          }
+        if (snapshot.hasError || !snapshot.hasData) {
+          final message = snapshot.error is AppException
+              ? (snapshot.error as AppException).message
+              : 'Handoff not found';
+          return Scaffold(
+            backgroundColor: AppColors.backgroundApp,
+            appBar: AppBar(
+              backgroundColor: AppColors.navyPrimary,
+              foregroundColor: AppColors.textOnDark,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 18,
+                  color: AppColors.textOnDark,
+                ),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            body: Center(child: Text(message)),
+          );
+        }
 
-          final handoff = snapshot.data!;
-          final isSender = handoff.fromUser.id == currentUserId;
-          final isReceiver = handoff.toUser.id == currentUserId;
-          final canEdit = handoff.isDraft && isSender;
-          final canAcknowledge =
-              handoff.status == HandoffStatus.submitted && isReceiver;
-          final updated = handoff.lastUpdated;
+        final handoff = snapshot.data!;
+        final isSender = handoff.fromUser.id == currentUserId;
+        final isReceiver = handoff.toUser.id == currentUserId;
+        final canEdit = handoff.isDraft && isSender;
+        final canAcknowledge =
+            handoff.status == HandoffStatus.submitted && isReceiver;
+        final updated = handoff.lastUpdated;
+        final shiftTitle =
+            '${_capitalize(handoff.shiftType.value)} shift';
+        final dateLabel = handoff.shiftDate != null
+            ? DateFormat.yMMMd().format(handoff.shiftDate!.toLocal())
+            : '';
 
-          return Column(
+        return Scaffold(
+          backgroundColor: AppColors.backgroundApp,
+          body: Column(
             children: [
+              Container(
+                width: double.infinity,
+                color: AppColors.navyPrimary,
+                child: SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 4, 16, 20),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 18,
+                            color: AppColors.textOnDark,
+                          ),
+                          onPressed: () => context.pop(),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  shiftTitle,
+                                  style: AppTextStyles.doctorName,
+                                ),
+                                if (dateLabel.isNotEmpty) ...[
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    dateLabel,
+                                    style: AppTextStyles.caption.copyWith(
+                                      color: AppColors.textOnDarkMuted,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               if (_error != null)
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -113,209 +197,251 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
                 ),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppGaps.screenH,
+                    AppGaps.sectionGap,
+                    AppGaps.screenH,
+                    AppGaps.sectionGap,
+                  ),
                   children: [
-                    _HeaderCard(handoff: handoff),
-                    const SizedBox(height: 16),
-                    if (handoff.shiftSummary.isNotEmpty) ...[
-                      Text(
-                        'Shift summary',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(handoff.shiftSummary),
-                      const SizedBox(height: 16),
-                    ],
+                    _MetaCard(handoff: handoff),
+                    const SizedBox(height: AppGaps.sectionGap),
                     Text(
-                      '${handoff.patients.length} patient${handoff.patients.length == 1 ? '' : 's'}',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      '${handoff.patients.length} PATIENT${handoff.patients.length == 1 ? '' : 'S'}'
+                          .toUpperCase(),
+                      style: AppTextStyles.sectionLabel,
                     ),
+                    const SizedBox(height: 8),
                     ...handoff.patients.map(
-                      (p) => HandoffPatientCard(patient: p),
+                      (p) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
+                        child: HandoffPatientCard(patient: p),
+                      ),
                     ),
                     if (updated != null) ...[
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       Text(
                         'Last updated ${DateFormat('d MMM yyyy, h:mm a').format(updated.toLocal())}',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
+                        style: AppTextStyles.caption,
                       ),
                     ],
                     if (handoff.acknowledgementNote.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       Text(
                         'Acknowledgement: ${handoff.acknowledgementNote}',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: AppTextStyles.body,
                       ),
                     ],
                     const SizedBox(height: 80),
                   ],
                 ),
               ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      if (canEdit) ...[
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: _isBusy
-                                ? null
-                                : () => context.push(
-                                      AppRoutes.spaceHandoffEditPath(
-                                        widget.spaceId,
-                                        handoff.id,
+              if (canEdit || canAcknowledge)
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppGaps.screenH,
+                      8,
+                      AppGaps.screenH,
+                      12,
+                    ),
+                    child: Row(
+                      children: [
+                        if (canEdit) ...[
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _isBusy
+                                  ? null
+                                  : () => context.push(
+                                        AppRoutes.spaceHandoffEditPath(
+                                          widget.spaceId,
+                                          handoff.id,
+                                        ),
                                       ),
-                                    ),
-                            icon: const Icon(Icons.edit_outlined),
-                            label: const Text('Edit'),
+                              icon: const Icon(Icons.edit_outlined),
+                              label: const Text('Edit'),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed:
-                                _isBusy ? null : () => _deleteDraft(handoff),
-                            icon: const Icon(Icons.delete_outline),
-                            label: const Text('Delete'),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed:
+                                  _isBusy ? null : () => _deleteDraft(handoff),
+                              icon: const Icon(Icons.delete_outline),
+                              label: const Text('Delete'),
+                            ),
                           ),
-                        ),
+                        ],
+                        if (canAcknowledge)
+                          Expanded(
+                            child: SizedBox(
+                              height: 48,
+                              child: FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: AppColors.tealPrimary,
+                                  foregroundColor: AppColors.textOnDark,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: AppRadius.card,
+                                  ),
+                                ),
+                                onPressed: _isBusy
+                                    ? null
+                                    : () => _acknowledge(handoff),
+                                child: _isBusy
+                                    ? const SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Acknowledge Handoff',
+                                        style: AppTextStyles.labelLarge
+                                            .copyWith(
+                                          color: AppColors.textOnDark,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ),
                       ],
-                      if (canAcknowledge)
-                        Expanded(
-                          child: FilledButton.icon(
-                            onPressed:
-                                _isBusy ? null : () => _acknowledge(handoff),
-                            icon: _isBusy
-                                ? const SizedBox(
-                                    width: 18,
-                                    height: 18,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Icon(Icons.check_circle_outline),
-                            label: const Text('Acknowledge'),
-                          ),
-                        ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+  }
+
+  static String _capitalize(String raw) {
+    if (raw.isEmpty) return raw;
+    return '${raw[0].toUpperCase()}${raw.substring(1)}';
   }
 }
 
-class _HeaderCard extends StatelessWidget {
-  const _HeaderCard({required this.handoff});
+class _MetaCard extends StatelessWidget {
+  const _MetaCard({required this.handoff});
 
   final HandoffModel handoff;
 
   @override
   Widget build(BuildContext context) {
-    final statusColor =
-        HandoffPriorityColors.handoffStatusColor(handoff.status);
+    final token = handoffStatusToken(handoff);
+    final badge = handoffBadgeColors(token);
+    final badgeLabel = handoff.lifecycleLabel == 'Completed'
+        ? 'Done'
+        : handoff.lifecycleLabel == 'Active'
+            ? 'Active'
+            : HandoffPriorityColors.handoffLifecycleLabel(handoff);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surfaceCard,
+        borderRadius: AppRadius.card,
+        border: Border.all(color: AppColors.borderDefault, width: 0.5),
+      ),
+      child: Column(
+        children: [
+          _MetaRow(label: 'From', value: handoff.fromUser.displayName),
+          const Divider(height: 1, color: AppColors.borderLight),
+          _MetaRow(
+            label: 'Assigned to',
+            value: handoff.toUser.displayName,
+            valueColor: AppColors.tealPrimary,
+          ),
+          const Divider(height: 1, color: AppColors.borderLight),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppGaps.cardH,
+              vertical: AppGaps.cardV,
+            ),
+            child: Row(
               children: [
-                Text(
-                  '${handoff.shiftType.value} shift',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    'Status',
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                 ),
-                const Spacer(),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
+                    color: badge.bg,
+                    borderRadius: AppRadius.pill,
                   ),
                   child: Text(
-                    HandoffPriorityColors.handoffStatusLabel(handoff.status),
-                    style: TextStyle(
-                      color: statusColor,
+                    badgeLabel,
+                    style: AppTextStyles.badge.copyWith(
+                      color: badge.text,
                       fontWeight: FontWeight.w600,
-                      fontSize: 12,
                     ),
                   ),
                 ),
               ],
             ),
-            if (handoff.shiftDate != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                DateFormat.yMMMd().format(handoff.shiftDate!.toLocal()),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-            ],
-            const Divider(height: 24),
-            _PersonRow(
-              label: 'From',
-              name: handoff.fromUser.displayName,
-            ),
-            const SizedBox(height: 8),
-            _PersonRow(
-              label: 'Assigned to',
-              name: handoff.toUser.displayName,
-              highlight: true,
-            ),
+          ),
+          if (handoff.shiftSummary.isNotEmpty) ...[
+            const Divider(height: 1, color: AppColors.borderLight),
+            _MetaRow(label: 'Summary', value: handoff.shiftSummary),
           ],
-        ),
+        ],
       ),
     );
   }
 }
 
-class _PersonRow extends StatelessWidget {
-  const _PersonRow({
+class _MetaRow extends StatelessWidget {
+  const _MetaRow({
     required this.label,
-    required this.name,
-    this.highlight = false,
+    required this.value,
+    this.valueColor,
   });
 
   final String label;
-  final String name;
-  final bool highlight;
+  final String value;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 100,
-          child: Text(
-            label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppGaps.cardH,
+        vertical: AppGaps.cardV,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
-        ),
-        Expanded(
-          child: Text(
-            name,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: highlight ? AppColors.primary : null,
-                  fontWeight: highlight ? FontWeight.w600 : null,
-                ),
+          Expanded(
+            child: Text(
+              value,
+              style: AppTextStyles.cardTitle.copyWith(
+                color: valueColor ?? AppColors.textPrimary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

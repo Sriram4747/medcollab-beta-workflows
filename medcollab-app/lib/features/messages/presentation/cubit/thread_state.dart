@@ -9,6 +9,7 @@ class ThreadState extends Equatable {
     this.isUploading = false,
     this.hasMore = false,
     this.error,
+    this.typingUserNames = const [],
   });
 
   final MessageModel? rootMessage;
@@ -18,6 +19,15 @@ class ThreadState extends Equatable {
   final bool isUploading;
   final bool hasMore;
   final String? error;
+  final List<String> typingUserNames;
+
+  String get typingLabel {
+    final names = typingUserNames;
+    if (names.isEmpty) return '';
+    if (names.length == 1) return '${names.first} is typing…';
+    if (names.length == 2) return '${names[0]} and ${names[1]} are typing…';
+    return '${names.length} people are typing…';
+  }
 
   ThreadState copyWith({
     MessageModel? rootMessage,
@@ -27,6 +37,7 @@ class ThreadState extends Equatable {
     bool? isUploading,
     bool? hasMore,
     String? error,
+    List<String>? typingUserNames,
   }) {
     return ThreadState(
       rootMessage: rootMessage ?? this.rootMessage,
@@ -36,10 +47,19 @@ class ThreadState extends Equatable {
       isUploading: isUploading ?? this.isUploading,
       hasMore: hasMore ?? this.hasMore,
       error: error,
+      typingUserNames: typingUserNames ?? this.typingUserNames,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [rootMessage, replies, isLoading, isSending, isUploading, hasMore, error];
+  List<Object?> get props => [
+        rootMessage,
+        replies,
+        isLoading,
+        isSending,
+        isUploading,
+        hasMore,
+        error,
+        typingUserNames,
+      ];
 }

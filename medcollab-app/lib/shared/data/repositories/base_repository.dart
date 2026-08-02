@@ -24,6 +24,25 @@ abstract class BaseRepository {
     }
   }
 
+  /// For endpoints that succeed with `{ success: true }` and optional unused `data`.
+  Future<void> executeVoid(Future<ApiResponse<dynamic>> Function() request) async {
+    try {
+      final response = await request();
+      if (!response.success) {
+        if (response.errors.isNotEmpty) {
+          throw ValidationException(response.message, errors: response.errors);
+        }
+        throw UnknownException(
+          response.message.isNotEmpty ? response.message : 'Request failed',
+        );
+      }
+    } on AppException {
+      rethrow;
+    } catch (e) {
+      throw UnknownException(e.toString());
+    }
+  }
+
   /// Parses a single nested key from the `data` object.
   T parseNested<T>(
     Map<String, dynamic> data,

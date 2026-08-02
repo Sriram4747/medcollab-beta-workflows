@@ -41,6 +41,7 @@ const { handoffRouter, spaceHandoffRouter } = require('./features/handoffs/hando
 const mediaRoutes = require('./features/media/media.routes');
 const notificationRoutes = require('./features/notifications/notification.routes');
 const searchRoutes = require('./features/search/search.routes');
+const devRoutes = require('./features/dev/dev.routes');
 
 const app = express();
 
@@ -183,6 +184,7 @@ app.use('/api/channels/:channelId/messages', messageRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/dev', devRoutes);
 
 // ── API Info Route ────────────────────────────────────────────────────────────
 app.get('/api', (req, res) => {

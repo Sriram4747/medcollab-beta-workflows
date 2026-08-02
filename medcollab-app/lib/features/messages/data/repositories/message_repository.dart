@@ -37,11 +37,13 @@ class MessageRepository extends BaseRepository {
   Future<MessageModel> sendTextMessage({
     required String channelId,
     required String text,
+    List<String> mentions = const [],
   }) {
     return _sendMessage(
       channelId: channelId,
       type: MessageType.text,
       content: MessageContent(text: text),
+      mentions: mentions,
     );
   }
 
@@ -71,6 +73,7 @@ class MessageRepository extends BaseRepository {
     required String channelId,
     required MessageType type,
     required MessageContent content,
+    List<String> mentions = const [],
   }) {
     return execute(
       () => apiClient.post(
@@ -78,6 +81,7 @@ class MessageRepository extends BaseRepository {
         data: {
           'type': type.value,
           'content': content.toJson(),
+          if (mentions.isNotEmpty) 'mentions': mentions,
         },
         parser: (json) =>
             parseNested(json, 'message', MessageModel.fromJson),
@@ -100,15 +104,24 @@ class MessageRepository extends BaseRepository {
     );
   }
 
-  Future<MessageModel> deleteMessage({
+  /// Soft-deletes a message. Backend returns `{ success }` without a message body.
+  Future<void> deleteMessage({
     required String channelId,
     required String messageId,
   }) {
-    return execute(
-      () => apiClient.delete(
-        ApiEndpoints.messageById(channelId, messageId),
-        parser: (json) =>
-            parseNested(json, 'message', MessageModel.fromJson),
+    return executeVoid(
+      () => apiClient.delete(ApiEndpoints.messageById(channelId, messageId)),
+    );
+  }
+
+  Future<void> markMessagesRead({
+    required String channelId,
+    required List<String> messageIds,
+  }) {
+    return executeVoid(
+      () => apiClient.post(
+        ApiEndpoints.markChannelRead(channelId),
+        data: {'messageIds': messageIds},
       ),
     );
   }

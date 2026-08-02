@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/router/go_router_refresh_stream.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -9,15 +10,26 @@ import 'package:medcollab_app/features/auth/presentation/pages/otp_verification_
 import 'package:medcollab_app/features/auth/presentation/pages/phone_entry_page.dart';
 import 'package:medcollab_app/features/auth/presentation/pages/profile_setup_page.dart';
 import 'package:medcollab_app/features/auth/presentation/pages/splash_page.dart';
-import 'package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart';
-import 'package:medcollab_app/features/messages/presentation/pages/thread_page.dart';
+import 'package:medcollab_app/features/bookmarks/presentation/pages/bookmarks_page.dart';
+import 'package:medcollab_app/features/dev/presentation/pages/developer_mode_page.dart';
 import 'package:medcollab_app/features/handoffs/presentation/pages/handoff_detail_page.dart';
 import 'package:medcollab_app/features/handoffs/presentation/pages/handoff_form_page.dart';
 import 'package:medcollab_app/features/handoffs/presentation/pages/handoffs_list_page.dart';
 import 'package:medcollab_app/features/members/presentation/pages/space_members_page.dart';
+import 'package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart';
+import 'package:medcollab_app/features/messages/presentation/pages/start_dm_page.dart';
+import 'package:medcollab_app/features/messages/presentation/pages/thread_page.dart';
+import 'package:medcollab_app/features/notifications/presentation/pages/notification_settings_page.dart';
+import 'package:medcollab_app/features/search/presentation/pages/global_search_page.dart';
+import 'package:medcollab_app/features/shell/presentation/pages/main_shell_page.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
+import 'package:medcollab_app/features/spaces/presentation/pages/join_invite_page.dart';
 import 'package:medcollab_app/features/spaces/presentation/pages/space_detail_page.dart';
 import 'package:medcollab_app/features/spaces/presentation/pages/spaces_home_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/contact_team_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/feature_request_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/help_faq_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/report_bug_page.dart';
 
 class AppRouter {
   AppRouter({required AuthBloc authBloc}) : _authBloc = authBloc {
@@ -26,8 +38,11 @@ class AppRouter {
 
   final AuthBloc _authBloc;
   late final GoRouterRefreshStream _refreshListenable;
+  final GlobalKey<NavigatorState> rootNavigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: 'root');
 
   late final GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: kDebugMode,
     refreshListenable: _refreshListenable,
@@ -49,9 +64,131 @@ class AppRouter {
         path: AppRoutes.profileSetup,
         builder: (context, state) => const ProfileSetupPage(),
       ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainShellPage(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (context, state) => ShellTabPages.home,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.messages,
+                builder: (context, state) => ShellTabPages.messages,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.handoffs,
+                builder: (context, state) => ShellTabPages.handoffs,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.notifications,
+                builder: (context, state) => ShellTabPages.notifications,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                builder: (context, state) => ShellTabPages.profile,
+              ),
+            ],
+          ),
+        ],
+      ),
       GoRoute(
-        path: AppRoutes.home,
+        path: AppRoutes.spacesList,
         builder: (context, state) => const SpacesHomePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.search,
+        builder: (context, state) => const GlobalSearchPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.bookmarks,
+        builder: (context, state) => const BookmarksPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.notificationSettings,
+        builder: (context, state) => const NotificationSettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.help,
+        builder: (context, state) => const HelpFaqPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.reportBug,
+        builder: (context, state) => const ReportBugPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.featureRequest,
+        builder: (context, state) => const FeatureRequestPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.contact,
+        builder: (context, state) => const ContactTeamPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.developerMode,
+        redirect: (context, state) {
+          if (!EnvConfig.enableDeveloperTools) return AppRoutes.home;
+          return null;
+        },
+        builder: (context, state) => const DeveloperModePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.startDm,
+        builder: (context, state) => const StartDmPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.dm,
+        builder: (context, state) {
+          final channelId = state.pathParameters['channelId']!;
+          final channel = state.extra as ChannelModel?;
+          return ChannelChatPage(
+            spaceId: null,
+            channelId: channelId,
+            channel: channel,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.dmThread,
+        builder: (context, state) {
+          final channelId = state.pathParameters['channelId']!;
+          final messageId = state.pathParameters['messageId']!;
+          final args = state.extra;
+          final routeArgs = args is ThreadRouteArgs ? args : null;
+          return ThreadPage(
+            spaceId: null,
+            channelId: channelId,
+            rootMessageId: messageId,
+            channel: routeArgs?.channel,
+            initialRoot: routeArgs?.rootMessage,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.joinInvite,
+        builder: (context, state) {
+          final code = state.pathParameters['code']!;
+          return JoinInvitePage(code: code);
+        },
       ),
       GoRoute(
         path: AppRoutes.spaceDetail,
@@ -149,13 +286,11 @@ class AppRouter {
         return location == AppRoutes.splash ? null : AppRoutes.splash;
 
       case AuthStatus.loading:
-        // Stay on the current auth screen while saving OTP / profile, etc.
         if (location == AppRoutes.splash ||
             location == AppRoutes.phoneEntry ||
             location == AppRoutes.otpVerification ||
             location == AppRoutes.profileSetup ||
-            location == AppRoutes.home ||
-            location.startsWith('/spaces')) {
+            _isAuthenticatedRoute(location)) {
           return null;
         }
         return AppRoutes.splash;
@@ -173,11 +308,30 @@ class AppRouter {
         return AppRoutes.profileSetup;
 
       case AuthStatus.authenticated:
-        if (location == AppRoutes.home || location.startsWith('/spaces')) {
-          return null;
-        }
+        if (_isAuthenticatedRoute(location)) return null;
         return AppRoutes.home;
     }
+  }
+
+  bool _isAuthenticatedRoute(String location) {
+    if (AppRoutes.shellPaths.contains(location)) return true;
+    if (location.startsWith('/spaces')) return true;
+    if (location.startsWith('/dm')) return true;
+    if (location.startsWith('/join')) return true;
+    if (location == AppRoutes.search ||
+        location == AppRoutes.bookmarks ||
+        location == AppRoutes.notificationSettings ||
+        location == AppRoutes.help ||
+        location == AppRoutes.reportBug ||
+        location == AppRoutes.featureRequest ||
+        location == AppRoutes.contact) {
+      return true;
+    }
+    if (location == AppRoutes.developerMode &&
+        EnvConfig.enableDeveloperTools) {
+      return true;
+    }
+    return false;
   }
 
   void dispose() {

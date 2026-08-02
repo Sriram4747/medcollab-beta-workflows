@@ -31,6 +31,7 @@ class ThreadCubit extends Cubit<ThreadState> {
       _socketClient.joinChannel(channelId);
     }
     _listenForSocketReplies();
+    _listenForTyping();
     _connectionSub = _socketClient.connectionStream.listen((connected) {
       if (connected) {
         _socketClient.joinChannel(channelId);
@@ -49,6 +50,10 @@ class ThreadCubit extends Cubit<ThreadState> {
 
   StreamSubscription<Map<String, dynamic>>? _messageSub;
   StreamSubscription<bool>? _connectionSub;
+  StreamSubscription<Map<String, dynamic>>? _typingSub;
+  StreamSubscription<Map<String, dynamic>>? _stoppedTypingSub;
+
+  final Map<String, String> _typingUsers = {};
 
   Future<void> loadThread({bool silent = false}) async {
     if (!silent) {
@@ -164,6 +169,38 @@ class ThreadCubit extends Cubit<ThreadState> {
     });
   }
 
+  void _listenForTyping() {
+    _typingSub =
+        _socketClient.onMapEvent(SocketEvents.userTyping).listen((data) {
+      final msgChannelId = data['channelId']?.toString() ?? '';
+      if (msgChannelId != channelId) return;
+      final userId = data['userId']?.toString() ?? '';
+      if (userId.isEmpty || userId == currentUserId) return;
+      final userName = data['userName']?.toString() ?? 'Someone';
+      _typingUsers[userId] = userName;
+      emit(state.copyWith(typingUserNames: _typingUsers.values.toList()));
+    });
+
+    _stoppedTypingSub = _socketClient
+        .onMapEvent(SocketEvents.userStoppedTyping)
+        .listen((data) {
+      final msgChannelId = data['channelId']?.toString() ?? '';
+      if (msgChannelId != channelId) return;
+      final userId = data['userId']?.toString() ?? '';
+      if (userId.isEmpty) return;
+      _typingUsers.remove(userId);
+      emit(state.copyWith(typingUserNames: _typingUsers.values.toList()));
+    });
+  }
+
+  void emitTypingStart() {
+    _socketClient.emitTypingStart(channelId);
+  }
+
+  void emitTypingStop() {
+    _socketClient.emitTypingStop(channelId);
+  }
+
   MessageModel? _parseSocketMessage(Map<String, dynamic> data) {
     try {
       return MessageModel.fromJson(data);
@@ -196,8 +233,11 @@ class ThreadCubit extends Cubit<ThreadState> {
 
   @override
   Future<void> close() {
+    emitTypingStop();
     _connectionSub?.cancel();
     _messageSub?.cancel();
+    _typingSub?.cancel();
+    _stoppedTypingSub?.cancel();
     return super.close();
   }
 }

@@ -3,6 +3,7 @@ import 'package:medcollab_app/core/utils/json_map_utils.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
+import 'package:medcollab_app/features/messages/data/models/message_read_receipt.dart';
 import 'package:medcollab_app/features/messages/data/models/thread_reply_preview.dart';
 
 class MessageContent extends Equatable {
@@ -73,6 +74,8 @@ class MessageModel extends Equatable {
     this.createdAt,
     this.deliveryState,
     this.localOnly = false,
+    this.mentions = const [],
+    this.readBy = const [],
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -87,6 +90,8 @@ class MessageModel extends Equatable {
 
     final contentJson = asJsonMap(json['content']);
     final lastReplyJson = asJsonMap(json['lastReply']);
+    final mentionsRaw = json['mentions'];
+    final readByRaw = json['readBy'];
 
     return MessageModel(
       id: id.toString(),
@@ -107,6 +112,25 @@ class MessageModel extends Equatable {
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString())
           : null,
+      mentions: mentionsRaw is List
+          ? mentionsRaw
+              .map((m) {
+                final map = asJsonMap(m);
+                if (map != null) {
+                  return UserModel.fromJson(map).id;
+                }
+                return m?.toString() ?? '';
+              })
+              .where((id) => id.isNotEmpty && id != 'null')
+              .toList()
+          : const [],
+      readBy: readByRaw is List
+          ? readByRaw
+              .map(asJsonMap)
+              .whereType<Map<String, dynamic>>()
+              .map(MessageReadReceipt.fromJson)
+              .toList()
+          : const [],
     );
   }
 
@@ -124,6 +148,8 @@ class MessageModel extends Equatable {
   final DateTime? createdAt;
   final MessageDeliveryState? deliveryState;
   final bool localOnly;
+  final List<String> mentions;
+  final List<MessageReadReceipt> readBy;
 
   bool get isThreadReply => threadId != null && threadId!.isNotEmpty;
   bool get hasThread => replyCount > 0;
@@ -152,6 +178,8 @@ class MessageModel extends Equatable {
     DateTime? createdAt,
     MessageDeliveryState? deliveryState,
     bool? localOnly,
+    List<String>? mentions,
+    List<MessageReadReceipt>? readBy,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -168,6 +196,8 @@ class MessageModel extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       deliveryState: deliveryState ?? this.deliveryState,
       localOnly: localOnly ?? this.localOnly,
+      mentions: mentions ?? this.mentions,
+      readBy: readBy ?? this.readBy,
     );
   }
 
@@ -187,5 +217,7 @@ class MessageModel extends Equatable {
         createdAt,
         deliveryState,
         localOnly,
+        mentions,
+        readBy,
       ];
 }

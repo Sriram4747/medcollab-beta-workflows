@@ -1,8 +1,8 @@
 # MedCollab — Beta Deployment Guide
 
-**Phase:** External beta — **backend LIVE**  
+**Phase:** External beta — **backend + mobile LIVE** (FCM Android ✅)  
 **Production API:** https://medcollab.up.railway.app  
-**Last updated:** 2026-06-28
+**Last updated:** 2026-08-02
 
 ---
 
@@ -11,12 +11,14 @@
 | Step | Status |
 |------|--------|
 | MongoDB Atlas cluster `medcollab-beta` | ✅ |
-| Railway deploy from GitHub `mathiharan29/medcollab-beta` | ✅ |
+| Railway deploy from GitHub `mathiharan29/medcollab-beta` **`master`** | ✅ Hobby plan |
 | `/health` → `"database": "connected"` | ✅ |
 | Cloudinary (`denbnijqe`) | ✅ |
-| `API_BASE_URL` on Railway | ✅ Set to production URL |
-| MSG91 OTP SMS | ⏳ **In progress** — dashboard OK (use mobile data on home Wi‑Fi if blocked); add keys to Railway |
-| Flutter production APK | ⬜ Pending MSG91 |
+| `API_BASE_URL` on Railway | ✅ |
+| MSG91 OTP Widget (SDK + `verify-msg91-token`) | ✅ |
+| Firebase FCM (`FIREBASE_*` + Admin connected) | ✅ |
+| Flutter production APK (with FCM) | ✅ `D:\MedCollab\MedCollab-beta.apk` |
+| Beta bug-fix batch (`f2e8afe`) | ✅ Auth speed, presence, handoffs, chat, private channels |
 
 **Repos:**
 
@@ -55,7 +57,7 @@ Push to both after changes: `git push origin branch` and `git push github branch
 - [x] Cloudinary credentials configured
 - [x] `API_BASE_URL=https://medcollab.up.railway.app`
 - [ ] `ALLOWED_ORIGINS` — only needed for Flutter web
-- [ ] Firebase credentials (optional)
+- [x] Firebase credentials (`FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`) — FCM LIVE
 - [x] Health check returns 200: `GET /health`
 
 ### MongoDB Atlas
@@ -311,7 +313,8 @@ Run with two physical devices or one phone + one browser:
 
 | Item | Status | Impact |
 |------|--------|--------|
-| FCM push notifications | Backend ready, Flutter not integrated | No background push |
+| FCM push notifications | ✅ Android LIVE | See `PUSH_NOTIFICATIONS.md` |
+| iOS / APNs | Not configured | Android-first beta |
 | Release signing | Debug keystore | OK for internal beta, not Play Store |
 | App ID | `com.example.medcollab_app` | Change before store release |
 | Local media fallback | Dev only | Must use Cloudinary in production |
@@ -399,7 +402,14 @@ cd medcollab-backend && node scripts/validate-env.js
 cd medcollab-backend && .\scripts\start-production.ps1
 
 # Build beta APK
-cd medcollab-app && .\scripts\build-release-apk.ps1 -ApiBaseUrl "https://medcollab.up.railway.app"
+cd medcollab-app
+.\scripts\build-release-apk.ps1 `
+  -ApiBaseUrl "https://medcollab.up.railway.app" `
+  -Msg91WidgetToken "YOUR_WIDGET_TOKEN" `
+  -SkipAnalyze
+
+# Output: build\app\outputs\flutter-apk\app-release.apk
+# Install: adb install -r build\app\outputs\flutter-apk\app-release.apk
 
 # Health check
 curl https://medcollab.up.railway.app/health

@@ -1,6 +1,6 @@
 /// App-wide constants.
 abstract final class AppConstants {
-  static const String appName = 'MedCollab';
+  static const String appName = 'Vocle';
 
   /// Default when no `--dart-define=API_BASE_URL` is set (see [EnvConfig]).
   static const String defaultApiBaseUrl = 'http://localhost:5000';
@@ -28,6 +28,14 @@ abstract final class AppConstants {
   static const int socketMaxReconnectAttempts = 10;
 
   /// HTTP timeouts.
-  static const Duration connectTimeout = Duration(seconds: 15);
-  static const Duration receiveTimeout = Duration(seconds: 30);
+  ///
+  /// Connect timeout is generous because Railway (and similar hosts) can
+  /// "cold start" a sleeping container — the first request after idle may take
+  /// 15–40s to get a response while the server boots.
+  static const Duration connectTimeout = Duration(seconds: 40);
+  static const Duration receiveTimeout = Duration(seconds: 45);
+
+  /// Automatic retry for connection failures (handles server cold starts).
+  static const int networkMaxRetries = 3;
+  static const Duration networkRetryBaseDelay = Duration(seconds: 2);
 }

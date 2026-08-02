@@ -7,7 +7,7 @@ import 'package:medcollab_app/core/theme/app_spacing.dart';
 /// Inspired by Linear (precision), Notion (calm surfaces), Slack (clinical chat).
 abstract final class AppDesignSystem {
   // Brand personality
-  static const String brandName = 'MedCollab';
+  static const String brandName = 'Vocle';
   static const List<String> personality = [
     'Calm',
     'Professional',

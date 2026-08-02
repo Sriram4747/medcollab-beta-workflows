@@ -1,9 +1,9 @@
 # MedCollab — Claude Code Context
 
 ## What this project is
-Medical collaboration platform for doctors. Replacing WhatsApp for clinical communication. Slack-like, built for Indian hospital workflows.
+Medical collaboration platform for doctors (**product UI name: Vocle**). Replacing WhatsApp for clinical communication. Slack-like, built for Indian hospital workflows.
 
-## Repos & production (2026-06-28)
+## Repos & production (2026-08-02)
 
 | | URL |
 |---|-----|
@@ -12,8 +12,10 @@ Medical collaboration platform for doctors. Replacing WhatsApp for clinical comm
 | **Production API** | **https://medcollab.up.railway.app** |
 | Health | https://medcollab.up.railway.app/health |
 
-**Beta backend: LIVE** — MongoDB Atlas + Railway + Cloudinary configured.  
-**MSG91: BLOCKED** — user cannot access msg91.com dashboard (IP blocked at signup). Production login needs MSG91 vars on Railway.
+**Beta: LIVE** — MongoDB Atlas + Railway Hobby + Cloudinary + MSG91 widget OTP + Firebase FCM + production APK.  
+**Current sprint:** **11 — Beta Polish ✅** (DM privacy, notify-while-reading, Offline, onboarding/help/dev mode). Deploy Sprint 11 backend to GitHub `master` for Railway.
+
+**Railway deploys from GitHub `master` only** (root `medcollab-backend`). Design branches do not auto-deploy.
 
 ## Target users (beta)
 MBBS interns, PG residents, junior consultants. Starting with ~15 doctors.
@@ -22,8 +24,8 @@ MBBS interns, PG residents, junior consultants. Starting with ~15 doctors.
 - Backend: Node.js + Express + MongoDB Atlas + Socket.io on **Railway**
 - Mobile: Flutter (flutter_bloc, dio, go_router, socket_io_client)
 - Media: **Cloudinary** (cloud `denbnijqe` in production)
-- Auth: Phone OTP (**MSG91**) + JWT — MSG91 pending
-- Push: Firebase (optional, not configured)
+- Auth: Phone OTP (**MSG91 widget SDK**) + JWT
+- Push: **Firebase Cloud Messaging (Android LIVE)**
 - CI: GitLab CI; deploy via GitHub → Railway
 
 ## Project structure
@@ -31,25 +33,33 @@ MBBS interns, PG residents, junior consultants. Starting with ~15 doctors.
 medcollab-backend/   ← Node.js API (Railway root: medcollab-backend/)
 medcollab-app/       ← Flutter client
 DEPLOYMENT.md        ← Beta deploy guide + troubleshooting
+PUSH_NOTIFICATIONS.md ← FCM Firebase + Railway setup
+PROJECT_LEAD_SUMMARY.md ← Shareable project-lead status
 ```
 
 ## What is DONE
 
 ### Backend — complete + deployed
 - All controllers, socket, auth, handoffs, media
-- Production on Railway; `/health` OK
-- Realtime fixes: JWT socket refresh, space rooms, presence snapshot
+- Sprint 8: DMs list, search, invite preview, notification unread/prefs
+- Sprint 10: Firebase Admin FCM send (modular `firebase-admin/app`)
+- Production on Railway; `/health` OK; logs `Firebase Admin connected`
+- Realtime: JWT socket refresh, space rooms, presence snapshot
 
-### Flutter — Phases 1–6 MVP + design system
+### Flutter — Phases 1–10
 - Auth, spaces, channels, threads, media, members, presence, handoffs
-- Clinical design system (teal/slate, no gradients)
+- Sprint 7–8: Home shell, DMs, typing, drafts, invites, search, notif prefs
+- Sprint 9: modular configurable Home
+- Sprint 10: FCM client, local notifications, deep links, token lifecycle
+- Vocle clinical UI redesign + QA polish
 
 ### Beta deployment
 - ✅ MongoDB Atlas (`medcollab-beta` database)
-- ✅ Railway (`medcollab.up.railway.app`)
+- ✅ Railway Hobby (`medcollab.up.railway.app`)
 - ✅ Cloudinary
-- ⏳ MSG91 (dashboard access blocked)
-- ⬜ Production APK
+- ✅ MSG91 widget OTP
+- ✅ Firebase FCM (Android)
+- ✅ Production APK (`scripts/build-release-apk.ps1` → `MedCollab-beta.apk`)
 
 ## Architecture — DO NOT change
 - Feature-based backend folders
@@ -58,7 +68,10 @@ DEPLOYMENT.md        ← Beta deploy guide + troubleshooting
 - OTP bypass: `OTP_BYPASS=true` dev only; **blocked in production**
 
 ## Key docs
+- `PROJECT_LEAD_SUMMARY.md` — share with project lead / ChatGPT
+- `AI_HANDOFF.md` — tech lead + agent handoff
 - `DEPLOYMENT.md` — deploy checklist, Railway, MSG91, APK
+- `PUSH_NOTIFICATIONS.md` — FCM setup
 - `medcollab-app/PROJECT_STATE.md` — detailed status
 - `medcollab-backend/.env.example` — all env vars
 

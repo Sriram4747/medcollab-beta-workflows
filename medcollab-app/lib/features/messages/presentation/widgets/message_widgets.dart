@@ -3,13 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_decorations.dart';
+import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
-import 'package:medcollab_app/features/messages/data/models/thread_reply_preview.dart';
 import 'package:medcollab_app/features/messages/presentation/utils/message_list_utils.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/read_receipt_footer.dart';
+import 'package:medcollab_app/shared/presentation/widgets/mention_rich_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Text input bar with attach menu — gallery, camera, document.
@@ -21,7 +25,7 @@ class MessageComposer extends StatelessWidget {
     this.onPickCamera,
     this.onPickDocument,
     this.onEmojiSelected,
-    this.hintText = 'Message…',
+    this.hintText = 'Message… @ to mention',
     this.isBusy = false,
     super.key,
   });
@@ -45,7 +49,7 @@ class MessageComposer extends StatelessWidget {
       showDragHandle: true,
       builder: (ctx) => SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(AppGaps.screenH),
           child: Wrap(
             spacing: 12,
             runSpacing: 12,
@@ -55,7 +59,7 @@ class MessageComposer extends StatelessWidget {
                   Navigator.pop(ctx);
                   onEmojiSelected?.call(emoji);
                 },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppRadius.button,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(emoji, style: const TextStyle(fontSize: 28)),
@@ -101,6 +105,15 @@ class MessageComposer extends StatelessWidget {
                 onPickDocument?.call();
               },
             ),
+            if (onEmojiSelected != null)
+              ListTile(
+                leading: const Icon(Icons.emoji_emotions_outlined),
+                title: const Text('Emoji'),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _showEmojiPicker(context);
+                },
+              ),
           ],
         ),
       ),
@@ -109,38 +122,45 @@ class MessageComposer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final canAttach = onPickGallery != null ||
+        onPickDocument != null ||
+        onPickCamera != null ||
+        onEmojiSelected != null;
+
     return Container(
       decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        color: AppColors.surfaceCard,
+        border: Border(
+          top: BorderSide(color: AppColors.borderDefault, width: 0.5),
+        ),
       ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.sm,
-            AppSpacing.sm,
-            AppSpacing.sm,
-            AppSpacing.sm,
-          ),
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (onPickGallery != null ||
-                  onPickDocument != null ||
-                  onPickCamera != null)
-                IconButton(
-                  onPressed: isBusy ? null : () => _showAttachMenu(context),
-                  icon: const Icon(Icons.add_circle_outline),
-                  color: AppColors.textSecondary,
-                  tooltip: 'Attach',
-                ),
-              if (onEmojiSelected != null)
-                IconButton(
-                  onPressed: isBusy ? null : () => _showEmojiPicker(context),
-                  icon: const Icon(Icons.emoji_emotions_outlined),
-                  color: AppColors.textSecondary,
-                  tooltip: 'Emoji',
+              if (canAttach)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2, right: 8),
+                  child: Material(
+                    color: AppColors.surfaceInput,
+                    borderRadius: AppRadius.button,
+                    child: InkWell(
+                      onTap: isBusy ? null : () => _showAttachMenu(context),
+                      borderRadius: AppRadius.button,
+                      child: const SizedBox(
+                        width: 32,
+                        height: 32,
+                        child: Icon(
+                          Icons.add,
+                          size: 20,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               Expanded(
                 child: TextField(
@@ -149,55 +169,73 @@ class MessageComposer extends StatelessWidget {
                   maxLines: 4,
                   textCapitalization: TextCapitalization.sentences,
                   enabled: !isBusy,
+                  style: AppTextStyles.body.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
                   decoration: InputDecoration(
                     hintText: hintText,
+                    hintStyle: AppTextStyles.body.copyWith(
+                      color: AppColors.textMuted,
+                    ),
                     filled: true,
-                    fillColor: AppColors.background,
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppSpacing.radiusMd),
-                      borderSide: const BorderSide(color: AppColors.border),
+                    fillColor: AppColors.surfaceInput,
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderSide: BorderSide.none,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppSpacing.radiusMd),
-                      borderSide: const BorderSide(color: AppColors.border),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderSide: BorderSide.none,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppSpacing.radiusMd),
-                      borderSide: const BorderSide(
-                        color: AppColors.primary,
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderSide: BorderSide(
+                        color: AppColors.tealPrimary,
                         width: 1.5,
                       ),
                     ),
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                      vertical: AppSpacing.sm,
+                      horizontal: 14,
+                      vertical: 10,
                     ),
                   ),
                   onSubmitted: isBusy ? null : onSend,
                 ),
               ),
-              const SizedBox(width: AppSpacing.xs),
-              IconButton.filled(
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor: AppColors.surfaceVariant,
+              const SizedBox(width: 8),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 1),
+                child: Material(
+                  color: isBusy
+                      ? AppColors.navyPrimary.withValues(alpha: 0.5)
+                      : AppColors.navyPrimary,
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: isBusy ? null : () => onSend(controller.text),
+                    child: SizedBox(
+                      width: 34,
+                      height: 34,
+                      child: Center(
+                        child: isBusy
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.tealPrimary,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.arrow_upward_rounded,
+                                size: 18,
+                                color: AppColors.tealPrimary,
+                              ),
+                      ),
+                    ),
+                  ),
                 ),
-                onPressed: isBusy ? null : () => onSend(controller.text),
-                icon: isBusy
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Icon(Icons.arrow_upward_rounded, size: 20),
               ),
             ],
           ),
@@ -216,25 +254,15 @@ class DateSeparatorChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(vertical: AppGaps.cardV),
       child: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.xxs,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: const BoxDecoration(
+            color: AppColors.borderDefault,
+            borderRadius: AppRadius.pill,
           ),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-            border: Border.all(color: AppColors.border),
-          ),
-          child: Text(
-            label,
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
+          child: Text(label, style: AppTextStyles.timestamp),
         ),
       ),
     );
@@ -303,6 +331,10 @@ class MessageBubble extends StatelessWidget {
     this.onImageTap,
     this.onEdit,
     this.onDelete,
+    this.onBookmark,
+    this.onPin,
+    this.currentUserId,
+    this.seenByMembers = const [],
     super.key,
   });
 
@@ -314,6 +346,10 @@ class MessageBubble extends StatelessWidget {
   final void Function(String url)? onImageTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onBookmark;
+  final VoidCallback? onPin;
+  final String? currentUserId;
+  final List<UserModel> seenByMembers;
 
   Future<void> _showActions(BuildContext context) async {
     if (!isMine || message.isDeleted || message.localOnly) return;
@@ -336,6 +372,18 @@ class MessageBubble extends StatelessWidget {
                 title: const Text('Delete message'),
                 onTap: () => Navigator.pop(ctx, 'delete'),
               ),
+            if (onBookmark != null)
+              ListTile(
+                leading: const Icon(Icons.bookmark_outline),
+                title: const Text('Bookmark'),
+                onTap: () => Navigator.pop(ctx, 'bookmark'),
+              ),
+            if (onPin != null)
+              ListTile(
+                leading: const Icon(Icons.push_pin_outlined),
+                title: const Text('Pin message'),
+                onTap: () => Navigator.pop(ctx, 'pin'),
+              ),
           ],
         ),
       ),
@@ -345,6 +393,10 @@ class MessageBubble extends StatelessWidget {
       onEdit?.call();
     } else if (action == 'delete') {
       onDelete?.call();
+    } else if (action == 'bookmark') {
+      onBookmark?.call();
+    } else if (action == 'pin') {
+      onPin?.call();
     }
   }
 
@@ -353,54 +405,56 @@ class MessageBubble extends StatelessWidget {
     return GestureDetector(
       onLongPress: () => _showActions(context),
       child: Align(
-      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.only(
-          top: showSender ? 8 : 2,
-          bottom: 2,
-        ),
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.sizeOf(context).width * 0.78,
-        ),
-        child: Column(
-          crossAxisAlignment:
-              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            MessageBubbleContent(
-              message: message,
-              isMine: isMine,
-              showSender: showSender,
-              showTimestamp: showTimestamp,
-              onImageTap: onImageTap ?? (url) => _openImage(context, url, message),
-              onDocumentTap: (url) => _openUrl(context, url),
-            ),
-            if (message.hasThread) ...[
-              const SizedBox(height: 4),
-              ThreadCountBadge(
-                replyCount: message.replyCount,
-                lastReply: message.lastReply,
-                onTap: onOpenThread,
+        alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+        child: Container(
+          margin: EdgeInsets.only(
+            top: showSender ? 8 : 2,
+            bottom: 2,
+          ),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+          ),
+          child: Column(
+            crossAxisAlignment:
+                isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              if (showSender && !isMine)
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, bottom: 4),
+                  child: Text(
+                    message.sender.displayName,
+                    style: AppTextStyles.caption.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.tealDark,
+                    ),
+                  ),
+                ),
+              MessageBubbleContent(
+                message: message,
+                isMine: isMine,
+                showSender: false,
+                showTimestamp: showTimestamp,
+                currentUserId: currentUserId,
+                onImageTap:
+                    onImageTap ?? (url) => _openImage(context, url, message),
+                onDocumentTap: (url) => _openUrl(context, url),
               ),
+              if (message.replyCount > 0) ...[
+                const SizedBox(height: 4),
+                ThreadCountBadge(
+                  replyCount: message.replyCount,
+                  onTap: onOpenThread,
+                ),
+              ],
+              if (isMine && !message.localOnly)
+                ReadReceiptFooter(
+                  message: message,
+                  seenByMembers: seenByMembers,
+                ),
             ],
-            if (onOpenThread != null)
-              TextButton(
-                onPressed: onOpenThread,
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  message.hasThread ? 'View thread' : 'Reply in thread',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: AppColors.primary,
-                      ),
-                ),
-              ),
-          ],
+          ),
         ),
       ),
-    ),
     );
   }
 }
@@ -413,6 +467,7 @@ class MessageBubbleContent extends StatelessWidget {
     required this.showTimestamp,
     required this.onImageTap,
     required this.onDocumentTap,
+    this.currentUserId,
     super.key,
   });
 
@@ -422,18 +477,20 @@ class MessageBubbleContent extends StatelessWidget {
   final bool showTimestamp;
   final void Function(String url) onImageTap;
   final void Function(String url) onDocumentTap;
+  final String? currentUserId;
 
   @override
   Widget build(BuildContext context) {
     final time = message.createdAt != null
         ? DateFormat.jm().format(message.createdAt!.toLocal())
         : '';
+    final textColor =
+        isMine ? AppColors.textOnDark : AppColors.textPrimary;
+    final timestampColor =
+        isMine ? AppColors.textOnDarkMuted : AppColors.textMuted;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs + 2,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: AppDecorations.bubble(isMine: isMine),
       child: Column(
         crossAxisAlignment:
@@ -444,14 +501,17 @@ class MessageBubbleContent extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 message.sender.displayName,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: AppColors.secondary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: AppTextStyles.caption.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.tealDark,
+                ),
               ),
             ),
           _MessageBody(
             message: message,
+            isMine: isMine,
+            textColor: textColor,
+            currentUserId: currentUserId,
             onImageTap: onImageTap,
             onDocumentTap: onDocumentTap,
           ),
@@ -466,9 +526,9 @@ class MessageBubbleContent extends StatelessWidget {
                   if (time.isNotEmpty)
                     Text(
                       message.isEdited ? '$time · edited' : time,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
+                      style: AppTextStyles.timestamp.copyWith(
+                        color: timestampColor,
+                      ),
                     ),
                   if (isMine &&
                       message.deliveryState ==
@@ -477,15 +537,14 @@ class MessageBubbleContent extends StatelessWidget {
                     const Icon(
                       Icons.error_outline,
                       size: 14,
-                      color: AppColors.error,
+                      color: AppColors.statusError,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       'Failed to send',
-                      style:
-                          Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: AppColors.error,
-                              ),
+                      style: AppTextStyles.timestamp.copyWith(
+                        color: AppColors.statusError,
+                      ),
                     ),
                   ],
                 ],
@@ -500,23 +559,32 @@ class MessageBubbleContent extends StatelessWidget {
 class _MessageBody extends StatelessWidget {
   const _MessageBody({
     required this.message,
+    required this.isMine,
+    required this.textColor,
     required this.onImageTap,
     required this.onDocumentTap,
+    this.currentUserId,
   });
 
   final MessageModel message;
+  final bool isMine;
+  final Color textColor;
   final void Function(String url) onImageTap;
   final void Function(String url) onDocumentTap;
+  final String? currentUserId;
 
   @override
   Widget build(BuildContext context) {
     if (message.isDeleted) {
       return Text(
         'This message was deleted',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontStyle: FontStyle.italic,
-              color: AppColors.textSecondary,
-            ),
+        style: (isMine ? AppTextStyles.bubbleMine : AppTextStyles.bubbleTheirs)
+            .copyWith(
+          fontStyle: FontStyle.italic,
+          color: isMine
+              ? AppColors.textOnDarkMuted
+              : AppColors.textSecondary,
+        ),
       );
     }
 
@@ -558,9 +626,14 @@ class _MessageBody extends StatelessWidget {
           if (message.content.text != null &&
               message.content.text!.trim().isNotEmpty) ...[
             const SizedBox(height: 6),
-            Text(
-              message.content.text!,
-              style: Theme.of(context).textTheme.bodyMedium,
+            MentionRichText(
+              text: message.content.text!,
+              mentionIds: message.mentions,
+              currentUserId: currentUserId,
+              style: (isMine
+                      ? AppTextStyles.bubbleMine
+                      : AppTextStyles.bubbleTheirs)
+                  .copyWith(color: textColor),
             ),
           ],
         ],
@@ -625,78 +698,44 @@ class _MessageBody extends StatelessWidget {
       );
     }
 
-    return Text(
-      message.displayText,
-      style: Theme.of(context).textTheme.bodyMedium,
-      softWrap: true,
+    return MentionRichText(
+      text: message.displayText,
+      mentionIds: message.mentions,
+      currentUserId: currentUserId,
+      style: (isMine ? AppTextStyles.bubbleMine : AppTextStyles.bubbleTheirs)
+          .copyWith(color: textColor),
     );
   }
 }
 
-/// Reply count + last-reply preview under a channel message.
+/// Compact reply count under a channel message — opens the thread.
+/// Only rendered when [replyCount] > 0 (never a generic "Reply in thread").
 class ThreadCountBadge extends StatelessWidget {
   const ThreadCountBadge({
     required this.replyCount,
-    this.lastReply,
     this.onTap,
     super.key,
   });
 
   final int replyCount;
-  final ThreadReplyPreview? lastReply;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final label = replyCount == 1 ? '1 reply' : '$replyCount replies';
-    final preview = lastReply?.text;
+    if (replyCount <= 0) return const SizedBox.shrink();
+    final label = replyCount == 1 ? '1 reply →' : '$replyCount replies →';
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm,
-          vertical: AppSpacing.xs,
-        ),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-          color: AppColors.surface,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.forum_outlined,
-              size: 16,
-              color: AppColors.primary,
-            ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  if (preview != null && preview.isNotEmpty)
-                    Text(
-                      preview,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                    ),
-                ],
-              ),
-            ),
-          ],
+      borderRadius: AppRadius.button,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+        child: Text(
+          label,
+          style: AppTextStyles.caption.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.tealDark,
+          ),
         ),
       ),
     );

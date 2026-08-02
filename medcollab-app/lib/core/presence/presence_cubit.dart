@@ -174,6 +174,7 @@ extension AvailabilityStatusLabel on AvailabilityStatus {
         AvailabilityStatus.onCall => 'On Call',
         AvailabilityStatus.inIcu => 'In ICU',
         AvailabilityStatus.onRounds => 'On Rounds',
+        AvailabilityStatus.offline => 'Offline',
       };
 
   static List<AvailabilityStatus> get quickPresenceOptions => [
@@ -181,5 +182,6 @@ extension AvailabilityStatusLabel on AvailabilityStatus {
         AvailabilityStatus.doNotDisturb,
         AvailabilityStatus.inOt,
         AvailabilityStatus.offDuty,
+        AvailabilityStatus.offline,
       ];
 }

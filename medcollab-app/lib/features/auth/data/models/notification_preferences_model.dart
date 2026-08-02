@@ -38,6 +38,28 @@ class NotificationPreferencesModel extends Equatable {
         if (quietHoursEnd != null) 'quietHoursEnd': quietHoursEnd,
       };
 
+  NotificationPreferencesModel copyWith({
+    bool? emergencyAlerts,
+    bool? mentions,
+    bool? newMessages,
+    bool? handoffs,
+    String? quietHoursStart,
+    String? quietHoursEnd,
+    bool clearQuietHoursStart = false,
+    bool clearQuietHoursEnd = false,
+  }) {
+    return NotificationPreferencesModel(
+      emergencyAlerts: emergencyAlerts ?? this.emergencyAlerts,
+      mentions: mentions ?? this.mentions,
+      newMessages: newMessages ?? this.newMessages,
+      handoffs: handoffs ?? this.handoffs,
+      quietHoursStart:
+          clearQuietHoursStart ? null : (quietHoursStart ?? this.quietHoursStart),
+      quietHoursEnd:
+          clearQuietHoursEnd ? null : (quietHoursEnd ?? this.quietHoursEnd),
+    );
+  }
+
   @override
   List<Object?> get props => [
         emergencyAlerts,

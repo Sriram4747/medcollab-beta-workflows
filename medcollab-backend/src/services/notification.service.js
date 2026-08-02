@@ -281,10 +281,20 @@ const flattenMetadata = (metadata) => {
 
 const notifyNewMessage = async ({ recipientIds, message, sender, channel }) => {
   const isEmergency = message.priority === MESSAGE_PRIORITY.EMERGENCY;
+  const { getUserIdsViewingChannel } = require('../socket/channelViewers');
+  const viewing = await getUserIdsViewingChannel(channel._id);
 
-  await sendBulkNotification(
-    recipientIds.filter((id) => id.toString() !== sender._id.toString()),
-    {
+  // Skip inbox + FCM for people already reading this chat (except emergency).
+  const recipients = recipientIds.filter((id) => {
+    const sid = id.toString();
+    if (sid === sender._id.toString()) return false;
+    if (!isEmergency && viewing.has(sid)) return false;
+    return true;
+  });
+
+  if (recipients.length === 0) return;
+
+  await sendBulkNotification(recipients, {
       type: isEmergency
         ? NOTIFICATION_TYPES.EMERGENCY_ALERT
         : NOTIFICATION_TYPES.NEW_MESSAGE,
@@ -307,9 +317,14 @@ const notifyNewMessage = async ({ recipientIds, message, sender, channel }) => {
 
 const notifyMention = async ({ mentionedUserIds, message, sender, channel }) => {
   const senderId = sender?._id?.toString?.() || sender?._id || '';
-  const recipients = (mentionedUserIds || []).filter(
-    (id) => id && id.toString() !== senderId.toString()
-  );
+  const { getUserIdsViewingChannel } = require('../socket/channelViewers');
+  const viewing = await getUserIdsViewingChannel(channel._id);
+  const recipients = (mentionedUserIds || []).filter((id) => {
+    if (!id || id.toString() === senderId.toString()) return false;
+    // Mentions still notify if away; skip only when already in the thread.
+    if (viewing.has(id.toString())) return false;
+    return true;
+  });
   if (recipients.length === 0) return;
 
   await sendBulkNotification(recipients, {
