@@ -34,12 +34,12 @@ dependencies:
   sendotp_flutter_sdk: ^0.0.2
   share_plus: ^10.1.4
   qr_flutter: ^4.1.0
+  crop_your_image: ^1.1.0
+  mobile_scanner: ^6.0.2
   firebase_core: ^4.12.1
   firebase_messaging: ^16.4.3
   flutter_local_notifications: ^19.5.0
-  # Camera QR: deferred — mobile_scanner caused release-start crashes with
-  # Kotlin/ML Kit toolchain on this project. Join still works via code/link paste.
-
+  # QR uses mobile_scanner only when user opens the join-scan page (lazy).
 
 dev_dependencies:
   flutter_test:

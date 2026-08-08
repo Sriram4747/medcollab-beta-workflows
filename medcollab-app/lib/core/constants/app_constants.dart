@@ -44,4 +44,9 @@ abstract final class AppConstants {
   /// Automatic retry for connection failures (handles server cold starts).
   static const int networkMaxRetries = 3;
   static const Duration networkRetryBaseDelay = Duration(seconds: 2);
+
+  /// Official Vocle pilot contact.
+  static const String supportEmail = 'vocle.official@gmail.com';
+  static const String instagramHandle = 'thevocle';
+  static const String instagramUrl = 'https://instagram.com/thevocle';
 }

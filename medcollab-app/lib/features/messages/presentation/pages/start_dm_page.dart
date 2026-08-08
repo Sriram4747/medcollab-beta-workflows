@@ -144,7 +144,10 @@ class _StartDmPageState extends State<StartDmPage> {
                         onTap: busy ? null : () => _startDm(user),
                         child: Row(
                           children: [
-                            AppAvatar(name: user.displayName),
+                            AppAvatar(
+                              name: user.displayName,
+                              imageUrl: user.avatarUrl,
+                            ),
                             const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Column(

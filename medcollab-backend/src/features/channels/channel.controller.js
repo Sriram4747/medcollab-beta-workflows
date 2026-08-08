@@ -241,7 +241,7 @@ const getChannelMembers = asyncHandler(async (req, res) => {
 
 /**
  * POST /api/channels/:id/pin/:messageId
- * Pin a message (max 5 per channel, admin only)
+ * Pin a message (max 5). Space members or either DM participant may pin.
  */
 const pinMessage = asyncHandler(async (req, res) => {
   const { id: channelId, messageId } = req.params;
@@ -249,8 +249,26 @@ const pinMessage = asyncHandler(async (req, res) => {
   const channel = await Channel.findById(channelId);
   if (!channel) return respond.notFound(res, 'Channel not found');
 
-  const space = await Space.findById(channel.spaceId);
-  if (!space?.isAdmin(req.user._id)) return respond.forbidden(res, 'Admins only');
+  const Message = require('../messages/message.model');
+  const { CHANNEL_TYPES } = require('../../constants');
+
+  const isDm = channel.type === CHANNEL_TYPES.DIRECT || !channel.spaceId;
+  if (isDm) {
+    const isMember = (channel.members || []).some(
+      (m) => m.toString() === req.user._id.toString()
+    );
+    if (!isMember) return respond.forbidden(res, 'Not a conversation member');
+  } else {
+    const space = await Space.findById(channel.spaceId);
+    if (!space?.isMember(req.user._id)) {
+      return respond.forbidden(res, 'Not a group member');
+    }
+  }
+
+  const msg = await Message.findOne({ _id: messageId, channelId: channel._id });
+  if (!msg || msg.isDeleted) {
+    return respond.notFound(res, 'Message not found in this chat');
+  }
 
   if (channel.pinnedMessages.length >= 5) {
     return respond.badRequest(res, 'Maximum 5 pinned messages per channel');
@@ -269,7 +287,7 @@ const pinMessage = asyncHandler(async (req, res) => {
 
 /**
  * DELETE /api/channels/:id/pin/:messageId
- * Unpin a message (admin only)
+ * Unpin a message (same permission as pin)
  */
 const unpinMessage = asyncHandler(async (req, res) => {
   const { id: channelId, messageId } = req.params;
@@ -277,8 +295,19 @@ const unpinMessage = asyncHandler(async (req, res) => {
   const channel = await Channel.findById(channelId);
   if (!channel) return respond.notFound(res, 'Channel not found');
 
-  const space = await Space.findById(channel.spaceId);
-  if (!space?.isAdmin(req.user._id)) return respond.forbidden(res, 'Admins only');
+  const { CHANNEL_TYPES } = require('../../constants');
+  const isDm = channel.type === CHANNEL_TYPES.DIRECT || !channel.spaceId;
+  if (isDm) {
+    const isMember = (channel.members || []).some(
+      (m) => m.toString() === req.user._id.toString()
+    );
+    if (!isMember) return respond.forbidden(res, 'Not a conversation member');
+  } else {
+    const space = await Space.findById(channel.spaceId);
+    if (!space?.isMember(req.user._id)) {
+      return respond.forbidden(res, 'Not a group member');
+    }
+  }
 
   channel.pinnedMessages = channel.pinnedMessages.filter(
     (p) => p.messageId.toString() !== messageId

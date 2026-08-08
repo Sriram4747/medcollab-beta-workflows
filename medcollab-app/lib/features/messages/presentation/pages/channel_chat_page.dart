@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
+import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
@@ -30,6 +31,7 @@ import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChannelChatPage extends StatefulWidget {
@@ -665,8 +667,16 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                             currentUserId: currentUserId,
                                             seenByMembers:
                                                 _seenByForMessage(message),
-                                            onOpenThread: () =>
-                                                _openThread(context, message),
+                                            isPinned: _pinnedMessages.any(
+                                              (p) =>
+                                                  p.message.id == message.id,
+                                            ),
+                                            onOpenThread: message.localOnly
+                                                ? null
+                                                : () => _openThread(
+                                                      context,
+                                                      message,
+                                                    ),
                                             onEdit: isMine &&
                                                     message.type ==
                                                         MessageType.text
@@ -686,6 +696,10 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                               channel,
                                             ),
                                             onPin: () => _pinMessage(message),
+                                            onUnpin: () =>
+                                                _unpinMessage(message),
+                                            onForward: () =>
+                                                _forwardMessage(message),
                                             onReact: (emoji) => context
                                                 .read<ChannelChatCubit>()
                                                 .toggleReaction(
@@ -1045,6 +1059,12 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           const SnackBar(content: Text('Message pinned')),
         );
       }
+    } on AppException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message)),
+        );
+      }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1052,6 +1072,48 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         );
       }
     }
+  }
+
+  Future<void> _unpinMessage(MessageModel message) async {
+    try {
+      await AppDependencies.instance.channelRepository.unpinMessage(
+        widget.channelId,
+        message.id,
+      );
+      await _loadChannelContext();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Message unpinned')),
+        );
+      }
+    } on AppException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message)),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not unpin message')),
+        );
+      }
+    }
+  }
+
+  Future<void> _forwardMessage(MessageModel message) async {
+    final body = message.displayText.trim();
+    if (body.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Nothing to forward from this message')),
+      );
+      return;
+    }
+    await Share.share(
+      body,
+      subject: 'Vocle message from ${message.sender.displayName}',
+    );
   }
 
   Future<void> _bookmarkMessage(

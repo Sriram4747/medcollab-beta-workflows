@@ -586,6 +586,7 @@ class _DirectTab extends StatelessWidget {
                   return DMRow(
                     name: dm.displayName,
                     preview: previewText,
+                    imageUrl: peer?.avatarUrl,
                     timestamp: hasDraft
                         ? null
                         : _formatTimestamp(preview?.sentAt),

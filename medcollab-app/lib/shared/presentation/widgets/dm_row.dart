@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 
 /// Direct-message list row (brief SCREEN 2).
 class DMRow extends StatelessWidget {
   const DMRow({
     required this.name,
     required this.preview,
+    this.imageUrl,
     this.timestamp,
     this.isOnline = false,
     this.onTap,
@@ -15,6 +17,7 @@ class DMRow extends StatelessWidget {
 
   final String name;
   final String preview;
+  final String? imageUrl;
   final String? timestamp;
   final bool isOnline;
   final VoidCallback? onTap;
@@ -40,9 +43,6 @@ class DMRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarColor = colorFromName(name);
-    final initial = name.trim().isEmpty ? '?' : name.trim()[0].toUpperCase();
-
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -60,47 +60,14 @@ class DMRow extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(
             children: [
-              SizedBox(
-                width: 38,
-                height: 38,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: avatarColor.withValues(alpha: 0.18),
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        initial,
-                        style: AppTextStyles.cardTitle.copyWith(
-                          color: avatarColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    if (isOnline)
-                      Positioned(
-                        right: -1,
-                        bottom: -1,
-                        child: Container(
-                          width: 9,
-                          height: 9,
-                          decoration: BoxDecoration(
-                            color: AppColors.statusSuccess,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.surfaceCard,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+              AppAvatar(
+                name: name,
+                imageUrl: imageUrl,
+                size: 38,
+                showPresence: true,
+                isOnline: isOnline,
+                backgroundColor: colorFromName(name).withValues(alpha: 0.18),
+                foregroundColor: colorFromName(name),
               ),
               const SizedBox(width: 12),
               Expanded(

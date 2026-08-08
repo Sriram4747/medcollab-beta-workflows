@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
@@ -9,11 +10,12 @@ import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/core/utils/clinical_formatters.dart';
+import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:medcollab_app/features/dev/presentation/pages/developer_mode_page.dart';
-import 'package:medcollab_app/features/media/data/services/media_picker_service.dart';
+import 'package:medcollab_app/features/profile/presentation/pages/avatar_crop_page.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -43,7 +45,7 @@ class ProfilePage extends StatelessWidget {
                 availability: availability,
                 onAvatarTap: user == null
                     ? null
-                    : () => _pickAndUploadAvatar(context),
+                    : () => _openProfilePhotoSheet(context, user),
               ),
               Expanded(
                 child: ListView(
@@ -127,10 +129,95 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Future<void> _pickAndUploadAvatar(BuildContext context) async {
-    final picker = MediaPickerService();
-    final picked = await picker.pickFromGallery();
-    if (picked == null || !context.mounted) return;
+  Future<void> _openProfilePhotoSheet(
+    BuildContext context,
+    UserModel user,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: AppColors.surfaceCard,
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.sheet),
+      builder: (sheetContext) {
+        final roleLine = [
+          if (user.role.label.isNotEmpty) user.role.label,
+          if (user.speciality != null && user.speciality!.isNotEmpty)
+            user.speciality!,
+        ].join(' · ');
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppAvatar(
+                  name: user.displayName,
+                  imageUrl: user.avatarUrl,
+                  size: 120,
+                  foregroundColor: AppColors.tealPrimary,
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  user.displayName,
+                  style: AppTextStyles.screenTitle.copyWith(fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                if (roleLine.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    roleLine,
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                if (user.institution != null &&
+                    user.institution!.trim().isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    user.institution!,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+                const SizedBox(height: 20),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.photo_library_outlined),
+                  title: const Text('Change photo'),
+                  subtitle: const Text('Crop to circle before saving'),
+                  onTap: () async {
+                    Navigator.pop(sheetContext);
+                    await _pickCropAndUpload(context, ImageSource.gallery);
+                  },
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.photo_camera_outlined),
+                  title: const Text('Take photo'),
+                  onTap: () async {
+                    Navigator.pop(sheetContext);
+                    await _pickCropAndUpload(context, ImageSource.camera);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickCropAndUpload(
+    BuildContext context,
+    ImageSource source,
+  ) async {
+    final cropped = await AvatarCropPage.pickAndCrop(context, source: source);
+    if (cropped == null || !context.mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Uploading photo…')),
@@ -139,16 +226,13 @@ class ProfilePage extends StatelessWidget {
     try {
       final deps = AppDependencies.instance;
       final upload = await deps.mediaRepository.uploadFile(
-        bytes: picked.bytes,
-        fileName: picked.fileName,
-        mimeType: picked.mimeType,
+        bytes: cropped,
+        fileName: 'avatar.jpg',
+        mimeType: 'image/jpeg',
         context: 'avatar',
       );
-      final url = upload.url;
-      if (url.isEmpty) {
-        throw StateError('No URL from upload');
-      }
-      final user = await deps.userRepository.updateAvatarUrl(url);
+      if (upload.url.isEmpty) throw StateError('No URL from upload');
+      final user = await deps.userRepository.updateAvatarUrl(upload.url);
       if (!context.mounted) return;
       context.read<AuthBloc>().add(AuthUserUpdated(user));
       ScaffoldMessenger.of(context).showSnackBar(
@@ -442,7 +526,7 @@ class _ProfileHeader extends StatelessWidget {
           if (onAvatarTap != null) ...[
             const SizedBox(height: 6),
             Text(
-              'Tap photo to change',
+              'Tap photo to view profile',
               style: TextStyle(
                 fontSize: 11,
                 color: Colors.white.withValues(alpha: 0.55),

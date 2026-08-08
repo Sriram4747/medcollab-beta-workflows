@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:medcollab_app/core/constants/app_constants.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
@@ -20,7 +21,7 @@ class _ReportBugPageState extends State<ReportBugPage> {
   final _stepsController = TextEditingController();
   bool _submitting = false;
 
-  static const _supportEmail = 'support@vocle.app';
+  static const _supportEmail = AppConstants.supportEmail;
 
   @override
   void dispose() {

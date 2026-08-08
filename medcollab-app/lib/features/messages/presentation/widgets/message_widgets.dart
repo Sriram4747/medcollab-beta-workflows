@@ -16,8 +16,8 @@ import 'package:medcollab_app/features/messages/presentation/widgets/read_receip
 import 'package:medcollab_app/shared/presentation/widgets/mention_rich_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Text input bar with attach menu — gallery, camera, document.
-/// Emoji lives on the system keyboard (WhatsApp-style), not a separate tray.
+/// Text input bar — attach button next to send for quick uploads.
+/// Emoji uses the system keyboard (WhatsApp-style).
 class MessageComposer extends StatelessWidget {
   const MessageComposer({
     required this.controller,
@@ -97,27 +97,6 @@ class MessageComposer extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (canAttach)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 2, right: 8),
-                  child: Material(
-                    color: AppColors.surfaceInput,
-                    borderRadius: AppRadius.button,
-                    child: InkWell(
-                      onTap: isBusy ? null : () => _showAttachMenu(context),
-                      borderRadius: AppRadius.button,
-                      child: const SizedBox(
-                        width: 36,
-                        height: 36,
-                        child: Icon(
-                          Icons.add,
-                          size: 22,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               Expanded(
                 child: TextField(
                   controller: controller,
@@ -160,7 +139,30 @@ class MessageComposer extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              if (canAttach) ...[
+                const SizedBox(width: 6),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 1),
+                  child: Material(
+                    color: AppColors.surfaceInput,
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: isBusy ? null : () => _showAttachMenu(context),
+                      child: const SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Icon(
+                          Icons.attach_file_rounded,
+                          size: 20,
+                          color: AppColors.tealDark,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(width: 6),
               Padding(
                 padding: const EdgeInsets.only(bottom: 1),
                 child: Material(
@@ -287,9 +289,12 @@ class MessageBubble extends StatelessWidget {
     this.onDelete,
     this.onBookmark,
     this.onPin,
+    this.onUnpin,
     this.onReact,
+    this.onForward,
     this.currentUserId,
     this.seenByMembers = const [],
+    this.isPinned = false,
     super.key,
   });
 
@@ -303,9 +308,12 @@ class MessageBubble extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onBookmark;
   final VoidCallback? onPin;
+  final VoidCallback? onUnpin;
   final ValueChanged<String>? onReact;
+  final VoidCallback? onForward;
   final String? currentUserId;
   final List<UserModel> seenByMembers;
+  final bool isPinned;
 
   static const quickReactions = ['👍', '❤️', '😂', '🙏', '✅', '👏'];
 
@@ -339,6 +347,19 @@ class MessageBubble extends StatelessWidget {
               ),
               const Divider(height: 1),
             ],
+            if (onOpenThread != null)
+              ListTile(
+                leading: const Icon(Icons.reply_outlined),
+                title: const Text('Reply in thread'),
+                subtitle: const Text('Keep discussion side-by-side'),
+                onTap: () => Navigator.pop(ctx, 'reply'),
+              ),
+            if (onForward != null)
+              ListTile(
+                leading: const Icon(Icons.forward_outlined),
+                title: const Text('Forward / share'),
+                onTap: () => Navigator.pop(ctx, 'forward'),
+              ),
             if (isMine &&
                 message.type == MessageType.text &&
                 onEdit != null)
@@ -359,7 +380,13 @@ class MessageBubble extends StatelessWidget {
                 title: const Text('Bookmark'),
                 onTap: () => Navigator.pop(ctx, 'bookmark'),
               ),
-            if (onPin != null)
+            if (isPinned && onUnpin != null)
+              ListTile(
+                leading: const Icon(Icons.push_pin),
+                title: const Text('Unpin message'),
+                onTap: () => Navigator.pop(ctx, 'unpin'),
+              )
+            else if (onPin != null)
               ListTile(
                 leading: const Icon(Icons.push_pin_outlined),
                 title: const Text('Pin message'),
@@ -372,6 +399,10 @@ class MessageBubble extends StatelessWidget {
     if (!context.mounted || action == null) return;
     if (action.startsWith('react:')) {
       onReact?.call(action.substring(6));
+    } else if (action == 'reply') {
+      onOpenThread?.call();
+    } else if (action == 'forward') {
+      onForward?.call();
     } else if (action == 'edit') {
       onEdit?.call();
     } else if (action == 'delete') {
@@ -380,108 +411,134 @@ class MessageBubble extends StatelessWidget {
       onBookmark?.call();
     } else if (action == 'pin') {
       onPin?.call();
+    } else if (action == 'unpin') {
+      onUnpin?.call();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () => _showActions(context),
-      child: Align(
-        alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
-        child: Container(
-          margin: EdgeInsets.only(
-            top: showSender ? 8 : 2,
-            bottom: 2,
-          ),
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.sizeOf(context).width * 0.78,
-          ),
-          child: Column(
-            crossAxisAlignment:
-                isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-            children: [
-              if (showSender && !isMine)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 4),
-                  child: Text(
-                    message.sender.displayName,
-                    style: AppTextStyles.caption.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.tealDark,
-                    ),
+    final bubble = Align(
+      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: EdgeInsets.only(
+          top: showSender ? 8 : 2,
+          bottom: 2,
+        ),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width * 0.78,
+        ),
+        child: Column(
+          crossAxisAlignment:
+              isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            if (showSender && !isMine)
+              Padding(
+                padding: const EdgeInsets.only(left: 4, bottom: 4),
+                child: Text(
+                  message.sender.displayName,
+                  style: AppTextStyles.caption.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.tealDark,
                   ),
                 ),
-              MessageBubbleContent(
-                message: message,
-                isMine: isMine,
-                showSender: false,
-                showTimestamp: showTimestamp,
-                currentUserId: currentUserId,
-                onImageTap:
-                    onImageTap ?? (url) => _openImage(context, url, message),
-                onDocumentTap: (url) => _openUrl(context, url),
               ),
-              if (message.reactions.isNotEmpty) ...[
-                const SizedBox(height: 4),
-                Wrap(
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: message.reactions
-                      .where((r) => r.emoji.isNotEmpty && r.count > 0)
-                      .map(
-                        (r) {
-                          final mine = currentUserId != null &&
-                              r.reactedBy(currentUserId!);
-                          return InkWell(
-                            onTap: onReact == null
-                                ? null
-                                : () => onReact!(r.emoji),
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
+            MessageBubbleContent(
+              message: message,
+              isMine: isMine,
+              showSender: false,
+              showTimestamp: showTimestamp,
+              currentUserId: currentUserId,
+              onImageTap:
+                  onImageTap ?? (url) => _openImage(context, url, message),
+              onDocumentTap: (url) => _openUrl(context, url),
+            ),
+            if (message.reactions.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children: message.reactions
+                    .where((r) => r.emoji.isNotEmpty && r.count > 0)
+                    .map(
+                      (r) {
+                        final mine = currentUserId != null &&
+                            r.reactedBy(currentUserId!);
+                        return InkWell(
+                          onTap: onReact == null
+                              ? null
+                              : () => onReact!(r.emoji),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: mine
+                                  ? AppColors.tealPrimary
+                                      .withValues(alpha: 0.15)
+                                  : AppColors.surfaceInput,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
                                 color: mine
                                     ? AppColors.tealPrimary
-                                        .withValues(alpha: 0.15)
-                                    : AppColors.surfaceInput,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: mine
-                                      ? AppColors.tealPrimary
-                                      : AppColors.borderDefault,
-                                ),
-                              ),
-                              child: Text(
-                                '${r.emoji} ${r.count}',
-                                style: const TextStyle(fontSize: 12),
+                                    : AppColors.borderDefault,
                               ),
                             ),
-                          );
-                        },
-                      )
-                      .toList(),
-                ),
-              ],
-              if (message.replyCount > 0) ...[
-                const SizedBox(height: 4),
-                ThreadCountBadge(
-                  replyCount: message.replyCount,
-                  onTap: onOpenThread,
-                ),
-              ],
-              if (isMine && !message.localOnly)
-                ReadReceiptFooter(
-                  message: message,
-                  seenByMembers: seenByMembers,
-                ),
+                            child: Text(
+                              '${r.emoji} ${r.count}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                    .toList(),
+              ),
             ],
-          ),
+            if (onOpenThread != null && !message.localOnly) ...[
+              const SizedBox(height: 4),
+              ThreadCountBadge(
+                replyCount: message.replyCount,
+                onTap: onOpenThread,
+                alwaysShow: true,
+              ),
+            ],
+            if (isMine && !message.localOnly)
+              ReadReceiptFooter(
+                message: message,
+                seenByMembers: seenByMembers,
+              ),
+          ],
         ),
       ),
+    );
+
+    // Swipe toward reply (right for peers, left for mine) opens thread.
+    return GestureDetector(
+      onLongPress: () => _showActions(context),
+      child: onOpenThread == null
+          ? bubble
+          : Dismissible(
+              key: ValueKey('swipe-${message.id}'),
+              direction: isMine
+                  ? DismissDirection.endToStart
+                  : DismissDirection.startToEnd,
+              confirmDismiss: (_) async {
+                onOpenThread?.call();
+                return false; // never remove the bubble
+              },
+              background: Align(
+                alignment:
+                    isMine ? Alignment.centerRight : Alignment.centerLeft,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(Icons.reply, color: AppColors.tealDark),
+                ),
+              ),
+              child: bubble,
+            ),
     );
   }
 }
@@ -735,22 +792,29 @@ class _MessageBody extends StatelessWidget {
   }
 }
 
-/// Compact reply count under a channel message — opens the thread.
-/// Only rendered when [replyCount] > 0 (never a generic "Reply in thread").
+/// Compact reply control under a channel message — opens the thread.
+/// When [alwaysShow] is true, shows “Reply in thread” even with 0 replies
+/// (needed so DMs can start a thread like space chats).
 class ThreadCountBadge extends StatelessWidget {
   const ThreadCountBadge({
     required this.replyCount,
     this.onTap,
+    this.alwaysShow = false,
     super.key,
   });
 
   final int replyCount;
   final VoidCallback? onTap;
+  final bool alwaysShow;
 
   @override
   Widget build(BuildContext context) {
-    if (replyCount <= 0) return const SizedBox.shrink();
-    final label = replyCount == 1 ? '1 reply →' : '$replyCount replies →';
+    if (replyCount <= 0 && !alwaysShow) return const SizedBox.shrink();
+    final label = replyCount <= 0
+        ? 'Reply in thread →'
+        : replyCount == 1
+            ? '1 reply →'
+            : '$replyCount replies →';
 
     return InkWell(
       onTap: onTap,

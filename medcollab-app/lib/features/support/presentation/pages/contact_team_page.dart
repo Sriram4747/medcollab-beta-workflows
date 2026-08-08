@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:medcollab_app/core/constants/app_constants.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/shared/presentation/widgets/clinical_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactTeamPage extends StatelessWidget {
   const ContactTeamPage({super.key});
 
-  static const _email = 'support@vocle.app';
-
   Future<void> _copyEmail(BuildContext context) async {
-    await Clipboard.setData(const ClipboardData(text: _email));
+    await Clipboard.setData(
+      const ClipboardData(text: AppConstants.supportEmail),
+    );
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Email copied')),
     );
+  }
+
+  Future<void> _openInstagram(BuildContext context) async {
+    final uri = Uri.parse(AppConstants.instagramUrl);
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open Instagram')),
+      );
+    }
   }
 
   @override
@@ -39,7 +51,7 @@ class ContactTeamPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Vocle beta support',
+                  'Vocle official',
                   style: AppTextStyles.screenTitle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 8),
@@ -52,7 +64,7 @@ class ContactTeamPage extends StatelessWidget {
                   children: [
                     Expanded(
                       child: SelectableText(
-                        _email,
+                        AppConstants.supportEmail,
                         style: AppTextStyles.cardTitle.copyWith(
                           color: AppColors.tealDark,
                         ),
@@ -68,6 +80,17 @@ class ContactTeamPage extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.camera_alt_outlined,
+                    color: AppColors.tealDark,
+                  ),
+                  title: Text('Instagram @${AppConstants.instagramHandle}'),
+                  subtitle: const Text('Follow product updates'),
+                  onTap: () => _openInstagram(context),
+                ),
               ],
             ),
           ),
@@ -76,6 +99,12 @@ class ContactTeamPage extends StatelessWidget {
             onPressed: () => _copyEmail(context),
             icon: const Icon(Icons.copy_rounded, size: 18),
             label: const Text('Copy support email'),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () => _openInstagram(context),
+            icon: const Icon(Icons.open_in_new, size: 18),
+            label: const Text('Open Instagram'),
           ),
         ],
       ),
