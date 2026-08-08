@@ -56,9 +56,9 @@ const requestOtp = asyncHandler(async (req, res) => {
 
   // Never reveal whether the phone is already registered
   // (prevents user enumeration — an attacker can't probe which phones are in the system)
-  return respond.ok(res, 'OTP sent successfully. Valid for 10 minutes.', {
+  return respond.ok(res, 'OTP sent successfully. Valid for 5 minutes.', {
     phone,
-    expiresInMinutes: parseInt(process.env.OTP_EXPIRY_MINUTES) || 10,
+    expiresInMinutes: parseInt(process.env.OTP_EXPIRY_MINUTES, 10) || 5,
   });
 });
 

@@ -305,7 +305,8 @@ const notifyNewMessage = async ({ recipientIds, message, sender, channel }) => {
       referenceId: message._id,
       referenceType: 'Message',
       metadata: {
-        spaceId: channel.spaceId,
+        // Never send null spaceId — clients may coer to "null" and treat DMs as channels.
+        ...(channel.spaceId ? { spaceId: channel.spaceId } : {}),
         channelId: channel._id,
         messageId: message._id,
       },
@@ -334,7 +335,7 @@ const notifyMention = async ({ mentionedUserIds, message, sender, channel }) => 
     referenceId: message._id,
     referenceType: 'Message',
     metadata: {
-      spaceId: channel.spaceId,
+      ...(channel.spaceId ? { spaceId: channel.spaceId } : {}),
       channelId: channel._id,
       messageId: message._id,
     },

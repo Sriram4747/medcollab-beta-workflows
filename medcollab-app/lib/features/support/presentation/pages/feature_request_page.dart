@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
@@ -18,6 +19,8 @@ class _FeatureRequestPageState extends State<FeatureRequestPage> {
   final _descriptionController = TextEditingController();
   final _stepsController = TextEditingController();
   bool _submitting = false;
+
+  static const _supportEmail = 'support@vocle.app';
 
   @override
   void dispose() {
@@ -39,11 +42,13 @@ class _FeatureRequestPageState extends State<FeatureRequestPage> {
       'submittedAt': DateTime.now().toIso8601String(),
     };
 
+    var delivered = false;
     try {
       await AppDependencies.instance.apiClient.post<dynamic>(
         '/api/support/feature',
         data: payload,
       );
+      delivered = true;
     } catch (_) {
       try {
         final prefs = await SharedPreferences.getInstance();
@@ -56,7 +61,14 @@ class _FeatureRequestPageState extends State<FeatureRequestPage> {
     if (!mounted) return;
     setState(() => _submitting = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Thanks — team notified')),
+      SnackBar(
+        content: Text(
+          delivered
+              ? 'Thanks — Vocle beta team received your request'
+              : 'Saved on device. Email $_supportEmail if urgent '
+                  '(API unavailable offline)',
+        ),
+      ),
     );
     Navigator.of(context).pop();
   }
@@ -74,11 +86,29 @@ class _FeatureRequestPageState extends State<FeatureRequestPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            const Text(
-              'Tell us what would help on shift. The beta team reviews every request.',
+            Text(
+              'Feature ideas go to the Vocle product team reviewing this pilot. '
+              'Also: $_supportEmail.',
               style: AppTextStyles.body,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () async {
+                  await Clipboard.setData(
+                    const ClipboardData(text: _supportEmail),
+                  );
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Email copied')),
+                  );
+                },
+                icon: const Icon(Icons.copy_rounded, size: 16),
+                label: const Text('Copy support email'),
+              ),
+            ),
+            const SizedBox(height: 8),
             ClinicalCard(
               child: Column(
                 children: [

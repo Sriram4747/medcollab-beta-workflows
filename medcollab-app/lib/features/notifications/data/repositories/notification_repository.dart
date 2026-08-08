@@ -58,6 +58,16 @@ class NotificationRepository extends BaseRepository {
     return executeVoid(() => apiClient.put(ApiEndpoints.markAllRead));
   }
 
+  /// Mark all unread alerts for a channel as read (when the doctor opens that chat).
+  Future<int> markReadByChannel(String channelId) {
+    return execute(
+      () => apiClient.put(
+        ApiEndpoints.markNotificationsReadByChannel(channelId),
+        parser: (json) => (json['unreadCount'] as num?)?.toInt() ?? 0,
+      ),
+    );
+  }
+
   Future<void> deleteNotification(String notificationId) {
     return executeVoid(
       () => apiClient.delete(ApiEndpoints.notificationById(notificationId)),

@@ -20,6 +20,12 @@ abstract final class AppConstants {
   /// OTP length enforced by backend.
   static const int otpLength = 6;
 
+  /// OTP validity window shown in UI (must match backend OTP_EXPIRY_MINUTES default).
+  static const int otpValidityMinutes = 5;
+
+  /// Cooldown before user may request Resend OTP.
+  static const int otpResendCooldownSeconds = 30;
+
   /// Dev bypass OTP when backend has OTP_BYPASS=true.
   static const String devBypassOtp = '123456';
 

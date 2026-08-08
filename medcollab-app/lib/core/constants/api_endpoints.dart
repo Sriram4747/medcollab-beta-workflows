@@ -77,6 +77,8 @@ abstract final class ApiEndpoints {
   static String markNotificationRead(String id) => '$notifications/$id/read';
   static String markNotificationUnread(String id) =>
       '$notifications/$id/unread';
+  static String markNotificationsReadByChannel(String channelId) =>
+      '$notifications/read-by-channel/$channelId';
 
   // Search
   static const String search = '/api/search';

@@ -53,7 +53,7 @@ const otpSchema = new mongoose.Schema({
     type: Date,
     required: true,
     default: () => {
-      const minutes = parseInt(process.env.OTP_EXPIRY_MINUTES || '10');
+      const minutes = parseInt(process.env.OTP_EXPIRY_MINUTES || '5', 10);
       return new Date(Date.now() + minutes * 60 * 1000);
     },
   },

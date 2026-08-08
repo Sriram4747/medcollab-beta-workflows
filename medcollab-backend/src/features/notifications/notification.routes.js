@@ -80,6 +80,16 @@ router.get('/unread-count', notificationController.getUnreadCount);
 router.put('/read-all', notificationController.markAllAsRead);
 
 /**
+ * @route   PUT /api/notifications/read-by-channel/:channelId
+ * @desc    Mark unread notifications for this channel as read (when viewing chat)
+ */
+router.put(
+  '/read-by-channel/:channelId',
+  validateMongoId('channelId'),
+  notificationController.markReadByChannel
+);
+
+/**
  * @route   PUT /api/notifications/:id/read
  * @desc    Mark a single notification as read
  * @access  Protected + Must own the notification

@@ -48,6 +48,18 @@ class UserRepository extends BaseRepository {
     );
   }
 
+  /// `PUT /api/users/me` — set Cloudinary avatar URL after upload.
+  Future<UserModel> updateAvatarUrl(String avatarUrl) {
+    return execute(
+      () => apiClient.put(
+        ApiEndpoints.me,
+        data: {'avatarUrl': avatarUrl},
+        parser: (json) =>
+            UserModel.fromJson(json['user'] as Map<String, dynamic>),
+      ),
+    );
+  }
+
   /// `PUT /api/users/me/availability`
   Future<AvailabilityModel> updateAvailability({
     required AvailabilityStatus status,

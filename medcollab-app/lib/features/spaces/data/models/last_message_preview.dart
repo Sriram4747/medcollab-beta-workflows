@@ -29,6 +29,20 @@ class LastMessagePreview extends Equatable {
   final MessageType type;
   final DateTime? sentAt;
 
+  /// Sidebar-friendly label (handles media with empty text).
+  String get previewLabel {
+    final t = text?.trim();
+    if (t != null && t.isNotEmpty) return t;
+    return switch (type) {
+      MessageType.image => '📷 Photo',
+      MessageType.document => '📎 Document',
+      MessageType.ecg => '📈 ECG',
+      MessageType.handoff => '🔄 Handoff',
+      MessageType.alert => '⚠️ Alert',
+      MessageType.text => 'Message',
+    };
+  }
+
   @override
   List<Object?> get props =>
       [messageId, text, senderName, type, sentAt];

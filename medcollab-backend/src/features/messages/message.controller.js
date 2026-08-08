@@ -95,8 +95,32 @@ const sendMessage = asyncHandler(async (req, res) => {
     mentions: mentions || [],
   });
 
-  // Populate sender for the socket broadcast
+  // Populate sender for the response + socket broadcast
   await message.populate('senderId', 'name displayTitle role avatarUrl');
+
+  // Sidebar preview must be ready before HTTP response so immediate list
+  // reloads don't still show "No messages yet".
+  const lastMessageText =
+    content?.text?.slice(0, 200) ||
+    (type === MESSAGE_TYPES.IMAGE || type === MESSAGE_TYPES.ECG
+      ? '📷 Photo'
+      : type === MESSAGE_TYPES.DOCUMENT
+        ? '📎 Document'
+        : type === MESSAGE_TYPES.HANDOFF
+          ? '🔄 Handoff'
+          : type === MESSAGE_TYPES.ALERT
+            ? '⚠️ Alert'
+            : null);
+
+  await Channel.findByIdAndUpdate(channel._id, {
+    lastMessage: {
+      messageId: message._id,
+      text: lastMessageText,
+      senderName: req.user.name,
+      type,
+      sentAt: message.createdAt,
+    },
+  });
 
   // ── HTTP response first ─────────────────────────────────────────────────────
   respond.created(res, 'Message sent', { message });
@@ -104,10 +128,21 @@ const sendMessage = asyncHandler(async (req, res) => {
   // ── Async side-effects (fire and forget after response) ────────────────────
   setImmediate(async () => {
     try {
-      // 1. Socket broadcast to channel room
-      emitNewMessage(channel._id.toString(), message.toObject());
+      let recipientIds = [];
+      if (channel.type === CHANNEL_TYPES.DIRECT) {
+        recipientIds = (channel.members || []).map((id) => id.toString());
+      } else if (space) {
+        recipientIds = space.members.map((m) => m.userId.toString());
+      }
 
-      // 2. If it's a thread reply: update parent's replyCount + lastReply snapshot
+      // Socket first so open chats update immediately.
+      emitNewMessage(
+        channel._id.toString(),
+        message.toObject(),
+        recipientIds
+      );
+
+      // Thread reply bookkeeping
       if (threadId) {
         await Message.findByIdAndUpdate(threadId, {
           $inc: { replyCount: 1 },
@@ -120,25 +155,6 @@ const sendMessage = asyncHandler(async (req, res) => {
         });
       }
 
-      // 3. Update channel.lastMessage for sidebar preview
-      await Channel.findByIdAndUpdate(channel._id, {
-        lastMessage: {
-          messageId: message._id,
-          text: content?.text?.slice(0, 200) || null,
-          senderName: req.user.name,
-          type,
-          sentAt: message.createdAt,
-        },
-      });
-
-      // 4. Notifications — get channel members to notify
-      let recipientIds = [];
-      if (channel.type === CHANNEL_TYPES.DIRECT) {
-        recipientIds = channel.members;
-      } else if (space) {
-        recipientIds = space.members.map((m) => m.userId);
-      }
-
       await notifyNewMessage({
         recipientIds,
         message: message.toObject(),
@@ -146,7 +162,6 @@ const sendMessage = asyncHandler(async (req, res) => {
         channel,
       });
 
-      // 5. Extra notification for @mentions
       if (mentions?.length > 0) {
         await notifyMention({
           mentionedUserIds: mentions,

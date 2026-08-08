@@ -311,15 +311,6 @@ class _ThreadPageState extends State<ThreadPage> {
                               context,
                               _mediaPicker.pickDocument,
                             ),
-                            onEmojiSelected: (emoji) {
-                              _textController.text =
-                                  '${_textController.text}$emoji';
-                              _textController.selection =
-                                  TextSelection.collapsed(
-                                offset: _textController.text.length,
-                              );
-                              _handleTyping(cubit);
-                            },
                           ),
                         ),
                       ],

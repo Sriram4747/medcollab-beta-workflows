@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
@@ -18,6 +19,8 @@ class _ReportBugPageState extends State<ReportBugPage> {
   final _descriptionController = TextEditingController();
   final _stepsController = TextEditingController();
   bool _submitting = false;
+
+  static const _supportEmail = 'support@vocle.app';
 
   @override
   void dispose() {
@@ -39,13 +42,14 @@ class _ReportBugPageState extends State<ReportBugPage> {
       'submittedAt': DateTime.now().toIso8601String(),
     };
 
+    var delivered = false;
     try {
       await AppDependencies.instance.apiClient.post<dynamic>(
         '/api/support/bug',
         data: payload,
       );
+      delivered = true;
     } catch (_) {
-      // Backend endpoint may not exist yet — store locally and still thank user.
       try {
         final prefs = await SharedPreferences.getInstance();
         final existing = prefs.getStringList('vocle_support_bugs') ?? [];
@@ -57,7 +61,14 @@ class _ReportBugPageState extends State<ReportBugPage> {
     if (!mounted) return;
     setState(() => _submitting = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Thanks — team notified')),
+      SnackBar(
+        content: Text(
+          delivered
+              ? 'Thanks — Vocle beta team received your report'
+              : 'Saved on device. Email $_supportEmail if urgent '
+                  '(API unavailable offline)',
+        ),
+      ),
     );
     Navigator.of(context).pop();
   }
@@ -75,12 +86,29 @@ class _ReportBugPageState extends State<ReportBugPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           children: [
-            const Text(
-              'Describe what went wrong. Include enough detail for the beta team '
-              'to reproduce the issue.',
+            Text(
+              'Reports go to the Vocle beta team (product owners for this pilot). '
+              'You can also email $_supportEmail.',
               style: AppTextStyles.body,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () async {
+                  await Clipboard.setData(
+                    const ClipboardData(text: _supportEmail),
+                  );
+                  if (!context.mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Email copied')),
+                  );
+                },
+                icon: const Icon(Icons.copy_rounded, size: 16),
+                label: const Text('Copy support email'),
+              ),
+            ),
+            const SizedBox(height: 8),
             ClinicalCard(
               child: Column(
                 children: [

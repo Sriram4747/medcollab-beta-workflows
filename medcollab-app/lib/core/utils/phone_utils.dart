@@ -14,7 +14,28 @@ abstract final class PhoneUtils {
     if (!_localPattern.hasMatch(digits)) {
       return 'Number must start with 6, 7, 8, or 9';
     }
+    // Block obviously fake / repeated-digit numbers (e.g. 9999999999).
+    if (RegExp(r'^(\d)\1{9}$').hasMatch(digits)) {
+      return 'Enter a real mobile number, not a repeated-digit test number';
+    }
+    // Block simple ascending/descending sequences (e.g. 9876543210 is ok, but
+    // 0123456789 already fails start rule; 1234567890 starts with 1).
+    if (_isTrivialSequence(digits)) {
+      return 'Enter a valid mobile number';
+    }
     return null;
+  }
+
+  static bool _isTrivialSequence(String digits) {
+    var ascending = true;
+    var descending = true;
+    for (var i = 1; i < digits.length; i++) {
+      final prev = int.parse(digits[i - 1]);
+      final curr = int.parse(digits[i]);
+      if (curr != (prev + 1) % 10) ascending = false;
+      if (curr != (prev + 9) % 10) descending = false;
+    }
+    return ascending || descending;
   }
 
   static String toE164(String localDigits) {
@@ -44,5 +65,18 @@ abstract final class PhoneUtils {
     final local = e164.substring(AppConstants.defaultCountryCode.length);
     if (local.length != 10) return e164;
     return '${AppConstants.defaultCountryCode} ${local.substring(0, 5)} ${local.substring(5)}';
+  }
+
+  /// Extract a 6-char invite code from free text or a deep link /join/CODE URL.
+  static String? extractInviteCode(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return null;
+    final fromUrl = RegExp(
+      r'(?:join[\/#]|invite[=\/])([A-Za-z0-9]{4,12})',
+      caseSensitive: false,
+    ).firstMatch(trimmed);
+    if (fromUrl != null) return fromUrl.group(1)!.toUpperCase();
+    final onlyCode = RegExp(r'^[A-Za-z0-9]{4,12}$').firstMatch(trimmed);
+    return onlyCode?.group(0)?.toUpperCase();
   }
 }

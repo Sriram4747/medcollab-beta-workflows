@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/core/constants/socket_events.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
 import 'package:medcollab_app/core/socket/socket_client.dart';
@@ -35,6 +36,9 @@ class MembersCubit extends Cubit<MembersState> {
         loadMembers(silent: true, refreshPresence: true);
       }
     });
+    _memberJoinedSub = _socketClient
+        .onMapEvent(SocketEvents.spaceMemberJoined)
+        .listen(_onMemberJoined);
     loadMembers();
   }
 
@@ -47,7 +51,14 @@ class MembersCubit extends Cubit<MembersState> {
   final String currentUserId;
 
   StreamSubscription<bool>? _connectionSub;
+  StreamSubscription<Map<String, dynamic>>? _memberJoinedSub;
   bool _hasLoadedOnce = false;
+
+  void _onMemberJoined(Map<String, dynamic> data) {
+    final eventSpaceId = data['spaceId']?.toString();
+    if (eventSpaceId != null && eventSpaceId != spaceId) return;
+    loadMembers(silent: true, refreshPresence: true);
+  }
 
   Future<void> loadMembers({
     bool silent = false,
@@ -194,6 +205,7 @@ class MembersCubit extends Cubit<MembersState> {
   @override
   Future<void> close() {
     _connectionSub?.cancel();
+    _memberJoinedSub?.cancel();
     return super.close();
   }
 }

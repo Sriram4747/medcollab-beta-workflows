@@ -29,7 +29,7 @@ const getMe = asyncHandler(async (req, res) => {
  */
 const updateMe = asyncHandler(async (req, res) => {
   const allowed = ['name', 'displayTitle', 'role', 'speciality', 'pgYear',
-                   'institution', 'city', 'bio', 'notifications'];
+                   'institution', 'city', 'bio', 'notifications', 'avatarUrl'];
 
   const updates = {};
   allowed.forEach((field) => {

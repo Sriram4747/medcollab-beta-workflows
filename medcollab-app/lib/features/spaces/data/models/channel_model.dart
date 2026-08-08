@@ -38,11 +38,10 @@ class ChannelModel extends Equatable {
       description: json['description'] as String? ?? '',
       type: ChannelType.fromString(json['type'] as String?),
       isPrivate: json['isPrivate'] as bool? ?? false,
-      lastMessage: json['lastMessage'] is Map<String, dynamic>
-          ? LastMessagePreview.fromJson(
-              json['lastMessage'] as Map<String, dynamic>,
-            )
-          : null,
+      lastMessage: () {
+        final lm = asJsonMap(json['lastMessage']);
+        return lm != null ? LastMessagePreview.fromJson(lm) : null;
+      }(),
       position: json['position'] as int? ?? 0,
       peer: peerJson != null ? UserModel.fromJson(peerJson) : null,
       members: members,
@@ -64,11 +63,43 @@ class ChannelModel extends Equatable {
 
   String get displayName {
     if (isDirect) {
-      if (peer != null) return peer!.displayName;
-      if (name.isNotEmpty && name != 'channel') return name;
+      if (peer != null && peer!.displayName.trim().isNotEmpty) {
+        return peer!.displayName;
+      }
+      if (name.isNotEmpty &&
+          name != 'channel' &&
+          name.toLowerCase() != 'direct message') {
+        return name;
+      }
       return 'Direct message';
     }
     return name.startsWith('#') ? name : '#$name';
+  }
+
+  ChannelModel copyWith({
+    String? id,
+    String? spaceId,
+    String? name,
+    String? description,
+    ChannelType? type,
+    bool? isPrivate,
+    LastMessagePreview? lastMessage,
+    int? position,
+    UserModel? peer,
+    List<UserModel>? members,
+  }) {
+    return ChannelModel(
+      id: id ?? this.id,
+      spaceId: spaceId ?? this.spaceId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      type: type ?? this.type,
+      isPrivate: isPrivate ?? this.isPrivate,
+      lastMessage: lastMessage ?? this.lastMessage,
+      position: position ?? this.position,
+      peer: peer ?? this.peer,
+      members: members ?? this.members,
+    );
   }
 
   @override

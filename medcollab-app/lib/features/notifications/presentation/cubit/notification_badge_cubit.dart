@@ -35,10 +35,22 @@ class NotificationBadgeCubit extends Cubit<int> {
       channelId = meta['channelId']?.toString();
     }
     channelId ??= raw['channelId']?.toString();
-    if (ActiveChatTracker.instance.isViewing(channelId)) {
+    if (channelId != null &&
+        ActiveChatTracker.instance.isViewing(channelId)) {
+      // Doctor already has the chat open — clear matching Alerts server-side.
+      unawaited(_clearWhileViewing(channelId));
       return;
     }
     refresh();
+  }
+
+  Future<void> _clearWhileViewing(String channelId) async {
+    try {
+      final count = await _repository.markReadByChannel(channelId);
+      emit(count);
+    } catch (_) {
+      await refresh();
+    }
   }
 
   Future<void> refresh() async {

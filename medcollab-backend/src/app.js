@@ -42,6 +42,7 @@ const mediaRoutes = require('./features/media/media.routes');
 const notificationRoutes = require('./features/notifications/notification.routes');
 const searchRoutes = require('./features/search/search.routes');
 const devRoutes = require('./features/dev/dev.routes');
+const supportRoutes = require('./features/support/support.routes');
 
 const app = express();
 
@@ -148,6 +149,53 @@ app.get('/health', (req, res) => {
   });
 });
 
+/**
+ * Space invite deep-link landing page.
+ * Opened from WhatsApp / browser — launches the app when possible.
+ */
+app.get('/join/:code', (req, res) => {
+  const code = String(req.params.code || '')
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, '');
+  if (!code || code.length < 4) {
+    return res.status(400).type('html').send(
+      '<!DOCTYPE html><html><body><p>Invalid invite link.</p></body></html>'
+    );
+  }
+  const appDeepLink = `medcollab:///join/${code}`;
+  const apiHint = `https://medcollab.up.railway.app/join/${code}`;
+  res
+    .status(200)
+    .type('html')
+    .send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Join Vocle space</title>
+  <style>
+    body{font-family:system-ui,sans-serif;max-width:28rem;margin:3rem auto;padding:0 1.25rem;color:#0f172a}
+    .code{font-size:1.75rem;letter-spacing:.2em;font-weight:700;margin:1rem 0}
+    a.btn{display:inline-block;background:#0d9488;color:#fff;text-decoration:none;padding:.75rem 1.25rem;border-radius:.5rem;font-weight:600}
+    p{line-height:1.5;color:#475569}
+  </style>
+  <script>
+    // Try to open the Android app via custom scheme.
+    setTimeout(function(){ window.location.href = ${JSON.stringify(appDeepLink)}; }, 80);
+  </script>
+</head>
+<body>
+  <h1>Vocle invite</h1>
+  <p>You have been invited to a clinical group.</p>
+  <p class="code">${code}</p>
+  <p><a class="btn" href="${appDeepLink}">Open in Vocle</a></p>
+  <p>If the app does not open, install Vocle, then enter this code under <strong>Spaces → Join</strong>.</p>
+  <p style="font-size:.85rem;color:#94a3b8">Link: ${apiHint}</p>
+</body>
+</html>`);
+});
+
 // ── Local media (dev fallback when Cloudinary is not configured) ───────────────
 app.use(
   '/uploads',
@@ -185,6 +233,7 @@ app.use('/api/media', mediaRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/dev', devRoutes);
+app.use('/api/support', supportRoutes);
 
 // ── API Info Route ────────────────────────────────────────────────────────────
 app.get('/api', (req, res) => {
@@ -199,6 +248,7 @@ app.get('/api', (req, res) => {
       channels: '/api/channels',
       media: '/api/media',
       notifications: '/api/notifications',
+      support: '/api/support',
     },
   });
 });

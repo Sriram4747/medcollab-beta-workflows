@@ -8,6 +8,7 @@ import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/core/utils/clinical_formatters.dart';
+import 'package:medcollab_app/core/utils/phone_utils.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_model.dart';
@@ -360,14 +361,28 @@ class _Header extends StatelessWidget {
 }
 
 /// Navy shift card: TODAY'S SHIFT + text + availability pill (brief SCREEN 1).
+/// Visibility respects Configure Home for shift / availability widgets.
 class _ShiftCard extends StatelessWidget {
   const _ShiftCard({required this.state, required this.user});
 
   final HomeDashboardState state;
   final UserModel? user;
 
+  bool _isVisible(DashboardWidgetId id) {
+    for (final pref in state.widgetPreferences) {
+      if (pref.id == id) return pref.isVisible;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final showShift = _isVisible(DashboardWidgetId.todayShift);
+    final showAvailability = _isVisible(DashboardWidgetId.availability);
+    if (!showShift && !showAvailability) {
+      return const SizedBox.shrink();
+    }
+
     final availability =
         user?.availability.status ?? AvailabilityStatus.available;
 
@@ -382,30 +397,35 @@ class _ShiftCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "TODAY'S SHIFT",
-                  style: AppTextStyles.sectionLabel.copyWith(
-                    color: Colors.white.withValues(alpha: 0.50),
+          if (showShift)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "TODAY'S SHIFT",
+                    style: AppTextStyles.sectionLabel.copyWith(
+                      color: Colors.white.withValues(alpha: 0.50),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _shiftLabel(state.todayHandoffs.firstOrNull),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textOnDark,
+                  const SizedBox(height: 4),
+                  Text(
+                    _shiftLabel(state.todayHandoffs.firstOrNull),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.body.copyWith(
+                      color: AppColors.textOnDark,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          AvailabilityPill(status: availability, onDark: true, compact: true),
+                ],
+              ),
+            )
+          else
+            const Spacer(),
+          if (showAvailability) ...[
+            if (showShift) const SizedBox(width: 8),
+            AvailabilityPill(status: availability, onDark: true, compact: true),
+          ],
         ],
       ),
     );
@@ -461,14 +481,28 @@ class _WelcomeEmptyCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Join with invite code'),
-        content: TextField(
-          controller: codeController,
-          decoration: const InputDecoration(
-            labelText: 'Invite code',
-            hintText: 'A3K7BX',
-          ),
-          textCapitalization: TextCapitalization.characters,
-          autofocus: true,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: codeController,
+              decoration: const InputDecoration(
+                labelText: 'Invite code or link',
+                hintText: 'A3K7BX or invite URL',
+              ),
+              textCapitalization: TextCapitalization.characters,
+              autofocus: true,
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pop(ctx);
+                context.push(AppRoutes.scanInviteQr);
+              },
+              icon: const Icon(Icons.qr_code_scanner),
+              label: const Text('Scan QR code'),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -477,9 +511,12 @@ class _WelcomeEmptyCard extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () {
-              final trimmed = codeController.text.trim();
-              if (trimmed.length < 4) return;
-              Navigator.pop(ctx, trimmed);
+              final extracted = PhoneUtils.extractInviteCode(
+                    codeController.text,
+                  ) ??
+                  codeController.text.trim().toUpperCase();
+              if (extracted.length < 4) return;
+              Navigator.pop(ctx, extracted);
             },
             child: const Text('Continue'),
           ),

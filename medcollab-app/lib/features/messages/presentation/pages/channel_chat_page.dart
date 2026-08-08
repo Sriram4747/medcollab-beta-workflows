@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
@@ -29,6 +30,7 @@ import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChannelChatPage extends StatefulWidget {
   const ChannelChatPage({
@@ -120,15 +122,32 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
 
   Future<void> _loadChannelContext() async {
     final deps = AppDependencies.instance;
+    final selfId = context.read<AuthBloc>().state.user?.id ?? '';
 
     try {
       if (_isDm) {
         final members =
             await deps.channelRepository.getChannelMembers(widget.channelId);
         if (mounted) {
+          UserModel? peer = widget.channel?.peer;
+          peer ??= members.where((m) => m.id != selfId).firstOrNull;
           setState(() {
             _mentionCandidates = members;
             _spaceMembers = members;
+            if (peer != null) {
+              _resolvedChannel = (widget.channel ??
+                      _resolvedChannel ??
+                      ChannelModel(
+                        id: widget.channelId,
+                        name: peer.displayName,
+                        type: ChannelType.direct,
+                      ))
+                  .copyWith(
+                peer: peer,
+                members: members,
+                name: peer.displayName,
+              );
+            }
           });
         }
       } else {
@@ -146,6 +165,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     try {
       final detail =
           await deps.channelRepository.getChannelById(widget.channelId);
+      final fetched = detail.channel;
       if (!_isDm) {
         final spaces = await deps.spaceRepository.getMySpaces();
         final space =
@@ -155,20 +175,29 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           await deps.recentItemsService.recordChannelVisit(
             spaceId: widget.spaceId!,
             channelId: widget.channelId,
-            channelName: widget.channel?.name ?? detail.channel.name,
+            channelName: widget.channel?.name ?? fetched.name,
             spaceName: spaceName,
           );
         }
         if (mounted) {
           setState(() {
             _pinnedMessages = detail.pinnedMessages;
-            _resolvedChannel = widget.channel ?? detail.channel;
+            _resolvedChannel = widget.channel ?? fetched;
           });
         }
       } else if (mounted) {
+        UserModel? peer = fetched.peer;
+        peer ??= fetched.members.where((m) => m.id != selfId).firstOrNull;
+        peer ??= _spaceMembers.where((m) => m.id != selfId).firstOrNull;
         setState(() {
           _pinnedMessages = detail.pinnedMessages;
-          _resolvedChannel = widget.channel ?? detail.channel;
+          _resolvedChannel = fetched.copyWith(
+            peer: peer,
+            name: peer?.displayName ?? fetched.name,
+            members: fetched.members.isNotEmpty
+                ? fetched.members
+                : _spaceMembers,
+          );
         });
       }
     } catch (_) {
@@ -347,17 +376,22 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         messageRepository: deps.messageRepository,
         mediaRepository: deps.mediaRepository,
         socketClient: deps.socketClient,
+        notificationRepository: deps.notificationRepository,
+        onChannelAlertsCleared: (count) {
+          deps.notificationBadgeCubit.setCount(count);
+        },
         channelId: widget.channelId,
         currentUserId: currentUserId,
       ),
       child: Builder(
         builder: (context) {
           final channel = _resolvedChannel ?? widget.channel;
-          final title = channel?.displayName ?? 'Channel';
+          final peer = _dmPeer(channel, currentUserId);
+          // Prefer peer name; avoid flashing "Channel" / bare "Direct message".
+          final title = _chatTitle(channel, peer);
           final subtitle = _isDm
               ? _dmPresenceSubtitle(context, channel)
               : channel?.description;
-          final peer = _dmPeer(channel, currentUserId);
           final peerOnline = peer != null &&
               (context.watch<PresenceCubit>().state[peer.id]?.isOnline ??
                   false);
@@ -470,16 +504,20 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         }
                         return;
                       case 'search':
-                        context.push(AppRoutes.search);
+                        await _showInChatSearch(context);
+                        return;
+                      case 'info':
+                        await _showChatInfo(context, channel, title);
                         return;
                       case 'pinned':
                         if (_pinnedMessages.isEmpty) {
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('No pinned messages yet'),
                             ),
                           );
-                        } else {
+                        } else if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -490,86 +528,6 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             ),
                           );
                         }
-                        return;
-                      case 'info':
-                        final name = channel?.displayName ?? title;
-                        final desc = channel?.description.trim();
-                        await showModalBottomSheet<void>(
-                          context: context,
-                          showDragHandle: true,
-                          backgroundColor: AppColors.surfaceCard,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: AppRadius.sheet,
-                          ),
-                          builder: (sheetContext) {
-                            return SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  20,
-                                  4,
-                                  20,
-                                  20,
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      name,
-                                      style: AppTextStyles.screenTitle
-                                          .copyWith(fontSize: 16),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      desc?.isNotEmpty == true
-                                          ? desc!
-                                          : (_isDm
-                                              ? 'Direct message'
-                                              : 'Clinical subgroup chat'),
-                                      style: AppTextStyles.body.copyWith(
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                    if (!_isDm &&
-                                        widget.spaceId != null) ...[
-                                      const SizedBox(height: 16),
-                                      ListTile(
-                                        contentPadding: EdgeInsets.zero,
-                                        leading: const Icon(
-                                          Icons.people_outline,
-                                          color: AppColors.tealDark,
-                                        ),
-                                        title: const Text('View members'),
-                                        onTap: () {
-                                          Navigator.pop(sheetContext);
-                                          context.push(
-                                            AppRoutes.spaceMembersPath(
-                                              widget.spaceId!,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                    const SizedBox(height: 8),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: FilledButton(
-                                        style: FilledButton.styleFrom(
-                                          minimumSize: const Size(0, 44),
-                                          backgroundColor:
-                                              AppColors.navyPrimary,
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.pop(sheetContext),
-                                        child: const Text('Done'),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
                         return;
                     }
                   },
@@ -728,6 +686,12 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                               channel,
                                             ),
                                             onPin: () => _pinMessage(message),
+                                            onReact: (emoji) => context
+                                                .read<ChannelChatCubit>()
+                                                .toggleReaction(
+                                                  message.id,
+                                                  emoji,
+                                                ),
                                           ),
                                       };
                                     },
@@ -779,15 +743,6 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             context,
                             _mediaPicker.pickDocument,
                           ),
-                          onEmojiSelected: (emoji) {
-                            _textController.text =
-                                '${_textController.text}$emoji';
-                            _textController.selection =
-                                TextSelection.collapsed(
-                              offset: _textController.text.length,
-                            );
-                            _handleTyping(cubit);
-                          },
                         ),
                         ),
                       ],
@@ -799,6 +754,243 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           );
         },
       ),
+    );
+  }
+
+  String _chatTitle(ChannelModel? channel, UserModel? peer) {
+    if (_isDm) {
+      final peerName = peer?.displayName.trim() ?? '';
+      if (peerName.isNotEmpty) return peerName;
+      final fromChannel = channel?.peer?.displayName.trim() ?? '';
+      if (fromChannel.isNotEmpty) return fromChannel;
+      final name = channel?.name.trim() ?? '';
+      if (name.isNotEmpty &&
+          name.toLowerCase() != 'channel' &&
+          name.toLowerCase() != 'direct message' &&
+          name.toLowerCase() != 'direct messages') {
+        return name;
+      }
+      return 'Chat';
+    }
+    final name = channel?.displayName.trim() ?? '';
+    if (name.isNotEmpty &&
+        name.toLowerCase() != 'channel' &&
+        name != '#channel') {
+      return name;
+    }
+    return 'Chat';
+  }
+
+  Future<void> _showInChatSearch(BuildContext context) async {
+    final messages = context.read<ChannelChatCubit>().state.messages;
+    final qController = TextEditingController();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: AppColors.surfaceCard,
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.sheet),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 8,
+              bottom: MediaQuery.viewInsetsOf(sheetContext).bottom + 16,
+            ),
+            child: StatefulBuilder(
+              builder: (context, setSheetState) {
+                final q = qController.text.trim().toLowerCase();
+                final hits = q.isEmpty
+                    ? const <MessageModel>[]
+                    : messages
+                        .where(
+                          (m) =>
+                              !m.isDeleted &&
+                              m.displayText.toLowerCase().contains(q),
+                        )
+                        .toList()
+                        .reversed
+                        .toList();
+                return SizedBox(
+                  height: MediaQuery.sizeOf(sheetContext).height * 0.72,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Search this chat',
+                        style: AppTextStyles.screenTitle.copyWith(fontSize: 16),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Only messages in this conversation',
+                        style: AppTextStyles.caption.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: qController,
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          hintText: 'Find in conversation…',
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                        onChanged: (_) => setSheetState(() {}),
+                      ),
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: q.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'Type to search messages here only',
+                                  style: AppTextStyles.body.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              )
+                            : hits.isEmpty
+                                ? Center(
+                                    child: Text(
+                                      'No matches in this chat',
+                                      style: AppTextStyles.body.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  )
+                                : ListView.separated(
+                                    itemCount: hits.length,
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 1),
+                                    itemBuilder: (_, i) {
+                                      final m = hits[i];
+                                      return ListTile(
+                                        title: Text(
+                                          m.displayText,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          [
+                                            if (!_isDm) m.sender.displayName,
+                                            if (m.createdAt != null)
+                                              DateFormat.MMMd().add_jm().format(
+                                                    m.createdAt!.toLocal(),
+                                                  ),
+                                          ].where((s) => s.isNotEmpty).join(' · '),
+                                        ),
+                                        onTap: () =>
+                                            Navigator.pop(sheetContext),
+                                      );
+                                    },
+                                  ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+    qController.dispose();
+  }
+
+  Future<void> _showChatInfo(
+    BuildContext context,
+    ChannelModel? channel,
+    String title,
+  ) async {
+    final messages = context.read<ChannelChatCubit>().state.messages;
+    final media = messages
+        .where(
+          (m) =>
+              !m.isDeleted &&
+              (m.type == MessageType.image || m.type == MessageType.document) &&
+              (m.content.mediaUrl?.isNotEmpty ?? false),
+        )
+        .toList()
+        .reversed
+        .toList();
+    final images = media.where((m) => m.type == MessageType.image).toList();
+    final documents =
+        media.where((m) => m.type == MessageType.document).toList();
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: AppColors.surfaceCard,
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.sheet),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
+            child: DefaultTabController(
+              length: 3,
+              child: SizedBox(
+                height: MediaQuery.sizeOf(sheetContext).height * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.screenTitle.copyWith(fontSize: 16),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _isDm
+                          ? 'Shared media in this conversation'
+                          : (channel?.description.trim().isNotEmpty == true
+                              ? channel!.description
+                              : 'Channel media and files'),
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    if (!_isDm && widget.spaceId != null) ...[
+                      const SizedBox(height: 8),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(
+                          Icons.people_outline,
+                          color: AppColors.tealDark,
+                        ),
+                        title: const Text('View members'),
+                        onTap: () {
+                          Navigator.pop(sheetContext);
+                          context.push(
+                            AppRoutes.spaceMembersPath(widget.spaceId!),
+                          );
+                        },
+                      ),
+                    ],
+                    const TabBar(
+                      labelColor: AppColors.tealDark,
+                      tabs: [
+                        Tab(text: 'Media'),
+                        Tab(text: 'Docs'),
+                        Tab(text: 'Links'),
+                      ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _ChatMediaGrid(messages: images),
+                          _ChatDocList(messages: documents),
+                          _ChatLinkList(messages: messages),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -1022,6 +1214,127 @@ class _EmptyChatState extends StatelessWidget {
       subtitle: isDm
           ? 'Send a message to start the conversation.'
           : 'Start a topic — share images, PDFs, or text.\nUse threads to discuss each patient.',
+    );
+  }
+}
+
+class _ChatMediaGrid extends StatelessWidget {
+  const _ChatMediaGrid({required this.messages});
+
+  final List<MessageModel> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    if (messages.isEmpty) {
+      return const Center(child: Text('No media shared yet'));
+    }
+    return GridView.builder(
+      padding: const EdgeInsets.only(top: 12),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 6,
+        mainAxisSpacing: 6,
+      ),
+      itemCount: messages.length,
+      itemBuilder: (context, index) {
+        final m = messages[index];
+        final url = m.content.thumbnailUrl ?? m.content.mediaUrl ?? '';
+        return InkWell(
+          onTap: () {
+            final full = m.content.mediaUrl ?? url;
+            if (full.isEmpty) return;
+            showDialog<void>(
+              context: context,
+              builder: (ctx) => Dialog(
+                child: InteractiveViewer(
+                  child: Image.network(full, fit: BoxFit.contain),
+                ),
+              ),
+            );
+          },
+          child: url.isEmpty
+              ? Container(color: AppColors.surfaceInput)
+              : Image.network(url, fit: BoxFit.cover),
+        );
+      },
+    );
+  }
+}
+
+class _ChatDocList extends StatelessWidget {
+  const _ChatDocList({required this.messages});
+
+  final List<MessageModel> messages;
+
+  @override
+  Widget build(BuildContext context) {
+    if (messages.isEmpty) {
+      return const Center(child: Text('No documents shared yet'));
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: messages.length,
+      separatorBuilder: (_, __) => const Divider(height: 1),
+      itemBuilder: (context, index) {
+        final m = messages[index];
+          final name = m.content.fileName ?? 'Document';
+        final url = m.content.mediaUrl;
+        return ListTile(
+          leading: const Icon(Icons.insert_drive_file_outlined),
+          title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text(m.sender.displayName),
+          onTap: url == null || url.isEmpty
+              ? null
+              : () async {
+                  final uri = Uri.tryParse(url);
+                  if (uri == null) return;
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                },
+        );
+      },
+    );
+  }
+}
+
+class _ChatLinkList extends StatelessWidget {
+  const _ChatLinkList({required this.messages});
+
+  final List<MessageModel> messages;
+
+  static final _linkRe = RegExp(
+    r'https?://[^\s]+',
+    caseSensitive: false,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final links = <String>[];
+    for (final m in messages) {
+      if (m.isDeleted || m.type != MessageType.text) continue;
+      final text = m.content.text ?? '';
+      for (final match in _linkRe.allMatches(text)) {
+        links.add(match.group(0)!);
+      }
+    }
+    if (links.isEmpty) {
+      return const Center(child: Text('No links shared yet'));
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: links.length,
+      separatorBuilder: (_, __) => const Divider(height: 1),
+      itemBuilder: (context, index) {
+        final url = links[index];
+        return ListTile(
+          leading: const Icon(Icons.link),
+          title: Text(url, maxLines: 2, overflow: TextOverflow.ellipsis),
+          onTap: () async {
+            final uri = Uri.tryParse(url);
+            if (uri == null) return;
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          },
+        );
+      },
     );
   }
 }

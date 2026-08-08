@@ -14,6 +14,7 @@ import 'package:medcollab_app/features/messages/data/models/message_delivery_sta
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 import 'package:medcollab_app/features/messages/data/models/thread_reply_preview.dart';
 import 'package:medcollab_app/features/messages/data/repositories/message_repository.dart';
+import 'package:medcollab_app/features/notifications/data/repositories/notification_repository.dart';
 
 part 'channel_chat_state.dart';
 
@@ -26,13 +27,18 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     required SocketClient socketClient,
     required this.channelId,
     required this.currentUserId,
+    NotificationRepository? notificationRepository,
+    void Function(int unreadCount)? onChannelAlertsCleared,
   })  : _messageRepository = messageRepository,
         _mediaRepository = mediaRepository,
         _socketClient = socketClient,
+        _notificationRepository = notificationRepository,
+        _onChannelAlertsCleared = onChannelAlertsCleared,
         super(const ChannelChatState()) {
     _listenForSocketMessages();
     _listenForSocketUpdates();
     _listenForTyping();
+    _listenForInChatNotificationFallback();
     _connectionSub = _socketClient.connectionStream.listen((connected) {
       if (connected) {
         _socketClient.joinChannel(channelId);
@@ -44,11 +50,14 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     }
     ActiveChatTracker.instance.enter(channelId);
     loadMessages();
+    _markChannelNotificationsRead();
   }
 
   final MessageRepository _messageRepository;
   final MediaRepository _mediaRepository;
   final SocketClient _socketClient;
+  final NotificationRepository? _notificationRepository;
+  final void Function(int unreadCount)? _onChannelAlertsCleared;
   final String channelId;
   final String currentUserId;
 
@@ -57,8 +66,20 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   StreamSubscription<Map<String, dynamic>>? _messageDeletedSub;
   StreamSubscription<Map<String, dynamic>>? _typingSub;
   StreamSubscription<Map<String, dynamic>>? _stoppedTypingSub;
+  StreamSubscription<Map<String, dynamic>>? _notificationSub;
 
   final Map<String, String> _typingUsers = {};
+
+  Future<void> _markChannelNotificationsRead() async {
+    final repo = _notificationRepository;
+    if (repo == null) return;
+    try {
+      final count = await repo.markReadByChannel(channelId);
+      _onChannelAlertsCleared?.call(count);
+    } catch (_) {
+      /* non-fatal — chat still works */
+    }
+  }
 
   Future<void> loadMessages({bool silent = false}) async {
     if (!silent) {
@@ -74,9 +95,43 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         ),
       );
       _socketClient.joinChannel(channelId);
+      unawaited(_markMessagesRead(page.messages));
+      unawaited(_markChannelNotificationsRead());
     } on AppException catch (e) {
       emit(state.copyWith(isLoading: false, error: e.message));
     }
+  }
+
+  Future<void> _markMessagesRead(List<MessageModel> messages) async {
+    final ids = messages
+        .where((m) => !m.localOnly && !m.isDeleted && m.sender.id != currentUserId)
+        .map((m) => m.id)
+        .where((id) => id.isNotEmpty)
+        .toList();
+    if (ids.isEmpty) return;
+    try {
+      await _messageRepository.markMessagesRead(
+        channelId: channelId,
+        messageIds: ids,
+      );
+    } catch (_) {
+      /* non-fatal */
+    }
+  }
+
+  /// If `new_message` is missed (room race), inbox events still refresh the open chat.
+  void _listenForInChatNotificationFallback() {
+    _notificationSub = _socketClient
+        .onMapEvent(SocketEvents.newNotification)
+        .listen((data) {
+      final meta = asJsonMap(data['metadata']);
+      final cid = meta?['channelId']?.toString() ??
+          data['channelId']?.toString() ??
+          '';
+      if (cid.isEmpty || cid == 'null' || cid != channelId) return;
+      unawaited(loadMessages(silent: true));
+      unawaited(_markChannelNotificationsRead());
+    });
   }
 
   Future<void> sendMessage(String text, {List<String> mentions = const []}) async {
@@ -235,8 +290,30 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   void _listenForSocketUpdates() {
     _messageUpdatedSub =
         _socketClient.onMapEvent(SocketEvents.messageUpdated).listen((data) {
+      final messageId =
+          data['messageId']?.toString() ?? data['_id']?.toString() ?? '';
+      final reactionsRaw = data['reactions'];
+      if (messageId.isNotEmpty && reactionsRaw is List) {
+        final reactions = reactionsRaw
+            .map(asJsonMap)
+            .whereType<Map<String, dynamic>>()
+            .map(MessageReaction.fromJson)
+            .toList();
+        final index = state.messages.indexWhere((m) => m.id == messageId);
+        if (index >= 0) {
+          final updated = List<MessageModel>.from(state.messages);
+          updated[index] = updated[index].copyWith(reactions: reactions);
+          emit(state.copyWith(messages: updated));
+        }
+        return;
+      }
+
       final message = _parseSocketMessage(data);
-      if (message == null || message.channelId != channelId) return;
+      if (message == null) return;
+      final msgChannelId = message.channelId.isNotEmpty
+          ? message.channelId
+          : data['channelId']?.toString() ?? '';
+      if (msgChannelId.isNotEmpty && msgChannelId != channelId) return;
       if (message.isThreadReply) {
         _applyThreadReplyToRoot(message);
       } else {
@@ -321,6 +398,26 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       return;
     }
     _upsertRootMessage(message, fromSocket: true);
+    // Keep Alerts in sync when messages arrive while this chat is open.
+    unawaited(_markMessagesRead([message]));
+    unawaited(_markChannelNotificationsRead());
+  }
+
+  Future<void> toggleReaction(String messageId, String emoji) async {
+    try {
+      final reactions = await _messageRepository.toggleReaction(
+        channelId: channelId,
+        messageId: messageId,
+        emoji: emoji,
+      );
+      final index = state.messages.indexWhere((m) => m.id == messageId);
+      if (index < 0) return;
+      final updated = List<MessageModel>.from(state.messages);
+      updated[index] = updated[index].copyWith(reactions: reactions);
+      emit(state.copyWith(messages: updated));
+    } on AppException catch (e) {
+      emit(state.copyWith(error: e.message));
+    }
   }
 
   void _applyThreadReplyToRoot(MessageModel reply) {
@@ -399,6 +496,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     _messageDeletedSub?.cancel();
     _typingSub?.cancel();
     _stoppedTypingSub?.cancel();
+    _notificationSub?.cancel();
     return super.close();
   }
 }

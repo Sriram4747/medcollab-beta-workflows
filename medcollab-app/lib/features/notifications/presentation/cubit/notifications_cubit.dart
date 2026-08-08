@@ -87,12 +87,19 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     _notifSub = _socketClient
         .onMapEvent(SocketEvents.newNotification)
         .listen(_onSocketNotification);
+    // Debounced re-sync when badge drops because chat marked channel alerts read.
+    _badgeSub = _badgeCubit.stream.listen((count) {
+      if (!_acceptBadgeSync || count == state.unreadCount) return;
+      unawaited(loadSilent());
+    });
   }
 
   final NotificationRepository _repository;
   final SocketClient _socketClient;
   final NotificationBadgeCubit _badgeCubit;
   StreamSubscription<Map<String, dynamic>>? _notifSub;
+  StreamSubscription<int>? _badgeSub;
+  bool _acceptBadgeSync = false;
 
   Future<void> load() async {
     emit(state.copyWith(isLoading: true, error: null));
@@ -105,9 +112,28 @@ class NotificationsCubit extends Cubit<NotificationsState> {
           unreadCount: page.unreadCount,
         ),
       );
+      _acceptBadgeSync = false;
       _badgeCubit.setCount(page.unreadCount);
+      _acceptBadgeSync = true;
     } on AppException catch (e) {
+      _acceptBadgeSync = true;
       emit(state.copyWith(isLoading: false, error: e.message));
+    }
+  }
+
+  Future<void> loadSilent() async {
+    try {
+      final page = await _repository.getNotifications(limit: 50);
+      emit(
+        state.copyWith(
+          isLoading: false,
+          notifications: page.notifications,
+          unreadCount: page.unreadCount,
+          error: null,
+        ),
+      );
+    } on AppException {
+      /* ignore silent refresh failures */
     }
   }
 
@@ -216,6 +242,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   @override
   Future<void> close() {
     _notifSub?.cancel();
+    _badgeSub?.cancel();
     return super.close();
   }
 }

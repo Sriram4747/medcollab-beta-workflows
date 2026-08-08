@@ -100,9 +100,22 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
     }
   }
 
-  void _openChannelHit({required String channelId, String? spaceId}) {
+  void _openChannelHit({required String channelId, String? spaceId}) async {
     if (spaceId == null || spaceId.isEmpty) {
-      openDmChat(context, channelId: channelId, replace: true);
+      try {
+        final detail = await AppDependencies.instance.channelRepository
+            .getChannelById(channelId);
+        if (!mounted) return;
+        openDmChat(
+          context,
+          channelId: channelId,
+          channel: detail.channel,
+          replace: true,
+        );
+      } catch (_) {
+        if (!mounted) return;
+        openDmChat(context, channelId: channelId, replace: true);
+      }
     } else {
       context.push(AppRoutes.channelPath(spaceId, channelId));
     }

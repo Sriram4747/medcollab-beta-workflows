@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_patient_model.dart';
 import 'package:medcollab_app/features/handoffs/presentation/utils/handoff_priority_colors.dart';
+
+/// Field length caps aligned with backend handoff.model.js + clinical practice:
+/// bed labels are short, ward codes/names are brief, aliases avoid PHI names,
+/// diagnosis stays concise for shift handoff cards.
+abstract final class PatientFieldLimits {
+  static const bedNumber = 20;
+  static const ward = 50;
+  static const clinicalAlias = 100;
+  static const diagnosis = 200;
+  static const notes = 2000;
+  static const taskLine = 200;
+}
 
 /// Add or edit a single patient entry in a handoff draft.
 class PatientEditorSheet extends StatefulWidget {
@@ -58,10 +71,41 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
 
   void _save() {
     final bed = _bedController.text.trim();
+    final ward = _wardController.text.trim();
     final alias = _aliasController.text.trim();
+    final diagnosis = _diagnosisController.text.trim();
     if (bed.isEmpty || alias.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Bed number and clinical alias required')),
+      );
+      return;
+    }
+    // Bed/ward: short clinical labels (no free-form noise).
+    final bedOk = RegExp(r'^[A-Za-z0-9][A-Za-z0-9\-/\s.]{0,19}$').hasMatch(bed);
+    final wardOk =
+        ward.isEmpty || RegExp(r'^[A-Za-z0-9][A-Za-z0-9\-/\s.]{0,49}$').hasMatch(ward);
+    if (!bedOk) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bed: use letters, numbers, - / . (max 20)'),
+        ),
+      );
+      return;
+    }
+    if (!wardOk) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ward: use letters, numbers, - / . (max 50)'),
+        ),
+      );
+      return;
+    }
+    if (alias.length > PatientFieldLimits.clinicalAlias ||
+        diagnosis.length > PatientFieldLimits.diagnosis ||
+        bed.length > PatientFieldLimits.bedNumber ||
+        ward.length > PatientFieldLimits.ward) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Some fields exceed the allowed length')),
       );
       return;
     }
@@ -70,6 +114,11 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
         .split('\n')
         .map((t) => t.trim())
         .where((t) => t.isNotEmpty)
+        .map(
+          (t) => t.length > PatientFieldLimits.taskLine
+              ? t.substring(0, PatientFieldLimits.taskLine)
+              : t,
+        )
         .toList();
 
     Navigator.pop(
@@ -77,9 +126,9 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
       HandoffPatientModel(
         id: widget.initial?.id,
         bedNumber: bed,
-        ward: _wardController.text.trim(),
+        ward: ward,
         clinicalAlias: alias,
-        diagnosis: _diagnosisController.text.trim(),
+        diagnosis: diagnosis,
         status: _status,
         notes: _notesController.text.trim(),
         pendingTasks: tasks,
@@ -115,9 +164,19 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
                     controller: _bedController,
                     decoration: const InputDecoration(
                       labelText: 'Bed number',
-                      hintText: '7',
+                      hintText: '7 / ICU-12',
+                      counterText: '',
                     ),
                     keyboardType: TextInputType.text,
+                    maxLength: PatientFieldLimits.bedNumber,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                        PatientFieldLimits.bedNumber,
+                      ),
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'[A-Za-z0-9\-/\s.]'),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -128,7 +187,15 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
                     decoration: const InputDecoration(
                       labelText: 'Ward',
                       hintText: 'CICU',
+                      counterText: '',
                     ),
+                    maxLength: PatientFieldLimits.ward,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(PatientFieldLimits.ward),
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'[A-Za-z0-9\-/\s.]'),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -137,17 +204,33 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
             TextField(
               controller: _aliasController,
               decoration: const InputDecoration(
-                labelText: 'Clinical alias (no names)',
+                labelText: 'Clinical alias (no real names)',
                 hintText: '65M with ACS',
+                helperText: 'Age/sex + short problem — max 100 chars',
+                counterText: '',
               ),
+              maxLength: PatientFieldLimits.clinicalAlias,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(
+                  PatientFieldLimits.clinicalAlias,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _diagnosisController,
               decoration: const InputDecoration(
                 labelText: 'Diagnosis',
-                hintText: 'Acute Coronary Syndrome',
+                hintText: 'NSTEMI, post-PCI',
+                counterText: '',
               ),
+              maxLength: PatientFieldLimits.diagnosis,
+              maxLines: 2,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(
+                  PatientFieldLimits.diagnosis,
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<PatientStatus>(
@@ -186,9 +269,14 @@ class _PatientEditorSheetState extends State<PatientEditorSheet> {
               controller: _notesController,
               decoration: const InputDecoration(
                 labelText: 'Clinical notes',
+                counterText: '',
               ),
               minLines: 2,
               maxLines: 4,
+              maxLength: PatientFieldLimits.notes,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(PatientFieldLimits.notes),
+              ],
             ),
             const SizedBox(height: 16),
             FilledButton(

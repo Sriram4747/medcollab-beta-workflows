@@ -185,6 +185,20 @@ const joinSpace = asyncHandler(async (req, res) => {
   // Join member's socket to the space room for presence broadcasts
   joinUserToSpaceRoom(req.user._id, space._id);
 
+  // Tell existing members to refresh members / lists without pull-to-refresh.
+  try {
+    const { getIO } = require('../../socket');
+    const { SOCKET_EVENTS } = require('../../constants');
+    getIO().to(`space:${space._id}`).emit(SOCKET_EVENTS.SPACE_MEMBER_JOINED, {
+      spaceId: space._id.toString(),
+      userId: req.user._id.toString(),
+      userName: req.user.name || '',
+      memberCount: space.members.length,
+    });
+  } catch (_) {
+    /* non-fatal */
+  }
+
   return respond.ok(res, `Joined "${space.name}"`, { space, channels });
 });
 

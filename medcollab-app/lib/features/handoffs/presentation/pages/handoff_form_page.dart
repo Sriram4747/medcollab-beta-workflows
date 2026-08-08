@@ -14,7 +14,6 @@ import 'package:medcollab_app/features/handoffs/presentation/widgets/handoff_wid
 import 'package:medcollab_app/features/handoffs/presentation/widgets/patient_editor_sheet.dart';
 import 'package:medcollab_app/features/members/data/models/space_member_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
-import 'package:medcollab_app/shared/presentation/widgets/app_bottom_bar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
 
 class HandoffFormPage extends StatefulWidget {
@@ -180,6 +179,32 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
           title: Text(
             widget.handoffId == null ? 'Create handoff' : 'Edit handoff',
           ),
+          actions: [
+            BlocBuilder<HandoffFormCubit, HandoffFormState>(
+              bloc: _cubit,
+              builder: (context, state) {
+                return TextButton(
+                  onPressed: state.isSaving
+                      ? null
+                      : () async {
+                          final result = await _cubit.submit();
+                          if (!mounted || result == null) return;
+                          context.pop(result);
+                        },
+                  child: state.isSaving
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text(
+                          'Submit',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                );
+              },
+            ),
+          ],
         ),
         body: BlocBuilder<HandoffFormCubit, HandoffFormState>(
           builder: (context, state) {
@@ -271,9 +296,11 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                   controller: _summaryController,
                   decoration: const InputDecoration(
                     labelText: 'Shift summary (optional)',
+                    counterText: '',
                   ),
                   minLines: 2,
                   maxLines: 3,
+                  maxLength: 2000,
                   onChanged: _cubit.setShiftSummary,
                 ),
                 const SizedBox(height: 20),
@@ -315,73 +342,24 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                       },
                     );
                   }),
-                const SizedBox(height: 80),
+                const SizedBox(height: 24),
+                OutlinedButton(
+                  onPressed: state.isSaving
+                      ? null
+                      : () async {
+                          final result = await _cubit.saveDraft();
+                          if (!mounted || result == null) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Draft saved')),
+                          );
+                          context.pop(result);
+                        },
+                  child: const Text('Save draft'),
+                ),
+                const SizedBox(height: 32),
               ],
             );
           },
-        ),
-        bottomNavigationBar: AppBottomBar(
-          child: BlocBuilder<HandoffFormCubit, HandoffFormState>(
-            builder: (context, state) {
-              // Theme FilledButton uses minWidth: infinity — override so both
-              // buttons share the row evenly instead of Submit overflowing right.
-              final draftStyle = OutlinedButton.styleFrom(
-                minimumSize: const Size(0, 48),
-                foregroundColor: AppColors.navyPrimary,
-                side: const BorderSide(color: AppColors.navyPrimary),
-              );
-              final submitStyle = FilledButton.styleFrom(
-                minimumSize: const Size(0, 48),
-                backgroundColor: AppColors.navyPrimary,
-                foregroundColor: AppColors.textOnDark,
-              );
-
-              return Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      style: draftStyle,
-                      onPressed: state.isSaving
-                          ? null
-                          : () async {
-                              final result = await _cubit.saveDraft();
-                              if (!mounted || result == null) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Draft saved'),
-                                ),
-                              );
-                              context.pop(result);
-                            },
-                      child: state.isSaving
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text('Save draft'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      style: submitStyle,
-                      onPressed: state.isSaving
-                          ? null
-                          : () async {
-                              final result = await _cubit.submit();
-                              if (!mounted || result == null) return;
-                              context.pop(result);
-                            },
-                      child: const Text('Submit'),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
         ),
       ),
     );

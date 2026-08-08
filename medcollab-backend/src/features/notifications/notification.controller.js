@@ -94,6 +94,41 @@ const markAsUnread = asyncHandler(async (req, res) => {
 });
 
 /**
+ * PUT /api/notifications/read-by-channel/:channelId
+ * Mark all unread notifications for a channel as read (chat open).
+ */
+const markReadByChannel = asyncHandler(async (req, res) => {
+  const channelId = req.params.channelId;
+  if (!channelId) {
+    return respond.badRequest(res, 'channelId is required');
+  }
+
+  const mongoose = require('mongoose');
+  const channelMatch = [{ 'metadata.channelId': channelId }];
+  if (mongoose.Types.ObjectId.isValid(channelId)) {
+    channelMatch.push({
+      'metadata.channelId': new mongoose.Types.ObjectId(channelId),
+    });
+  }
+
+  const result = await Notification.updateMany(
+    {
+      userId: req.user._id,
+      read: false,
+      $or: channelMatch,
+    },
+    { $set: { read: true, readAt: new Date() } }
+  );
+
+  const unreadCount = await Notification.getUnreadCount(req.user._id);
+
+  return respond.ok(res, 'Channel notifications marked as read', {
+    modifiedCount: result.modifiedCount,
+    unreadCount,
+  });
+});
+
+/**
  * DELETE /api/notifications/:id
  * Delete a single notification
  */
@@ -112,5 +147,5 @@ const deleteNotification = asyncHandler(async (req, res) => {
 
 module.exports = {
   getNotifications, getUnreadCount,
-  markAsRead, markAsUnread, markAllAsRead, deleteNotification,
+  markAsRead, markAsUnread, markAllAsRead, markReadByChannel, deleteNotification,
 };

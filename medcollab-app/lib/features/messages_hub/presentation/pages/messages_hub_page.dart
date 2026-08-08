@@ -576,9 +576,11 @@ class _DirectTab extends StatelessWidget {
                       (presence[peer.id]?.isOnline ?? false);
 
                   final previewText = hasDraft
-                      ? 'Draft awaiting'
-                      : (preview?.text?.trim().isNotEmpty == true
-                          ? preview!.text!
+                      ? (preview != null
+                          ? 'Draft · ${preview.previewLabel}'
+                          : 'Draft awaiting')
+                      : (preview != null
+                          ? preview.previewLabel
                           : 'No messages yet');
 
                   return DMRow(

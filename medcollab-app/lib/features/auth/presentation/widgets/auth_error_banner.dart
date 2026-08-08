@@ -4,12 +4,12 @@ import 'package:medcollab_app/core/theme/app_colors.dart';
 class AuthErrorBanner extends StatelessWidget {
   const AuthErrorBanner({
     required this.message,
-    required this.onDismiss,
+    this.onDismiss,
     super.key,
   });
 
   final String message;
-  final VoidCallback onDismiss;
+  final VoidCallback? onDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +31,14 @@ class AuthErrorBanner extends StatelessWidget {
                     ),
               ),
             ),
-            IconButton(
-              onPressed: onDismiss,
-              icon: const Icon(Icons.close, size: 18),
-              color: AppColors.error,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-            ),
+            if (onDismiss != null)
+              IconButton(
+                onPressed: onDismiss,
+                icon: const Icon(Icons.close, size: 18),
+                color: AppColors.error,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              ),
           ],
         ),
       ),

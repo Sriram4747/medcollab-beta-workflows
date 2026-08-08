@@ -65,8 +65,9 @@ const getSpaceChannels = asyncHandler(async (req, res) => {
  * Get a single channel with its pinned messages
  */
 const getChannelById = asyncHandler(async (req, res) => {
-  const channel = await Channel.findById(req.params.id)
+  let channel = await Channel.findById(req.params.id)
     .populate('pinnedMessages.messageId')
+    .populate('members', 'name displayTitle role avatarUrl speciality department institution availability')
     .lean();
 
   if (!channel) return respond.notFound(res, 'Channel not found');
@@ -77,10 +78,14 @@ const getChannelById = asyncHandler(async (req, res) => {
     if (!space?.isMember(req.user._id)) return respond.forbidden(res, 'Not a space member');
   } else {
     // DM channel — must be a member
-    const isMember = channel.members.some(
-      (id) => id.toString() === req.user._id.toString()
+    const isMember = (channel.members || []).some(
+      (m) => (m._id || m).toString() === req.user._id.toString()
     );
     if (!isMember) return respond.forbidden(res, 'Not a channel member');
+  }
+
+  if (channel.type === CHANNEL_TYPES.DIRECT) {
+    channel = enrichDM(channel, req.user._id);
   }
 
   return respond.ok(res, 'Channel fetched', { channel });

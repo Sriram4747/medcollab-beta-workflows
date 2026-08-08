@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
@@ -7,9 +6,7 @@ import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
-import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
-import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
+import 'package:medcollab_app/core/utils/phone_utils.dart';
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
@@ -17,7 +14,8 @@ import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_fab.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
 
-/// Post-auth home — lists spaces the user belongs to.
+/// Lists clinical groups (spaces) the doctor belongs to.
+/// Reached from Profile → My Groups. Sign-out lives on Profile only.
 class SpacesHomePage extends StatefulWidget {
   const SpacesHomePage({super.key});
 
@@ -61,27 +59,22 @@ class _SpacesHomePageState extends State<SpacesHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Spaces'),
+        title: const Text('My Groups'),
         actions: [
           IconButton(
             tooltip: 'Join with code',
             onPressed: () => _showJoinDialog(context),
             icon: const Icon(Icons.group_add_outlined),
           ),
-          BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) => TextButton(
-              onPressed: state.isLoading
-                  ? null
-                  : () => context
-                      .read<AuthBloc>()
-                      .add(const AuthLogoutRequested()),
-              child: const Text('Log out'),
-            ),
+          IconButton(
+            tooltip: 'Scan / paste invite',
+            onPressed: () => context.push(AppRoutes.scanInviteQr),
+            icon: const Icon(Icons.qr_code_2_outlined),
           ),
         ],
       ),
       floatingActionButton: AppFab(
-        label: 'New space',
+        label: 'New group',
         onPressed: () => _showCreateDialog(context),
       ),
       body: FutureBuilder<List<SpaceModel>>(
@@ -278,13 +271,27 @@ class _SpacesHomePageState extends State<SpacesHomePage>
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Join space'),
-        content: TextField(
-          controller: codeController,
-          decoration: const InputDecoration(
-            labelText: 'Invite code',
-            hintText: 'A3K7BX',
-          ),
-          textCapitalization: TextCapitalization.characters,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: codeController,
+              decoration: const InputDecoration(
+                labelText: 'Invite code or link',
+                hintText: 'A3K7BX or invite URL',
+              ),
+              textCapitalization: TextCapitalization.characters,
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pop(ctx, false);
+                context.push(AppRoutes.scanInviteQr);
+              },
+              icon: const Icon(Icons.qr_code_scanner),
+              label: const Text('Scan QR code'),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -293,9 +300,13 @@ class _SpacesHomePageState extends State<SpacesHomePage>
           ),
           FilledButton(
             onPressed: () async {
-              if (codeController.text.trim().length < 4) return;
+              final extracted = PhoneUtils.extractInviteCode(
+                    codeController.text,
+                  ) ??
+                  codeController.text.trim().toUpperCase();
+              if (extracted.length < 4) return;
               try {
-                await _spaceRepository.joinSpace(codeController.text);
+                await _spaceRepository.joinSpace(extracted);
                 if (ctx.mounted) Navigator.pop(ctx, true);
               } catch (e) {
                 if (ctx.mounted) {

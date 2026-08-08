@@ -37,6 +37,9 @@ dependencies:
   firebase_core: ^4.12.1
   firebase_messaging: ^16.4.3
   flutter_local_notifications: ^19.5.0
+  # Camera QR: deferred — mobile_scanner caused release-start crashes with
+  # Kotlin/ML Kit toolchain on this project. Join still works via code/link paste.
+
 
 dev_dependencies:
   flutter_test:

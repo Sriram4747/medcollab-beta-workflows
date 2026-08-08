@@ -176,8 +176,11 @@ const getIO = () => {
 /**
  * Emit a new_message event to a channel room
  * Called by the message controller after saving a message to MongoDB
+ * @param {string} channelId
+ * @param {object} message
+ * @param {string[]} [alsoNotifyUserIds] user rooms (DM members) for open-chat fallback
  */
-const emitNewMessage = (channelId, message) => {
+const emitNewMessage = (channelId, message, alsoNotifyUserIds = []) => {
   const doc =
     typeof message.toObject === 'function' ? message.toObject() : message;
 
@@ -201,9 +204,17 @@ const emitNewMessage = (channelId, message) => {
     updatedAt: doc.updatedAt?.toISOString?.() ?? doc.updatedAt,
   };
 
-  getIO()
-    .to(`channel:${channelId}`)
-    .emit(SOCKET_EVENTS.NEW_MESSAGE, payload);
+  const io = getIO();
+  io.to(`channel:${channelId}`).emit(SOCKET_EVENTS.NEW_MESSAGE, payload);
+
+  // Fallback fan-out: viewers who never got join_channel still receive realtime.
+  const seen = new Set();
+  for (const raw of alsoNotifyUserIds) {
+    const id = raw?.toString?.() || String(raw);
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    io.to(`user:${id}`).emit(SOCKET_EVENTS.NEW_MESSAGE, payload);
+  }
 };
 
 /**

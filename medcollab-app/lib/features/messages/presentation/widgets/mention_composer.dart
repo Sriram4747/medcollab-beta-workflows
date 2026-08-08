@@ -14,7 +14,6 @@ class MentionAwareComposer extends StatefulWidget {
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
-    this.onEmojiSelected,
     this.isBusy = false,
     super.key,
   });
@@ -27,7 +26,6 @@ class MentionAwareComposer extends StatefulWidget {
   final VoidCallback? onPickGallery;
   final VoidCallback? onPickCamera;
   final VoidCallback? onPickDocument;
-  final ValueChanged<String>? onEmojiSelected;
   final bool isBusy;
 
   @override
@@ -195,7 +193,6 @@ class _MentionAwareComposerState extends State<MentionAwareComposer> {
           onPickGallery: widget.onPickGallery,
           onPickCamera: widget.onPickCamera,
           onPickDocument: widget.onPickDocument,
-          onEmojiSelected: widget.onEmojiSelected,
           hintText: 'Message… @ to mention',
         ),
       ],

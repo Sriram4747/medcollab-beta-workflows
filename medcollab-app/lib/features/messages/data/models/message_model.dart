@@ -76,6 +76,7 @@ class MessageModel extends Equatable {
     this.localOnly = false,
     this.mentions = const [],
     this.readBy = const [],
+    this.reactions = const [],
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -92,6 +93,7 @@ class MessageModel extends Equatable {
     final lastReplyJson = asJsonMap(json['lastReply']);
     final mentionsRaw = json['mentions'];
     final readByRaw = json['readBy'];
+    final reactionsRaw = json['reactions'];
 
     return MessageModel(
       id: id.toString(),
@@ -131,6 +133,13 @@ class MessageModel extends Equatable {
               .map(MessageReadReceipt.fromJson)
               .toList()
           : const [],
+      reactions: reactionsRaw is List
+          ? reactionsRaw
+              .map(asJsonMap)
+              .whereType<Map<String, dynamic>>()
+              .map(MessageReaction.fromJson)
+              .toList()
+          : const [],
     );
   }
 
@@ -150,6 +159,7 @@ class MessageModel extends Equatable {
   final bool localOnly;
   final List<String> mentions;
   final List<MessageReadReceipt> readBy;
+  final List<MessageReaction> reactions;
 
   bool get isThreadReply => threadId != null && threadId!.isNotEmpty;
   bool get hasThread => replyCount > 0;
@@ -180,6 +190,7 @@ class MessageModel extends Equatable {
     bool? localOnly,
     List<String>? mentions,
     List<MessageReadReceipt>? readBy,
+    List<MessageReaction>? reactions,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -198,6 +209,7 @@ class MessageModel extends Equatable {
       localOnly: localOnly ?? this.localOnly,
       mentions: mentions ?? this.mentions,
       readBy: readBy ?? this.readBy,
+      reactions: reactions ?? this.reactions,
     );
   }
 
@@ -219,5 +231,39 @@ class MessageModel extends Equatable {
         localOnly,
         mentions,
         readBy,
+        reactions,
       ];
+}
+
+/// Emoji reaction aggregate for a message.
+class MessageReaction extends Equatable {
+  const MessageReaction({
+    required this.emoji,
+    this.userIds = const [],
+  });
+
+  factory MessageReaction.fromJson(Map<String, dynamic> json) {
+    final raw = json['userIds'];
+    final ids = <String>[];
+    if (raw is List) {
+      for (final id in raw) {
+        final s = id?.toString() ?? '';
+        if (s.isNotEmpty && s != 'null') ids.add(s);
+      }
+    }
+    return MessageReaction(
+      emoji: json['emoji']?.toString() ?? '',
+      userIds: ids,
+    );
+  }
+
+  final String emoji;
+  final List<String> userIds;
+
+  int get count => userIds.length;
+
+  bool reactedBy(String userId) => userIds.contains(userId);
+
+  @override
+  List<Object?> get props => [emoji, userIds];
 }

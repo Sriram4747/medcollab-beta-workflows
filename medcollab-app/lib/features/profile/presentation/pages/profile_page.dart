@@ -13,6 +13,7 @@ import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:medcollab_app/features/dev/presentation/pages/developer_mode_page.dart';
+import 'package:medcollab_app/features/media/data/services/media_picker_service.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -40,6 +41,9 @@ class ProfilePage extends StatelessWidget {
                 roleLine: roleLine.isEmpty ? 'Doctor' : roleLine,
                 imageUrl: user?.avatarUrl,
                 availability: availability,
+                onAvatarTap: user == null
+                    ? null
+                    : () => _pickAndUploadAvatar(context),
               ),
               Expanded(
                 child: ListView(
@@ -121,6 +125,41 @@ class ProfilePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _pickAndUploadAvatar(BuildContext context) async {
+    final picker = MediaPickerService();
+    final picked = await picker.pickFromGallery();
+    if (picked == null || !context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Uploading photo…')),
+    );
+
+    try {
+      final deps = AppDependencies.instance;
+      final upload = await deps.mediaRepository.uploadFile(
+        bytes: picked.bytes,
+        fileName: picked.fileName,
+        mimeType: picked.mimeType,
+        context: 'avatar',
+      );
+      final url = upload.url;
+      if (url.isEmpty) {
+        throw StateError('No URL from upload');
+      }
+      final user = await deps.userRepository.updateAvatarUrl(url);
+      if (!context.mounted) return;
+      context.read<AuthBloc>().add(AuthUserUpdated(user));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile photo updated')),
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not update profile photo')),
+      );
+    }
   }
 
   Future<void> _showAvailabilitySheet(
@@ -340,12 +379,14 @@ class _ProfileHeader extends StatelessWidget {
     required this.roleLine,
     required this.availability,
     this.imageUrl,
+    this.onAvatarTap,
   });
 
   final String name;
   final String roleLine;
   final String? imageUrl;
   final AvailabilityStatus availability;
+  final VoidCallback? onAvatarTap;
 
   @override
   Widget build(BuildContext context) {
@@ -358,19 +399,56 @@ class _ProfileHeader extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16, top + 20, 16, 28),
       child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.tealPrimary, width: 2.5),
-            ),
-            padding: const EdgeInsets.all(2),
-            child: AppAvatar(
-              name: name,
-              imageUrl: imageUrl,
-              size: 64,
-              foregroundColor: AppColors.tealPrimary,
+          GestureDetector(
+            onTap: onAvatarTap,
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(color: AppColors.tealPrimary, width: 2.5),
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  child: AppAvatar(
+                    name: name,
+                    imageUrl: imageUrl,
+                    size: 64,
+                    foregroundColor: AppColors.tealPrimary,
+                  ),
+                ),
+                if (onAvatarTap != null)
+                  Container(
+                    width: 26,
+                    height: 26,
+                    decoration: BoxDecoration(
+                      color: AppColors.tealPrimary,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.navyPrimary,
+                        width: 2,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt_rounded,
+                      size: 14,
+                      color: AppColors.navyPrimary,
+                    ),
+                  ),
+              ],
             ),
           ),
+          if (onAvatarTap != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              'Tap photo to change',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.white.withValues(alpha: 0.55),
+              ),
+            ),
+          ],
           const SizedBox(height: 14),
           Text(
             name,

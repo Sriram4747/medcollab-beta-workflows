@@ -22,11 +22,19 @@ class NotificationMetadata extends Equatable {
   factory NotificationMetadata.fromJson(Map<String, dynamic>? json) {
     if (json == null) return const NotificationMetadata();
     return NotificationMetadata(
-      spaceId: json['spaceId']?.toString(),
-      channelId: json['channelId']?.toString(),
-      messageId: json['messageId']?.toString(),
-      handoffId: json['handoffId']?.toString(),
+      spaceId: _cleanId(json['spaceId']),
+      channelId: _cleanId(json['channelId']),
+      messageId: _cleanId(json['messageId']),
+      handoffId: _cleanId(json['handoffId']),
     );
+  }
+
+  /// Mongo nulls and the literal string "null" must not open fake routes.
+  static String? _cleanId(dynamic value) {
+    if (value == null) return null;
+    final s = value.toString().trim();
+    if (s.isEmpty || s == 'null' || s == 'undefined') return null;
+    return s;
   }
 
   final String? spaceId;

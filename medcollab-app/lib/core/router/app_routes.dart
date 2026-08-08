@@ -34,6 +34,7 @@ abstract final class AppRoutes {
   static const String dm = '/dm/:channelId';
   static const String dmThread = '/dm/:channelId/threads/:messageId';
   static const String joinInvite = '/join/:code';
+  static const String scanInviteQr = '/join-scan';
 
   // Sprint 11 — help & support
   static const String help = '/help';

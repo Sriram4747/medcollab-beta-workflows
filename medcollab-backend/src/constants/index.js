@@ -170,6 +170,9 @@ const SOCKET_EVENTS = {
   HANDOFF_SUBMITTED: 'handoff_submitted',
   HANDOFF_ACKNOWLEDGED: 'handoff_acknowledged',
 
+  // Spaces
+  SPACE_MEMBER_JOINED: 'space_member_joined',
+
   // Errors
   ERROR: 'error',
 };

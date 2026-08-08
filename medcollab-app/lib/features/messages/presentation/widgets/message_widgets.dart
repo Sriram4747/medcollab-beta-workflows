@@ -17,6 +17,7 @@ import 'package:medcollab_app/shared/presentation/widgets/mention_rich_text.dart
 import 'package:url_launcher/url_launcher.dart';
 
 /// Text input bar with attach menu — gallery, camera, document.
+/// Emoji lives on the system keyboard (WhatsApp-style), not a separate tray.
 class MessageComposer extends StatelessWidget {
   const MessageComposer({
     required this.controller,
@@ -24,7 +25,6 @@ class MessageComposer extends StatelessWidget {
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
-    this.onEmojiSelected,
     this.hintText = 'Message… @ to mention',
     this.isBusy = false,
     super.key,
@@ -35,42 +35,8 @@ class MessageComposer extends StatelessWidget {
   final VoidCallback? onPickGallery;
   final VoidCallback? onPickCamera;
   final VoidCallback? onPickDocument;
-  final ValueChanged<String>? onEmojiSelected;
   final String hintText;
   final bool isBusy;
-
-  static const _quickEmojis = [
-    '👍', '❤️', '😂', '🙏', '✅', '🏥', '💊', '🩺', '⚠️', '👏',
-  ];
-
-  void _showEmojiPicker(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(AppGaps.screenH),
-          child: Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: _quickEmojis.map((emoji) {
-              return InkWell(
-                onTap: () {
-                  Navigator.pop(ctx);
-                  onEmojiSelected?.call(emoji);
-                },
-                borderRadius: AppRadius.button,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(emoji, style: const TextStyle(fontSize: 28)),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-    );
-  }
 
   void _showAttachMenu(BuildContext context) {
     showModalBottomSheet<void>(
@@ -105,15 +71,6 @@ class MessageComposer extends StatelessWidget {
                 onPickDocument?.call();
               },
             ),
-            if (onEmojiSelected != null)
-              ListTile(
-                leading: const Icon(Icons.emoji_emotions_outlined),
-                title: const Text('Emoji'),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _showEmojiPicker(context);
-                },
-              ),
           ],
         ),
       ),
@@ -124,8 +81,7 @@ class MessageComposer extends StatelessWidget {
   Widget build(BuildContext context) {
     final canAttach = onPickGallery != null ||
         onPickDocument != null ||
-        onPickCamera != null ||
-        onEmojiSelected != null;
+        onPickCamera != null;
 
     return Container(
       decoration: const BoxDecoration(
@@ -151,11 +107,11 @@ class MessageComposer extends StatelessWidget {
                       onTap: isBusy ? null : () => _showAttachMenu(context),
                       borderRadius: AppRadius.button,
                       child: const SizedBox(
-                        width: 32,
-                        height: 32,
+                        width: 36,
+                        height: 36,
                         child: Icon(
                           Icons.add,
-                          size: 20,
+                          size: 22,
                           color: AppColors.textSecondary,
                         ),
                       ),
@@ -166,9 +122,11 @@ class MessageComposer extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   minLines: 1,
-                  maxLines: 4,
+                  maxLines: 5,
                   textCapitalization: TextCapitalization.sentences,
                   enabled: !isBusy,
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.newline,
                   style: AppTextStyles.body.copyWith(
                     color: AppColors.textPrimary,
                   ),
@@ -180,15 +138,15 @@ class MessageComposer extends StatelessWidget {
                     filled: true,
                     fillColor: AppColors.surfaceInput,
                     border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                       borderSide: BorderSide.none,
                     ),
                     enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                       borderSide: BorderSide.none,
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: BorderRadius.all(Radius.circular(22)),
                       borderSide: BorderSide(
                         color: AppColors.tealPrimary,
                         width: 1.5,
@@ -196,11 +154,10 @@ class MessageComposer extends StatelessWidget {
                     ),
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
+                      horizontal: 16,
+                      vertical: 12,
                     ),
                   ),
-                  onSubmitted: isBusy ? null : onSend,
                 ),
               ),
               const SizedBox(width: 8),
@@ -215,24 +172,21 @@ class MessageComposer extends StatelessWidget {
                     customBorder: const CircleBorder(),
                     onTap: isBusy ? null : () => onSend(controller.text),
                     child: SizedBox(
-                      width: 34,
-                      height: 34,
-                      child: Center(
-                        child: isBusy
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: AppColors.tealPrimary,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.arrow_upward_rounded,
-                                size: 18,
-                                color: AppColors.tealPrimary,
+                      width: 40,
+                      height: 40,
+                      child: isBusy
+                          ? const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
                               ),
-                      ),
+                            )
+                          : const Icon(
+                              Icons.send_rounded,
+                              size: 18,
+                              color: Colors.white,
+                            ),
                     ),
                   ),
                 ),
@@ -333,6 +287,7 @@ class MessageBubble extends StatelessWidget {
     this.onDelete,
     this.onBookmark,
     this.onPin,
+    this.onReact,
     this.currentUserId,
     this.seenByMembers = const [],
     super.key,
@@ -348,11 +303,14 @@ class MessageBubble extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onBookmark;
   final VoidCallback? onPin;
+  final ValueChanged<String>? onReact;
   final String? currentUserId;
   final List<UserModel> seenByMembers;
 
+  static const quickReactions = ['👍', '❤️', '😂', '🙏', '✅', '👏'];
+
   Future<void> _showActions(BuildContext context) async {
-    if (!isMine || message.isDeleted || message.localOnly) return;
+    if (message.isDeleted || message.localOnly) return;
     final action = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
@@ -360,13 +318,36 @@ class MessageBubble extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (message.type == MessageType.text && onEdit != null)
+            if (onReact != null) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: quickReactions
+                      .map(
+                        (e) => InkWell(
+                          onTap: () => Navigator.pop(ctx, 'react:$e'),
+                          borderRadius: BorderRadius.circular(20),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(e, style: const TextStyle(fontSize: 26)),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              const Divider(height: 1),
+            ],
+            if (isMine &&
+                message.type == MessageType.text &&
+                onEdit != null)
               ListTile(
                 leading: const Icon(Icons.edit_outlined),
                 title: const Text('Edit message'),
                 onTap: () => Navigator.pop(ctx, 'edit'),
               ),
-            if (onDelete != null)
+            if (isMine && onDelete != null)
               ListTile(
                 leading: const Icon(Icons.delete_outline, color: AppColors.error),
                 title: const Text('Delete message'),
@@ -389,7 +370,9 @@ class MessageBubble extends StatelessWidget {
       ),
     );
     if (!context.mounted || action == null) return;
-    if (action == 'edit') {
+    if (action.startsWith('react:')) {
+      onReact?.call(action.substring(6));
+    } else if (action == 'edit') {
       onEdit?.call();
     } else if (action == 'delete') {
       onDelete?.call();
@@ -439,6 +422,50 @@ class MessageBubble extends StatelessWidget {
                     onImageTap ?? (url) => _openImage(context, url, message),
                 onDocumentTap: (url) => _openUrl(context, url),
               ),
+              if (message.reactions.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Wrap(
+                  spacing: 4,
+                  runSpacing: 4,
+                  children: message.reactions
+                      .where((r) => r.emoji.isNotEmpty && r.count > 0)
+                      .map(
+                        (r) {
+                          final mine = currentUserId != null &&
+                              r.reactedBy(currentUserId!);
+                          return InkWell(
+                            onTap: onReact == null
+                                ? null
+                                : () => onReact!(r.emoji),
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: mine
+                                    ? AppColors.tealPrimary
+                                        .withValues(alpha: 0.15)
+                                    : AppColors.surfaceInput,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: mine
+                                      ? AppColors.tealPrimary
+                                      : AppColors.borderDefault,
+                                ),
+                              ),
+                              child: Text(
+                                '${r.emoji} ${r.count}',
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                      .toList(),
+                ),
+              ],
               if (message.replyCount > 0) ...[
                 const SizedBox(height: 4),
                 ThreadCountBadge(

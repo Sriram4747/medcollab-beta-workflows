@@ -1,5 +1,6 @@
 import 'package:medcollab_app/core/constants/api_endpoints.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/core/utils/json_map_utils.dart';
 import 'package:medcollab_app/features/media/data/models/media_upload_result.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
@@ -122,6 +123,28 @@ class MessageRepository extends BaseRepository {
       () => apiClient.post(
         ApiEndpoints.markChannelRead(channelId),
         data: {'messageIds': messageIds},
+      ),
+    );
+  }
+
+  Future<List<MessageReaction>> toggleReaction({
+    required String channelId,
+    required String messageId,
+    required String emoji,
+  }) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.messageReact(channelId, messageId),
+        data: {'emoji': emoji},
+        parser: (json) {
+          final raw = json['reactions'];
+          if (raw is! List) return <MessageReaction>[];
+          return raw
+              .map((e) => asJsonMap(e))
+              .whereType<Map<String, dynamic>>()
+              .map(MessageReaction.fromJson)
+              .toList();
+        },
       ),
     );
   }

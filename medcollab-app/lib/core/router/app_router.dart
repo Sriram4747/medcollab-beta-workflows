@@ -24,6 +24,7 @@ import 'package:medcollab_app/features/search/presentation/pages/global_search_p
 import 'package:medcollab_app/features/shell/presentation/pages/main_shell_page.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/presentation/pages/join_invite_page.dart';
+import 'package:medcollab_app/features/spaces/presentation/pages/scan_invite_qr_page.dart';
 import 'package:medcollab_app/features/spaces/presentation/pages/space_detail_page.dart';
 import 'package:medcollab_app/features/spaces/presentation/pages/spaces_home_page.dart';
 import 'package:medcollab_app/features/support/presentation/pages/contact_team_page.dart';
@@ -46,7 +47,34 @@ class AppRouter {
     initialLocation: AppRoutes.splash,
     debugLogDiagnostics: kDebugMode,
     refreshListenable: _refreshListenable,
-    redirect: _redirect,
+    redirect: (context, state) {
+      // Only rewrite known invite deep-link shapes — never rewrite app tab paths.
+      final uri = state.uri;
+      final host = uri.host.toLowerCase();
+      final path = uri.path;
+      final scheme = uri.scheme.toLowerCase();
+
+      // medcollab://join/CODE  → path is /CODE, host is join
+      if (host == 'join') {
+        final code = path.replaceAll('/', '').trim().toUpperCase();
+        if (RegExp(r'^[A-Z0-9]{4,12}$').hasMatch(code)) {
+          return AppRoutes.joinInvitePath(code);
+        }
+      }
+
+      // medcollab:///join/CODE already matches /join/:code — leave as-is.
+      // Avoid hijacking normal GoRouter locations (HOME, HELP, etc.).
+      if (scheme == 'medcollab' &&
+          path.startsWith('/join/') == false &&
+          path != '/join') {
+        final bare = path.replaceAll('/', '').trim().toUpperCase();
+        if (RegExp(r'^[A-Z0-9]{4,12}$').hasMatch(bare)) {
+          return AppRoutes.joinInvitePath(bare);
+        }
+      }
+
+      return _redirect(context, state);
+    },
     routes: [
       GoRoute(
         path: AppRoutes.splash,
@@ -191,6 +219,10 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: AppRoutes.scanInviteQr,
+        builder: (context, state) => const ScanInviteQrPage(),
+      ),
+      GoRoute(
         path: AppRoutes.spaceDetail,
         builder: (context, state) {
           final spaceId = state.pathParameters['spaceId']!;
@@ -279,7 +311,15 @@ class AppRouter {
 
   String? _redirect(BuildContext context, GoRouterState state) {
     final auth = _authBloc.state;
-    final location = state.matchedLocation;
+    // Prefer full path so deep links are not lost when matchedLocation is empty.
+    final location = state.uri.path.isNotEmpty
+        ? state.uri.path
+        : state.matchedLocation;
+
+    // Pending invite while not fully signed in — remember and resume after auth.
+    if (location.startsWith('/join/')) {
+      _pendingJoinLocation = location;
+    }
 
     switch (auth.status) {
       case AuthStatus.unknown:
@@ -308,16 +348,38 @@ class AppRouter {
         return AppRoutes.profileSetup;
 
       case AuthStatus.authenticated:
+        final pending = _pendingJoinLocation;
+        if (pending != null &&
+            pending.startsWith('/join/') &&
+            location != pending) {
+          // Consume once — do not re-set from the same evaluation.
+          if (!location.startsWith('/join/')) {
+            _pendingJoinLocation = null;
+            return pending;
+          }
+        }
         if (_isAuthenticatedRoute(location)) return null;
+        // Splash / unknown auth-shell paths after login.
+        if (location == AppRoutes.splash || location == '/') {
+          return AppRoutes.home;
+        }
+        if (location == AppRoutes.phoneEntry ||
+            location == AppRoutes.otpVerification ||
+            location == AppRoutes.profileSetup) {
+          return AppRoutes.home;
+        }
         return AppRoutes.home;
     }
   }
+
+  String? _pendingJoinLocation;
 
   bool _isAuthenticatedRoute(String location) {
     if (AppRoutes.shellPaths.contains(location)) return true;
     if (location.startsWith('/spaces')) return true;
     if (location.startsWith('/dm')) return true;
     if (location.startsWith('/join')) return true;
+    if (location == AppRoutes.scanInviteQr) return true;
     if (location == AppRoutes.search ||
         location == AppRoutes.bookmarks ||
         location == AppRoutes.notificationSettings ||
