@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -126,10 +127,18 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     final deps = AppDependencies.instance;
     final selfId = context.read<AuthBloc>().state.user?.id ?? '';
 
+    // Load members and channel detail in parallel.
+    final membersFuture = _isDm
+        ? deps.channelRepository.getChannelMembers(widget.channelId)
+        : deps.memberRepository
+            .getSpaceMembers(widget.spaceId!)
+            .then((list) => list.map((m) => m.user).toList());
+    final detailFuture =
+        deps.channelRepository.getChannelById(widget.channelId);
+
     try {
+      final members = await membersFuture;
       if (_isDm) {
-        final members =
-            await deps.channelRepository.getChannelMembers(widget.channelId);
         if (mounted) {
           UserModel? peer = widget.channel?.peer;
           peer ??= members.where((m) => m.id != selfId).firstOrNull;
@@ -153,11 +162,9 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           });
         }
       } else {
-        final members =
-            await deps.memberRepository.getSpaceMembers(widget.spaceId!);
         if (mounted) {
           setState(() {
-            _mentionCandidates = members.map((m) => m.user).toList();
+            _mentionCandidates = members;
             _spaceMembers = _mentionCandidates;
           });
         }
@@ -165,8 +172,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     } catch (_) {}
 
     try {
-      final detail =
-          await deps.channelRepository.getChannelById(widget.channelId);
+      final detail = await detailFuture;
       final fetched = detail.channel;
       if (!_isDm) {
         final spaces = await deps.spaceRepository.getMySpaces();
@@ -746,6 +752,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             child: state.messages.isEmpty
                                 ? _EmptyChatState(isDm: _isDm)
                                 : ListView.builder(
+                                    key: const PageStorageKey('chat-list'),
                                     controller: _scrollController,
                                     cacheExtent: 480,
                                     padding: const EdgeInsets.symmetric(
@@ -1424,6 +1431,7 @@ class _ChatMediaGrid extends StatelessWidget {
         final m = messages[index];
         final url = m.content.thumbnailUrl ?? m.content.mediaUrl ?? '';
         return InkWell(
+          key: ValueKey('media-${m.id}'),
           onTap: () {
             final full = m.content.mediaUrl ?? url;
             if (full.isEmpty) return;
@@ -1431,14 +1439,34 @@ class _ChatMediaGrid extends StatelessWidget {
               context: context,
               builder: (ctx) => Dialog(
                 child: InteractiveViewer(
-                  child: Image.network(full, fit: BoxFit.contain),
+                  child: CachedNetworkImage(
+                    imageUrl: full,
+                    fit: BoxFit.contain,
+                    placeholder: (_, __) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (_, __, ___) => const Icon(
+                      Icons.broken_image_outlined,
+                      size: 48,
+                    ),
+                  ),
                 ),
               ),
             );
           },
           child: url.isEmpty
               ? Container(color: AppColors.surfaceInput)
-              : Image.network(url, fit: BoxFit.cover),
+              : CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  placeholder: (_, __) => Container(
+                    color: AppColors.surfaceInput,
+                  ),
+                  errorWidget: (_, __, ___) => Container(
+                    color: AppColors.surfaceInput,
+                    child: const Icon(Icons.broken_image_outlined, size: 20),
+                  ),
+                ),
         );
       },
     );

@@ -87,6 +87,19 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   const { type = MESSAGE_TYPES.TEXT, content, priority = MESSAGE_PRIORITY.NORMAL, threadId, mentions } = req.body;
 
+  // Validate media URLs point to trusted domains only.
+  if (content?.mediaUrl) {
+    const allowedHosts = ['res.cloudinary.com', 'cloudinary.com'];
+    try {
+      const host = new URL(content.mediaUrl).hostname;
+      if (!allowedHosts.some((h) => host === h || host.endsWith('.' + h))) {
+        return respond.badRequest(res, 'Media URL must point to a trusted host');
+      }
+    } catch {
+      return respond.badRequest(res, 'Invalid media URL');
+    }
+  }
+
   // Emergency channel always gets emergency priority
   const effectivePriority = channel.type === CHANNEL_TYPES.EMERGENCY
     ? MESSAGE_PRIORITY.EMERGENCY

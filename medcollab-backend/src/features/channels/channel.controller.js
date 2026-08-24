@@ -201,18 +201,24 @@ const createOrGetDM = asyncHandler(async (req, res) => {
     );
   }
 
-  // Check if DM already exists
-  let channel = await Channel.findDMChannel(req.user._id, targetUserId);
-
-  if (!channel) {
-    channel = await Channel.create({
-      spaceId: null,
+  // Atomic upsert to prevent TOCTOU race when two users create the same DM simultaneously.
+  const sortedMembers = [req.user._id.toString(), targetUserId].sort();
+  let channel = await Channel.findOneAndUpdate(
+    {
       type: CHANNEL_TYPES.DIRECT,
-      members: [req.user._id, targetUserId],
-      createdBy: req.user._id,
-      name: null,
-    });
-  }
+      'members': { $all: sortedMembers, $size: 2 },
+    },
+    {
+      $setOnInsert: {
+        spaceId: null,
+        type: CHANNEL_TYPES.DIRECT,
+        members: [req.user._id, targetUserId],
+        createdBy: req.user._id,
+        name: null,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
   const populated = await Channel.findById(channel._id)
     .populate(

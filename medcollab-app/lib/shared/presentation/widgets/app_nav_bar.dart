@@ -135,6 +135,7 @@ class _AppNavItem extends StatelessWidget {
         button: true,
         selected: isActive,
         label: semanticsLabel,
+        excludeSemantics: true,
         child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,

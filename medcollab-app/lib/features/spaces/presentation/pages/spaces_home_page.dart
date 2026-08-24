@@ -195,6 +195,7 @@ class _SpacesHomePageState extends State<SpacesHomePage>
   Future<void> _showCreateDialog(BuildContext context) async {
     final nameController = TextEditingController();
     var type = SpaceType.department;
+    void disposeController() => nameController.dispose();
 
     final created = await showDialog<bool>(
       context: context,
@@ -261,6 +262,7 @@ class _SpacesHomePageState extends State<SpacesHomePage>
       ),
     );
 
+    disposeController();
     if (created == true) _reload();
   }
 
@@ -326,6 +328,7 @@ class _SpacesHomePageState extends State<SpacesHomePage>
       ),
     );
 
+    codeController.dispose();
     if (joined == true) _reload();
   }
 }

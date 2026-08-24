@@ -110,7 +110,8 @@ const initSocket = (httpServer) => {
 
   // ── Connection Handler ─────────────────────────────────────────────────────
   io.on('connection', async (socket) => {
-    logger.socket(`Connected: ${socket.userName} (${socket.id})`);
+    const isRecovered = socket.recovered;
+    logger.socket(`Connected: ${socket.userName} (${socket.id})${isRecovered ? ' [recovered]' : ''}`);
 
     try {
       // ── Join Space Rooms ───────────────────────────────────────────────────
@@ -133,9 +134,12 @@ const initSocket = (httpServer) => {
       logger.socket(`${socket.userName} joined ${spaceIds.length} space rooms`);
 
       // ── Register Event Handlers ────────────────────────────────────────────
-      registerMessageHandlers(io, socket);
-      registerPresenceHandlers(io, socket);
-      registerSpaceHandlers(io, socket);
+      // Skip re-registration on recovered connections to prevent duplicate listeners.
+      if (!isRecovered) {
+        registerMessageHandlers(io, socket);
+        registerPresenceHandlers(io, socket);
+        registerSpaceHandlers(io, socket);
+      }
       // Future: registerHandoffHandlers(io, socket);
 
       // ── Acknowledge Successful Connection ──────────────────────────────────

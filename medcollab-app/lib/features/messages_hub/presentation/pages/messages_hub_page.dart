@@ -265,6 +265,7 @@ class _GroupsTab extends StatelessWidget {
               final timestamp = _formatTimestamp(latest?.lastMessage?.sentAt);
 
               return GroupRow(
+                key: ValueKey('group-${space.id}'),
                 name: space.name,
                 preview: preview,
                 timestamp: timestamp,
@@ -527,6 +528,7 @@ class _SpaceSubgroupsPageState extends State<SpaceSubgroupsPage> {
                                 : _subgroupPreviewText(preview);
 
                             return SubgroupRow(
+                              key: ValueKey('sub-${channel.id}'),
                               name: channel.displayName,
                               preview: previewText,
                               type: channel.type,
@@ -649,6 +651,7 @@ class _DirectTab extends StatelessWidget {
                           : 'No messages yet');
 
                   return DMRow(
+                    key: ValueKey('dm-${dm.id}'),
                     name: dm.displayName,
                     preview: previewText,
                     imageUrl: peer?.avatarUrl,
