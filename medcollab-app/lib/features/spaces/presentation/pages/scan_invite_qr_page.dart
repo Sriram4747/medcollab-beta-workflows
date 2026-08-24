@@ -1,14 +1,18 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/core/utils/phone_utils.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:zxing2/qrcode.dart';
 
-/// Join via camera QR scan, or by typing/pasting invite code or link.
+/// Join via camera / photo QR capture, or by typing invite code / link.
+/// Pure-Dart QR decode (zxing2) — no ML Kit dependency.
 class ScanInviteQrPage extends StatefulWidget {
   const ScanInviteQrPage({super.key});
 
@@ -19,64 +23,67 @@ class ScanInviteQrPage extends StatefulWidget {
 class _ScanInviteQrPageState extends State<ScanInviteQrPage> {
   final _controller = TextEditingController();
   final _picker = ImagePicker();
-  MobileScannerController? _scanner;
   String? _error;
-  bool _cameraOn = false;
-  bool _handlingCode = false;
+  bool _busy = false;
 
   @override
   void dispose() {
-    _scanner?.dispose();
     _controller.dispose();
     super.dispose();
   }
 
-  Future<void> _startCamera() async {
+  Future<void> _captureAndDecode(ImageSource source) async {
     setState(() {
       _error = null;
-      _cameraOn = true;
-      _scanner ??= MobileScannerController(
-        detectionSpeed: DetectionSpeed.normal,
-        facing: CameraFacing.back,
-        autoStart: true,
-      );
+      _busy = true;
     });
-  }
-
-  Future<void> _stopCamera() async {
-    await _scanner?.stop();
-    setState(() => _cameraOn = false);
-  }
-
-  void _onDetect(BarcodeCapture capture) {
-    if (_handlingCode) return;
-    for (final barcode in capture.barcodes) {
-      final raw = barcode.rawValue?.trim();
-      if (raw == null || raw.isEmpty) continue;
-      _tryOpenCode(raw);
-      return;
-    }
-  }
-
-  Future<void> _scanFromGallery() async {
-    setState(() => _error = null);
-    final file = await _picker.pickImage(source: ImageSource.gallery);
-    if (file == null || !mounted) return;
     try {
-      final ctrl = MobileScannerController();
-      final result = await ctrl.analyzeImage(file.path);
-      await ctrl.dispose();
-      final raw = result?.barcodes
-          .map((b) => b.rawValue)
-          .whereType<String>()
-          .firstWhere((s) => s.trim().isNotEmpty, orElse: () => '');
+      final file = await _picker.pickImage(
+        source: source,
+        imageQuality: 90,
+        maxWidth: 1600,
+      );
+      if (file == null || !mounted) return;
+      final bytes = await file.readAsBytes();
+      final raw = _decodeQr(bytes);
       if (raw == null || raw.isEmpty) {
-        setState(() => _error = 'No QR code found in that image');
+        setState(
+          () => _error =
+              'No QR found. Fill the frame with the Vocle invite QR and try again.',
+        );
         return;
       }
       _tryOpenCode(raw);
     } catch (_) {
       setState(() => _error = 'Could not read that image');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  String? _decodeQr(Uint8List bytes) {
+    final decoded = img.decodeImage(bytes);
+    if (decoded == null) return null;
+    final sample = decoded.width > 1000
+        ? img.copyResize(decoded, width: 1000)
+        : decoded;
+    final pixels = sample
+        .convert(numChannels: 4)
+        .getBytes(order: img.ChannelOrder.abgr)
+        .buffer
+        .asInt32List();
+    final source = RGBLuminanceSource(sample.width, sample.height, pixels);
+    final reader = QRCodeReader();
+    try {
+      return reader
+          .decode(BinaryBitmap(GlobalHistogramBinarizer(source)))
+          .text;
+    } catch (_) {
+      try {
+        return reader.decode(BinaryBitmap(HybridBinarizer(source))).text;
+      } catch (_) {
+        return null;
+      }
     }
   }
 
@@ -89,7 +96,6 @@ class _ScanInviteQrPageState extends State<ScanInviteQrPage> {
       );
       return;
     }
-    _handlingCode = true;
     context.pushReplacement(AppRoutes.joinInvitePath(code));
   }
 
@@ -109,16 +115,7 @@ class _ScanInviteQrPageState extends State<ScanInviteQrPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundApp,
-      appBar: AppBar(
-        title: const Text('Join with invite'),
-        actions: [
-          if (_cameraOn)
-            TextButton(
-              onPressed: _stopCamera,
-              child: const Text('Stop cam'),
-            ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Join with invite')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -129,50 +126,46 @@ class _ScanInviteQrPageState extends State<ScanInviteQrPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Point your camera at a Vocle group QR, or pick a screenshot.',
-              style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+              'Take a photo of the Vocle group QR, or choose a screenshot. '
+              'You can also type the invite code / link.',
+              style:
+                  AppTextStyles.body.copyWith(color: AppColors.textSecondary),
             ),
             const SizedBox(height: 16),
-            if (_cameraOn && _scanner != null)
-              ClipRRect(
+            Container(
+              height: 140,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceInput,
                 borderRadius: BorderRadius.circular(12),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: MobileScanner(
-                    controller: _scanner!,
-                    onDetect: _onDetect,
-                  ),
-                ),
-              )
-            else
-              Container(
-                height: 160,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceInput,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.borderDefault),
-                ),
-                alignment: Alignment.center,
-                child: const Icon(
-                  Icons.qr_code_scanner,
-                  size: 48,
-                  color: AppColors.tealDark,
-                ),
+                border: Border.all(color: AppColors.borderDefault),
               ),
+              alignment: Alignment.center,
+              child: _busy
+                  ? const CircularProgressIndicator()
+                  : const Icon(
+                      Icons.qr_code_scanner,
+                      size: 48,
+                      color: AppColors.tealDark,
+                    ),
+            ),
             const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
                   child: FilledButton.icon(
-                    onPressed: _cameraOn ? null : _startCamera,
+                    onPressed: _busy
+                        ? null
+                        : () => _captureAndDecode(ImageSource.camera),
                     icon: const Icon(Icons.photo_camera_outlined, size: 18),
-                    label: Text(_cameraOn ? 'Scanning…' : 'Start camera'),
+                    label: const Text('Scan with camera'),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: _scanFromGallery,
+                    onPressed: _busy
+                        ? null
+                        : () => _captureAndDecode(ImageSource.gallery),
                     icon: const Icon(Icons.image_outlined, size: 18),
                     label: const Text('From photo'),
                   ),
@@ -209,7 +202,7 @@ class _ScanInviteQrPageState extends State<ScanInviteQrPage> {
             ],
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: _continueManual,
+              onPressed: _busy ? null : _continueManual,
               child: const Text('Continue'),
             ),
           ],

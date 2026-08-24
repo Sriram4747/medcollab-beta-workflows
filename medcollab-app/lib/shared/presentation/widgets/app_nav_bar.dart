@@ -123,8 +123,19 @@ class _AppNavItem extends StatelessWidget {
         ? AppColors.tealPrimary
         : Colors.white.withValues(alpha: 0.35);
 
+    final semanticsLabel = switch (true) {
+      _ when badgeCount > 0 =>
+        '${tab.label}, $badgeCount unread alerts',
+      _ when showDot => '${tab.label}, unread',
+      _ => tab.label,
+    };
+
     return Expanded(
-      child: GestureDetector(
+      child: Semantics(
+        button: true,
+        selected: isActive,
+        label: semanticsLabel,
+        child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: Column(
@@ -153,15 +164,19 @@ class _AppNavItem extends StatelessWidget {
                     Positioned(
                       top: 2,
                       right: 4,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: AppColors.emergencyRed,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.navyPrimary,
-                            width: 1.5,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Container(
+                          key: const ValueKey('nav-dot'),
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: AppColors.emergencyRed,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.navyPrimary,
+                              width: 1.5,
+                            ),
                           ),
                         ),
                       ),
@@ -170,28 +185,32 @@ class _AppNavItem extends StatelessWidget {
                     Positioned(
                       top: 0,
                       right: 2,
-                      child: Container(
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.emergencyRed,
-                          borderRadius: AppRadius.pill,
-                          border: Border.all(
-                            color: AppColors.navyPrimary,
-                            width: 1.5,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Container(
+                          key: ValueKey('nav-badge-$badgeCount'),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
                           ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          badgeCount > 99 ? '99+' : '$badgeCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.w600,
-                            height: 1,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.emergencyRed,
+                            borderRadius: AppRadius.pill,
+                            border: Border.all(
+                              color: AppColors.navyPrimary,
+                              width: 1.5,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            badgeCount > 99 ? '99+' : '$badgeCount',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w600,
+                              height: 1,
+                            ),
                           ),
                         ),
                       ),
@@ -213,6 +232,7 @@ class _AppNavItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

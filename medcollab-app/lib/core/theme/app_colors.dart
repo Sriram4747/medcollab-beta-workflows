@@ -76,7 +76,8 @@ abstract final class AppColors {
 
   static const Color available = statusSuccess;
   static const Color onCall = statusWarning;
-  static const Color inOt = statusNeutral;
+  /// Clinical blue — distinct from offline/muted grey.
+  static const Color inOt = Color(0xFF2563EB);
   static const Color offDuty = textMuted;
   static const Color busy = statusError;
 
@@ -99,7 +100,7 @@ Color availabilityStatusColor(String status) {
     case 'on_call':
       return AppColors.statusWarning;
     case 'in_ot':
-      return AppColors.statusNeutral;
+      return AppColors.inOt;
     case 'in_icu':
       return AppColors.statusError;
     case 'on_rounds':

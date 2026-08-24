@@ -11,7 +11,6 @@ import 'package:medcollab_app/core/presence/presence_cubit.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
-import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/core/utils/clinical_formatters.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
@@ -26,6 +25,7 @@ import 'package:medcollab_app/features/messages/presentation/utils/message_list_
 import 'package:medcollab_app/features/messages/presentation/widgets/mention_composer.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/message_widgets.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
+import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
@@ -209,6 +209,107 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     }
   }
 
+  Future<void> _refreshPinnedMessages() async {
+    try {
+      final detail = await AppDependencies.instance.channelRepository
+          .getChannelById(widget.channelId);
+      if (!mounted) return;
+      setState(() => _pinnedMessages = detail.pinnedMessages);
+    } catch (_) {
+      /* keep current pins */
+    }
+  }
+
+  bool _isMessagePinned(MessageModel message) {
+    if (message.localOnly || message.id.isEmpty) return false;
+    final id = message.id.trim();
+    return _pinnedMessages.any((p) {
+      final pid = (p.messageId.isNotEmpty ? p.messageId : p.message.id).trim();
+      return pid.isNotEmpty && pid == id;
+    });
+  }
+
+  void _applyPinnedMessages(List<PinnedMessageEntry> entries) {
+    if (!mounted) return;
+    setState(() => _pinnedMessages = entries);
+  }
+
+  Future<void> _showPinnedMessagesSheet() async {
+    if (_pinnedMessages.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No pinned messages yet')),
+      );
+      return;
+    }
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: ListView.separated(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+          itemCount: _pinnedMessages.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (context, index) {
+            final entry = _pinnedMessages[index];
+            final text = entry.message.displayText.trim();
+            return ListTile(
+              leading: const Icon(Icons.push_pin, color: AppColors.tealDark),
+              title: Text(
+                text.isEmpty ? 'Pinned message' : text,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              subtitle: Text(entry.message.sender.displayName),
+              onTap: () {
+                Navigator.pop(ctx);
+                _scrollToMessage(entry.message.id);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _scrollToMessage(String messageId) {
+    final id = messageId.trim();
+    if (id.isEmpty || !_scrollController.hasClients) return;
+
+    final currentUserId = context.read<AuthBloc>().state.user?.id ?? '';
+    final messages = context.read<ChannelChatCubit>().state.messages;
+    final listItems = buildMessageListItems(
+      messages: messages,
+      currentUserId: currentUserId,
+    );
+    final itemIndex = listItems.indexWhere(
+      (item) =>
+          item is ChatMessageItem &&
+          item.message.id.trim() == id &&
+          !item.message.localOnly,
+    );
+    if (itemIndex < 0) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Load older messages to jump to that pin'),
+          ),
+        );
+      }
+      return;
+    }
+
+    const estimatedItemHeight = 72.0;
+    final target = (itemIndex * estimatedItemHeight)
+        .clamp(0.0, _scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(
+      target,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOut,
+    );
+  }
+
   @override
   void dispose() {
     _draftDebounce?.cancel();
@@ -381,9 +482,13 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         notificationRepository: deps.notificationRepository,
         onChannelAlertsCleared: (count) {
           deps.notificationBadgeCubit.setCount(count);
+          deps.navBadgesCubit.refresh();
         },
         channelId: widget.channelId,
         currentUserId: currentUserId,
+        readReceiptsEnabled: () =>
+            deps.authBloc.state.user?.notifications.readReceiptsEnabled ??
+            true,
       ),
       child: Builder(
         builder: (context) {
@@ -393,10 +498,24 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           final title = _chatTitle(channel, peer);
           final subtitle = _isDm
               ? _dmPresenceSubtitle(context, channel)
-              : channel?.description;
+              : (channel?.description.trim().isNotEmpty == true
+                  ? channel!.description
+                  : 'Tap for channel details');
           final peerOnline = peer != null &&
               (context.watch<PresenceCubit>().state[peer.id]?.isOnline ??
                   false);
+          final showReadReceipts = _isDm &&
+              (context.watch<AuthBloc>().state.user?.notifications
+                      .readReceiptsEnabled ??
+                  true);
+          final nameByUserId = <String, String>{
+            for (final m in _spaceMembers)
+              if (m.id.isNotEmpty) m.id: m.displayName,
+            if (peer != null && peer.id.isNotEmpty)
+              peer.id: peer.displayName,
+            for (final m in channel?.members ?? const <UserModel>[])
+              if (m.id.isNotEmpty) m.id: m.displayName,
+          };
 
           return Scaffold(
             backgroundColor: AppColors.backgroundApp,
@@ -427,9 +546,13 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
               ),
               titleSpacing: 0,
               title: InkWell(
-                onTap: _isDm
-                    ? () => _showDmPeerCard(context, channel)
-                    : null,
+                onTap: () {
+                  if (_isDm) {
+                    _showDmPeerCard(context, channel);
+                  } else {
+                    _showChatInfo(context, channel, title);
+                  }
+                },
                 borderRadius: AppRadius.button,
                 child: Row(
                   children: [
@@ -512,24 +635,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         await _showChatInfo(context, channel, title);
                         return;
                       case 'pinned':
-                        if (_pinnedMessages.isEmpty) {
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('No pinned messages yet'),
-                            ),
-                          );
-                        } else if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${_pinnedMessages.length} pinned message'
-                                '${_pinnedMessages.length == 1 ? '' : 's'} '
-                                'shown above',
-                              ),
-                            ),
-                          );
-                        }
+                        await _showPinnedMessagesSheet();
                         return;
                     }
                   },
@@ -609,8 +715,6 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
             ),
             body: Column(
               children: [
-                if (_pinnedMessages.isNotEmpty)
-                  _PinnedMessagesBar(entries: _pinnedMessages),
                 Expanded(
                   child: BlocConsumer<ChannelChatCubit, ChannelChatState>(
                     listenWhen: (prev, next) =>
@@ -643,6 +747,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                 ? _EmptyChatState(isDm: _isDm)
                                 : ListView.builder(
                                     controller: _scrollController,
+                                    cacheExtent: 480,
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
                                       vertical: 8,
@@ -665,12 +770,10 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                             showSender:
                                                 !_isDm && showSender,
                                             currentUserId: currentUserId,
-                                            seenByMembers:
-                                                _seenByForMessage(message),
-                                            isPinned: _pinnedMessages.any(
-                                              (p) =>
-                                                  p.message.id == message.id,
-                                            ),
+                                            isDm: _isDm,
+                                            showReadReceipts: showReadReceipts,
+                                            nameByUserId: nameByUserId,
+                                            isPinned: _isMessagePinned(message),
                                             onOpenThread: message.localOnly
                                                 ? null
                                                 : () => _openThread(
@@ -959,27 +1062,62 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                           ? 'Shared media in this conversation'
                           : (channel?.description.trim().isNotEmpty == true
                               ? channel!.description
-                              : 'Channel media and files'),
+                              : 'Channel details, media and files'),
                       style: AppTextStyles.body.copyWith(
                         color: AppColors.textSecondary,
                       ),
                     ),
-                    if (!_isDm && widget.spaceId != null) ...[
+                    if (!_isDm) ...[
                       const SizedBox(height: 8),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(
-                          Icons.people_outline,
-                          color: AppColors.tealDark,
+                      if (channel != null)
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: Icon(
+                            channel.type == ChannelType.emergency
+                                ? Icons.warning_amber_rounded
+                                : Icons.tag,
+                            color: channel.type == ChannelType.emergency
+                                ? AppColors.emergencyRed
+                                : AppColors.tealDark,
+                          ),
+                          title: Text(channel.displayName),
+                          subtitle: Text(
+                            'Type: ${channel.type.value}'
+                            '${channel.isPrivate ? ' · Private' : ''}',
+                          ),
                         ),
-                        title: const Text('View members'),
-                        onTap: () {
-                          Navigator.pop(sheetContext);
-                          context.push(
-                            AppRoutes.spaceMembersPath(widget.spaceId!),
-                          );
-                        },
-                      ),
+                      if (widget.spaceId != null &&
+                          widget.spaceId!.isNotEmpty) ...[
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(
+                            Icons.groups_outlined,
+                            color: AppColors.tealDark,
+                          ),
+                          title: const Text('Open group (space)'),
+                          subtitle: const Text('Members, channels, invites'),
+                          onTap: () {
+                            Navigator.pop(sheetContext);
+                            context.push(
+                              AppRoutes.spaceDetailPath(widget.spaceId!),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(
+                            Icons.people_outline,
+                            color: AppColors.tealDark,
+                          ),
+                          title: const Text('View members'),
+                          onTap: () {
+                            Navigator.pop(sheetContext);
+                            context.push(
+                              AppRoutes.spaceMembersPath(widget.spaceId!),
+                            );
+                          },
+                        ),
+                      ],
                     ],
                     const TabBar(
                       labelColor: AppColors.tealDark,
@@ -1048,24 +1186,49 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   }
 
   Future<void> _pinMessage(MessageModel message) async {
+    if (message.localOnly || message.id.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Wait until the message is sent')),
+      );
+      return;
+    }
+    if (!_isMessagePinned(message)) {
+      setState(() {
+        _pinnedMessages = [
+          ..._pinnedMessages,
+          PinnedMessageEntry(
+            messageId: message.id,
+            message: message,
+            pinnedAt: DateTime.now(),
+          ),
+        ];
+      });
+    }
     try {
-      await AppDependencies.instance.channelRepository.pinMessage(
+      final pinned = await AppDependencies.instance.channelRepository.pinMessage(
         widget.channelId,
         message.id,
       );
-      await _loadChannelContext();
+      if (pinned.isNotEmpty) {
+        _applyPinnedMessages(pinned);
+      } else {
+        await _refreshPinnedMessages();
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Message pinned')),
         );
       }
     } on AppException catch (e) {
+      await _refreshPinnedMessages();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.message)),
         );
       }
     } catch (_) {
+      await _refreshPinnedMessages();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Could not pin message')),
@@ -1075,24 +1238,41 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   }
 
   Future<void> _unpinMessage(MessageModel message) async {
+    if (message.id.isEmpty) return;
+    setState(() {
+      _pinnedMessages = _pinnedMessages
+          .where((p) {
+            final pid =
+                (p.messageId.isNotEmpty ? p.messageId : p.message.id).trim();
+            return pid != message.id.trim();
+          })
+          .toList(growable: false);
+    });
     try {
-      await AppDependencies.instance.channelRepository.unpinMessage(
+      final pinned =
+          await AppDependencies.instance.channelRepository.unpinMessage(
         widget.channelId,
         message.id,
       );
-      await _loadChannelContext();
+      if (pinned.isNotEmpty || _pinnedMessages.isEmpty) {
+        _applyPinnedMessages(pinned);
+      } else {
+        await _refreshPinnedMessages();
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Message unpinned')),
         );
       }
     } on AppException catch (e) {
+      await _refreshPinnedMessages();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.message)),
         );
       }
     } catch (_) {
+      await _refreshPinnedMessages();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Could not unpin message')),
@@ -1132,15 +1312,6 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         const SnackBar(content: Text('Saved to bookmarks')),
       );
     }
-  }
-
-  List<UserModel> _seenByForMessage(MessageModel message) {
-    final created = message.createdAt;
-    if (created == null) return const [];
-    return _spaceMembers.where((u) {
-      final seen = u.lastSeenAt;
-      return seen != null && !seen.isBefore(created);
-    }).toList();
   }
 }
 
@@ -1209,55 +1380,6 @@ class _TypingIndicator extends StatelessWidget {
           color: AppColors.textSecondary,
           fontStyle: FontStyle.italic,
         ),
-      ),
-    );
-  }
-}
-
-class _PinnedMessagesBar extends StatelessWidget {
-  const _PinnedMessagesBar({required this.entries});
-
-  final List<PinnedMessageEntry> entries;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.primaryContainer,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.push_pin, size: 16, color: AppColors.primary),
-              const SizedBox(width: 6),
-              Text(
-                'Pinned',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: AppColors.onPrimaryContainer,
-                    ),
-              ),
-            ],
-          ),
-          ...entries.take(3).map(
-                (e) => Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                    e.message.displayText,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ),
-        ],
       ),
     );
   }
@@ -1347,11 +1469,12 @@ class _ChatDocList extends StatelessWidget {
           subtitle: Text(m.sender.displayName),
           onTap: url == null || url.isEmpty
               ? null
-              : () async {
-                  final uri = Uri.tryParse(url);
-                  if (uri == null) return;
-                  await launchUrl(uri, mode: LaunchMode.externalApplication);
-                },
+              : () => DocumentOpenService.open(
+                    context,
+                    url: url,
+                    fileName: m.content.fileName ?? name,
+                    mimeType: m.content.mimeType,
+                  ),
         );
       },
     );

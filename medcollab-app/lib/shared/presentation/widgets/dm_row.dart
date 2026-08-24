@@ -10,6 +10,7 @@ class DMRow extends StatelessWidget {
     required this.preview,
     this.imageUrl,
     this.timestamp,
+    this.unreadCount = 0,
     this.isOnline = false,
     this.onTap,
     super.key,
@@ -19,6 +20,7 @@ class DMRow extends StatelessWidget {
   final String preview;
   final String? imageUrl;
   final String? timestamp;
+  final int unreadCount;
   final bool isOnline;
   final VoidCallback? onTap;
 
@@ -93,6 +95,28 @@ class DMRow extends StatelessWidget {
               if (timestamp != null && timestamp!.isNotEmpty) ...[
                 const SizedBox(width: 8),
                 Text(timestamp!, style: AppTextStyles.timestamp),
+              ],
+              if (unreadCount > 0) ...[
+                const SizedBox(width: 8),
+                Container(
+                  constraints: const BoxConstraints(minWidth: 18),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: AppColors.tealPrimary,
+                    borderRadius: BorderRadius.all(Radius.circular(999)),
+                  ),
+                  child: Text(
+                    unreadCount > 99 ? '99+' : '$unreadCount',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.badge.copyWith(
+                      color: AppColors.textOnDark,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ],
           ),

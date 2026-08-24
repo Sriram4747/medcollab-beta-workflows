@@ -44,4 +44,14 @@ class MemberRepository extends BaseRepository {
       ),
     );
   }
+
+  /// `DELETE /api/spaces/:id/members/:userId` (admin/owner)
+  Future<void> removeMember({
+    required String spaceId,
+    required String userId,
+  }) {
+    return execute(
+      () => apiClient.delete(ApiEndpoints.spaceMember(spaceId, userId)),
+    );
+  }
 }

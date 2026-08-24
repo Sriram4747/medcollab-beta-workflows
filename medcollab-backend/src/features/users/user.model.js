@@ -175,6 +175,8 @@ const userSchema = new mongoose.Schema(
       mentions: { type: Boolean, default: true },
       newMessages: { type: Boolean, default: true },
       handoffs: { type: Boolean, default: true },
+      // When false: do not write DM read receipts / hide "Seen by" UI
+      readReceiptsEnabled: { type: Boolean, default: true },
       // Quiet hours: no notifications between these times
       quietHoursStart: { type: String, default: null }, // "22:00"
       quietHoursEnd: { type: String, default: null },   // "07:00"

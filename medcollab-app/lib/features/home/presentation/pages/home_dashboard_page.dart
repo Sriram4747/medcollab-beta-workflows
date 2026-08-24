@@ -18,6 +18,7 @@ import 'package:medcollab_app/features/home/presentation/cubit/home_dashboard_st
 import 'package:medcollab_app/features/home/presentation/widgets/doctor_workspace_widgets.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/availability_pill.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
@@ -326,6 +327,48 @@ class _Header extends StatelessWidget {
                 ),
               ),
               IconButton(
+                tooltip: 'Search',
+                onPressed: () => context.push(AppRoutes.search),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white.withValues(alpha: 0.55),
+                  size: 20,
+                ),
+              ),
+              if (state.unreadNotifications > 0)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, right: 2),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => context.go(AppRoutes.notifications),
+                      borderRadius: BorderRadius.circular(999),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.emergencyRed.withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          state.unreadNotifications > 99
+                              ? '99+ alerts'
+                              : '${state.unreadNotifications} alert${state.unreadNotifications == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              IconButton(
                 tooltip: 'Configure Home',
                 onPressed: () => _openConfigureSheet(context),
                 padding: EdgeInsets.zero,
@@ -539,31 +582,26 @@ class _WelcomeEmptyCard extends StatelessWidget {
         AppGaps.screenH,
         8,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.surfaceCard,
-          borderRadius: AppRadius.card,
-          border: Border.all(color: AppColors.borderDefault, width: 0.5),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: AppEmptyState(
+        compact: true,
+        icon: Icons.waving_hand_outlined,
+        title: 'Welcome to Vocle',
+        subtitle:
+            'Join your department space to see handoffs, messages, and '
+            'shift context for your team.',
+        action: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Welcome to Vocle',
-              style: AppTextStyles.screenTitle.copyWith(fontSize: 16),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Join your department space to see handoffs, messages, and '
-              'shift context for your team.',
-              style: AppTextStyles.body,
-            ),
-            const SizedBox(height: 16),
             FilledButton.icon(
               onPressed: () => _joinWithCode(context),
               icon: const Icon(Icons.group_add_outlined, size: 18),
               label: const Text('Join with invite code'),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: () => context.push(AppRoutes.scanInviteQr),
+              icon: const Icon(Icons.qr_code_scanner, size: 18),
+              label: const Text('Scan invite QR'),
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(

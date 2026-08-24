@@ -1,40 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
-import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 
 /// Compact read-receipt row — tap to expand full list.
 class ReadReceiptFooter extends StatelessWidget {
   const ReadReceiptFooter({
     required this.message,
-    this.seenByMembers = const [],
+    this.nameByUserId = const {},
     super.key,
   });
 
   final MessageModel message;
-  final List<UserModel> seenByMembers;
+  /// Resolves user ids → display names when `readBy.user` is not populated.
+  final Map<String, String> nameByUserId;
 
   List<String> get _seenNames {
-    if (message.readBy.isNotEmpty) {
-      return message.readBy.map((r) => r.displayName).toList();
-    }
-    return seenByMembers.map((u) => u.displayName).toList();
+    return message.readBy
+        .map((r) {
+          final mapped = nameByUserId[r.userId]?.trim();
+          if (mapped != null && mapped.isNotEmpty) return mapped;
+          return r.displayName;
+        })
+        .where((n) => n.isNotEmpty && n != 'Colleague')
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final names = _seenNames;
-    if (names.isEmpty) return const SizedBox.shrink();
+    // If only "Colleague" was available, still show that we have receipts after
+    // name resolution failed — prefer real names; show Colleague as last resort.
+    final display = names.isNotEmpty
+        ? names
+        : message.readBy
+            .map((r) {
+              final mapped = nameByUserId[r.userId]?.trim();
+              if (mapped != null && mapped.isNotEmpty) return mapped;
+              return r.displayName;
+            })
+            .where((n) => n.isNotEmpty)
+            .toList();
+    if (display.isEmpty) return const SizedBox.shrink();
 
-    final preview = names.length <= 2
-        ? names.join(', ')
-        : '${names.take(2).join(', ')} +${names.length - 2}';
+    final preview = display.length <= 2
+        ? display.join(', ')
+        : '${display.take(2).join(', ')} +${display.length - 2}';
 
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.xxs, left: AppSpacing.xxs),
       child: InkWell(
-        onTap: () => _showSheet(context, names),
+        onTap: () => _showSheet(context, display),
         borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -44,12 +60,10 @@ class ReadReceiptFooter extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.done_all,
                 size: 14,
-                color: message.readBy.isNotEmpty
-                    ? AppColors.primary
-                    : AppColors.textTertiary,
+                color: AppColors.primary,
               ),
               const SizedBox(width: 4),
               Flexible(

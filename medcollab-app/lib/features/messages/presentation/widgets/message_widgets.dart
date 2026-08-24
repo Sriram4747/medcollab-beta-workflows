@@ -3,18 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
-import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_decorations.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
+import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
 import 'package:medcollab_app/features/messages/presentation/utils/message_list_utils.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/read_receipt_footer.dart';
 import 'package:medcollab_app/shared/presentation/widgets/mention_rich_text.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// Text input bar — attach button next to send for quick uploads.
 /// Emoji uses the system keyboard (WhatsApp-style).
@@ -267,7 +266,12 @@ class ParentMessagePreview extends StatelessWidget {
               showSender: true,
               showTimestamp: true,
               onImageTap: (url) => _openImage(context, url, message),
-              onDocumentTap: (url) => _openUrl(context, url),
+              onDocumentTap: (url) => DocumentOpenService.open(
+                context,
+                url: url,
+                fileName: message.content.fileName,
+                mimeType: message.content.mimeType,
+              ),
             ),
           ],
         ),
@@ -293,7 +297,9 @@ class MessageBubble extends StatelessWidget {
     this.onReact,
     this.onForward,
     this.currentUserId,
-    this.seenByMembers = const [],
+    this.nameByUserId = const {},
+    this.showReadReceipts = true,
+    this.isDm = false,
     this.isPinned = false,
     super.key,
   });
@@ -312,7 +318,9 @@ class MessageBubble extends StatelessWidget {
   final ValueChanged<String>? onReact;
   final VoidCallback? onForward;
   final String? currentUserId;
-  final List<UserModel> seenByMembers;
+  final Map<String, String> nameByUserId;
+  final bool showReadReceipts;
+  final bool isDm;
   final bool isPinned;
 
   static const quickReactions = ['👍', '❤️', '😂', '🙏', '✅', '👏'];
@@ -449,9 +457,15 @@ class MessageBubble extends StatelessWidget {
               showSender: false,
               showTimestamp: showTimestamp,
               currentUserId: currentUserId,
+              isPinned: isPinned,
               onImageTap:
                   onImageTap ?? (url) => _openImage(context, url, message),
-              onDocumentTap: (url) => _openUrl(context, url),
+              onDocumentTap: (url) => DocumentOpenService.open(
+                context,
+                url: url,
+                fileName: message.content.fileName,
+                mimeType: message.content.mimeType,
+              ),
             ),
             if (message.reactions.isNotEmpty) ...[
               const SizedBox(height: 4),
@@ -505,10 +519,14 @@ class MessageBubble extends StatelessWidget {
                 alwaysShow: true,
               ),
             ],
-            if (isMine && !message.localOnly)
+            if (isMine &&
+                isDm &&
+                showReadReceipts &&
+                !message.localOnly &&
+                message.readBy.isNotEmpty)
               ReadReceiptFooter(
                 message: message,
-                seenByMembers: seenByMembers,
+                nameByUserId: nameByUserId,
               ),
           ],
         ),
@@ -552,6 +570,7 @@ class MessageBubbleContent extends StatelessWidget {
     required this.onImageTap,
     required this.onDocumentTap,
     this.currentUserId,
+    this.isPinned = false,
     super.key,
   });
 
@@ -562,6 +581,7 @@ class MessageBubbleContent extends StatelessWidget {
   final void Function(String url) onImageTap;
   final void Function(String url) onDocumentTap;
   final String? currentUserId;
+  final bool isPinned;
 
   @override
   Widget build(BuildContext context) {
@@ -575,11 +595,41 @@ class MessageBubbleContent extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: AppDecorations.bubble(isMine: isMine),
+      decoration: AppDecorations.bubble(isMine: isMine).copyWith(
+        border: isPinned && !isMine
+            ? Border.all(color: AppColors.tealPrimary.withValues(alpha: 0.55))
+            : null,
+      ),
       child: Column(
         crossAxisAlignment:
             isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
+          if (isPinned)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.push_pin,
+                    size: 12,
+                    color: isMine
+                        ? AppColors.textOnDarkMuted
+                        : AppColors.tealDark,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Pinned',
+                    style: AppTextStyles.caption.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: isMine
+                          ? AppColors.textOnDarkMuted
+                          : AppColors.tealDark,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           if (showSender && !isMine)
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
@@ -859,7 +909,12 @@ class ThreadReplyBubble extends StatelessWidget {
           showSender: !isMine,
           showTimestamp: true,
           onImageTap: (url) => _openImage(context, url, message),
-          onDocumentTap: (url) => _openUrl(context, url),
+          onDocumentTap: (url) => DocumentOpenService.open(
+            context,
+            url: url,
+            fileName: message.content.fileName,
+            mimeType: message.content.mimeType,
+          ),
         ),
       ),
     );
@@ -904,34 +959,6 @@ class MessageListView extends StatelessWidget {
       },
     );
   }
-}
-
-Future<void> _openUrl(BuildContext context, String url) async {
-  final uri = Uri.tryParse(url);
-  if (uri == null) {
-    _showOpenError(context, 'Invalid document link');
-    return;
-  }
-
-  try {
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!opened && context.mounted) {
-      final inApp = await launchUrl(uri, mode: LaunchMode.inAppBrowserView);
-      if (!inApp && context.mounted) {
-        _showOpenError(context, 'No app found to open this file');
-      }
-    }
-  } catch (_) {
-    if (context.mounted) {
-      _showOpenError(context, 'Could not open document');
-    }
-  }
-}
-
-void _showOpenError(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message)),
-  );
 }
 
 void _openImage(BuildContext context, String url, MessageModel message) {

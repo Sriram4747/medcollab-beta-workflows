@@ -7,6 +7,7 @@ class NotificationPreferencesModel extends Equatable {
     this.mentions = true,
     this.newMessages = true,
     this.handoffs = true,
+    this.readReceiptsEnabled = true,
     this.quietHoursStart,
     this.quietHoursEnd,
   });
@@ -17,6 +18,7 @@ class NotificationPreferencesModel extends Equatable {
       mentions: json['mentions'] as bool? ?? true,
       newMessages: json['newMessages'] as bool? ?? true,
       handoffs: json['handoffs'] as bool? ?? true,
+      readReceiptsEnabled: json['readReceiptsEnabled'] as bool? ?? true,
       quietHoursStart: json['quietHoursStart'] as String?,
       quietHoursEnd: json['quietHoursEnd'] as String?,
     );
@@ -26,6 +28,8 @@ class NotificationPreferencesModel extends Equatable {
   final bool mentions;
   final bool newMessages;
   final bool handoffs;
+  /// When false: hide Seen-by UI and do not write DM read receipts.
+  final bool readReceiptsEnabled;
   final String? quietHoursStart;
   final String? quietHoursEnd;
 
@@ -34,6 +38,7 @@ class NotificationPreferencesModel extends Equatable {
         'mentions': mentions,
         'newMessages': newMessages,
         'handoffs': handoffs,
+        'readReceiptsEnabled': readReceiptsEnabled,
         if (quietHoursStart != null) 'quietHoursStart': quietHoursStart,
         if (quietHoursEnd != null) 'quietHoursEnd': quietHoursEnd,
       };
@@ -43,6 +48,7 @@ class NotificationPreferencesModel extends Equatable {
     bool? mentions,
     bool? newMessages,
     bool? handoffs,
+    bool? readReceiptsEnabled,
     String? quietHoursStart,
     String? quietHoursEnd,
     bool clearQuietHoursStart = false,
@@ -53,6 +59,7 @@ class NotificationPreferencesModel extends Equatable {
       mentions: mentions ?? this.mentions,
       newMessages: newMessages ?? this.newMessages,
       handoffs: handoffs ?? this.handoffs,
+      readReceiptsEnabled: readReceiptsEnabled ?? this.readReceiptsEnabled,
       quietHoursStart:
           clearQuietHoursStart ? null : (quietHoursStart ?? this.quietHoursStart),
       quietHoursEnd:
@@ -66,6 +73,7 @@ class NotificationPreferencesModel extends Equatable {
         mentions,
         newMessages,
         handoffs,
+        readReceiptsEnabled,
         quietHoursStart,
         quietHoursEnd,
       ];

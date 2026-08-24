@@ -196,12 +196,27 @@
 | flutter analyze / unit tests | ✅ Done | See test suite |
 | Docs updated | ✅ Done | Lead summary + state |
 
-## Phase 14 — Next (Sprint 12+)
+## Phase 14 — Sprint 12: Beta Completion ✅ (2026-08-22)
 
 | Task | Status | Notes |
 |------|--------|-------|
-| Unread badges on Messages / Handoffs tabs | ⬜ Pending | Often hardcoded `false` |
-| Commit / push + Railway deploy privacy fixes | ⬜ Pending | GitHub `master` for API |
+| Real nav unread badges | ✅ Done | `NavBadgesCubit` + socket refresh |
+| Messages hub unread rows | ✅ Done | `unreadCountsByChannel` |
+| Home dashboard polish | ✅ Done | Search, alerts chip, welcome QR |
+| Global search UX | ✅ Done | Empty state + skeleton |
+| Profile cards + Message | ✅ Done | `UserProfileSheet` + member list |
+| Invite / onboarding polish | ✅ Done | Copy code, profile setup card |
+| Settings + accessibility | ✅ Done | Sections, nav/search semantics |
+| Performance | ✅ Done | Chat `cacheExtent` |
+| flutter analyze | ✅ Done | `--no-fatal-infos`, 0 errors |
+| Release APK | ✅ Done | `D:\MedCollab\vocle-beta.apk` |
+| Docs updated | ✅ Done | Lead summary, handoff, state, tasks |
+
+## Phase 15 — Next (Sprint 13+)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Commit / push + Railway deploy | ⬜ Pending | GitHub `master` for API |
 | Dedicated shift/roster API | ⬜ Pending | Replace handoff-derived Today’s Shift |
 | Handoff completed/missed | ⬜ Pending | New statuses + expiry |
 | Server-side bookmarks + synced dashboard prefs | ⬜ Pending | Currently local |

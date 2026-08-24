@@ -6,6 +6,7 @@ import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/features/auth/data/models/notification_preferences_model.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/clinical_card.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
@@ -218,7 +219,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         backgroundColor: AppColors.background,
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Padding(
+              padding: EdgeInsets.all(AppSpacing.md),
+              child: AppListSkeleton(itemCount: 5),
+            )
           : _prefs == null
               ? Center(child: Text(_error ?? 'Settings unavailable'))
               : ListView(
@@ -233,6 +237,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                       const SizedBox(height: AppSpacing.md),
                     ],
+                    _SettingsSectionTitle('Alerts'),
                     ClinicalCard(
                       padding: EdgeInsets.zero,
                       child: Column(
@@ -275,10 +280,25 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                                 ? null
                                 : (v) => _save(_prefs!.copyWith(handoffs: v)),
                           ),
+                          const Divider(height: 1),
+                          SwitchListTile(
+                            title: const Text('Read receipts (Seen by)'),
+                            subtitle: const Text(
+                              'Show when others read your DMs, and share yours',
+                            ),
+                            value: _prefs!.readReceiptsEnabled,
+                            onChanged: _saving
+                                ? null
+                                : (v) => _save(
+                                      _prefs!
+                                          .copyWith(readReceiptsEnabled: v),
+                                    ),
+                          ),
                         ],
                       ),
                     ),
                     const SizedBox(height: AppSpacing.md),
+                    _SettingsSectionTitle('Quiet hours'),
                     ClinicalCard(
                       padding: EdgeInsets.zero,
                       child: Column(
@@ -310,6 +330,29 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     ),
                   ],
                 ),
+    );
+  }
+}
+
+class _SettingsSectionTitle extends StatelessWidget {
+  const _SettingsSectionTitle(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: AppSpacing.xxs,
+        bottom: AppSpacing.sm,
+      ),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w600,
+            ),
+      ),
     );
   }
 }

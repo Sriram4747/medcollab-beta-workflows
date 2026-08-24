@@ -14,6 +14,7 @@ import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/last_message_preview.dart';
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
 import 'package:medcollab_app/features/spaces/presentation/widgets/space_invite_share_sheet.dart';
+import 'package:medcollab_app/features/notifications/presentation/utils/notification_unread_utils.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/dm_row.dart';
@@ -35,6 +36,7 @@ class _MessagesHubPageState extends State<MessagesHubPage>
   late Future<List<SpaceModel>> _spacesFuture;
   late Future<List<ChannelModel>> _dmsFuture;
   late Future<Set<String>> _draftIdsFuture;
+  late Future<Map<String, int>> _unreadByChannelFuture;
 
   @override
   void initState() {
@@ -50,7 +52,18 @@ class _MessagesHubPageState extends State<MessagesHubPage>
       _dmsFuture = AppDependencies.instance.channelRepository.getMyDMs();
       _draftIdsFuture =
           AppDependencies.instance.draftMessageService.draftChannelIds();
+      _unreadByChannelFuture = _loadUnreadByChannel();
     });
+  }
+
+  Future<Map<String, int>> _loadUnreadByChannel() async {
+    try {
+      final page = await AppDependencies.instance.notificationRepository
+          .getNotifications(limit: 100);
+      return unreadCountsByChannel(page.notifications);
+    } catch (_) {
+      return const {};
+    }
   }
 
   @override
@@ -77,11 +90,13 @@ class _MessagesHubPageState extends State<MessagesHubPage>
                 _GroupsTab(
                   spacesFuture: _spacesFuture,
                   draftIdsFuture: _draftIdsFuture,
+                  unreadByChannelFuture: _unreadByChannelFuture,
                   onReload: _reload,
                 ),
                 _DirectTab(
                   dmsFuture: _dmsFuture,
                   draftIdsFuture: _draftIdsFuture,
+                  unreadByChannelFuture: _unreadByChannelFuture,
                   onReload: _reload,
                 ),
               ],
@@ -175,17 +190,31 @@ class _GroupsTab extends StatelessWidget {
   const _GroupsTab({
     required this.spacesFuture,
     required this.draftIdsFuture,
+    required this.unreadByChannelFuture,
     required this.onReload,
   });
 
   final Future<List<SpaceModel>> spacesFuture;
   final Future<Set<String>> draftIdsFuture;
+  final Future<Map<String, int>> unreadByChannelFuture;
   final VoidCallback onReload;
+
+  int _spaceUnread(SpaceModel space, Map<String, int> unreadByChannel) {
+    var total = 0;
+    for (final channel in space.channels) {
+      total += unreadByChannel[channel.id] ?? 0;
+    }
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Object>>(
-      future: Future.wait([spacesFuture, draftIdsFuture]),
+      future: Future.wait([
+        spacesFuture,
+        draftIdsFuture,
+        unreadByChannelFuture,
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const AppListSkeleton();
@@ -196,6 +225,8 @@ class _GroupsTab extends StatelessWidget {
           );
         }
         final spaces = snapshot.data![0] as List<SpaceModel>;
+        final unreadByChannel =
+            snapshot.data![2] as Map<String, int>;
 
         if (spaces.isEmpty) {
           return AppEmptyState(
@@ -237,10 +268,14 @@ class _GroupsTab extends StatelessWidget {
                 name: space.name,
                 preview: preview,
                 timestamp: timestamp,
+                unreadCount: _spaceUnread(space, unreadByChannel),
                 onTap: () async {
                   await Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder: (_) => SpaceSubgroupsPage(space: space),
+                      builder: (_) => SpaceSubgroupsPage(
+                        space: space,
+                        initialUnreadByChannel: unreadByChannel,
+                      ),
                     ),
                   );
                   onReload();
@@ -281,9 +316,14 @@ class _GroupsTab extends StatelessWidget {
 
 /// Group → list of subgroups, with create (+) and live draft badges.
 class SpaceSubgroupsPage extends StatefulWidget {
-  const SpaceSubgroupsPage({required this.space, super.key});
+  const SpaceSubgroupsPage({
+    required this.space,
+    this.initialUnreadByChannel = const {},
+    super.key,
+  });
 
   final SpaceModel space;
+  final Map<String, int> initialUnreadByChannel;
 
   @override
   State<SpaceSubgroupsPage> createState() => _SpaceSubgroupsPageState();
@@ -292,12 +332,14 @@ class SpaceSubgroupsPage extends StatefulWidget {
 class _SpaceSubgroupsPageState extends State<SpaceSubgroupsPage> {
   late List<ChannelModel> _channels;
   Set<String> _draftIds = {};
+  Map<String, int> _unreadByChannel = {};
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
     _channels = List.of(widget.space.channels);
+    _unreadByChannel = Map.of(widget.initialUnreadByChannel);
     _refresh();
   }
 
@@ -308,20 +350,34 @@ class _SpaceSubgroupsPageState extends State<SpaceSubgroupsPage> {
           .getSpaceChannels(widget.space.id);
       final drafts =
           await AppDependencies.instance.draftMessageService.draftChannelIds();
+      final unread = await _loadUnreadByChannel();
       if (!mounted) return;
       setState(() {
         _channels = channels;
         _draftIds = drafts;
+        _unreadByChannel = unread;
         _loading = false;
       });
     } catch (_) {
       final drafts =
           await AppDependencies.instance.draftMessageService.draftChannelIds();
+      final unread = await _loadUnreadByChannel();
       if (!mounted) return;
       setState(() {
         _draftIds = drafts;
+        _unreadByChannel = unread;
         _loading = false;
       });
+    }
+  }
+
+  Future<Map<String, int>> _loadUnreadByChannel() async {
+    try {
+      final page = await AppDependencies.instance.notificationRepository
+          .getNotifications(limit: 100);
+      return unreadCountsByChannel(page.notifications);
+    } catch (_) {
+      return Map.of(_unreadByChannel);
     }
   }
 
@@ -477,6 +533,7 @@ class _SpaceSubgroupsPageState extends State<SpaceSubgroupsPage> {
                               timestamp: hasDraft
                                   ? null
                                   : _formatTimestamp(preview?.sentAt),
+                              unreadCount: _unreadByChannel[channel.id] ?? 0,
                               hasDraft: hasDraft,
                               onTap: () => _openChannel(channel),
                             );
@@ -503,17 +560,23 @@ class _DirectTab extends StatelessWidget {
   const _DirectTab({
     required this.dmsFuture,
     required this.draftIdsFuture,
+    required this.unreadByChannelFuture,
     required this.onReload,
   });
 
   final Future<List<ChannelModel>> dmsFuture;
   final Future<Set<String>> draftIdsFuture;
+  final Future<Map<String, int>> unreadByChannelFuture;
   final VoidCallback onReload;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Object>>(
-      future: Future.wait([dmsFuture, draftIdsFuture]),
+      future: Future.wait([
+        dmsFuture,
+        draftIdsFuture,
+        unreadByChannelFuture,
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const AppListSkeleton();
@@ -541,6 +604,8 @@ class _DirectTab extends StatelessWidget {
 
         final dms = snapshot.data![0] as List<ChannelModel>;
         final draftIds = snapshot.data![1] as Set<String>;
+        final unreadByChannel =
+            snapshot.data![2] as Map<String, int>;
 
         if (dms.isEmpty) {
           return AppEmptyState(
@@ -590,6 +655,7 @@ class _DirectTab extends StatelessWidget {
                     timestamp: hasDraft
                         ? null
                         : _formatTimestamp(preview?.sentAt),
+                    unreadCount: unreadByChannel[dm.id] ?? 0,
                     isOnline: isOnline,
                     onTap: () async {
                       await openDmChat(

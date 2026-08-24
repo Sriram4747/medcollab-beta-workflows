@@ -51,6 +51,7 @@ class ProfilePage extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                   children: [
+                    const _SettingsSectionLabel('Workspace'),
                     _SettingsCard(
                       children: [
                         _SettingsRow(
@@ -80,7 +81,12 @@ class ProfilePage extends StatelessWidget {
                           onTap: () =>
                               context.push(AppRoutes.notificationSettings),
                         ),
-                        const _RowDivider(),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const _SettingsSectionLabel('Support'),
+                    _SettingsCard(
+                      children: [
                         _SettingsRow(
                           icon: Icons.help_outline,
                           label: 'Help & FAQ',
@@ -585,6 +591,25 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingsSectionLabel extends StatelessWidget {
+  const _SettingsSectionLabel(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      child: Text(
+        title,
+        style: AppTextStyles.sectionLabel.copyWith(
+          color: AppColors.textMuted,
+        ),
       ),
     );
   }

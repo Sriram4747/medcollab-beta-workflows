@@ -11,7 +11,9 @@ import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/search/data/repositories/search_repository.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_search_bar.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/clinical_card.dart';
 
 /// Global search with a stable text field (results update without rebuilding the field).
@@ -162,26 +164,31 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                       valueListenable: _loading,
                       builder: (context, loading, _) {
                         if (query.length < 2) {
-                          return Center(
-                            child: Text(
-                              'Search inside your groups',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: AppColors.textSecondary),
-                            ),
+                          return AppEmptyState(
+                            compact: true,
+                            icon: Icons.search,
+                            title: 'Search your workspace',
+                            subtitle:
+                                'Find messages, colleagues, channels, handoffs, '
+                                'and attachments across your groups.',
                           );
                         }
 
                         if (results == null && loading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return const Padding(
+                            padding: EdgeInsets.all(AppSpacing.md),
+                            child: AppListSkeleton(itemCount: 6),
                           );
                         }
 
                         if (results == null || results.isEmpty) {
-                          return const Center(
-                            child: Text('No results for this search'),
+                          return AppEmptyState(
+                            compact: true,
+                            icon: Icons.search_off_outlined,
+                            title: 'No results',
+                            subtitle:
+                                'Try a shorter term, a colleague name, or a '
+                                'channel like #general.',
                           );
                         }
 
@@ -340,9 +347,12 @@ class _ResultTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-      child: ClinicalCard(
-        onTap: onTap,
-        child: Column(
+      child: Semantics(
+        button: true,
+        label: '$title. $subtitle',
+        child: ClinicalCard(
+          onTap: onTap,
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: Theme.of(context).textTheme.titleSmall),
@@ -350,6 +360,7 @@ class _ResultTile extends StatelessWidget {
               Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
+      ),
       ),
     );
   }

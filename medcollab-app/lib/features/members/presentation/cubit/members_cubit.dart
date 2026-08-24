@@ -197,6 +197,23 @@ class MembersCubit extends Cubit<MembersState> {
     }
   }
 
+  /// Returns null on success, or error message on failure.
+  Future<String?> removeMember(String userId) async {
+    try {
+      await _memberRepository.removeMember(
+        spaceId: spaceId,
+        userId: userId,
+      );
+      final next =
+          state.members.where((m) => m.user.id != userId).toList(growable: false);
+      emit(state.copyWith(members: next, error: null));
+      return null;
+    } on AppException catch (e) {
+      emit(state.copyWith(error: e.message));
+      return e.message;
+    }
+  }
+
   void applyPresenceUpdate() {
     if (state.members.isEmpty) return;
     emit(state.copyWith(members: _mergePresence(state.members)));

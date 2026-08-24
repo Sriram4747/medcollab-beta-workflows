@@ -48,7 +48,7 @@ const getMessages = asyncHandler(async (req, res) => {
   // Cursor: fetch messages older than the given messageId
   if (before) query._id = { $lt: before };
 
-  const messages = await Message.find(query)
+  let messages = await Message.find(query)
     .sort({ _id: -1 })          // Newest first from DB
     .limit(limit + 1)           // Fetch one extra to know if there's more
     .populate('senderId', 'name displayTitle role avatarUrl')
@@ -56,6 +56,14 @@ const getMessages = asyncHandler(async (req, res) => {
 
   const hasMore = messages.length > limit;
   if (hasMore) messages.pop();  // Remove the extra
+
+  // Populate DM read-receipt names so clients don't show "Colleague"
+  if (access.channel.type === CHANNEL_TYPES.DIRECT && messages.length > 0) {
+    messages = await Message.populate(messages, {
+      path: 'readBy.userId',
+      select: 'name displayTitle role avatarUrl',
+    });
+  }
 
   // Return in ascending order (oldest → newest) for natural chat rendering
   messages.reverse();
@@ -315,6 +323,11 @@ const markAsRead = asyncHandler(async (req, res) => {
   const { channel } = access;
   if (channel.type !== CHANNEL_TYPES.DIRECT) {
     return respond.badRequest(res, 'Read receipts only apply to direct messages');
+  }
+
+  // Honour privacy: user opted out of read receipts
+  if (req.user.notifications?.readReceiptsEnabled === false) {
+    return respond.ok(res, 'Read receipts disabled — skipped');
   }
 
   const { messageIds } = req.body;

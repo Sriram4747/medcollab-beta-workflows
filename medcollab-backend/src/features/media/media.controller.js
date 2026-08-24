@@ -65,14 +65,22 @@ const uploadFile = asyncHandler(async (req, res) => {
   const folder = folderMap[context] || folderMap.message;
 
   try {
+    // Keep original name (sanitized) so downloads aren't random public_ids.
+    const rawName = (req.file.originalname || 'file').replace(/[^\w.\-() ]+/g, '_');
+    const baseName = rawName.replace(/\.[^.]+$/, '') || 'file';
+
     const uploadOptions = {
       folder,
       resource_type: isPDF ? 'raw' : 'image',
+      use_filename: true,
+      unique_filename: true,
+      filename_override: baseName.slice(0, 100),
     };
 
     const result = await uploadBufferToCloudinary(req.file.buffer, uploadOptions);
 
     let thumbnailUrl = null;
+    let deliveryUrl = result.secure_url;
     if (isImage) {
       thumbnailUrl = cloudinary.url(result.public_id, {
         width: 400,
@@ -82,18 +90,30 @@ const uploadFile = asyncHandler(async (req, res) => {
         format: 'webp',
       });
     } else if (isPDF) {
-      thumbnailUrl = cloudinary.url(result.public_id, {
-        resource_type: 'image',
-        format: 'webp',
-        width: 400,
-        height: 300,
-        crop: 'fill',
-        page: 1,
+      // Attachment flag suggests the original filename to browsers / downloaders.
+      const attachName = (req.file.originalname || 'document.pdf')
+        .replace(/[^\w.\-]+/g, '_');
+      deliveryUrl = cloudinary.url(result.public_id, {
+        resource_type: 'raw',
+        flags: `attachment:${attachName}`,
+        secure: true,
       });
+      try {
+        thumbnailUrl = cloudinary.url(result.public_id, {
+          resource_type: 'image',
+          format: 'webp',
+          width: 400,
+          height: 300,
+          crop: 'fill',
+          page: 1,
+        });
+      } catch (_) {
+        thumbnailUrl = null;
+      }
     }
 
     return respond.ok(res, 'File uploaded', {
-      url: result.secure_url,
+      url: deliveryUrl,
       thumbnailUrl,
       publicId: result.public_id,
       fileName: req.file.originalname,

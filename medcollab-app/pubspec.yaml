@@ -35,11 +35,16 @@ dependencies:
   share_plus: ^10.1.4
   qr_flutter: ^4.1.0
   crop_your_image: ^1.1.0
-  mobile_scanner: ^6.0.2
+  # Pure-Dart QR decode from camera/gallery photo (no ML Kit / mobile_scanner).
+  zxing2: ^0.2.3
+  image: ^4.5.4
+  path_provider: ^2.1.5
+  open_filex: ^4.7.0
+  path: ^1.9.1
   firebase_core: ^4.12.1
   firebase_messaging: ^16.4.3
   flutter_local_notifications: ^19.5.0
-  # QR uses mobile_scanner only when user opens the join-scan page (lazy).
+  # Avoid mobile_scanner — Kotlin/ML Kit release build breaks on this toolchain.
 
 dev_dependencies:
   flutter_test:
