@@ -1,15 +1,15 @@
 # MedCollab (Vocle) — Project Lead Summary
 
-**Date:** 2026-08-22  
+**Date:** 2026-08-24  
 **Product name (app):** Vocle · **Repo / API name:** MedCollab  
 **Purpose:** Replace WhatsApp for department chat, DMs, threads, and clinical shift handoffs  
 **Beta target:** ~15 doctors (MBBS interns, PG residents, junior consultants)  
 **Production API:** https://medcollab.up.railway.app  
 **Health:** https://medcollab.up.railway.app/health  
-**Latest APK:** `D:\MedCollab\vocle-beta.apk` (build script copies here automatically)  
-**Active branch:** `design/clinical-design-system` (large uncommitted delta — not all pushed)  
-**Last pushed commit:** `59da551` — chat pins, threads/reply, reactions, attach UX, QR scan, avatar crop  
-
+**Latest APK:** `D:\MedCollab\vocle-beta.apk` · **Version:** `1.0.0+14` (Sprint 14 closed beta)  
+**Release docs:** [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`BETA_CHECKLIST.md`](BETA_CHECKLIST.md) · [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md) · [`docs/TERMS.md`](docs/TERMS.md)  
+**Active branch:** `design/clinical-design-system`  
+**Official contact:** `vocle.official@gmail.com` · Instagram `@thevocle`
 ---
 
 ## 1. Product overview
@@ -44,9 +44,23 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-release-apk.ps1 `
 | Sprint | Outcome | Status |
 |--------|---------|--------|
 | 1–10 | Auth → Home, FCM, core chat | ✅ Shipped |
-| **11** | Beta polish, DM privacy, support pages | ✅ Shipped (`5aeff9a` + `b2330dc`) |
-| **11b** | Beta doctor feedback — three fix rounds | ✅ In `vocle-beta.apk` locally |
-| **12** | Beta completion UX polish | ✅ **`vocle-beta.apk` built 2026-08-22** |
+| **11** | Beta polish, DM privacy, support pages | ✅ Shipped |
+| **11b** | Beta doctor feedback — three fix rounds | ✅ |
+| **12** | Beta completion UX polish | ✅ |
+| **13** | Beta QA (critical fixes + report) | ✅ |
+| **14** | Closed beta release prep | ✅ `1.0.0+14` |
+
+### Sprint 14 — Closed Beta Release ✅ (2026-08-24)
+| # | Deliverable |
+|---|-------------|
+| 1 | Transparent logo (`Logo_bgless.png` → `vocle_logo.png`) |
+| 2 | Version `1.0.0+14` |
+| 3 | Privacy Policy + Terms (in-app + docs) |
+| 4 | FAQ expansion, Feedback, Bug report, Feature request |
+| 5 | Release notes + Beta checklist |
+| 6 | Analytics policy verified (no third-party SDKs) |
+| 7 | Production `/health` OK; FCM documented live |
+| 8 | Release APK `vocle-beta.apk` |
 
 ### Sprint 12 — Beta Completion ✅ (2026-08-22)
 | # | UX deliverable |

@@ -2,8 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/constants/app_constants.dart';
+import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
@@ -123,6 +125,51 @@ class _PhoneEntryPageState extends State<PhoneEntryPage> {
                 const Text(
                   "We'll send a 6-digit OTP",
                   style: AppTextStyles.caption,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text.rich(
+                  TextSpan(
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textMuted,
+                      height: 1.4,
+                    ),
+                    children: [
+                      const TextSpan(
+                        text: 'By continuing you agree to our ',
+                      ),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: GestureDetector(
+                          onTap: () => context.push(AppRoutes.terms),
+                          child: Text(
+                            'Terms',
+                            style: AppTextStyles.caption.copyWith(
+                              color: AppColors.tealDark,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const TextSpan(text: ' and '),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: GestureDetector(
+                          onTap: () => context.push(AppRoutes.privacy),
+                          child: Text(
+                            'Privacy Policy',
+                            style: AppTextStyles.caption.copyWith(
+                              color: AppColors.tealDark,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 if (kDebugMode) ...[

@@ -2,6 +2,11 @@
 abstract final class AppConstants {
   static const String appName = 'Vocle';
 
+  /// Must match `pubspec.yaml` version (`x.y.z+build`).
+  static const String appVersionName = '1.0.0';
+  static const int appVersionCode = 14;
+  static const String appVersionLabel = '1.0.0 (14)';
+
   /// Default when no `--dart-define=API_BASE_URL` is set (see [EnvConfig]).
   static const String defaultApiBaseUrl = 'http://localhost:5000';
 

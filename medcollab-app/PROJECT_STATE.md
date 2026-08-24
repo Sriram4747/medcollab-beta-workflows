@@ -1,10 +1,12 @@
 # MedCollab — Project State
 
-**Last updated:** 2026-08-22  
-**Sprint:** 12 — Beta Completion ✅  
+**Last updated:** 2026-08-24  
+**Sprint:** 14 — Closed Beta Release ✅  
 **Product UI name:** Vocle  
+**Version:** `1.0.0+14`  
 **Production API:** https://medcollab.up.railway.app  
-**Latest APK:** `D:\MedCollab\vocle-beta.apk` (Sprint 12 — unread badges + UX polish)
+**Latest APK:** `D:\MedCollab\vocle-beta.apk`  
+**Checklist:** [`BETA_CHECKLIST.md`](../BETA_CHECKLIST.md) · Notes: [`RELEASE_NOTES.md`](../RELEASE_NOTES.md)
 
 Share: [`PROJECT_LEAD_SUMMARY.md`](../PROJECT_LEAD_SUMMARY.md) · Tech: [`AI_HANDOFF.md`](../AI_HANDOFF.md)
 
@@ -12,26 +14,24 @@ Share: [`PROJECT_LEAD_SUMMARY.md`](../PROJECT_LEAD_SUMMARY.md) · Tech: [`AI_HAN
 
 ## Product in one line
 
-Clinical collaboration for doctors — Home, spaces, DMs, handoffs, invites, Android push — beta-ready UX with real nav badges and polished onboarding.
+Clinical collaboration for doctors — Home, spaces, DMs, handoffs, invites, Android push — closed-beta ready with legal surfaces, feedback channels, and release checklist.
 
 ---
 
-## Sprint 12 — Beta Completion (2026-08-22) ✅
+## Sprint 14 — Closed Beta (2026-08-24) ✅
 
 | Area | Status |
 |------|--------|
-| Real nav unread badges (Alerts / Messages / Handoffs) | ✅ |
-| Messages hub per-row unread counts | ✅ |
-| Home search + alerts chip + welcome QR onboarding | ✅ |
-| Global search empty/skeleton states | ✅ |
-| Member profile cards + Message action | ✅ |
-| Invite sheet copy-code + clearer copy | ✅ |
-| Profile / notification settings polish | ✅ |
-| Nav accessibility + badge animations | ✅ |
-| Chat list performance (`cacheExtent`) | ✅ |
-| `flutter analyze` + release APK | ✅ |
+| Transparent brand logo | ✅ |
+| Versioning `1.0.0+14` | ✅ |
+| Privacy + Terms | ✅ |
+| FAQ / Feedback / Bug report | ✅ |
+| Analytics policy (none) | ✅ |
+| Production + FCM verification docs | ✅ |
+| Release notes + beta checklist | ✅ |
+| Release APK | ✅ |
 
-**Deploy note:** Flutter + backend Sprint 11b rounds 2–3 remain **uncommitted** on branch `design/clinical-design-system`. Push to GitHub `master` before relying on production API for seen-by, PDF filenames, pin responses.
+**Deploy note:** Push Sprint 13–14 backend (`/health` firebase fields, support feedback, socket/DM/media fixes) to GitHub `master` for Railway before relying on new health fields in production.
 
 ---
 

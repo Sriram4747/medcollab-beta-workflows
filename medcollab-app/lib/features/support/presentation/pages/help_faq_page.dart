@@ -8,27 +8,48 @@ class HelpFaqPage extends StatelessWidget {
 
   static const _faqs = [
     (
-      'How to join a space',
-      'Ask a colleague for an invite code, then open Groups → Join with code, '
-          'or open a join link from them. Once joined, subgroups and handoffs '
+      'How do I join a group?',
+      'Ask a colleague for an invite code or QR. Open Groups → Join with code, '
+          'or Profile / Home → Scan invite QR. Once joined, subgroups and handoffs '
           'for that team appear in Messages and Home.',
     ),
     (
-      'Start a direct message',
+      'How do I start a direct message?',
       'Open Messages → Direct → New message, or use Quick actions on Home. '
-          'Pick a colleague who shares a group with you to open a private DM.',
+          'You can only DM doctors you share a group with, already chat with, '
+          'or who are at the same institution.',
     ),
     (
-      'Handoffs',
+      'What are handoffs?',
       'Handoffs capture shift-to-shift patient context. From Home or the '
           'Handoffs tab, create or open a handoff, set priority, and acknowledge '
-          'when you take over. They stay visible until resolved.',
+          'when you take over. They stay visible until resolved. Do not paste '
+          'full identifiers unless your hospital policy allows it.',
     ),
     (
-      'Notifications',
+      'How do notifications work?',
       'Alerts for mentions, handoffs, and messages appear under Alerts. '
-          'Tune what you receive in Profile → Notification settings. On Android, '
-          'enable Vocle notifications in system settings for push delivery.',
+          'Tune categories in Profile → Notification settings. On Android, '
+          'allow Vocle notifications in system settings. You will not get a '
+          'banner for a chat you currently have open.',
+    ),
+    (
+      'OTP and sign-in',
+      'Sign in with your Indian mobile number. We send a 6-digit OTP via MSG91. '
+          'OTP is valid for a few minutes. Never share it. Contact vocle.official@gmail.com '
+          'if you cannot receive SMS.',
+    ),
+    (
+      'Privacy and patient information',
+      'Vocle is a closed beta for invited doctors. We do not sell data or use '
+          'ad/analytics SDKs. You are responsible for hospital policy when typing '
+          'or attaching clinical details. Read Privacy Policy and Terms from Profile '
+          'or the sign-in screen.',
+    ),
+    (
+      'How do I report a bug or send feedback?',
+      'Profile → Report a bug, Send feedback, or Feature request. Urgent issues: '
+          'email vocle.official@gmail.com. Do not include patient names in tickets.',
     ),
     (
       'Availability',

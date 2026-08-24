@@ -12,7 +12,7 @@ const ticketSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: ['bug', 'feature'],
+      enum: ['bug', 'feature', 'feedback'],
       required: true,
       index: true,
     },
@@ -86,4 +86,25 @@ const createFeature = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { createBug, createFeature, SupportTicket };
+const createFeedback = asyncHandler(async (req, res) => {
+  const { title, description } = req.body || {};
+  if (!title?.trim() || !description?.trim()) {
+    return respond.badRequest(res, 'Title and description are required');
+  }
+
+  const ticket = await SupportTicket.create({
+    type: 'feedback',
+    title: String(title).trim().slice(0, 200),
+    description: String(description).trim().slice(0, 5000),
+    userId: req.user._id,
+    userName: req.user.name,
+    userPhone: req.user.phone,
+  });
+
+  logger.info(`Support feedback filed by ${req.user._id}: ${ticket.title}`);
+  return respond.created(res, 'Feedback received', {
+    ticketId: ticket._id,
+  });
+});
+
+module.exports = { createBug, createFeature, createFeedback, SupportTicket };

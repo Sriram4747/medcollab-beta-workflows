@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medcollab_app/core/analytics/analytics_policy.dart';
+import 'package:medcollab_app/core/constants/app_constants.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
@@ -139,6 +141,31 @@ class _DeveloperModePageState extends State<DeveloperModePage> {
                   style: AppTextStyles.body,
                 ),
                 const SizedBox(height: 16),
+                ClinicalCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Release checks',
+                        style: AppTextStyles.cardTitle,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'App ${AppConstants.appVersionLabel}',
+                        style: AppTextStyles.caption,
+                      ),
+                      Text(
+                        'FCM client: ${AppDependencies.instance.fcmService.isReady ? "ready" : "not ready"}',
+                        style: AppTextStyles.caption,
+                      ),
+                      Text(
+                        'Analytics: ${AnalyticsPolicy.statusLabel}',
+                        style: AppTextStyles.caption,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 ClinicalCard(
                   child: SwitchListTile(
                     contentPadding: EdgeInsets.zero,

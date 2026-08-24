@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medcollab_app/core/constants/branding_assets.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -31,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/branding/vocle_full_logo.jpeg',
+              BrandingAssets.logo,
               width: 220,
               fit: BoxFit.contain,
             ),

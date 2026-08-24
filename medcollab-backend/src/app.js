@@ -138,6 +138,8 @@ app.get('/', (req, res) => {
  */
 app.get('/health', (req, res) => {
   const mongoose = require('mongoose');
+  const { isFirebaseReady } = require('./config/firebase');
+  const { isCloudinaryConfigured } = require('./config/cloudinary');
   const dbState = ['disconnected', 'connected', 'connecting', 'disconnecting'];
 
   res.status(200).json({
@@ -146,6 +148,9 @@ app.get('/health', (req, res) => {
     environment: process.env.NODE_ENV,
     database: dbState[mongoose.connection.readyState] || 'unknown',
     uptime: Math.floor(process.uptime()) + 's',
+    firebase: isFirebaseReady(),
+    cloudinary: isCloudinaryConfigured(),
+    analytics: 'none',
   });
 });
 

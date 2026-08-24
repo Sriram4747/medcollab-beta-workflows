@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medcollab_app/core/constants/branding_assets.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
@@ -54,7 +55,7 @@ class AuthScaffold extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Center(
                     child: Image.asset(
-                      'assets/branding/vocle_full_logo.jpeg',
+                      BrandingAssets.logo,
                       width: logoWidth,
                       fit: BoxFit.contain,
                     ),

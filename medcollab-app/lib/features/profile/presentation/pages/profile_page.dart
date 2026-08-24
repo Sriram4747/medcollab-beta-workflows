@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medcollab_app/core/config/env_config.dart';
+import 'package:medcollab_app/core/constants/app_constants.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
@@ -94,6 +95,12 @@ class ProfilePage extends StatelessWidget {
                         ),
                         const _RowDivider(),
                         _SettingsRow(
+                          icon: Icons.chat_bubble_outline,
+                          label: 'Send feedback',
+                          onTap: () => context.push(AppRoutes.feedback),
+                        ),
+                        const _RowDivider(),
+                        _SettingsRow(
                           icon: Icons.bug_report_outlined,
                           label: 'Report a bug',
                           onTap: () => context.push(AppRoutes.reportBug),
@@ -109,6 +116,23 @@ class ProfilePage extends StatelessWidget {
                           icon: Icons.mail_outline,
                           label: 'Contact team',
                           onTap: () => context.push(AppRoutes.contact),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const _SettingsSectionLabel('Legal'),
+                    _SettingsCard(
+                      children: [
+                        _SettingsRow(
+                          icon: Icons.privacy_tip_outlined,
+                          label: 'Privacy policy',
+                          onTap: () => context.push(AppRoutes.privacy),
+                        ),
+                        const _RowDivider(),
+                        _SettingsRow(
+                          icon: Icons.description_outlined,
+                          label: 'Terms of use',
+                          onTap: () => context.push(AppRoutes.terms),
                         ),
                       ],
                     ),
@@ -441,7 +465,7 @@ class _VersionFooterState extends State<_VersionFooter> {
         child: Column(
           children: [
             Text(
-              'Vocle beta',
+              'Vocle closed beta ${AppConstants.appVersionLabel}',
               textAlign: TextAlign.center,
               style: AppTextStyles.caption.copyWith(
                 color: AppColors.textMuted,
