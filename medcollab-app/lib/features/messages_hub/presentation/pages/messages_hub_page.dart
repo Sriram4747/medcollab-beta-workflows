@@ -9,6 +9,7 @@ import 'package:medcollab_app/core/router/dm_navigation.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
+import 'package:medcollab_app/features/messages/data/models/message_request_model.dart';
 import 'package:medcollab_app/features/channels/presentation/widgets/create_channel_dialog.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/last_message_preview.dart';
@@ -35,6 +36,7 @@ class _MessagesHubPageState extends State<MessagesHubPage>
   late TabController _tabController;
   late Future<List<SpaceModel>> _spacesFuture;
   late Future<List<ChannelModel>> _dmsFuture;
+  late Future<List<MessageRequestModel>> _pendingRequestsFuture;
   late Future<Set<String>> _draftIdsFuture;
   late Future<Map<String, int>> _unreadByChannelFuture;
 
@@ -50,6 +52,9 @@ class _MessagesHubPageState extends State<MessagesHubPage>
       _spacesFuture =
           AppDependencies.instance.spaceRepository.getMySpaces();
       _dmsFuture = AppDependencies.instance.channelRepository.getMyDMs();
+      _pendingRequestsFuture = AppDependencies.instance.messageRequestRepository
+          .listRequests(direction: 'received', status: 'pending')
+          .catchError((_) => <MessageRequestModel>[]);
       _draftIdsFuture =
           AppDependencies.instance.draftMessageService.draftChannelIds();
       _unreadByChannelFuture = _loadUnreadByChannel();
@@ -87,14 +92,15 @@ class _MessagesHubPageState extends State<MessagesHubPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _GroupsTab(
-                  spacesFuture: _spacesFuture,
+                _DirectTab(
+                  dmsFuture: _dmsFuture,
+                  pendingRequestsFuture: _pendingRequestsFuture,
                   draftIdsFuture: _draftIdsFuture,
                   unreadByChannelFuture: _unreadByChannelFuture,
                   onReload: _reload,
                 ),
-                _DirectTab(
-                  dmsFuture: _dmsFuture,
+                _GroupsTab(
+                  spacesFuture: _spacesFuture,
                   draftIdsFuture: _draftIdsFuture,
                   unreadByChannelFuture: _unreadByChannelFuture,
                   onReload: _reload,
@@ -176,8 +182,8 @@ class _MessagesHeader extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.tab,
             dividerColor: AppColors.borderLight,
             tabs: const [
-              Tab(text: 'Groups'),
               Tab(text: 'Direct'),
+              Tab(text: 'Groups'),
             ],
           ),
         ],
@@ -558,26 +564,78 @@ class _SpaceSubgroupsPageState extends State<SpaceSubgroupsPage> {
   }
 }
 
-class _DirectTab extends StatelessWidget {
+class _DirectTab extends StatefulWidget {
   const _DirectTab({
     required this.dmsFuture,
+    required this.pendingRequestsFuture,
     required this.draftIdsFuture,
     required this.unreadByChannelFuture,
     required this.onReload,
   });
 
   final Future<List<ChannelModel>> dmsFuture;
+  final Future<List<MessageRequestModel>> pendingRequestsFuture;
   final Future<Set<String>> draftIdsFuture;
   final Future<Map<String, int>> unreadByChannelFuture;
   final VoidCallback onReload;
 
   @override
+  State<_DirectTab> createState() => _DirectTabState();
+}
+
+class _DirectTabState extends State<_DirectTab> {
+  String? _busyRequestId;
+
+  Future<void> _acceptRequest(MessageRequestModel request) async {
+    if (_busyRequestId != null) return;
+    setState(() => _busyRequestId = request.id);
+    try {
+      await AppDependencies.instance.messageRequestRepository
+          .acceptRequest(request.id);
+      final channel = await AppDependencies.instance.channelRepository
+          .createOrGetDM(request.peer.id);
+      if (!mounted) return;
+      await openDmChat(
+        context,
+        channelId: channel.id,
+        channel: channel,
+      );
+      widget.onReload();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not accept request')),
+      );
+    } finally {
+      if (mounted) setState(() => _busyRequestId = null);
+    }
+  }
+
+  Future<void> _declineRequest(String id) async {
+    if (_busyRequestId != null) return;
+    setState(() => _busyRequestId = id);
+    try {
+      await AppDependencies.instance.messageRequestRepository
+          .declineRequest(id);
+      widget.onReload();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not decline request')),
+      );
+    } finally {
+      if (mounted) setState(() => _busyRequestId = null);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Object>>(
       future: Future.wait([
-        dmsFuture,
-        draftIdsFuture,
-        unreadByChannelFuture,
+        widget.dmsFuture,
+        widget.pendingRequestsFuture,
+        widget.draftIdsFuture,
+        widget.unreadByChannelFuture,
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -596,7 +654,7 @@ class _DirectTab extends StatelessWidget {
                   const SizedBox(height: AppGaps.sectionGap),
                   FilledButton(
                     onPressed: () => context.push(AppRoutes.startDm),
-                    child: const Text('Find a colleague'),
+                    child: const Text('New message'),
                   ),
                 ],
               ),
@@ -605,17 +663,19 @@ class _DirectTab extends StatelessWidget {
         }
 
         final dms = snapshot.data![0] as List<ChannelModel>;
-        final draftIds = snapshot.data![1] as Set<String>;
+        final pending =
+            snapshot.data![1] as List<MessageRequestModel>;
+        final draftIds = snapshot.data![2] as Set<String>;
         final unreadByChannel =
-            snapshot.data![2] as Map<String, int>;
+            snapshot.data![3] as Map<String, int>;
 
-        if (dms.isEmpty) {
+        if (dms.isEmpty && pending.isEmpty) {
           return AppEmptyState(
             icon: Icons.chat_bubble_outline,
             title: 'No direct messages yet',
             subtitle:
-                'Start a private chat with a colleague who shares a group '
-                'with you — useful for quick clinical questions.',
+                'Search by name or mobile number to start a private chat. '
+                'Doctors outside your groups must approve a message request first.',
             action: FilledButton.icon(
               onPressed: () => context.push(AppRoutes.startDm),
               icon: const Icon(Icons.edit_outlined, size: 18),
@@ -627,49 +687,131 @@ class _DirectTab extends StatelessWidget {
         return BlocBuilder<PresenceCubit, Map<String, PresenceInfo>>(
           builder: (context, presence) {
             return RefreshIndicator(
-              onRefresh: () async => onReload(),
-              child: ListView.separated(
+              onRefresh: () async => widget.onReload(),
+              child: ListView(
                 padding: const EdgeInsets.all(AppGaps.screenH),
-                itemCount: dms.length,
-                separatorBuilder: (_, __) =>
+                children: [
+                  if (pending.isNotEmpty) ...[
+                    Text(
+                      'Message requests',
+                      style: AppTextStyles.cardTitle.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     const SizedBox(height: AppGaps.itemGap),
-                itemBuilder: (context, index) {
-                  final dm = dms[index];
-                  final preview = dm.lastMessage;
-                  final hasDraft = draftIds.contains(dm.id);
-                  final peer = dm.peer;
-                  // Green dot = socket presence only — not duty "Available".
-                  final isOnline = peer != null &&
-                      (presence[peer.id]?.isOnline ?? false);
-
-                  final previewText = hasDraft
-                      ? (preview != null
-                          ? 'Draft · ${preview.previewLabel}'
-                          : 'Draft awaiting')
-                      : (preview != null
-                          ? preview.previewLabel
-                          : 'No messages yet');
-
-                  return DMRow(
-                    key: ValueKey('dm-${dm.id}'),
-                    name: dm.displayName,
-                    preview: previewText,
-                    imageUrl: peer?.avatarUrl,
-                    timestamp: hasDraft
-                        ? null
-                        : _formatTimestamp(preview?.sentAt),
-                    unreadCount: unreadByChannel[dm.id] ?? 0,
-                    isOnline: isOnline,
-                    onTap: () async {
-                      await openDmChat(
-                        context,
-                        channelId: dm.id,
-                        channel: dm,
+                    ...pending.map((request) {
+                      final busy = _busyRequestId == request.id;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
+                        child: Material(
+                          color: AppColors.surfaceCard,
+                          borderRadius: AppRadius.card,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  request.peer.displayName,
+                                  style: AppTextStyles.cardTitle,
+                                ),
+                                if (request.introMessage.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      request.introMessage,
+                                      style: AppTextStyles.cardTitle.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 13,
+                                        color: AppColors.textMuted,
+                                      ),
+                                    ),
+                                  ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        onPressed: busy
+                                            ? null
+                                            : () => _declineRequest(request.id),
+                                        child: const Text('Decline'),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: FilledButton(
+                                        onPressed: busy
+                                            ? null
+                                            : () => _acceptRequest(request),
+                                        child: busy
+                                            ? const SizedBox(
+                                                width: 18,
+                                                height: 18,
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : const Text('Accept'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       );
-                      onReload();
-                    },
-                  );
-                },
+                    }),
+                    if (dms.isNotEmpty) ...[
+                      const SizedBox(height: AppGaps.sectionGap),
+                      Text(
+                        'Recent chats',
+                        style: AppTextStyles.cardTitle.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: AppGaps.itemGap),
+                    ],
+                  ],
+                  ...dms.map((dm) {
+                    final preview = dm.lastMessage;
+                    final hasDraft = draftIds.contains(dm.id);
+                    final peer = dm.peer;
+                    final isOnline = peer != null &&
+                        (presence[peer.id]?.isOnline ?? false);
+                    final previewText = hasDraft
+                        ? (preview != null
+                            ? 'Draft · ${preview.previewLabel}'
+                            : 'Draft awaiting')
+                        : (preview != null
+                            ? preview.previewLabel
+                            : 'No messages yet');
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
+                      child: DMRow(
+                        key: ValueKey('dm-${dm.id}'),
+                        name: dm.displayName,
+                        preview: previewText,
+                        imageUrl: peer?.avatarUrl,
+                        timestamp: hasDraft
+                            ? null
+                            : _formatTimestamp(preview?.sentAt),
+                        unreadCount: unreadByChannel[dm.id] ?? 0,
+                        isOnline: isOnline,
+                        onTap: () async {
+                          await openDmChat(
+                            context,
+                            channelId: dm.id,
+                            channel: dm,
+                          );
+                          widget.onReload();
+                        },
+                      ),
+                    );
+                  }),
+                ],
               ),
             );
           },

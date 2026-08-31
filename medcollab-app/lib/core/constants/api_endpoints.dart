@@ -21,6 +21,7 @@ abstract final class ApiEndpoints {
   static const String myAvailability = '$users/me/availability';
   static const String myFcmToken = '$users/me/fcm-token';
   static const String searchUsers = '$users/search';
+  static const String lookupUser = '$users/lookup';
 
   static String userById(String id) => '$users/$id';
 
@@ -82,6 +83,17 @@ abstract final class ApiEndpoints {
 
   // Search
   static const String search = '/api/search';
+
+  // Message requests (stranger DM)
+  static const String messageRequests = '/api/message-requests';
+  static const String messageRequestsPendingCount =
+      '$messageRequests/pending-count';
+
+  static String messageRequestAccept(String id) =>
+      '$messageRequests/$id/accept';
+
+  static String messageRequestDecline(String id) =>
+      '$messageRequests/$id/decline';
 
   // Invite preview
   static String spaceInvitePreview(String code) =>

@@ -11,6 +11,8 @@ const { getIO } = require('../../socket');
 const { isUserOnline } = require('../../socket/handlers/presence.handler');
 const { SOCKET_EVENTS } = require('../../constants');
 const logger = require('../../utils/logger');
+const { normalizePhoneToE164 } = require('../../services/msg91Widget.service');
+const { MESSAGE_REQUEST_STATUS } = require('../../constants');
 
 /**
  * GET /api/users/me
@@ -175,7 +177,66 @@ const searchUsers = asyncHandler(async (req, res) => {
   return respond.ok(res, 'Search results', { users });
 });
 
+/**
+ * GET /api/users/lookup?phone=9876543210
+ * Find a doctor by mobile number (E.164 or 10-digit Indian).
+ * Returns relationship metadata for DM / message-request flows.
+ */
+const lookupByPhone = asyncHandler(async (req, res) => {
+  const { phone } = req.query;
+  const normalized = normalizePhoneToE164(phone);
+  if (!normalized) {
+    return respond.badRequest(res, 'Enter a valid mobile number');
+  }
+
+  const user = await User.findOne({
+    phone: normalized,
+    isActive: true,
+    isOnboarded: true,
+  });
+  if (!user) {
+    return respond.notFound(res, 'No doctor found with this number on Vocle');
+  }
+
+  if (user._id.toString() === req.user._id.toString()) {
+    return respond.badRequest(res, 'That is your own number');
+  }
+
+  const { canMessageUser } = require('../../utils/knownUsers');
+  const MessageRequest = require('../message-requests/messageRequest.model');
+
+  const canMessage = await canMessageUser(req.user._id, user._id);
+
+  let pendingRequest = null;
+  const pending = await MessageRequest.findOne({
+    status: MESSAGE_REQUEST_STATUS.PENDING,
+    $or: [
+      { fromUserId: req.user._id, toUserId: user._id },
+      { fromUserId: user._id, toUserId: req.user._id },
+    ],
+  }).select('_id fromUserId toUserId introMessage createdAt');
+
+  if (pending) {
+    pendingRequest = {
+      id: pending._id.toString(),
+      direction:
+        pending.fromUserId.toString() === req.user._id.toString()
+          ? 'sent'
+          : 'received',
+      introMessage: pending.introMessage || '',
+      createdAt: pending.createdAt,
+    };
+  }
+
+  return respond.ok(res, 'Lookup result', {
+    user: user.toPublicProfile(),
+    relationship: canMessage ? 'known' : 'stranger',
+    canMessage,
+    pendingRequest,
+  });
+});
+
 module.exports = {
   getMe, updateMe, updateAvailability,
-  registerFcmToken, getUserById, searchUsers,
+  registerFcmToken, getUserById, searchUsers, lookupByPhone,
 };

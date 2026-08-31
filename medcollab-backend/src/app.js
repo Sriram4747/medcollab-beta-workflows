@@ -43,6 +43,7 @@ const notificationRoutes = require('./features/notifications/notification.routes
 const searchRoutes = require('./features/search/search.routes');
 const devRoutes = require('./features/dev/dev.routes');
 const supportRoutes = require('./features/support/support.routes');
+const messageRequestRoutes = require('./features/message-requests/messageRequest.routes');
 
 const app = express();
 
@@ -239,6 +240,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/dev', devRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/message-requests', messageRequestRoutes);
 
 // ── API Info Route ────────────────────────────────────────────────────────────
 app.get('/api', (req, res) => {
