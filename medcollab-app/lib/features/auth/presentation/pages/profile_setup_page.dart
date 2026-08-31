@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/core/constants/clinical_profile_options.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:medcollab_app/features/auth/presentation/widgets/auth_error_banner.dart';
 import 'package:medcollab_app/features/auth/presentation/widgets/auth_scaffold.dart';
+import 'package:medcollab_app/features/profile/presentation/widgets/profile_details_form.dart';
 
 class ProfileSetupPage extends StatefulWidget {
   const ProfileSetupPage({super.key});
@@ -21,6 +23,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final _institutionController = TextEditingController();
   final _customRoleController = TextEditingController();
   UserRole _role = UserRole.intern;
+  String? _pgPrepSubject;
 
   @override
   void dispose() {
@@ -34,12 +37,12 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
 
-    // When "Other" is chosen the free-text role is stored in speciality so it
-    // is still captured (backend `role` is a fixed enum).
-    final customRole = _customRoleController.text.trim();
-    final speciality = _role == UserRole.other && customRole.isNotEmpty
-        ? customRole
-        : _specialityController.text.trim();
+    final speciality = ProfileDetailsFormHelper.resolveSpeciality(
+      role: _role,
+      specialityController: _specialityController,
+      customRoleController: _customRoleController,
+      pgPrepSubject: _pgPrepSubject,
+    );
 
     context.read<AuthBloc>().add(
           AuthProfileSubmitted(
@@ -58,7 +61,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         return AuthScaffold(
           title: 'Set up profile',
           subtitle:
-              'Tell your team who you are. This takes less than a minute.',
+              'Tell your team who you are. Fields adjust based on your role.',
           child: Form(
             key: _formKey,
             child: Column(
@@ -70,20 +73,10 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                     color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Step 1 of 1',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Your profile helps colleagues recognize you in chats, '
-                        'handoffs, and member lists.',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                  child: Text(
+                    'MBBS interns can skip speciality. PG residents pick a '
+                    'NEET PG subject. You can update this later in Profile.',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -96,71 +89,25 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                   ),
                   const SizedBox(height: 16),
                 ],
-                TextFormField(
-                  controller: _nameController,
-                  textCapitalization: TextCapitalization.words,
+                ProfileDetailsForm(
+                  nameController: _nameController,
+                  institutionController: _institutionController,
+                  specialityController: _specialityController,
+                  customRoleController: _customRoleController,
+                  role: _role,
                   enabled: !state.isLoading,
-                  decoration: const InputDecoration(labelText: 'Full name'),
-                  validator: (v) {
-                    if (v == null || v.trim().length < 2) {
-                      return 'Name must be at least 2 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<UserRole>(
-                  value: _role,
-                  isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Role'),
-                  items: UserRole.values
-                      .map(
-                        (r) => DropdownMenuItem(
-                          value: r,
-                          child: Text(r.label),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: state.isLoading
-                      ? null
-                      : (v) => setState(() => _role = v ?? UserRole.intern),
-                ),
-                if (_role == UserRole.other) ...[
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _customRoleController,
-                    enabled: !state.isLoading,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: const InputDecoration(
-                      labelText: 'Your role',
-                      hintText: 'e.g. Physiotherapist, Pharmacist',
-                    ),
-                    validator: (v) {
-                      if (_role == UserRole.other &&
-                          (v == null || v.trim().length < 2)) {
-                        return 'Please describe your role';
+                  pgPrepSubject: _pgPrepSubject,
+                  onPgPrepSubjectChanged: (v) => _pgPrepSubject = v,
+                  onRoleChanged: (role) {
+                    setState(() {
+                      _role = role;
+                      if (!ClinicalProfileOptions.showClinicalSpeciality(role) &&
+                          !ClinicalProfileOptions.showFreeTextSpeciality(role)) {
+                        _specialityController.clear();
                       }
-                      return null;
-                    },
-                  ),
-                ],
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _specialityController,
-                  enabled: !state.isLoading,
-                  decoration: const InputDecoration(
-                    labelText: 'Speciality (optional)',
-                    hintText: 'General Medicine',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _institutionController,
-                  enabled: !state.isLoading,
-                  decoration: const InputDecoration(
-                    labelText: 'Hospital / College (optional)',
-                    hintText: 'AIIMS Delhi',
-                  ),
+                      _pgPrepSubject = null;
+                    });
+                  },
                 ),
                 const SizedBox(height: 24),
                 FilledButton(

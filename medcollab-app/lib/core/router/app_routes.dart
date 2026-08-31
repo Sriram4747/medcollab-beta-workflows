@@ -11,6 +11,7 @@ abstract final class AppRoutes {
   static const String handoffs = '/handoffs';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
+  static const String editProfile = '/profile/edit';
 
   // Spaces (no longer landing page)
   static const String spacesList = '/spaces';

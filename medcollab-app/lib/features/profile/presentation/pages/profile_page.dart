@@ -56,6 +56,15 @@ class ProfilePage extends StatelessWidget {
                     _SettingsCard(
                       children: [
                         _SettingsRow(
+                          icon: Icons.person_outline,
+                          label: 'Edit profile',
+                          subtitle: user?.institution?.isNotEmpty == true
+                              ? user!.institution
+                              : 'Name, role, college',
+                          onTap: () => context.push(AppRoutes.editProfile),
+                        ),
+                        const _RowDivider(),
+                        _SettingsRow(
                           icon: Icons.circle,
                           iconColor: availabilityColor(availability),
                           label: 'Availability',

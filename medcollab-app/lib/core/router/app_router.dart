@@ -20,6 +20,7 @@ import 'package:medcollab_app/features/messages/presentation/pages/channel_chat_
 import 'package:medcollab_app/features/messages/presentation/pages/start_dm_page.dart';
 import 'package:medcollab_app/features/messages/presentation/pages/thread_page.dart';
 import 'package:medcollab_app/features/notifications/presentation/pages/notification_settings_page.dart';
+import 'package:medcollab_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:medcollab_app/features/search/presentation/pages/global_search_page.dart';
 import 'package:medcollab_app/features/shell/presentation/pages/main_shell_page.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
@@ -157,6 +158,10 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.notificationSettings,
         builder: (context, state) => const NotificationSettingsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.editProfile,
+        builder: (context, state) => const EditProfilePage(),
       ),
       GoRoute(
         path: AppRoutes.help,

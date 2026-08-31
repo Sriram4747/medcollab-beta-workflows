@@ -1,7 +1,7 @@
 name: medcollab_app
 description: Medical collaboration platform for hospital teams — MedCollab MVP.
 publish_to: 'none'
-version: 1.0.0+15
+version: 1.0.0+16
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -63,3 +63,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/branding/
+    - assets/data/

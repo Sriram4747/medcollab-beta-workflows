@@ -212,11 +212,57 @@
 | Release APK | ✅ Done | `D:\MedCollab\vocle-beta.apk` |
 | Docs updated | ✅ Done | Lead summary, handoff, state, tasks |
 
-## Phase 15 — Next (Sprint 13+)
+## Phase 15 — Sprint 13: Beta QA ✅ (2026-08-24)
 
 | Task | Status | Notes |
 |------|--------|-------|
-| Commit / push + Railway deploy | ⬜ Pending | GitHub `master` for API |
+| Full app + backend audit | ✅ Done | `BETA_QA_REPORT.md` |
+| Socket recovered-handler guard | ✅ Done | `src/socket/index.js` |
+| DM create race (upsert) | ✅ Done | `createOrGetDM` |
+| mediaUrl Cloudinary allowlist | ✅ Done | `message.controller.js` |
+| Client QA fixes | ✅ Done | Image cache, push dedupe, list keys |
+| Commit | ✅ Done | `8f5ca73` |
+
+## Phase 16 — Sprint 14: Closed Beta Release ✅ (2026-08-24)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Transparent logo | ✅ Done | `Logo_bgless.png` → `vocle_logo.png` |
+| Version `1.0.0+14` | ✅ Done | pubspec + Profile footer |
+| Privacy Policy + Terms | ✅ Done | In-app + `docs/` |
+| FAQ / Feedback / Bug report | ✅ Done | Profile + `POST /api/support/feedback` |
+| Analytics verification | ✅ Done | No third-party SDKs; policy doc |
+| FCM + production verification | ✅ Done | `docs/SPRINT14_VERIFICATION.md` |
+| Release notes + checklist | ✅ Done | `RELEASE_NOTES.md`, `BETA_CHECKLIST.md` |
+| Release APK | ✅ Done | `vocle-beta.apk` ~61 MB |
+| Commit | ✅ Done | `8354fed` |
+
+## Phase 18 — Sprint 15A: Beta hotfixes ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Per-user API rate limit (not shared IP) | ✅ Done | `rateLimiter.js` — deploy to Railway |
+| Swipe-back closes app | ✅ Done | `AppNavigationBackHandler` |
+| Splash logo white card | ✅ Done | `splash_page.dart` |
+| Version `1.0.0+15` | ✅ Done | |
+| Commit | ✅ Done | `11f5ef6` |
+
+## Phase 19 — Sprint 15B: Profile UX ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Role-aware onboarding form | ✅ Done | `ProfileDetailsForm` |
+| NEET PG 19 subjects + TN colleges | ✅ Done | `clinical_profile_options.dart`, JSON asset |
+| Edit profile screen | ✅ Done | Profile → `/profile/edit` |
+| Version `1.0.0+16` | ✅ Done | |
+| Verification doc | ✅ Done | `docs/SPRINT15B_VERIFICATION.md` |
+
+## Phase 17 — Next (post closed-beta)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Push backend to GitHub `master` → Railway | ⬜ Pending | Sprint 13–14 API changes |
+| Complete `BETA_CHECKLIST.md` on devices | ⬜ Pending | Pilot invite |
 | Dedicated shift/roster API | ⬜ Pending | Replace handoff-derived Today’s Shift |
 | Handoff completed/missed | ⬜ Pending | New statuses + expiry |
 | Server-side bookmarks + synced dashboard prefs | ⬜ Pending | Currently local |
