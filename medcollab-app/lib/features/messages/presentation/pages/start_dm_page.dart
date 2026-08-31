@@ -325,8 +325,8 @@ class _StartDmPageState extends State<StartDmPage> {
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             )
-          else if (action != null)
-            action,
+          else
+            action!,
         ],
       ),
     );

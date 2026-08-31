@@ -257,6 +257,26 @@
 | Version `1.0.0+16` | ✅ Done | |
 | Verification doc | ✅ Done | `docs/SPRINT15B_VERIFICATION.md` |
 
+## Phase 20 — Sprint 16: DM by phone ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Phone lookup API | ✅ Done | `GET /api/users/lookup?phone=` |
+| Message requests | ✅ Done | `/api/message-requests` + accept/decline |
+| StartDm phone search | ✅ Done | Name or 10-digit number |
+| Messages Direct first | ✅ Done | Tab order + pending requests section |
+| Version `1.0.0+17` | ✅ Done | |
+| Commit | ✅ Done | `a7c855f` |
+
+## Phase 21 — Sprint 17: Live QR & handoffs ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Live QR scan | ✅ Done | `LiveQrScanner` + `camera` package |
+| Handoff reposition copy | ✅ Done | Form banner, FAQ, empty states |
+| Version `1.0.0+18` | ✅ Done | |
+| Verification doc | ✅ Done | `docs/SPRINT17_VERIFICATION.md` |
+
 ## Phase 17 — Next (post closed-beta)
 
 | Task | Status | Notes |

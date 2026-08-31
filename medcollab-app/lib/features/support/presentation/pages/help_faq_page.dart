@@ -10,21 +10,22 @@ class HelpFaqPage extends StatelessWidget {
     (
       'How do I join a group?',
       'Ask a colleague for an invite code or QR. Open Groups → Join with code, '
-          'or Profile / Home → Scan invite QR. Once joined, subgroups and handoffs '
-          'for that team appear in Messages and Home.',
+          'or Profile / Home → Scan invite QR — live scan detects the QR when '
+          'you point at it. Once joined, subgroups and handoffs for that team '
+          'appear in Messages and Home.',
     ),
     (
       'How do I start a direct message?',
-      'Open Messages → Direct → New message, or use Quick actions on Home. '
-          'You can only DM doctors you share a group with, already chat with, '
-          'or who are at the same institution.',
+      'Open Messages → Direct → New message. Search by name or enter a '
+          '10-digit mobile number. Doctors outside your groups must approve '
+          'a message request before you can chat.',
     ),
     (
       'What are handoffs?',
-      'Handoffs capture shift-to-shift patient context. From Home or the '
-          'Handoffs tab, create or open a handoff, set priority, and acknowledge '
-          'when you take over. They stay visible until resolved. Do not paste '
-          'full identifiers unless your hospital policy allows it.',
+      'Handoffs are for shift-to-shift coverage of patients that must not be '
+          'missed — critical, unstable, or cross-cover cases. They are not '
+          'meant to replace your full ward-round notebook. Use the shift note '
+          'for a quick summary and add only the patients that need explicit handover.',
     ),
     (
       'How do notifications work?',
