@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
@@ -26,8 +25,6 @@ class MainShellPage extends StatefulWidget {
 }
 
 class _MainShellPageState extends State<MainShellPage> {
-  DateTime? _lastExitAttempt;
-
   @override
   void initState() {
     super.initState();
@@ -53,45 +50,20 @@ class _MainShellPageState extends State<MainShellPage> {
     }
   }
 
-  void _handleRootBack() {
-    final now = DateTime.now();
-    final last = _lastExitAttempt;
-    if (last == null || now.difference(last) > const Duration(seconds: 2)) {
-      _lastExitAttempt = now;
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(
-            content: Text('Swipe back again to exit Vocle'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      return;
-    }
-    SystemNavigator.pop();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
-        _handleRootBack();
-      },
-      child: Scaffold(
-        body: widget.navigationShell,
-        bottomNavigationBar: BlocBuilder<NavBadgesCubit, NavBadgesState>(
-          builder: (context, badges) {
-            return AppNavBar(
-              currentIndex: widget.navigationShell.currentIndex,
-              onTap: _onTap,
-              alertsBadge: badges.alertsCount,
-              messagesDot: badges.messagesDot,
-              handoffsDot: badges.handoffsDot,
-            );
-          },
-        ),
+    return Scaffold(
+      body: widget.navigationShell,
+      bottomNavigationBar: BlocBuilder<NavBadgesCubit, NavBadgesState>(
+        builder: (context, badges) {
+          return AppNavBar(
+            currentIndex: widget.navigationShell.currentIndex,
+            onTap: _onTap,
+            alertsBadge: badges.alertsCount,
+            messagesDot: badges.messagesDot,
+            handoffsDot: badges.handoffsDot,
+          );
+        },
       ),
     );
   }

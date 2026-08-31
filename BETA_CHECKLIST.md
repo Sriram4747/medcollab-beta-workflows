@@ -59,6 +59,8 @@ Use this before inviting doctors. Check each box when verified.
 - [ ] Complete profile if first launch
 - [ ] Join group via code and via QR
 - [ ] Send group message + image + PDF
+- [ ] **3 phones on same Wi‑Fi:** group chat 5 min — no 429 / “too many requests from this IP”
+- [ ] **Swipe back** from My Groups / create group — returns to previous screen (double-back only exits from shell tabs)
 - [ ] Start DM with a shared-group colleague
 - [ ] Create handoff → acknowledge → resolve
 - [ ] Search finds a recent message

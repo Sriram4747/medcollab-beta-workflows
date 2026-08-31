@@ -8,6 +8,7 @@ import 'package:medcollab_app/core/lifecycle/app_lifecycle_handler.dart';
 import 'package:medcollab_app/core/notifications/fcm_service.dart';
 import 'package:medcollab_app/core/notifications/push_notification_router.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
+import 'package:medcollab_app/core/router/app_navigation_back_handler.dart';
 import 'package:medcollab_app/core/theme/app_theme.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
@@ -72,6 +73,9 @@ class _MedCollabAppState extends State<MedCollabApp> {
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             routerConfig: deps.appRouter.router,
+            builder: (context, child) => AppNavigationBackHandler(
+              child: child ?? const SizedBox.shrink(),
+            ),
           ),
         ),
       ),
