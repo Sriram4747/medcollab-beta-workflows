@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medcollab_app/core/constants/branding_assets.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -30,10 +31,24 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/branding/vocle_full_logo.jpeg',
-              width: 220,
-              fit: BoxFit.contain,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.navyPrimary.withValues(alpha: 0.06),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                BrandingAssets.logo,
+                width: 180,
+                fit: BoxFit.contain,
+              ),
             ),
             const SizedBox(height: 16),
             const Text(

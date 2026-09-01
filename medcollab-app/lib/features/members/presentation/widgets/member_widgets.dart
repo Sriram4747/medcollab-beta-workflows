@@ -6,6 +6,7 @@ import 'package:medcollab_app/core/theme/app_decorations.dart';
 import 'package:medcollab_app/core/theme/app_spacing.dart';
 import 'package:medcollab_app/features/members/data/models/space_member_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
+import 'package:medcollab_app/shared/presentation/widgets/clinical_card.dart';
 
 /// Presence indicator — compact dot or labeled pill chip.
 class PresenceIndicator extends StatelessWidget {
@@ -82,17 +83,34 @@ class PresenceIndicator extends StatelessWidget {
 class UserProfileSheet extends StatelessWidget {
   const UserProfileSheet({
     required this.member,
+    this.onRemove,
+    this.onMessage,
     super.key,
   });
 
   final SpaceMemberModel member;
+  final VoidCallback? onRemove;
+  final VoidCallback? onMessage;
 
-  static Future<void> show(BuildContext context, SpaceMemberModel member) {
+  static Future<void> show(
+    BuildContext context,
+    SpaceMemberModel member, {
+    VoidCallback? onRemove,
+    VoidCallback? onMessage,
+  }) {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (_) => UserProfileSheet(member: member),
+      backgroundColor: AppColors.surfaceCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => UserProfileSheet(
+        member: member,
+        onRemove: onRemove,
+        onMessage: onMessage,
+      ),
     );
   }
 
@@ -107,57 +125,88 @@ class UserProfileSheet extends StatelessWidget {
           AppSpacing.xl,
           AppSpacing.xl,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                AppAvatar(
-                  name: user.displayName,
-                  imageUrl: user.avatarUrl,
-                  size: 56,
-                  showPresence: true,
-                  isOnline: member.isOnline,
+        child: ClinicalCard(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  AppAvatar(
+                    name: user.displayName,
+                    imageUrl: user.avatarUrl,
+                    size: 56,
+                    showPresence: true,
+                    isOnline: member.isOnline,
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.displayName,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          user.role.label,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        PresenceIndicator(
+                          isOnline: member.isOnline,
+                          status: user.availability.status,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              if (user.speciality != null) ...[
+                const SizedBox(height: AppSpacing.md),
+                _InfoRow(label: 'Speciality', value: user.speciality!),
+              ],
+              if (user.institution != null)
+                _InfoRow(label: 'Institution', value: user.institution!),
+              if (user.city != null) _InfoRow(label: 'City', value: user.city!),
+              if (user.bio.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  user.bio,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user.displayName,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        user.role.label,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: AppSpacing.xs),
-                      PresenceIndicator(
-                        isOnline: member.isOnline,
-                        status: user.availability.status,
-                      ),
-                    ],
+              ],
+              if (onMessage != null) ...[
+                const SizedBox(height: AppSpacing.lg),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      onMessage!();
+                    },
+                    icon: const Icon(Icons.chat_bubble_outline),
+                    label: const Text('Message'),
                   ),
                 ),
               ],
-            ),
-            if (user.speciality != null) ...[
-              const SizedBox(height: AppSpacing.md),
-              _InfoRow(label: 'Speciality', value: user.speciality!),
+              if (onRemove != null) ...[
+                const SizedBox(height: AppSpacing.sm),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: onRemove,
+                    icon: const Icon(Icons.person_remove_outlined),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                    ),
+                    label: const Text('Remove from group'),
+                  ),
+                ),
+              ],
             ],
-            if (user.institution != null)
-              _InfoRow(label: 'Institution', value: user.institution!),
-            if (user.city != null) _InfoRow(label: 'City', value: user.city!),
-            if (user.bio.isNotEmpty) ...[
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                user.bio,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -201,11 +250,13 @@ class MemberListTile extends StatelessWidget {
   const MemberListTile({
     required this.member,
     required this.onTap,
+    this.onLongPress,
     super.key,
   });
 
   final SpaceMemberModel member;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -232,6 +283,7 @@ class MemberListTile extends StatelessWidget {
         status: user.availability.status,
       ),
       onTap: onTap,
+      onLongPress: onLongPress,
     );
   }
 }

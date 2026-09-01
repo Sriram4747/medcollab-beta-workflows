@@ -20,6 +20,7 @@ import 'package:medcollab_app/features/messages/presentation/pages/channel_chat_
 import 'package:medcollab_app/features/messages/presentation/pages/start_dm_page.dart';
 import 'package:medcollab_app/features/messages/presentation/pages/thread_page.dart';
 import 'package:medcollab_app/features/notifications/presentation/pages/notification_settings_page.dart';
+import 'package:medcollab_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:medcollab_app/features/search/presentation/pages/global_search_page.dart';
 import 'package:medcollab_app/features/shell/presentation/pages/main_shell_page.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
@@ -29,8 +30,11 @@ import 'package:medcollab_app/features/spaces/presentation/pages/space_detail_pa
 import 'package:medcollab_app/features/spaces/presentation/pages/spaces_home_page.dart';
 import 'package:medcollab_app/features/support/presentation/pages/contact_team_page.dart';
 import 'package:medcollab_app/features/support/presentation/pages/feature_request_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/feedback_page.dart';
 import 'package:medcollab_app/features/support/presentation/pages/help_faq_page.dart';
+import 'package:medcollab_app/features/support/presentation/pages/legal_document_page.dart';
 import 'package:medcollab_app/features/support/presentation/pages/report_bug_page.dart';
+import 'package:medcollab_app/core/constants/legal_copy.dart';
 
 class AppRouter {
   AppRouter({required AuthBloc authBloc}) : _authBloc = authBloc {
@@ -156,6 +160,10 @@ class AppRouter {
         builder: (context, state) => const NotificationSettingsPage(),
       ),
       GoRoute(
+        path: AppRoutes.editProfile,
+        builder: (context, state) => const EditProfilePage(),
+      ),
+      GoRoute(
         path: AppRoutes.help,
         builder: (context, state) => const HelpFaqPage(),
       ),
@@ -168,8 +176,28 @@ class AppRouter {
         builder: (context, state) => const FeatureRequestPage(),
       ),
       GoRoute(
+        path: AppRoutes.feedback,
+        builder: (context, state) => const FeedbackPage(),
+      ),
+      GoRoute(
         path: AppRoutes.contact,
         builder: (context, state) => const ContactTeamPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacy,
+        builder: (context, state) => const LegalDocumentPage(
+          title: 'Privacy policy',
+          body: LegalCopy.privacyBody,
+          lastUpdated: LegalCopy.lastUpdated,
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.terms,
+        builder: (context, state) => const LegalDocumentPage(
+          title: 'Terms of use',
+          body: LegalCopy.termsBody,
+          lastUpdated: LegalCopy.lastUpdated,
+        ),
       ),
       GoRoute(
         path: AppRoutes.developerMode,
@@ -336,7 +364,10 @@ class AppRouter {
         return AppRoutes.splash;
 
       case AuthStatus.unauthenticated:
-        if (location == AppRoutes.phoneEntry) return null;
+        if (location == AppRoutes.phoneEntry ||
+            _isPublicLegalRoute(location)) {
+          return null;
+        }
         return AppRoutes.phoneEntry;
 
       case AuthStatus.otpSent:
@@ -374,6 +405,11 @@ class AppRouter {
 
   String? _pendingJoinLocation;
 
+  bool _isPublicLegalRoute(String location) =>
+      location == AppRoutes.privacy ||
+      location == AppRoutes.terms ||
+      location == AppRoutes.help;
+
   bool _isAuthenticatedRoute(String location) {
     if (AppRoutes.shellPaths.contains(location)) return true;
     if (location.startsWith('/spaces')) return true;
@@ -386,7 +422,10 @@ class AppRouter {
         location == AppRoutes.help ||
         location == AppRoutes.reportBug ||
         location == AppRoutes.featureRequest ||
-        location == AppRoutes.contact) {
+        location == AppRoutes.feedback ||
+        location == AppRoutes.contact ||
+        location == AppRoutes.privacy ||
+        location == AppRoutes.terms) {
       return true;
     }
     if (location == AppRoutes.developerMode &&

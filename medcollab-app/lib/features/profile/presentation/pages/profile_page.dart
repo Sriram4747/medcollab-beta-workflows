@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:medcollab_app/core/config/env_config.dart';
+import 'package:medcollab_app/core/constants/app_constants.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
@@ -51,8 +52,18 @@ class ProfilePage extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                   children: [
+                    const _SettingsSectionLabel('Workspace'),
                     _SettingsCard(
                       children: [
+                        _SettingsRow(
+                          icon: Icons.person_outline,
+                          label: 'Edit profile',
+                          subtitle: user?.institution?.isNotEmpty == true
+                              ? user!.institution
+                              : 'Name, role, college',
+                          onTap: () => context.push(AppRoutes.editProfile),
+                        ),
+                        const _RowDivider(),
                         _SettingsRow(
                           icon: Icons.circle,
                           iconColor: availabilityColor(availability),
@@ -80,11 +91,22 @@ class ProfilePage extends StatelessWidget {
                           onTap: () =>
                               context.push(AppRoutes.notificationSettings),
                         ),
-                        const _RowDivider(),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const _SettingsSectionLabel('Support'),
+                    _SettingsCard(
+                      children: [
                         _SettingsRow(
                           icon: Icons.help_outline,
                           label: 'Help & FAQ',
                           onTap: () => context.push(AppRoutes.help),
+                        ),
+                        const _RowDivider(),
+                        _SettingsRow(
+                          icon: Icons.chat_bubble_outline,
+                          label: 'Send feedback',
+                          onTap: () => context.push(AppRoutes.feedback),
                         ),
                         const _RowDivider(),
                         _SettingsRow(
@@ -103,6 +125,23 @@ class ProfilePage extends StatelessWidget {
                           icon: Icons.mail_outline,
                           label: 'Contact team',
                           onTap: () => context.push(AppRoutes.contact),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const _SettingsSectionLabel('Legal'),
+                    _SettingsCard(
+                      children: [
+                        _SettingsRow(
+                          icon: Icons.privacy_tip_outlined,
+                          label: 'Privacy policy',
+                          onTap: () => context.push(AppRoutes.privacy),
+                        ),
+                        const _RowDivider(),
+                        _SettingsRow(
+                          icon: Icons.description_outlined,
+                          label: 'Terms of use',
+                          onTap: () => context.push(AppRoutes.terms),
                         ),
                       ],
                     ),
@@ -435,7 +474,7 @@ class _VersionFooterState extends State<_VersionFooter> {
         child: Column(
           children: [
             Text(
-              'Vocle beta',
+              'Vocle closed beta ${AppConstants.appVersionLabel}',
               textAlign: TextAlign.center,
               style: AppTextStyles.caption.copyWith(
                 color: AppColors.textMuted,
@@ -585,6 +624,25 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _SettingsSectionLabel extends StatelessWidget {
+  const _SettingsSectionLabel(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      child: Text(
+        title,
+        style: AppTextStyles.sectionLabel.copyWith(
+          color: AppColors.textMuted,
+        ),
       ),
     );
   }

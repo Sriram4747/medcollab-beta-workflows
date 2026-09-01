@@ -87,8 +87,9 @@ class SpaceInviteShareSheet extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(
-              'Code: ${inviteCode.toUpperCase()}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              'Share this QR or link with colleagues. They can scan it in Vocle '
+              'or open the link on their phone.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
                   ),
             ),
@@ -118,6 +119,27 @@ class SpaceInviteShareSheet extends StatelessWidget {
                   ),
             ),
             const SizedBox(height: AppSpacing.md),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await Clipboard.setData(
+                        ClipboardData(text: inviteCode.toUpperCase()),
+                      );
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Invite code copied')),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.tag),
+                    label: Text('Code ${inviteCode.toUpperCase()}'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
             FilledButton.icon(
               onPressed: () => _copyLink(context),
               icon: const Icon(Icons.link),

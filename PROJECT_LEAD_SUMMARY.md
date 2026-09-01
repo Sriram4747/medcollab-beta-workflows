@@ -1,14 +1,15 @@
 # MedCollab (Vocle) — Project Lead Summary
 
-**Date:** 2026-08-02  
+**Date:** 2026-08-24  
 **Product name (app):** Vocle · **Repo / API name:** MedCollab  
 **Purpose:** Replace WhatsApp for department chat, DMs, threads, and clinical shift handoffs  
 **Beta target:** ~15 doctors (MBBS interns, PG residents, junior consultants)  
 **Production API:** https://medcollab.up.railway.app  
 **Health:** https://medcollab.up.railway.app/health  
-**Latest APK:** `D:\MedCollab\MedCollab-beta.apk` (rebuild after Sprint 11)  
-**Current sprint:** **11 — Beta Polish** ✅ (local; ship APK + deploy backend privacy/notif fixes)
-
+**Latest APK:** `D:\MedCollab\vocle-beta.apk` · **Version:** `1.0.0+14` (Sprint 14 closed beta)  
+**Release docs:** [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`BETA_CHECKLIST.md`](BETA_CHECKLIST.md) · [`docs/PRIVACY_POLICY.md`](docs/PRIVACY_POLICY.md) · [`docs/TERMS.md`](docs/TERMS.md)  
+**Active branch:** `design/clinical-design-system`  
+**Official contact:** `vocle.official@gmail.com` · Instagram `@thevocle`
 ---
 
 ## 1. Product overview
@@ -17,12 +18,24 @@
 |------|--------|
 | Mobile | Flutter (bloc, Dio, go_router, Socket.io) — Android beta |
 | Backend | Node.js + Express + MongoDB Atlas + Socket.io |
-| Hosting | Railway (**Hobby**) — GitHub `mathiharan29/medcollab-beta` **`master`** |
-| Media | Cloudinary |
+| Hosting | Railway — GitHub `mathiharan29/medcollab-beta` **`master`** (root: `medcollab-backend`) |
+| Media | Cloudinary (PDFs use attachment-friendly URLs on new uploads) |
 | Auth | Phone OTP via MSG91 widget → JWT |
-| Push | **FCM LIVE** (Android) — `PUSH_NOTIFICATIONS.md` |
+| Push | **FCM LIVE** (Android) — see `PUSH_NOTIFICATIONS.md` |
+| Official contact | `vocle.official@gmail.com` · Instagram `@thevocle` |
 
 **Architecture (stable):** REST persists; Socket.io broadcasts. Envelope `{ success, message, data }`.
+
+**Build APK:**
+```powershell
+$defs = Get-Content D:\MedCollab\medcollab-app\scripts\dart-defines.release.json -Raw | ConvertFrom-Json
+cd D:\MedCollab\medcollab-app
+powershell -ExecutionPolicy Bypass -File .\scripts\build-release-apk.ps1 `
+  -ApiBaseUrl $defs.API_BASE_URL `
+  -Msg91WidgetId $defs.MSG91_WIDGET_ID `
+  -Msg91WidgetToken $defs.MSG91_WIDGET_TOKEN
+# Output: D:\MedCollab\vocle-beta.apk
+```
 
 ---
 
@@ -30,71 +43,163 @@
 
 | Sprint | Outcome | Status |
 |--------|---------|--------|
-| 1–9 | Auth → Home workspace | ✅ |
-| 10 | FCM Android push | ✅ QA |
-| **11** | **Beta polish + bugfixes** | ✅ Ready to ship |
+| 1–10 | Auth → Home, FCM, core chat | ✅ Shipped |
+| **11** | Beta polish, DM privacy, support pages | ✅ Shipped |
+| **11b** | Beta doctor feedback — three fix rounds | ✅ |
+| **12** | Beta completion UX polish | ✅ |
+| **13** | Beta QA (critical fixes + report) | ✅ |
+| **14** | Closed beta release prep | ✅ `1.0.0+14` |
 
-### Sprint 11 highlights
-- Onboarding / empty states (Home, Spaces, Messages, Join invite)
-- Help & FAQ, Report bug, Feature request, Contact team (Profile)
-- Hidden **Developer Mode** (debug / `ENABLE_DEV_TOOLS`) — PIN `2468`
-- Backend `/api/dev/*` seed routes (non-prod or `ENABLE_DEV_TOOLS=true`)
+### Sprint 14 — Closed Beta Release ✅ (2026-08-24)
+| # | Deliverable |
+|---|-------------|
+| 1 | Transparent logo (`Logo_bgless.png` → `vocle_logo.png`) |
+| 2 | Version `1.0.0+14` |
+| 3 | Privacy Policy + Terms (in-app + docs) |
+| 4 | FAQ expansion, Feedback, Bug report, Feature request |
+| 5 | Release notes + Beta checklist |
+| 6 | Analytics policy verified (no third-party SDKs) |
+| 7 | Production `/health` OK; FCM documented live |
+| 8 | Release APK `vocle-beta.apk` |
 
-### Bugfixes in this sprint
-1. **DM privacy** — search + create DM limited to shared spaces ∪ existing DMs ∪ same institution; strangers cannot discover each other  
-2. **DM route stack** — debounce + no duplicate pushes when opening DMs  
-3. **Alerts while chatting** — no inbox/FCM for users already in that channel room (emergency still notifies)  
-4. **Offline status** — added to availability list; socket-offline peers show **Offline** (not Available)
+### Sprint 12 — Beta Completion ✅ (2026-08-22)
+| # | UX deliverable |
+|---|----------------|
+| 1 | **Real unread badges** — `NavBadgesCubit` wires Alerts count + Messages/Handoffs dots |
+| 2 | **Home dashboard** — search shortcut, unread alerts chip, welcome + QR join |
+| 3 | **Global search** — skeleton loading, empty states, result semantics |
+| 4 | **Profile cards** — clinical member sheet + Message from member list |
+| 5 | **Invite experience** — copy code button, clearer share guidance |
+| 6 | **Onboarding** — profile setup context; Home welcome empty state |
+| 7 | **Navigation polish** — animated badges, screen-reader labels |
+| 8 | **Empty states** — `AppEmptyState.compact` variant |
+| 9 | **Loading skeletons** — search, notification settings |
+| 10 | **Animations** — nav badge/dot `AnimatedSwitcher` |
+| 11 | **Settings** — Profile sections; notification settings grouped |
+| 12 | **Accessibility** — nav + search semantics |
+| 13 | **Performance** — chat `cacheExtent` |
+| 14 | **Screen polish** — messages hub unread on every row |
+
+**Quality gate:** `flutter analyze --no-fatal-infos` (0 errors) · release APK `D:\MedCollab\vocle-beta.apk`
+
+### Sprint 11 (shipped)
+- Onboarding / empty states, Help & FAQ, Report bug, Feature request, Contact team
+- DM privacy (shared spaces / institution only)
+- FCM + alert suppression while user is in active chat room
+- Developer Mode (Profile long-press → PIN `2468`)
+
+### Sprint 11b — Round 1 (commit `59da551`, on Railway `master`)
+| # | Fix |
+|---|-----|
+| 1 | Pin messages — any DM/space member (was admin-only) |
+| 2 | Long-press Reply in thread + Forward (system share); swipe-to-reply |
+| 3 | One emoji reaction per user (replace, not stack) |
+| 4 | Attach button beside Send |
+| 5 | Thread replies in DMs |
+| 6 | Official email + Instagram in Contact |
+| 7 | Join QR — camera/photo scan (zxing2; no `mobile_scanner` — Kotlin break) |
+| 8 | Avatar crop before upload; tap avatar → view profile → change photo |
+
+### Sprint 11b — Round 2 (local only — **commit + push needed**)
+| # | Fix |
+|---|-----|
+| 1 | Emergency **alerts** fade after read (not chat bubbles) |
+| 2 | Admin long-press remove member from group |
+| 3 | Removed “Your status” picker from member list |
+| 4 | In OT status → blue (not grey/offline) |
+| 5 | Double back-swipe to exit app on root tabs |
+| 6 | Toggle **Read receipts (Seen by)** in notification settings |
+| 7 | DM Seen-by uses real names (backend populates `readBy.userId`) |
+| 8 | PDF open in-chat (`open_filex` + temp download + filename) |
+| 9 | Pin marker on bubble (removed broken top bar); menu → pinned list → jump |
+| 10 | Tap channel title → channel/space details sheet |
+
+### Sprint 11b — Round 3 regressions (local only)
+| # | Fix |
+|---|-----|
+| 1 | **Emergency badge on every #emergency message** — removed per-message Emergency label (channel auto-sets `priority: emergency` on all messages server-side) |
+| 2 | **Pin not visible / not sticking** — optimistic pin state, robust ID parsing, backend returns `pinnedMessages` on pin/unpin |
 
 ---
 
 ## 3. Features delivered (summary)
 
-Home workspace, Messages (+ DMs), Handoffs, Alerts, Profile, spaces/channels/threads/media, mentions, receipts, invites, search, FCM push, Vocle clinical UI, Sprint 11 support + onboarding polish.
+Home workspace, Messages (+ DMs + threads), Handoffs, Alerts, Profile, spaces/channels, media/PDF, mentions, read receipts (DM, optional), invites + QR join, search, FCM push, reactions, pins, member admin remove, Vocle clinical UI, support + onboarding polish.
 
 ---
 
-## 4. Known limitations
+## 4. Deploy / git gap (important for Claude)
+
+| Item | Status |
+|------|--------|
+| Flutter changes (rounds 2–3) | **Uncommitted** on `design/clinical-design-system` |
+| Backend round 2 (`readReceiptsEnabled`, PDF attachment URL, DM readBy populate) | **Uncommitted** |
+| Backend round 3 (pin returns `pinnedMessages`) | **Uncommitted** |
+| Railway `master` | Likely at `59da551` — **needs push** for rounds 2–3 backend |
+| GitLab `origin` | Same branch; push when ready |
+
+**Before next beta test:** commit all, `git push origin design/clinical-design-system`, `git push github HEAD:master`, rebuild `vocle-beta.apk`, verify `/health`.
+
+---
+
+## 5. Known limitations / open items
 
 | Item | Notes |
 |------|--------|
-| Tab red dots | Still partially hardcoded |
+| Tab unread badges | ✅ Wired via `NavBadgesCubit` + notification inbox |
+| Pin jump-to-message | Approximate scroll; older pins may need “load more” |
+| PDFs uploaded before Cloudinary fix | Old URLs may still have random filenames |
+| `#emergency` channel | All messages get emergency **priority** for notifications — UI no longer tags each bubble |
+| QR scan | Photo/camera decode only (no live continuous scanner — avoids Kotlin/ML Kit build break) |
+| Forward | System share of text only (no multi-chat forward picker) |
 | Bookmarks / Home layout | Device-local |
-| Today's Shift | Handoff-derived |
 | iOS / APNs | Not configured |
 | App id | `com.example.medcollab_app` |
-| Backend deploy | Privacy + viewing-channel suppress need Railway deploy from `master` |
+| Play Store | Not started |
 
 ---
 
-## 5. Suggested Sprint 12+
+## 6. Suggested Sprint 13+ (for Claude planning)
 
-1. Unread badges on nav tabs  
-2. Commit/push redesign + Sprint 11; keep GitHub `master` current  
-3. Beta doctor onboarding pack  
-4. Handoff completed/missed + expiry  
-5. Shift/roster API  
-6. Play Store prep  
+**Ship & stabilize (P0)**
+1. Commit + push all local work; Railway redeploy; distribute fresh `vocle-beta.apk`  
+2. Beta validation: unread badges, invite flow, member Message, search  
+
+**Product (P1)**
+3. Dedicated channel unread API (optional — today uses notification counts)  
+4. Pin scroll-to-message with exact positioning  
+5. Handoff completed/missed + expiry  
+6. Shift/roster API  
+
+**Growth (P2)**
+7. Play Store prep · iOS / APNs when Android beta stable  
 
 ---
 
-## 6. Install
+## 7. Install
 
 ```text
-adb install -r D:\MedCollab\MedCollab-beta.apk
+adb install -r D:\MedCollab\vocle-beta.apk
 ```
 
-Developer Mode: Profile → long-press **Vocle beta** → PIN `2468` (debug builds or `ENABLE_DEV_TOOLS=true`).
+Developer Mode: Profile → long-press **Vocle beta** → PIN `2468` (debug or `ENABLE_DEV_TOOLS=true`).
 
 ---
 
-## 7. Doc index
+## 8. Doc index
 
 | File | Purpose |
 |------|---------|
-| `PROJECT_LEAD_SUMMARY.md` | This file |
-| `AI_HANDOFF.md` | Tech handoff |
-| `medcollab-app/PROJECT_STATE.md` | Live status |
+| `PROJECT_LEAD_SUMMARY.md` | This file — lead + Claude planning |
+| `AI_HANDOFF.md` | Technical handoff |
+| `medcollab-app/PROJECT_STATE.md` | App live status |
 | `medcollab-app/TASKS.md` | Task tracker |
 | `PUSH_NOTIFICATIONS.md` | FCM setup |
 | `DEPLOYMENT.md` | Deploy guide |
+| `medcollab-app/scripts/build-release-apk.ps1` | Release APK → `vocle-beta.apk` |
+
+---
+
+## 9. Claude prompt starter (copy-paste)
+
+> You are continuing Vocle/MedCollab beta. Read `PROJECT_LEAD_SUMMARY.md`, `AI_HANDOFF.md`, and `medcollab-app/PROJECT_STATE.md`. Production API: https://medcollab.up.railway.app. Latest APK: `vocle-beta.apk` (Sprint 12). Branch `design/clinical-design-system` has uncommitted Sprint 11b + 12 work. Railway may still be at commit `59da551`. Priorities: (1) commit/push/deploy backend, (2) beta doctor validation, (3) Sprint 13 roster/handoff lifecycle. Do not force-push `master`.

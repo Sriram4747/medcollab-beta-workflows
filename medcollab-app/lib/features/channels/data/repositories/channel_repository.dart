@@ -57,16 +57,36 @@ class ChannelRepository extends BaseRepository {
   }
 
   /// `POST /api/channels/:id/pin/:messageId`
-  Future<void> pinMessage(String channelId, String messageId) {
-    return executeVoid(
-      () => apiClient.post(ApiEndpoints.pinMessage(channelId, messageId)),
+  Future<List<PinnedMessageEntry>> pinMessage(
+    String channelId,
+    String messageId,
+  ) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.pinMessage(channelId, messageId),
+        parser: (json) => _parsePinnedList(json),
+      ),
     );
   }
 
   /// `DELETE /api/channels/:id/pin/:messageId`
-  Future<void> unpinMessage(String channelId, String messageId) {
-    return executeVoid(
-      () => apiClient.delete(ApiEndpoints.pinMessage(channelId, messageId)),
+  Future<List<PinnedMessageEntry>> unpinMessage(
+    String channelId,
+    String messageId,
+  ) {
+    return execute(
+      () => apiClient.delete(
+        ApiEndpoints.pinMessage(channelId, messageId),
+        parser: (json) => _parsePinnedList(json),
+      ),
+    );
+  }
+
+  List<PinnedMessageEntry> _parsePinnedList(Map<String, dynamic> json) {
+    return parseNestedList(
+      json,
+      'pinnedMessages',
+      PinnedMessageEntry.fromJson,
     );
   }
 

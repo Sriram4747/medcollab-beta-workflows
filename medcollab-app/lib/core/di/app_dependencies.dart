@@ -19,9 +19,11 @@ import 'package:medcollab_app/features/home/data/dashboard_preferences_service.d
 import 'package:medcollab_app/features/media/data/repositories/media_repository.dart';
 import 'package:medcollab_app/features/members/data/repositories/member_repository.dart';
 import 'package:medcollab_app/features/messages/data/repositories/message_repository.dart';
+import 'package:medcollab_app/features/messages/data/repositories/message_request_repository.dart';
 import 'package:medcollab_app/features/messages/data/repositories/thread_repository.dart';
 import 'package:medcollab_app/features/notifications/data/repositories/notification_repository.dart';
 import 'package:medcollab_app/features/notifications/presentation/cubit/notification_badge_cubit.dart';
+import 'package:medcollab_app/features/shell/presentation/cubit/nav_badges_cubit.dart';
 import 'package:medcollab_app/features/search/data/repositories/search_repository.dart';
 import 'package:medcollab_app/features/spaces/data/repositories/space_repository.dart';
 
@@ -37,6 +39,7 @@ class AppDependencies {
   late final UserRepository userRepository;
   late final SpaceRepository spaceRepository;
   late final MessageRepository messageRepository;
+  late final MessageRequestRepository messageRequestRepository;
   late final ThreadRepository threadRepository;
   late final MediaRepository mediaRepository;
   late final ChannelRepository channelRepository;
@@ -45,6 +48,7 @@ class AppDependencies {
   late final DashboardPreferencesService dashboardPreferencesService;
   late final NotificationRepository notificationRepository;
   late final NotificationBadgeCubit notificationBadgeCubit;
+  late final NavBadgesCubit navBadgesCubit;
   late final SearchRepository searchRepository;
   late final BookmarkService bookmarkService;
   late final RecentItemsService recentItemsService;
@@ -71,6 +75,7 @@ class AppDependencies {
     userRepository = UserRepository(apiClient: apiClient);
     spaceRepository = SpaceRepository(apiClient: apiClient);
     messageRepository = MessageRepository(apiClient: apiClient);
+    messageRequestRepository = MessageRequestRepository(apiClient: apiClient);
     threadRepository = ThreadRepository(apiClient: apiClient);
     mediaRepository = MediaRepository(apiClient: apiClient);
     channelRepository = ChannelRepository(apiClient: apiClient);
@@ -80,6 +85,12 @@ class AppDependencies {
     notificationRepository = NotificationRepository(apiClient: apiClient);
     notificationBadgeCubit = NotificationBadgeCubit(
       repository: notificationRepository,
+      socketClient: socketClient,
+    );
+    navBadgesCubit = NavBadgesCubit(
+      notificationRepository: notificationRepository,
+      handoffRepository: handoffRepository,
+      notificationBadgeCubit: notificationBadgeCubit,
       socketClient: socketClient,
     );
     searchRepository = SearchRepository(apiClient: apiClient);
@@ -129,6 +140,7 @@ class AppDependencies {
 
   void dispose() {
     appRouter.dispose();
+    navBadgesCubit.close();
     notificationBadgeCubit.close();
     presenceCubit.close();
     authBloc.close();

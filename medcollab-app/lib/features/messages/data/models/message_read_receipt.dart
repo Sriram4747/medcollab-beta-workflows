@@ -26,7 +26,13 @@ class MessageReadReceipt extends Equatable {
   final DateTime? readAt;
   final UserModel? user;
 
-  String get displayName => user?.displayName ?? 'Colleague';
+  String get displayName {
+    final u = user;
+    if (u != null && u.displayName.trim().isNotEmpty) {
+      return u.displayName.trim();
+    }
+    return 'Colleague';
+  }
 
   @override
   List<Object?> get props => [userId, readAt, user];

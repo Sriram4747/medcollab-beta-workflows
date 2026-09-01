@@ -6,17 +6,24 @@ import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 
 class PinnedMessageEntry extends Equatable {
   const PinnedMessageEntry({
+    required this.messageId,
     required this.message,
     this.pinnedAt,
   });
 
   factory PinnedMessageEntry.fromJson(Map<String, dynamic> json) {
-    final messageJson = asJsonMap(json['messageId']);
+    final raw = json['messageId'];
+    final messageJson = asJsonMap(raw);
+    final id = messageJson != null
+        ? (messageJson['_id'] ?? messageJson['id'])?.toString() ?? ''
+        : raw?.toString() ?? '';
+
     return PinnedMessageEntry(
+      messageId: id,
       message: messageJson != null
           ? MessageModel.fromJson(messageJson)
           : MessageModel(
-              id: json['messageId']?.toString() ?? '',
+              id: id,
               channelId: '',
               sender: UserModel(id: ''),
             ),
@@ -26,11 +33,12 @@ class PinnedMessageEntry extends Equatable {
     );
   }
 
+  final String messageId;
   final MessageModel message;
   final DateTime? pinnedAt;
 
   @override
-  List<Object?> get props => [message, pinnedAt];
+  List<Object?> get props => [messageId, message, pinnedAt];
 }
 
 class ChannelDetailModel extends Equatable {

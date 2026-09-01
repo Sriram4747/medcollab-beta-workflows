@@ -5,9 +5,10 @@ import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/features/handoffs/presentation/pages/global_handoffs_page.dart';
 import 'package:medcollab_app/features/home/presentation/pages/home_dashboard_page.dart';
 import 'package:medcollab_app/features/messages_hub/presentation/pages/messages_hub_page.dart';
-import 'package:medcollab_app/features/notifications/presentation/cubit/notification_badge_cubit.dart';
+import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:medcollab_app/features/profile/presentation/pages/profile_page.dart';
+import 'package:medcollab_app/features/shell/presentation/cubit/nav_badges_cubit.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_nav_bar.dart';
 
 /// Bottom navigation shell — Vocle redesign Step 2 ([AppNavBar]).
@@ -31,7 +32,12 @@ class _MainShellPageState extends State<MainShellPage> {
     if (deps.socketClient.isConnected) {
       deps.socketClient.syncSpaceRooms();
     }
-    deps.notificationBadgeCubit.refresh();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final userId = context.read<AuthBloc>().state.user?.id;
+      deps.navBadgesCubit.setUserId(userId);
+      deps.navBadgesCubit.refresh();
+    });
   }
 
   void _onTap(int index) {
@@ -39,8 +45,8 @@ class _MainShellPageState extends State<MainShellPage> {
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
     );
-    if (index == 3) {
-      AppDependencies.instance.notificationBadgeCubit.refresh();
+    if (index == 1 || index == 2 || index == 3) {
+      AppDependencies.instance.navBadgesCubit.refresh();
     }
   }
 
@@ -48,15 +54,14 @@ class _MainShellPageState extends State<MainShellPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.navigationShell,
-      bottomNavigationBar: BlocBuilder<NotificationBadgeCubit, int>(
-        builder: (context, alertsBadge) {
+      bottomNavigationBar: BlocBuilder<NavBadgesCubit, NavBadgesState>(
+        builder: (context, badges) {
           return AppNavBar(
             currentIndex: widget.navigationShell.currentIndex,
             onTap: _onTap,
-            alertsBadge: alertsBadge,
-            // Message / handoff dots wired when unread sources are available.
-            messagesDot: false,
-            handoffsDot: false,
+            alertsBadge: badges.alertsCount,
+            messagesDot: badges.messagesDot,
+            handoffsDot: badges.handoffsDot,
           );
         },
       ),

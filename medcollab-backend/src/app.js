@@ -43,6 +43,7 @@ const notificationRoutes = require('./features/notifications/notification.routes
 const searchRoutes = require('./features/search/search.routes');
 const devRoutes = require('./features/dev/dev.routes');
 const supportRoutes = require('./features/support/support.routes');
+const messageRequestRoutes = require('./features/message-requests/messageRequest.routes');
 
 const app = express();
 
@@ -138,6 +139,8 @@ app.get('/', (req, res) => {
  */
 app.get('/health', (req, res) => {
   const mongoose = require('mongoose');
+  const { isFirebaseReady } = require('./config/firebase');
+  const { isCloudinaryConfigured } = require('./config/cloudinary');
   const dbState = ['disconnected', 'connected', 'connecting', 'disconnecting'];
 
   res.status(200).json({
@@ -146,6 +149,9 @@ app.get('/health', (req, res) => {
     environment: process.env.NODE_ENV,
     database: dbState[mongoose.connection.readyState] || 'unknown',
     uptime: Math.floor(process.uptime()) + 's',
+    firebase: isFirebaseReady(),
+    cloudinary: isCloudinaryConfigured(),
+    analytics: 'none',
   });
 });
 
@@ -234,6 +240,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/dev', devRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/message-requests', messageRequestRoutes);
 
 // ── API Info Route ────────────────────────────────────────────────────────────
 app.get('/api', (req, res) => {

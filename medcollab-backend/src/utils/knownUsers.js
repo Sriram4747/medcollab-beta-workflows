@@ -6,7 +6,8 @@
 const Space = require('../features/spaces/space.model');
 const Channel = require('../features/channels/channel.model');
 const User = require('../features/users/user.model');
-const { CHANNEL_TYPES } = require('../constants');
+const MessageRequest = require('../features/message-requests/messageRequest.model');
+const { CHANNEL_TYPES, MESSAGE_REQUEST_STATUS } = require('../constants');
 
 function normalizeInstitution(value) {
   return (value || '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -86,6 +87,17 @@ async function canMessageUser(callerId, targetUserId) {
     .select('_id')
     .lean();
   if (existingDm) return true;
+
+  const acceptedRequest = await MessageRequest.findOne({
+    status: MESSAGE_REQUEST_STATUS.ACCEPTED,
+    $or: [
+      { fromUserId: callerId, toUserId: targetUserId },
+      { fromUserId: targetUserId, toUserId: callerId },
+    ],
+  })
+    .select('_id')
+    .lean();
+  if (acceptedRequest) return true;
 
   const known = await resolveKnownUserIds(callerId);
   return known.includes(targetUserId.toString());

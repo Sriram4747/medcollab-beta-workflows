@@ -66,7 +66,10 @@ const getSpaceChannels = asyncHandler(async (req, res) => {
  */
 const getChannelById = asyncHandler(async (req, res) => {
   let channel = await Channel.findById(req.params.id)
-    .populate('pinnedMessages.messageId')
+    .populate({
+      path: 'pinnedMessages.messageId',
+      populate: { path: 'senderId', select: 'name displayTitle role avatarUrl' },
+    })
     .populate('members', 'name displayTitle role avatarUrl speciality department institution availability')
     .lean();
 
@@ -198,18 +201,24 @@ const createOrGetDM = asyncHandler(async (req, res) => {
     );
   }
 
-  // Check if DM already exists
-  let channel = await Channel.findDMChannel(req.user._id, targetUserId);
-
-  if (!channel) {
-    channel = await Channel.create({
-      spaceId: null,
+  // Atomic upsert to prevent TOCTOU race when two users create the same DM simultaneously.
+  const sortedMembers = [req.user._id.toString(), targetUserId].sort();
+  let channel = await Channel.findOneAndUpdate(
+    {
       type: CHANNEL_TYPES.DIRECT,
-      members: [req.user._id, targetUserId],
-      createdBy: req.user._id,
-      name: null,
-    });
-  }
+      'members': { $all: sortedMembers, $size: 2 },
+    },
+    {
+      $setOnInsert: {
+        spaceId: null,
+        type: CHANNEL_TYPES.DIRECT,
+        members: [req.user._id, targetUserId],
+        createdBy: req.user._id,
+        name: null,
+      },
+    },
+    { upsert: true, new: true }
+  );
 
   const populated = await Channel.findById(channel._id)
     .populate(
@@ -238,6 +247,20 @@ const getChannelMembers = asyncHandler(async (req, res) => {
 
   return respond.ok(res, 'Members fetched', { members: users });
 });
+
+/**
+ * Load pinned messages with populated message + sender for clients.
+ */
+const loadPinnedMessages = async (channelId) => {
+  const doc = await Channel.findById(channelId)
+    .select('pinnedMessages')
+    .populate({
+      path: 'pinnedMessages.messageId',
+      populate: { path: 'senderId', select: 'name displayTitle role avatarUrl' },
+    })
+    .lean();
+  return doc?.pinnedMessages || [];
+};
 
 /**
  * POST /api/channels/:id/pin/:messageId
@@ -282,7 +305,8 @@ const pinMessage = asyncHandler(async (req, res) => {
   channel.pinnedMessages.push({ messageId, pinnedBy: req.user._id });
   await channel.save();
 
-  return respond.ok(res, 'Message pinned');
+  const pinnedMessages = await loadPinnedMessages(channelId);
+  return respond.ok(res, 'Message pinned', { pinnedMessages });
 });
 
 /**
@@ -314,7 +338,8 @@ const unpinMessage = asyncHandler(async (req, res) => {
   );
   await channel.save();
 
-  return respond.ok(res, 'Message unpinned');
+  const pinnedMessages = await loadPinnedMessages(channelId);
+  return respond.ok(res, 'Message unpinned', { pinnedMessages });
 });
 
 module.exports = {

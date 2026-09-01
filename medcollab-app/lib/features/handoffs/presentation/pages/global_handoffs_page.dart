@@ -251,7 +251,8 @@ class _GlobalHandoffsViewState extends State<_GlobalHandoffsView> {
                           icon: Icons.assignment_outlined,
                           title: 'No handoffs here',
                           subtitle:
-                              'Swipe left or right to switch Pending, Active, Done, Drafts.',
+                              'Handoffs track critical or cross-cover patients — '
+                              'not your full ward list. Swipe to switch Pending, Active, Done.',
                         );
                       }
                       return RefreshIndicator(

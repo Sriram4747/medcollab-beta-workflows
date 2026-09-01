@@ -1,8 +1,30 @@
 # MedCollab — Beta Deployment Guide
 
-**Phase:** External beta — **backend + mobile LIVE** (FCM Android ✅)  
+**Phase:** Closed beta — **backend + mobile LIVE** · App **`1.0.0+18`**  
 **Production API:** https://medcollab.up.railway.app  
-**Last updated:** 2026-08-02
+**Last updated:** 2026-08-31  
+**APK:** `D:\MedCollab\vocle-beta.apk` · Checklist: [`BETA_CHECKLIST.md`](BETA_CHECKLIST.md)
+
+---
+
+## Why Railway did not deploy (2026-08-31)
+
+Railway **only** watches **GitHub** `mathiharan29/medcollab-beta` branch **`master`**.
+
+| What you did | What Railway saw |
+|--------------|------------------|
+| Commit + push to **GitLab** `design/clinical-design-system` | Nothing (different remote) |
+| Push to **GitHub** `master` | Auto-redeploy ✅ |
+
+Sprint 15A–16 backend sat on GitLab **7 commits ahead** of GitHub `master` until manually synced.
+
+**Fix (automatic going forward):** GitLab CI job `deploy:railway` mirrors each push on `design/clinical-design-system` → GitHub `master`. One-time setup: add **`GITHUB_PUSH_TOKEN`** in GitLab → Settings → CI/CD → Variables (PAT with `repo` scope on `medcollab-beta`).
+
+**Manual sync anytime:**
+
+```powershell
+.\scripts\sync-railway-deploy.ps1
+```
 
 ---
 
@@ -17,15 +39,16 @@
 | `API_BASE_URL` on Railway | ✅ |
 | MSG91 OTP Widget (SDK + `verify-msg91-token`) | ✅ |
 | Firebase FCM (`FIREBASE_*` + Admin connected) | ✅ |
-| Flutter production APK (with FCM) | ✅ `D:\MedCollab\MedCollab-beta.apk` |
-| Beta bug-fix batch (`f2e8afe`) | ✅ Auth speed, presence, handoffs, chat, private channels |
+| Flutter closed-beta APK (with FCM) | ✅ `D:\MedCollab\vocle-beta.apk` (`1.0.0+14`) |
+| Privacy / Terms / Feedback in app | ✅ Sprint 14 |
+| Sprint 15–17 backend on Railway | ⬜ Sync via `sync-railway-deploy.ps1` or GitLab CI |
 
 **Repos:**
 
-- **GitHub (Railway):** https://github.com/mathiharan29/medcollab-beta  
-- **GitLab (primary dev):** https://gitlab.com/mathiharan-project/MedCollab  
+- **GitHub (Railway):** https://github.com/mathiharan29/medcollab-beta — **`master` only**  
+- **GitLab (primary dev):** https://gitlab.com/mathiharan-project/MedCollab — branch `design/clinical-design-system`
 
-Push to both after changes: `git push origin branch` and `git push github branch`
+After backend changes: run `.\scripts\sync-railway-deploy.ps1` **or** rely on GitLab CI `deploy:railway` (once `GITHUB_PUSH_TOKEN` is set).
 
 ---
 

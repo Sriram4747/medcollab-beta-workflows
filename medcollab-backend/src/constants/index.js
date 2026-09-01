@@ -105,6 +105,15 @@ const NOTIFICATION_TYPES = {
   EMERGENCY_ALERT: 'emergency_alert',
   SPACE_INVITE: 'space_invite',
   ROSTER_UPDATE: 'roster_update',
+  MESSAGE_REQUEST: 'message_request',
+};
+
+// ─── Message request status ────────────────────────────────────────────────────
+const MESSAGE_REQUEST_STATUS = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted',
+  DECLINED: 'declined',
+  BLOCKED: 'blocked',
 };
 
 // ─── Pagination ────────────────────────────────────────────────────────────────
@@ -189,6 +198,7 @@ module.exports = {
   SHIFT_TYPES,
   PATIENT_STATUS,
   NOTIFICATION_TYPES,
+  MESSAGE_REQUEST_STATUS,
   PAGINATION,
   MEDIA,
   SOCKET_EVENTS,

@@ -4,6 +4,7 @@
 stages:
   - validate
   - build
+  - deploy
 
 variables:
   FLUTTER_IMAGE: ghcr.io/cirruslabs/flutter:3.29.2
@@ -48,3 +49,24 @@ backend:validate:
     key: backend-npm-$CI_COMMIT_REF_SLUG
     paths:
       - medcollab-backend/node_modules/
+
+# Mirror to GitHub master → Railway auto-deploys medcollab-backend.
+# Requires GitLab CI/CD variable: GITHUB_PUSH_TOKEN (PAT with repo scope on medcollab-beta).
+deploy:railway:
+  stage: deploy
+  image: alpine:3.20
+  needs:
+    - backend:validate
+  before_script:
+    - apk add --no-cache git
+    - git config user.email "ci@vocle.app"
+    - git config user.name "GitLab CI Railway Sync"
+    - git remote remove github 2>/dev/null || true
+    - git remote add github "https://oauth2:${GITHUB_PUSH_TOKEN}@github.com/mathiharan29/medcollab-beta.git"
+  script:
+    - echo "Pushing ${CI_COMMIT_BRANCH} -> github/master for Railway"
+    - git push github "HEAD:master"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "design/clinical-design-system"
+    - if: $CI_COMMIT_BRANCH == "master"
+  allow_failure: false

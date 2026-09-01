@@ -11,6 +11,7 @@ abstract final class AppRoutes {
   static const String handoffs = '/handoffs';
   static const String notifications = '/notifications';
   static const String profile = '/profile';
+  static const String editProfile = '/profile/edit';
 
   // Spaces (no longer landing page)
   static const String spacesList = '/spaces';
@@ -40,7 +41,10 @@ abstract final class AppRoutes {
   static const String help = '/help';
   static const String reportBug = '/report-bug';
   static const String featureRequest = '/feature-request';
+  static const String feedback = '/feedback';
   static const String contact = '/contact';
+  static const String privacy = '/privacy';
+  static const String terms = '/terms';
   static const String developerMode = '/developer';
 
   static String spaceDetailPath(String spaceId) => '/spaces/$spaceId';

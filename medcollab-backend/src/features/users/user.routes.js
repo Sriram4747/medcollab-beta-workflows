@@ -97,6 +97,13 @@ router.put(
 router.get('/search', requireOnboarding, userController.searchUsers);
 
 /**
+ * @route   GET /api/users/lookup?phone=
+ * @desc    Find doctor by phone for DM / message request
+ * @access  Protected (onboarded)
+ */
+router.get('/lookup', requireOnboarding, userController.lookupByPhone);
+
+/**
  * @route   GET /api/users/:id
  * @desc    Get a user's public profile
  * @access  Protected

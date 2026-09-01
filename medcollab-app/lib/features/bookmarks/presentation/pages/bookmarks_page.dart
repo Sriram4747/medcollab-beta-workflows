@@ -35,6 +35,14 @@ class _BookmarksPageState extends State<BookmarksPage> {
       body: FutureBuilder<List<BookmarkItem>>(
         future: _future,
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Could not load bookmarks'),
+            );
+          }
           final items = snapshot.data ?? [];
           if (items.isEmpty) {
             return const AppEmptyState(

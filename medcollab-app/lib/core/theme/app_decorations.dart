@@ -18,17 +18,26 @@ abstract final class AppDecorations {
   }
 
   static BoxDecoration bubble({required bool isMine}) {
+    if (isMine) {
+      return BoxDecoration(
+        color: AppColors.navyPrimary,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(4),
+        ),
+      );
+    }
     return BoxDecoration(
-      color: isMine ? AppColors.navyPrimary : AppColors.surfaceCard,
-      borderRadius: BorderRadius.only(
-        topLeft: const Radius.circular(16),
-        topRight: const Radius.circular(16),
-        bottomLeft: Radius.circular(isMine ? 16 : 4),
-        bottomRight: Radius.circular(isMine ? 4 : 16),
+      color: AppColors.surfaceCard,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(16),
+        topRight: Radius.circular(16),
+        bottomLeft: Radius.circular(4),
+        bottomRight: Radius.circular(16),
       ),
-      border: isMine
-          ? null
-          : Border.all(color: AppColors.borderDefault, width: 0.5),
+      border: Border.all(color: AppColors.borderDefault, width: 0.5),
     );
   }
 

@@ -21,7 +21,9 @@ class AlertCard extends StatelessWidget {
   static const Color _mentionBg = Color(0xFFEEF2FF);
   static const Color _mentionFg = Color(0xFF6366F1);
   static const Color _emergencyTitle = Color(0xFF991B1B);
+  static const Color _emergencyTitleRead = Color(0xFFB45353);
   static const Color _emergencyCardBg = Color(0xFFFFF5F5);
+  static const Color _emergencyCardBgRead = Color(0xFFFFFBFB);
   static const Color _unreadTint = Color(0xFFF0FDFA);
 
   bool get _isEmergency {
@@ -45,18 +47,26 @@ class AlertCard extends StatelessWidget {
         ? notification.title
         : (notification.actorName ?? 'Alert');
 
+    // Unread emergency = strong red; after view, fade to soft tint + neutral border.
+    final emergencyUnread = _isEmergency && _isUnread;
+    final emergencyRead = _isEmergency && !_isUnread;
+
     return Material(
-      color: _isEmergency
+      color: emergencyUnread
           ? _emergencyCardBg
-          : (_isUnread ? _unreadTint : AppColors.surfaceCard),
+          : emergencyRead
+              ? _emergencyCardBgRead
+              : (_isUnread ? _unreadTint : AppColors.surfaceCard),
       shape: RoundedRectangleBorder(
         borderRadius: AppRadius.card,
         side: BorderSide(
-          color: _isEmergency
+          color: emergencyUnread
               ? AppColors.emergencyBorder
-              : (_isUnread
-                  ? AppColors.tealPrimary.withValues(alpha: 0.35)
-                  : AppColors.borderDefault),
+              : emergencyRead
+                  ? AppColors.borderDefault
+                  : (_isUnread
+                      ? AppColors.tealPrimary.withValues(alpha: 0.35)
+                      : AppColors.borderDefault),
           width: _isUnread && !_isEmergency ? 1 : 0.5,
         ),
       ),
@@ -104,9 +114,11 @@ class AlertCard extends StatelessWidget {
                                 fontWeight: _isUnread
                                     ? FontWeight.w700
                                     : FontWeight.w500,
-                                color: _isEmergency
+                                color: emergencyUnread
                                     ? _emergencyTitle
-                                    : AppColors.textPrimary,
+                                    : emergencyRead
+                                        ? _emergencyTitleRead
+                                        : AppColors.textPrimary,
                               ),
                             ),
                             if (notification.body.isNotEmpty) ...[
@@ -161,10 +173,17 @@ class AlertCard extends StatelessWidget {
 
   ({Color bg, IconData icon, Color fg}) _iconStyle() {
     if (_isEmergency) {
+      if (_isUnread) {
+        return (
+          bg: AppColors.emergencyRed,
+          icon: Icons.warning_rounded,
+          fg: Colors.white,
+        );
+      }
       return (
-        bg: AppColors.emergencyRed,
-        icon: Icons.warning_rounded,
-        fg: Colors.white,
+        bg: AppColors.emergencyTint,
+        icon: Icons.warning_amber_rounded,
+        fg: _emergencyTitleRead,
       );
     }
     return switch (notification.category) {

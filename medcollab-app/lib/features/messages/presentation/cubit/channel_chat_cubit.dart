@@ -29,6 +29,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     required this.currentUserId,
     NotificationRepository? notificationRepository,
     void Function(int unreadCount)? onChannelAlertsCleared,
+    this.readReceiptsEnabled,
   })  : _messageRepository = messageRepository,
         _mediaRepository = mediaRepository,
         _socketClient = socketClient,
@@ -60,6 +61,8 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   final void Function(int unreadCount)? _onChannelAlertsCleared;
   final String channelId;
   final String currentUserId;
+  /// When returns false, DM read receipts are neither written nor used by this cubit for mark-read.
+  final bool Function()? readReceiptsEnabled;
 
   StreamSubscription<Map<String, dynamic>>? _messageSub;
   StreamSubscription<Map<String, dynamic>>? _messageUpdatedSub;
@@ -103,6 +106,8 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   }
 
   Future<void> _markMessagesRead(List<MessageModel> messages) async {
+    final prefsEnabled = readReceiptsEnabled?.call() ?? true;
+    if (!prefsEnabled) return;
     final ids = messages
         .where((m) => !m.localOnly && !m.isDeleted && m.sender.id != currentUserId)
         .map((m) => m.id)

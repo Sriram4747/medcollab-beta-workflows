@@ -18,4 +18,10 @@ router.post('/bug', supportController.createBug);
  */
 router.post('/feature', supportController.createFeature);
 
+/**
+ * @route POST /api/support/feedback
+ * @desc  File general closed-beta feedback (authenticated)
+ */
+router.post('/feedback', supportController.createFeedback);
+
 module.exports = router;

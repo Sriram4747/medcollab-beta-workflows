@@ -7,9 +7,11 @@ void main() {
     test('maps known API status strings', () {
       expect(availabilityStatusColor('available'), AppColors.statusSuccess);
       expect(availabilityStatusColor('on_call'), AppColors.statusWarning);
+      expect(availabilityStatusColor('in_ot'), AppColors.inOt);
       expect(availabilityStatusColor('in_icu'), AppColors.statusError);
       expect(availabilityStatusColor('on_rounds'), AppColors.tealPrimary);
       expect(availabilityStatusColor('offline'), AppColors.textMuted);
+      expect(availabilityStatusColor('in_ot'), isNot(AppColors.textMuted));
     });
 
     test('unknown status falls back to muted', () {

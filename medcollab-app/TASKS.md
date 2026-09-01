@@ -196,12 +196,93 @@
 | flutter analyze / unit tests | ✅ Done | See test suite |
 | Docs updated | ✅ Done | Lead summary + state |
 
-## Phase 14 — Next (Sprint 12+)
+## Phase 14 — Sprint 12: Beta Completion ✅ (2026-08-22)
 
 | Task | Status | Notes |
 |------|--------|-------|
-| Unread badges on Messages / Handoffs tabs | ⬜ Pending | Often hardcoded `false` |
-| Commit / push + Railway deploy privacy fixes | ⬜ Pending | GitHub `master` for API |
+| Real nav unread badges | ✅ Done | `NavBadgesCubit` + socket refresh |
+| Messages hub unread rows | ✅ Done | `unreadCountsByChannel` |
+| Home dashboard polish | ✅ Done | Search, alerts chip, welcome QR |
+| Global search UX | ✅ Done | Empty state + skeleton |
+| Profile cards + Message | ✅ Done | `UserProfileSheet` + member list |
+| Invite / onboarding polish | ✅ Done | Copy code, profile setup card |
+| Settings + accessibility | ✅ Done | Sections, nav/search semantics |
+| Performance | ✅ Done | Chat `cacheExtent` |
+| flutter analyze | ✅ Done | `--no-fatal-infos`, 0 errors |
+| Release APK | ✅ Done | `D:\MedCollab\vocle-beta.apk` |
+| Docs updated | ✅ Done | Lead summary, handoff, state, tasks |
+
+## Phase 15 — Sprint 13: Beta QA ✅ (2026-08-24)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Full app + backend audit | ✅ Done | `BETA_QA_REPORT.md` |
+| Socket recovered-handler guard | ✅ Done | `src/socket/index.js` |
+| DM create race (upsert) | ✅ Done | `createOrGetDM` |
+| mediaUrl Cloudinary allowlist | ✅ Done | `message.controller.js` |
+| Client QA fixes | ✅ Done | Image cache, push dedupe, list keys |
+| Commit | ✅ Done | `8f5ca73` |
+
+## Phase 16 — Sprint 14: Closed Beta Release ✅ (2026-08-24)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Transparent logo | ✅ Done | `Logo_bgless.png` → `vocle_logo.png` |
+| Version `1.0.0+14` | ✅ Done | pubspec + Profile footer |
+| Privacy Policy + Terms | ✅ Done | In-app + `docs/` |
+| FAQ / Feedback / Bug report | ✅ Done | Profile + `POST /api/support/feedback` |
+| Analytics verification | ✅ Done | No third-party SDKs; policy doc |
+| FCM + production verification | ✅ Done | `docs/SPRINT14_VERIFICATION.md` |
+| Release notes + checklist | ✅ Done | `RELEASE_NOTES.md`, `BETA_CHECKLIST.md` |
+| Release APK | ✅ Done | `vocle-beta.apk` ~61 MB |
+| Commit | ✅ Done | `8354fed` |
+
+## Phase 18 — Sprint 15A: Beta hotfixes ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Per-user API rate limit (not shared IP) | ✅ Done | `rateLimiter.js` — deploy to Railway |
+| Swipe-back closes app | ✅ Done | `AppNavigationBackHandler` |
+| Splash logo white card | ✅ Done | `splash_page.dart` |
+| Version `1.0.0+15` | ✅ Done | |
+| Commit | ✅ Done | `11f5ef6` |
+
+## Phase 19 — Sprint 15B: Profile UX ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Role-aware onboarding form | ✅ Done | `ProfileDetailsForm` |
+| NEET PG 19 subjects + TN colleges | ✅ Done | `clinical_profile_options.dart`, JSON asset |
+| Edit profile screen | ✅ Done | Profile → `/profile/edit` |
+| Version `1.0.0+16` | ✅ Done | |
+| Verification doc | ✅ Done | `docs/SPRINT15B_VERIFICATION.md` |
+
+## Phase 20 — Sprint 16: DM by phone ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Phone lookup API | ✅ Done | `GET /api/users/lookup?phone=` |
+| Message requests | ✅ Done | `/api/message-requests` + accept/decline |
+| StartDm phone search | ✅ Done | Name or 10-digit number |
+| Messages Direct first | ✅ Done | Tab order + pending requests section |
+| Version `1.0.0+17` | ✅ Done | |
+| Commit | ✅ Done | `a7c855f` |
+
+## Phase 21 — Sprint 17: Live QR & handoffs ✅ (2026-08-31)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Live QR scan | ✅ Done | `LiveQrScanner` + `camera` package |
+| Handoff reposition copy | ✅ Done | Form banner, FAQ, empty states |
+| Version `1.0.0+18` | ✅ Done | |
+| Verification doc | ✅ Done | `docs/SPRINT17_VERIFICATION.md` |
+
+## Phase 17 — Next (post closed-beta)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Push backend to GitHub `master` → Railway | ⬜ Pending | Sprint 13–14 API changes |
+| Complete `BETA_CHECKLIST.md` on devices | ⬜ Pending | Pilot invite |
 | Dedicated shift/roster API | ⬜ Pending | Replace handoff-derived Today’s Shift |
 | Handoff completed/missed | ⬜ Pending | New statuses + expiry |
 | Server-side bookmarks + synced dashboard prefs | ⬜ Pending | Currently local |

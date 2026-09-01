@@ -5,6 +5,7 @@ import 'package:medcollab_app/features/auth/data/models/availability_model.dart'
 import 'package:medcollab_app/features/auth/data/models/notification_preferences_model.dart';
 import 'package:medcollab_app/features/auth/data/models/update_profile_request.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
+import 'package:medcollab_app/features/messages/data/models/user_lookup_result.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
 
 /// User profile API — mirrors backend `user.controller.js`.
@@ -93,6 +94,17 @@ class UserRepository extends BaseRepository {
       () => apiClient.put(
         ApiEndpoints.myFcmToken,
         data: {'token': token},
+      ),
+    );
+  }
+
+  /// `GET /api/users/lookup?phone=` — find doctor by mobile for DM.
+  Future<UserLookupResult> lookupByPhone(String phoneE164) {
+    return execute(
+      () => apiClient.get(
+        ApiEndpoints.lookupUser,
+        queryParameters: {'phone': phoneE164},
+        parser: (json) => UserLookupResult.fromJson(json),
       ),
     );
   }

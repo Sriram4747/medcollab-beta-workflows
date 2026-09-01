@@ -221,6 +221,20 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: ErrorBanner(message: state.error!),
                   ),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    'Handoffs are for patients and tasks that must not be missed '
+                    '— sick, unstable, or cross-cover cases. They are not meant '
+                    'to replace your full ward-round notebook for stable patients.',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 12),
                 DropdownButtonFormField<UserModel>(
                   value: state.assignedDoctor,
                   decoration: const InputDecoration(
@@ -295,7 +309,8 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                 TextField(
                   controller: _summaryController,
                   decoration: const InputDecoration(
-                    labelText: 'Shift summary (optional)',
+                    labelText: 'Shift note (optional)',
+                    hintText: 'e.g. Ward 3 stable except bed 12 — needs repeat Hb',
                     counterText: '',
                   ),
                   minLines: 2,
@@ -307,7 +322,7 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                 Row(
                   children: [
                     Text(
-                      'Patients',
+                      'Patients to hand over',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const Spacer(),
@@ -322,7 +337,8 @@ class _HandoffFormBodyState extends State<_HandoffFormBody> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      'Add at least one patient before submitting.',
+                      'Add only patients that need explicit handover — '
+                      'critical, unstable, or cross-cover. Skip stable ward-list entries.',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
