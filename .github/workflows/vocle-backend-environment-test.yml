@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: medcollab-backend/package-lock.json
 
@@ -58,9 +58,9 @@ jobs:
       - name: Wait for healthy backend
         run: |
           for attempt in {1..30}; do
-            if curl --fail --silent --show-error --output "$RUNNER_TEMP/vocle-health.json" http://127.0.0.1:5000/health; then
+            if curl --fail --silent --output "$RUNNER_TEMP/vocle-health.json" http://127.0.0.1:5000/health \
+              && node -e "const fs = require('fs'); const health = JSON.parse(fs.readFileSync(process.argv[1], 'utf8')); process.exit(health.status === 'ok' && health.database === 'connected' ? 0 : 1)" "$RUNNER_TEMP/vocle-health.json" 2>/dev/null; then
               cat "$RUNNER_TEMP/vocle-health.json"
-              node -e "const health = require(process.env.RUNNER_TEMP + '/vocle-health.json'); if (health.status !== 'ok' || health.database !== 'connected') process.exit(1)"
               exit 0
             fi
             sleep 2
