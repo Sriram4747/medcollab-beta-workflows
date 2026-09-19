@@ -1,0 +1,77 @@
+name: Vocle Backend Environment Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  boot-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: medcollab-backend
+    env:
+      NODE_ENV: test
+      PORT: 5000
+      MONGODB_URI: mongodb://127.0.0.1:27017/vocle_ci
+      JWT_SECRET: ci-test-only-jwt-secret-not-for-production-0000000000000001
+      JWT_REFRESH_SECRET: ci-test-only-refresh-secret-not-for-production-000000000002
+      OTP_BYPASS: "false"
+      API_BASE_URL: http://127.0.0.1:5000
+      ALLOWED_ORIGINS: http://localhost:3000
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: medcollab-backend/package-lock.json
+
+      - name: Start isolated MongoDB
+        run: |
+          docker run --detach --rm --name vocle-ci-mongodb --publish 127.0.0.1:27017:27017 \
+            --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'" \
+            --health-interval 5s --health-timeout 3s --health-retries 20 mongo:7
+          for attempt in {1..30}; do
+            if [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-ci-mongodb)" = "healthy" ]; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs vocle-ci-mongodb
+          exit 1
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Start backend
+        run: |
+          npm start > "$RUNNER_TEMP/vocle-backend.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/vocle-backend.pid"
+
+      - name: Wait for healthy backend
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error --output "$RUNNER_TEMP/vocle-health.json" http://127.0.0.1:5000/health; then
+              cat "$RUNNER_TEMP/vocle-health.json"
+              node -e "const health = require(process.env.RUNNER_TEMP + '/vocle-health.json'); if (health.status !== 'ok' || health.database !== 'connected') process.exit(1)"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Backend did not become healthy within 60 seconds."
+          exit 1
+
+      - name: Show diagnostics on failure
+        if: failure()
+        run: |
+          echo '=== Backend log ==='
+          cat "$RUNNER_TEMP/vocle-backend.log" 2>/dev/null || true
+          echo '=== MongoDB log ==='
+          docker logs vocle-ci-mongodb 2>/dev/null || true
