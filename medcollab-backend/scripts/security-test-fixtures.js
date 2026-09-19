@@ -1,0 +1,268 @@
+#!/usr/bin/env node
+
+/**
+ * Deterministic fixtures for the disposable CI security-test database only.
+ * This script deliberately refuses any environment other than NODE_ENV=test
+ * and the local vocle_ci MongoDB instance used by the GitHub Actions workflow.
+ */
+
+require('dotenv').config();
+
+const mongoose = require('mongoose');
+const User = require('../src/features/users/user.model');
+const Space = require('../src/features/spaces/space.model');
+const Channel = require('../src/features/channels/channel.model');
+const Message = require('../src/features/messages/message.model');
+const Handoff = require('../src/features/handoffs/handoff.model');
+const {
+  USER_ROLES,
+  SPACE_TYPES,
+  SPACE_ROLES,
+  CHANNEL_TYPES,
+  MESSAGE_TYPES,
+  MESSAGE_PRIORITY,
+  HANDOFF_STATUS,
+  SHIFT_TYPES,
+  PATIENT_STATUS,
+} = require('../src/constants');
+
+const TEST_DATABASE_URI = 'mongodb://127.0.0.1:27017/vocle_ci';
+const FIXTURE = {
+  users: [
+    {
+      key: 'userA',
+      phone: '+15550000001',
+      name: 'Vocle Security User A',
+      role: USER_ROLES.CONSULTANT,
+    },
+    {
+      key: 'userB',
+      phone: '+15550000002',
+      name: 'Vocle Security User B',
+      role: USER_ROLES.PG_RESIDENT,
+    },
+    {
+      key: 'userC',
+      phone: '+15550000003',
+      name: 'Vocle Security User C',
+      role: USER_ROLES.INTERN,
+    },
+  ],
+  inviteCode: 'VCLTST',
+  spaceName: 'Vocle Security Test Space',
+  channelName: 'security-test',
+  messages: {
+    userA: 'Security fixture message from userA.',
+    userB: 'Security fixture message from userB.',
+  },
+  shiftDate: new Date('2025-01-15T00:00:00.000Z'),
+};
+
+function assertSafeEnvironment() {
+  if (process.env.NODE_ENV !== 'test') {
+    throw new Error('Security fixtures may run only with NODE_ENV=test');
+  }
+  if (process.env.MONGODB_URI !== TEST_DATABASE_URI) {
+    throw new Error('Security fixtures may run only against the local vocle_ci database');
+  }
+}
+
+async function connect() {
+  assertSafeEnvironment();
+  await mongoose.connect(TEST_DATABASE_URI, { serverSelectionTimeoutMS: 10000 });
+}
+
+async function seed() {
+  const users = {};
+  for (const fixtureUser of FIXTURE.users) {
+    users[fixtureUser.key] = await User.findOneAndUpdate(
+      { phone: fixtureUser.phone },
+      {
+        $set: {
+          name: fixtureUser.name,
+          role: fixtureUser.role,
+          speciality: 'Security Test Only',
+          institution: 'Vocle CI Fixture',
+          isVerified: true,
+          isOnboarded: true,
+          isActive: true,
+          fcmTokens: [],
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+    );
+  }
+
+  const space = await Space.findOneAndUpdate(
+    { inviteCode: FIXTURE.inviteCode },
+    {
+      $set: {
+        name: FIXTURE.spaceName,
+        description: 'Disposable CI fixtures for authorization testing.',
+        type: SPACE_TYPES.DEPARTMENT,
+        createdBy: users.userA._id,
+        isActive: true,
+        members: [
+          { userId: users.userA._id, role: SPACE_ROLES.OWNER },
+          { userId: users.userB._id, role: SPACE_ROLES.MEMBER },
+        ],
+        pendingRequests: [],
+        settings: { requireApproval: false, onlyAdminsCanAnnounce: true },
+      },
+    },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  );
+
+  const channel = await Channel.findOneAndUpdate(
+    { spaceId: space._id, name: FIXTURE.channelName },
+    {
+      $set: {
+        description: 'Disposable CI channel for authorization fixtures.',
+        type: CHANNEL_TYPES.GENERAL,
+        isPrivate: false,
+        members: [],
+        onlyAdminsCanPost: false,
+        position: 10,
+        isArchived: false,
+        createdBy: users.userA._id,
+      },
+    },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  );
+
+  const messageA = await Message.findOneAndUpdate(
+    { channelId: channel._id, senderId: users.userA._id, 'content.text': FIXTURE.messages.userA },
+    {
+      $set: {
+        spaceId: space._id,
+        type: MESSAGE_TYPES.TEXT,
+        content: { text: FIXTURE.messages.userA },
+        priority: MESSAGE_PRIORITY.NORMAL,
+        threadId: null,
+        isDeleted: false,
+      },
+    },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  );
+
+  const messageB = await Message.findOneAndUpdate(
+    { channelId: channel._id, senderId: users.userB._id, 'content.text': FIXTURE.messages.userB },
+    {
+      $set: {
+        spaceId: space._id,
+        type: MESSAGE_TYPES.TEXT,
+        content: { text: FIXTURE.messages.userB },
+        priority: MESSAGE_PRIORITY.NORMAL,
+        threadId: null,
+        isDeleted: false,
+      },
+    },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  );
+
+  await Channel.findByIdAndUpdate(channel._id, {
+    lastMessage: {
+      messageId: messageB._id,
+      text: FIXTURE.messages.userB,
+      senderName: users.userB.name,
+      type: MESSAGE_TYPES.TEXT,
+      sentAt: messageB.createdAt,
+    },
+  });
+
+  const handoff = await Handoff.findOneAndUpdate(
+    {
+      spaceId: space._id,
+      channelId: channel._id,
+      fromUserId: users.userA._id,
+      toUserId: users.userB._id,
+      shiftDate: FIXTURE.shiftDate,
+      shiftType: SHIFT_TYPES.MORNING,
+    },
+    {
+      $set: {
+        patients: [
+          {
+            bedNumber: 'CI-01',
+            ward: 'Simulation',
+            clinicalAlias: 'Synthetic fixture only',
+            diagnosis: 'Non-clinical CI fixture',
+            status: PATIENT_STATUS.STABLE,
+            notes: 'No real patient data.',
+            pendingTasks: ['Verify authorization boundaries'],
+          },
+        ],
+        shiftSummary: 'Disposable authorization fixture handoff.',
+        status: HANDOFF_STATUS.SUBMITTED,
+        submittedAt: FIXTURE.shiftDate,
+        acknowledgedAt: null,
+        acknowledgementNote: '',
+      },
+    },
+    { new: true, upsert: true, setDefaultsOnInsert: true },
+  );
+
+  return { users, space, channel, messageA, messageB, handoff };
+}
+
+async function verify() {
+  const users = {};
+  for (const fixtureUser of FIXTURE.users) {
+    users[fixtureUser.key] = await User.findOne({ phone: fixtureUser.phone });
+    if (!users[fixtureUser.key]) throw new Error(`Missing fixture ${fixtureUser.key}`);
+  }
+
+  const space = await Space.findOne({ inviteCode: FIXTURE.inviteCode });
+  if (!space) throw new Error('Missing fixture space');
+  if (space.getMemberRole(users.userA._id) !== SPACE_ROLES.OWNER) {
+    throw new Error('userA is not the fixture space owner');
+  }
+  if (!space.isMember(users.userB._id)) throw new Error('userB is not a fixture space member');
+  if (space.isMember(users.userC._id)) throw new Error('userC must not be a fixture space member');
+
+  const channel = await Channel.findOne({ spaceId: space._id, name: FIXTURE.channelName, isArchived: false });
+  if (!channel) throw new Error('Missing fixture channel');
+
+  const [messageA, messageB] = await Promise.all([
+    Message.exists({ channelId: channel._id, senderId: users.userA._id, 'content.text': FIXTURE.messages.userA, isDeleted: false }),
+    Message.exists({ channelId: channel._id, senderId: users.userB._id, 'content.text': FIXTURE.messages.userB, isDeleted: false }),
+  ]);
+  if (!messageA || !messageB) throw new Error('Missing fixture messages');
+
+  const handoff = await Handoff.findOne({
+    spaceId: space._id,
+    channelId: channel._id,
+    fromUserId: users.userA._id,
+    toUserId: users.userB._id,
+    shiftDate: FIXTURE.shiftDate,
+    shiftType: SHIFT_TYPES.MORNING,
+    status: HANDOFF_STATUS.SUBMITTED,
+  });
+  if (!handoff) throw new Error('Missing submitted fixture handoff from userA to userB');
+
+  return { users, space, channel, handoff };
+}
+
+function printSummary(result) {
+  console.log(
+    `Security fixtures ready: userA (${result.users.userA.role}) owns "${result.space.name}"; ` +
+    `userB (${result.users.userB.role}) is a member; userC is excluded; ` +
+    `#${result.channel.name} has messages from userA and userB; handoff is submitted from userA to userB.`,
+  );
+}
+
+async function main() {
+  await connect();
+  try {
+    const result = process.argv.includes('--verify') ? await verify() : await seed();
+    if (!process.argv.includes('--verify')) await verify();
+    printSummary(result);
+  } finally {
+    await mongoose.disconnect();
+  }
+}
+
+main().catch((error) => {
+  console.error(`Security fixture setup failed: ${error.message}`);
+  process.exit(1);
+});

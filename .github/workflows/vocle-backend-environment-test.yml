@@ -68,6 +68,12 @@ jobs:
           echo "Backend did not become healthy within 60 seconds."
           exit 1
 
+      - name: Create deterministic security fixtures
+        run: node scripts/security-test-fixtures.js
+
+      - name: Verify deterministic security fixtures
+        run: node scripts/security-test-fixtures.js --verify
+
       - name: Show diagnostics on failure
         if: failure()
         run: |
