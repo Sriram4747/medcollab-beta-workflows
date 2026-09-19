@@ -172,14 +172,61 @@ class _StartDmPageState extends State<StartDmPage> {
 
   Future<void> _sendRequest(UserModel user) async {
     if (_busyUserId != null) return;
+
+    final introController = TextEditingController();
+    final intro = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Send message request'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'They will see your name and this note. Chat opens only after they accept — no Seen until then.',
+              style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: introController,
+              maxLength: 140,
+              maxLines: 3,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: const InputDecoration(
+                hintText: 'Optional — e.g. ICU R2 from AIIMS, need a consult',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, introController.text.trim()),
+            child: const Text('Send request'),
+          ),
+        ],
+      ),
+    );
+    introController.dispose();
+    if (intro == null || !mounted) return;
+
     setState(() => _busyUserId = user.id);
     try {
       await AppDependencies.instance.messageRequestRepository.sendRequest(
         toUserId: user.id,
+        introMessage: intro.isEmpty ? null : intro,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Message request sent')),
+        const SnackBar(
+          content: Text('Request sent — waiting for them to accept'),
+        ),
       );
       await _lookupPhone(_searchController.text.trim());
     } on AppException catch (e) {
@@ -196,10 +243,19 @@ class _StartDmPageState extends State<StartDmPage> {
     if (_busyRequestId != null) return;
     setState(() => _busyRequestId = requestId);
     try {
-      await AppDependencies.instance.messageRequestRepository
+      final result = await AppDependencies.instance.messageRequestRepository
           .acceptRequest(requestId);
       if (!mounted) return;
-      await _startDm(user);
+      final channel = result.channel ??
+          await AppDependencies.instance.channelRepository
+              .createOrGetDM(user.id);
+      if (!mounted) return;
+      openDmChat(
+        context,
+        channelId: channel.id,
+        channel: channel,
+        replace: true,
+      );
     } on AppException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,12 +286,14 @@ class _StartDmPageState extends State<StartDmPage> {
     final pending = lookup.pendingRequest;
     final busy = _busyUserId == user.id || _busyRequestId == pending?.id;
 
-    Widget? action;
+    Widget action;
+    late final String helper;
     if (lookup.canMessage) {
       action = FilledButton(
         onPressed: busy ? null : () => _startDm(user),
         child: const Text('Message'),
       );
+      helper = 'You share a group or college — chat opens immediately.';
     } else if (pending?.isReceived == true) {
       action = Row(
         children: [
@@ -258,21 +316,34 @@ class _StartDmPageState extends State<StartDmPage> {
               onPressed: busy
                   ? null
                   : () => _acceptRequest(pending!.id, user),
-              child: const Text('Accept'),
+              child: const Text('Accept & chat'),
             ),
           ),
         ],
       );
+      helper = 'Accept to open a private chat. Seen receipts start after this.';
     } else if (pending?.isSent == true) {
-      action = OutlinedButton(
+      action = const OutlinedButton(
         onPressed: null,
-        child: const Text('Request pending'),
+        child: Text('Request pending'),
       );
+      helper = 'Waiting for them to accept. No chat or Seen until then.';
+    } else if (!lookup.acceptsMessageRequests) {
+      action = const OutlinedButton(
+        onPressed: null,
+        child: Text('Requests closed'),
+      );
+      helper =
+          'This doctor is not accepting message requests from outside their '
+          'network. Ask a mutual colleague to introduce you in a group.';
     } else {
       action = FilledButton(
         onPressed: busy ? null : () => _sendRequest(user),
         child: const Text('Send request'),
       );
+      helper =
+          'Not in your groups yet. They must approve before you can chat — '
+          'no Seen until then.';
     }
 
     return ClinicalCard(
@@ -297,16 +368,13 @@ class _StartDmPageState extends State<StartDmPage> {
               ),
             ],
           ),
-          if (!lookup.canMessage && pending == null) ...[
-            const SizedBox(height: 12),
-            Text(
-              'This doctor is not in your groups yet. Send a request — '
-              'they must approve before you can chat.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textMuted,
-                  ),
-            ),
-          ],
+          const SizedBox(height: 12),
+          Text(
+            helper,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: AppColors.textMuted,
+                ),
+          ),
           if (pending?.introMessage?.isNotEmpty == true) ...[
             const SizedBox(height: 8),
             Text(
@@ -326,7 +394,7 @@ class _StartDmPageState extends State<StartDmPage> {
               ),
             )
           else
-            action!,
+            action,
         ],
       ),
     );
@@ -373,7 +441,8 @@ class _StartDmPageState extends State<StartDmPage> {
                         : 'No results',
                     subtitle: trimmed.isEmpty
                         ? 'Search by name (from your groups) or enter a '
-                            '10-digit mobile number registered on Vocle.'
+                            '10-digit mobile number. Outside your network, '
+                            'they must accept a request before chat opens.'
                         : _isPhoneQuery(trimmed)
                             ? 'This number is not on Vocle yet, or the doctor '
                                 'has not completed setup.'

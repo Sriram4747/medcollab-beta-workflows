@@ -9,6 +9,8 @@ class ChannelChatState extends Equatable {
     this.hasMore = false,
     this.error,
     this.typingUserNames = const [],
+    this.localMediaByMessageId = const {},
+    this.pendingReply,
   });
 
   final List<MessageModel> messages;
@@ -18,6 +20,12 @@ class ChannelChatState extends Equatable {
   final bool hasMore;
   final String? error;
   final List<String> typingUserNames;
+
+  /// Outgoing image/document bytes keyed by message id (temp then server id).
+  final Map<String, List<int>> localMediaByMessageId;
+
+  /// WhatsApp-style quote target for the next send (null = no quote).
+  final MessageModel? pendingReply;
 
   String get typingLabel {
     final names = typingUserNames;
@@ -35,6 +43,9 @@ class ChannelChatState extends Equatable {
     bool? hasMore,
     String? error,
     List<String>? typingUserNames,
+    Map<String, List<int>>? localMediaByMessageId,
+    MessageModel? pendingReply,
+    bool clearPendingReply = false,
   }) {
     return ChannelChatState(
       messages: messages ?? this.messages,
@@ -44,6 +55,10 @@ class ChannelChatState extends Equatable {
       hasMore: hasMore ?? this.hasMore,
       error: error,
       typingUserNames: typingUserNames ?? this.typingUserNames,
+      localMediaByMessageId:
+          localMediaByMessageId ?? this.localMediaByMessageId,
+      pendingReply:
+          clearPendingReply ? null : (pendingReply ?? this.pendingReply),
     );
   }
 
@@ -56,5 +71,7 @@ class ChannelChatState extends Equatable {
         hasMore,
         error,
         typingUserNames,
+        localMediaByMessageId,
+        pendingReply,
       ];
 }

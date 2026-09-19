@@ -197,7 +197,7 @@ const createOrGetDM = asyncHandler(async (req, res) => {
   if (!allowed) {
     return respond.forbidden(
       res,
-      'You can only message doctors you share a group with, already DM, or who are at your institution'
+      'Send a message request first — chat opens only after they accept'
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
 import 'package:medcollab_app/features/messages/data/models/message_read_receipt.dart';
+import 'package:medcollab_app/features/messages/data/models/message_reply_to.dart';
 import 'package:medcollab_app/features/messages/data/models/thread_reply_preview.dart';
 
 class MessageContent extends Equatable {
@@ -20,7 +21,7 @@ class MessageContent extends Equatable {
 
   factory MessageContent.fromJson(Map<String, dynamic> json) {
     return MessageContent(
-      text: json['text'] as String?,
+      text: _stringOrNull(json['text']),
       mediaUrl: json['mediaUrl'] as String?,
       thumbnailUrl: json['thumbnailUrl'] as String?,
       fileName: json['fileName'] as String?,
@@ -29,6 +30,13 @@ class MessageContent extends Equatable {
       width: json['width'] as int?,
       height: json['height'] as int?,
     );
+  }
+
+  static String? _stringOrNull(Object? value) {
+    if (value == null) return null;
+    if (value is String) return value;
+    // Defensive: never crash the chat list on coerced API payloads.
+    return value.toString();
   }
 
   final String? text;
@@ -67,6 +75,7 @@ class MessageModel extends Equatable {
     this.content = const MessageContent(),
     this.priority = MessagePriority.normal,
     this.threadId,
+    this.replyTo,
     this.replyCount = 0,
     this.lastReply,
     this.isEdited = false,
@@ -105,6 +114,7 @@ class MessageModel extends Equatable {
           : const MessageContent(),
       priority: MessagePriority.fromString(json['priority'] as String?),
       threadId: json['threadId']?.toString(),
+      replyTo: parseMessageReplyTo(json['replyTo']),
       replyCount: (json['replyCount'] as num?)?.toInt() ?? 0,
       lastReply: lastReplyJson != null
           ? ThreadReplyPreview.fromJson(lastReplyJson)
@@ -150,6 +160,7 @@ class MessageModel extends Equatable {
   final MessageContent content;
   final MessagePriority priority;
   final String? threadId;
+  final MessageReplyTo? replyTo;
   final int replyCount;
   final ThreadReplyPreview? lastReply;
   final bool isEdited;
@@ -163,6 +174,7 @@ class MessageModel extends Equatable {
 
   bool get isThreadReply => threadId != null && threadId!.isNotEmpty;
   bool get hasThread => replyCount > 0;
+  bool get hasQuoteReply => replyTo != null && replyTo!.messageId.isNotEmpty;
 
   String get displayText {
     if (isDeleted) return 'This message was deleted';
@@ -181,6 +193,7 @@ class MessageModel extends Equatable {
     MessageContent? content,
     MessagePriority? priority,
     String? threadId,
+    MessageReplyTo? replyTo,
     int? replyCount,
     ThreadReplyPreview? lastReply,
     bool? isEdited,
@@ -191,6 +204,7 @@ class MessageModel extends Equatable {
     List<String>? mentions,
     List<MessageReadReceipt>? readBy,
     List<MessageReaction>? reactions,
+    bool clearReplyTo = false,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -200,6 +214,7 @@ class MessageModel extends Equatable {
       content: content ?? this.content,
       priority: priority ?? this.priority,
       threadId: threadId ?? this.threadId,
+      replyTo: clearReplyTo ? null : (replyTo ?? this.replyTo),
       replyCount: replyCount ?? this.replyCount,
       lastReply: lastReply ?? this.lastReply,
       isEdited: isEdited ?? this.isEdited,
@@ -222,6 +237,7 @@ class MessageModel extends Equatable {
         content,
         priority,
         threadId,
+        replyTo,
         replyCount,
         lastReply,
         isEdited,

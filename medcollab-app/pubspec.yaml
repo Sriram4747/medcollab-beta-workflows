@@ -1,7 +1,7 @@
 name: medcollab_app
 description: Medical collaboration platform for hospital teams — MedCollab MVP.
 publish_to: 'none'
-version: 1.0.0+18
+version: 1.0.0+19
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
@@ -45,6 +45,7 @@ dependencies:
   firebase_core: ^4.12.1
   firebase_messaging: ^16.4.3
   flutter_local_notifications: ^19.5.0
+  native_dio_adapter: ^1.7.0
   # Avoid mobile_scanner — Kotlin/ML Kit release build breaks on this toolchain.
 
 dev_dependencies:

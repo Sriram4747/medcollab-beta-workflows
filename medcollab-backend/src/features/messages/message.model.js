@@ -118,8 +118,26 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
 
-    // ── Threading ──────────────────────────────────────────────────────────
-    // null = this IS a root message (not a reply)
+    // ── WhatsApp-style quote reply (same channel timeline) ─────────────────
+    // Snapshot taken at send time so soft-deleted parents still show a preview.
+    replyTo: {
+      messageId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message',
+        default: null,
+      },
+      senderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+      },
+      senderName: { type: String, default: null },
+      text: { type: String, maxlength: 120, default: null },
+      type: { type: String, default: null },
+    },
+
+    // ── Threading (Slack-style side discussion) ────────────────────────────
+    // null = this IS a root message (not a thread reply)
     // ObjectId = this is a reply in the thread started by that root message
     threadId: {
       type: mongoose.Schema.Types.ObjectId,

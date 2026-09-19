@@ -91,6 +91,18 @@ class ProfilePage extends StatelessWidget {
                           onTap: () =>
                               context.push(AppRoutes.notificationSettings),
                         ),
+                        const _RowDivider(),
+                        _SettingsRow(
+                          icon: Icons.lock_outline,
+                          label: 'Messaging privacy',
+                          subtitle: user?.notifications
+                                      .allowMessageRequestsFromAnyone ==
+                                  true
+                              ? 'Anyone can send a request'
+                              : 'Only your network can message you',
+                          onTap: () =>
+                              context.push(AppRoutes.notificationSettings),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),

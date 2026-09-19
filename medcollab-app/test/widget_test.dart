@@ -18,5 +18,9 @@ void main() {
     expect(find.text('For doctors. Built for India.'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.byType(Image), findsOneWidget);
+
+    // Drain shell timers (nav badge refresh / splash) so the test binder
+    // does not fail on pending timers after the tree is torn down.
+    await tester.pump(const Duration(seconds: 3));
   });
 }

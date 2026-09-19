@@ -206,6 +206,9 @@ const lookupByPhone = asyncHandler(async (req, res) => {
   const MessageRequest = require('../message-requests/messageRequest.model');
 
   const canMessage = await canMessageUser(req.user._id, user._id);
+  const acceptsMessageRequests =
+    canMessage ||
+    user.notifications?.allowMessageRequestsFromAnyone === true;
 
   let pendingRequest = null;
   const pending = await MessageRequest.findOne({
@@ -232,6 +235,7 @@ const lookupByPhone = asyncHandler(async (req, res) => {
     user: user.toPublicProfile(),
     relationship: canMessage ? 'known' : 'stranger',
     canMessage,
+    acceptsMessageRequests,
     pendingRequest,
   });
 });

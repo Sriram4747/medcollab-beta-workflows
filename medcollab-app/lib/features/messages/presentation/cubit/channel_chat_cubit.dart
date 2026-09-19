@@ -12,6 +12,7 @@ import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/media/data/repositories/media_repository.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
+import 'package:medcollab_app/features/messages/data/models/message_reply_to.dart';
 import 'package:medcollab_app/features/messages/data/models/thread_reply_preview.dart';
 import 'package:medcollab_app/features/messages/data/repositories/message_repository.dart';
 import 'package:medcollab_app/features/notifications/data/repositories/notification_repository.dart';
@@ -143,6 +144,17 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     final trimmed = text.trim();
     if (trimmed.isEmpty || state.isSending) return;
 
+    final replySource = state.pendingReply;
+    final replyTo = replySource == null || replySource.localOnly
+        ? null
+        : MessageReplyTo.fromMessage(
+            messageId: replySource.id,
+            senderId: replySource.sender.id,
+            senderName: replySource.sender.displayName,
+            type: replySource.type,
+            text: replySource.displayText,
+          );
+
     final tempId = 'local-${DateTime.now().millisecondsSinceEpoch}';
     final optimistic = MessageModel(
       id: tempId,
@@ -150,17 +162,18 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       sender: UserModel(id: currentUserId),
       type: MessageType.text,
       content: MessageContent(text: trimmed),
+      replyTo: replyTo,
       createdAt: DateTime.now(),
       localOnly: true,
     );
     _upsertRootMessage(optimistic);
-
-    emit(state.copyWith(isSending: true, error: null));
+    emit(state.copyWith(isSending: true, error: null, clearPendingReply: true));
     try {
       final message = await _messageRepository.sendTextMessage(
         channelId: channelId,
         text: trimmed,
         mentions: mentions,
+        replyToId: replyTo?.messageId,
       );
       _replaceLocalMessage(tempId, message);
       emit(state.copyWith(isSending: false));
@@ -173,6 +186,16 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     }
   }
 
+  void setPendingReply(MessageModel message) {
+    if (message.localOnly || message.isDeleted) return;
+    emit(state.copyWith(pendingReply: message));
+  }
+
+  void clearPendingReply() {
+    if (state.pendingReply == null) return;
+    emit(state.copyWith(clearPendingReply: true));
+  }
+
   Future<void> sendAttachment({
     required List<int> bytes,
     required String fileName,
@@ -180,6 +203,17 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     String? caption,
   }) async {
     if (state.isSending) return;
+
+    final replySource = state.pendingReply;
+    final replyTo = replySource == null || replySource.localOnly
+        ? null
+        : MessageReplyTo.fromMessage(
+            messageId: replySource.id,
+            senderId: replySource.sender.id,
+            senderName: replySource.sender.displayName,
+            type: replySource.type,
+            text: replySource.displayText,
+          );
 
     final tempId = 'local-${DateTime.now().millisecondsSinceEpoch}';
     final isImage = mimeType.startsWith('image/');
@@ -193,11 +227,19 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         fileName: fileName,
         mimeType: mimeType,
       ),
+      replyTo: replyTo,
       createdAt: DateTime.now(),
       localOnly: true,
     );
+    final localMedia = Map<String, List<int>>.from(state.localMediaByMessageId)
+      ..[tempId] = bytes;
+    emit(
+      state.copyWith(
+        localMediaByMessageId: localMedia,
+        clearPendingReply: true,
+      ),
+    );
     _upsertRootMessage(optimistic);
-
     emit(state.copyWith(isSending: true, error: null, isUploading: true));
     try {
       final upload = await _mediaRepository.uploadFile(
@@ -210,6 +252,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         type: isImage ? MessageType.image : MessageType.document,
         upload: upload,
         caption: caption,
+        replyToId: replyTo?.messageId,
       );
       _replaceLocalMessage(tempId, message);
       emit(state.copyWith(isSending: false, isUploading: false));
@@ -366,7 +409,14 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     );
     updated.add(message);
     updated.sort(_compareByCreatedAt);
-    emit(state.copyWith(messages: updated));
+
+    final localMedia = Map<String, List<int>>.from(state.localMediaByMessageId);
+    final bytes = localMedia.remove(tempId);
+    if (bytes != null) {
+      localMedia[message.id] = bytes;
+    }
+
+    emit(state.copyWith(messages: updated, localMediaByMessageId: localMedia));
   }
 
   void _listenForSocketMessages() {

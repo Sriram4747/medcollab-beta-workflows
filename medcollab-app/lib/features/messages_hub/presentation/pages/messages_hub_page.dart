@@ -16,6 +16,7 @@ import 'package:medcollab_app/features/spaces/data/models/last_message_preview.d
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
 import 'package:medcollab_app/features/spaces/presentation/widgets/space_invite_share_sheet.dart';
 import 'package:medcollab_app/features/notifications/presentation/utils/notification_unread_utils.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/dm_row.dart';
@@ -590,10 +591,11 @@ class _DirectTabState extends State<_DirectTab> {
     if (_busyRequestId != null) return;
     setState(() => _busyRequestId = request.id);
     try {
-      await AppDependencies.instance.messageRequestRepository
+      final result = await AppDependencies.instance.messageRequestRepository
           .acceptRequest(request.id);
-      final channel = await AppDependencies.instance.channelRepository
-          .createOrGetDM(request.peer.id);
+      final channel = result.channel ??
+          await AppDependencies.instance.channelRepository
+              .createOrGetDM(request.peer.id);
       if (!mounted) return;
       await openDmChat(
         context,
@@ -675,7 +677,8 @@ class _DirectTabState extends State<_DirectTab> {
             title: 'No direct messages yet',
             subtitle:
                 'Search by name or mobile number to start a private chat. '
-                'Doctors outside your groups must approve a message request first.',
+                'Doctors outside your network must approve a request first — '
+                'no chat or Seen until they accept.',
             action: FilledButton.icon(
               onPressed: () => context.push(AppRoutes.startDm),
               icon: const Icon(Icons.edit_outlined, size: 18),
@@ -698,9 +701,22 @@ class _DirectTabState extends State<_DirectTab> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Text(
+                      'No chat or Seen until you accept',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                     const SizedBox(height: AppGaps.itemGap),
                     ...pending.map((request) {
                       final busy = _busyRequestId == request.id;
+                      final peerLine = [
+                        request.peer.role.label,
+                        if (request.peer.speciality?.isNotEmpty == true)
+                          request.peer.speciality!,
+                        if (request.peer.institution?.isNotEmpty == true)
+                          request.peer.institution!,
+                      ].join(' · ');
                       return Padding(
                         padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
                         child: Material(
@@ -711,18 +727,44 @@ class _DirectTabState extends State<_DirectTab> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  request.peer.displayName,
-                                  style: AppTextStyles.cardTitle,
+                                Row(
+                                  children: [
+                                    AppAvatar(
+                                      name: request.peer.displayName,
+                                      imageUrl: request.peer.avatarUrl,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            request.peer.displayName,
+                                            style: AppTextStyles.cardTitle,
+                                          ),
+                                          if (peerLine.isNotEmpty)
+                                            Text(
+                                              peerLine,
+                                              style: AppTextStyles.caption
+                                                  .copyWith(
+                                                color: AppColors.textMuted,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 if (request.introMessage.isNotEmpty)
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
+                                    padding: const EdgeInsets.only(top: 8),
                                     child: Text(
-                                      request.introMessage,
+                                      '"${request.introMessage}"',
                                       style: AppTextStyles.cardTitle.copyWith(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 13,
+                                        fontStyle: FontStyle.italic,
                                         color: AppColors.textMuted,
                                       ),
                                     ),
@@ -752,7 +794,7 @@ class _DirectTabState extends State<_DirectTab> {
                                                   strokeWidth: 2,
                                                 ),
                                               )
-                                            : const Text('Accept'),
+                                            : const Text('Accept & chat'),
                                       ),
                                     ),
                                   ],

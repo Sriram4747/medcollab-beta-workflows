@@ -1,6 +1,18 @@
 import 'package:medcollab_app/core/constants/api_endpoints.dart';
+import 'package:medcollab_app/core/utils/json_map_utils.dart';
 import 'package:medcollab_app/features/messages/data/models/message_request_model.dart';
+import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
+
+class AcceptMessageRequestResult {
+  const AcceptMessageRequestResult({
+    required this.request,
+    this.channel,
+  });
+
+  final MessageRequestModel request;
+  final ChannelModel? channel;
+}
 
 class MessageRequestRepository extends BaseRepository {
   MessageRequestRepository({required super.apiClient});
@@ -50,13 +62,22 @@ class MessageRequestRepository extends BaseRepository {
     );
   }
 
-  Future<MessageRequestModel> acceptRequest(String id) {
+  Future<AcceptMessageRequestResult> acceptRequest(String id) {
     return execute(
       () => apiClient.post(
         ApiEndpoints.messageRequestAccept(id),
-        parser: (json) => MessageRequestModel.fromJson(
-          json['request'] as Map<String, dynamic>,
-        ),
+        parser: (json) {
+          final request = MessageRequestModel.fromJson(
+            json['request'] as Map<String, dynamic>,
+          );
+          final channelJson = asJsonMap(json['channel']);
+          return AcceptMessageRequestResult(
+            request: request,
+            channel: channelJson != null
+                ? ChannelModel.fromJson(channelJson)
+                : null,
+          );
+        },
       ),
     );
   }
