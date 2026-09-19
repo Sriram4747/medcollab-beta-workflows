@@ -24,8 +24,9 @@ The default command executes 146 cases serially against the real local API.
 All protected routes use `protect`: JWT signature/expiry verification plus a
 database lookup of the active user. Resource routes also require onboarding.
 Space roles are separate from medical roles. Public channel access derives from
-space membership; private/DM access uses explicit membership (with an admin
-exception in channelAccess). Messages enforce sender ownership and channel binding.
+space membership; private channel access allows explicit members or a space admin;
+DM access requires explicit membership. Message read/edit/delete handlers check
+channel binding, but the reply path has a confirmed binding gap (see review below).
 Handoffs enforce sender/receiver and draft/submitted state, with admin audit access.
 
 Cross-channel edit/delete/read/reply and cross-space handoff references have a
@@ -82,3 +83,13 @@ are intentionally deferred. No application security behavior is changed here.
 
 Local validation covers syntax, manifest generation and fail-closed preflight.
 This does not establish API results: run the workflow to obtain the baseline.
+
+## Reviewed baseline and continuation
+
+The downloaded execution artifact was reviewed: 146 cases, 138 passes, eight
+observations. See [observation classifications](../../docs/SECURITY_OBSERVATION_REVIEW.md),
+[coverage map and next phase](../../docs/SECURITY_TEST_COVERAGE.md), and
+[continuity instructions](../../docs/SECURITY_AUTOMATION_PROGRESS.md).
+The absent-ID input is now corrected; new execution results remain pending.
+The coverage matcher no longer double-counts /users/me as /users/:id (20 distinct
+operations in the reviewed baseline). DM API security remains untested.

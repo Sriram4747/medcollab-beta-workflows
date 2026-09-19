@@ -78,8 +78,18 @@ function routeMatches(template, executedEndpoint) {
   const expression = `^${template.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/:[A-Za-z0-9_]+/g, '[^/]+')}$`;
   return new RegExp(expression).test(pathname);
 }
-function statusFor(route, results, infrastructureFailure) {
-  const matching = results.filter(result => result.method === route.method && routeMatches(route.endpoint, result.endpoint));
+function matchingResults(route, routes, results) {
+  // Literal routes such as /users/me take precedence over /users/:id in
+  // this backend. Credit each request once, never to both route patterns.
+  const specificity = endpoint => endpoint.split('/').filter(part => part && !part.startsWith(':')).length;
+  return results.filter(result => {
+    const candidates = routes.filter(candidate => candidate.method === result.method && routeMatches(candidate.endpoint, result.endpoint));
+    candidates.sort((a, b) => specificity(b.endpoint) - specificity(a.endpoint));
+    return candidates[0] === route;
+  });
+}
+function statusFor(route, routes, results, infrastructureFailure) {
+  const matching = matchingResults(route, routes, results);
   if (!matching.length) return infrastructureFailure ? 'NOT RUN — discovery infrastructure did not complete' : 'NOT YET EXERCISED';
   const passed = matching.filter(result => result.passed).length;
   const observations = matching.length - passed;
@@ -98,7 +108,7 @@ function main() {
   let discovery = { planned: 0, executed: 0, passed: 0, unexpected: 0, infrastructureFailure: 'Discovery results were unavailable.', results: [] };
   const resultPath = path.join(outputDir, 'results.json');
   if (fs.existsSync(resultPath)) discovery = JSON.parse(read(resultPath));
-  const exercisedEndpoints = new Set(routes.filter(route => discovery.results.some(result => result.method === route.method && routeMatches(route.endpoint, result.endpoint))).map(route => `${route.method} ${route.endpoint}`));
+  const exercisedEndpoints = new Set(routes.filter(route => matchingResults(route, routes, discovery.results).length).map(route => `${route.method} ${route.endpoint}`));
   const groups = new Map();
   for (const route of routes) {
     const entries = groups.get(route.group) || [];
@@ -126,7 +136,7 @@ function main() {
       '',
       '| Method | API endpoint | This run | Route source |',
       '| --- | --- | --- | --- |',
-      ...entries.map(route => `| ${route.method} | \`${route.endpoint}\` | ${markdown(statusFor(route, discovery.results, discovery.infrastructureFailure))} | \`${route.source}\` |`),
+      ...entries.map(route => `| ${route.method} | \`${route.endpoint}\` | ${markdown(statusFor(route, routes, discovery.results, discovery.infrastructureFailure))} | \`${route.source}\` |`),
       '',
     ]),
     '## Status definitions',
@@ -139,4 +149,5 @@ function main() {
   console.log(`API coverage: ${routes.length} APIs discovered; ${exercisedEndpoints.size} exercised by this run.`);
 }
 
-main();
+if (require.main === module) main();
+module.exports = { matchingResults, loadMounts, parseRoutes, routeFiles, routeMatches };

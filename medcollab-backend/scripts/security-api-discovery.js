@@ -98,8 +98,18 @@ add('message ownership fields ignored', 'B', 'POST', mp, [201], { type: 'text', 
   category: 'unexpected-ownership-fields', check: b => b.data?.message?.senderId?._id === String(users.B._id) && b.data?.message?.spaceId === ids.space && b.data?.message?.isDeleted === false,
 });
 for (const limit of [0, 1, 99, 100, 101]) add(`pagination boundary ${limit}`, 'A', 'GET', `${mp}?limit=${limit}`, [limit >= 1 && limit <= 100 ? 200 : 400], undefined, { category: 'pagination-boundary', sources: ['src/middleware/validate.js:validatePagination'] });
-for (const endpoint of ['/api/spaces/not-an-id', `${mp}/not-an-id/thread`, '/api/handoffs/not-an-id', '/api/spaces/7ec0000000000000000000999']) {
-  add('object id boundary', 'A', 'GET', endpoint, [endpoint.endsWith('999') ? 404 : 400], undefined, { category: 'object-id', sources: ['src/middleware/validate.js:validateMongoId'] });
+// VOCLE-137 previously used a 25-character ID: 400 was correct for that input.
+// Keep the intended valid-but-absent case separate from malformed-ID cases.
+const absentSpaceId = '7ec000000000000000000999';
+assert.match(absentSpaceId, /^[a-f0-9]{24}$/);
+assert.ok(!Object.values(ids).includes(absentSpaceId));
+for (const [endpoint, expectedStatus] of [
+  ['/api/spaces/not-an-id', 400],
+  [`${mp}/not-an-id/thread`, 400],
+  ['/api/handoffs/not-an-id', 400],
+  [`/api/spaces/${absentSpaceId}`, 404],
+]) {
+  add('object id boundary', 'A', 'GET', endpoint, [expectedStatus], undefined, { category: 'object-id', sources: ['src/middleware/validate.js:validateMongoId', 'src/features/spaces/space.controller.js:getSpaceById'] });
 }
 for (const field of ['toUserId', 'shiftDate', 'shiftType']) {
   for (const variant of ['missing', 'null', 'invalid']) add(`handoff ${field} ${variant}`, 'A', 'POST', '/api/handoffs', [400], 'handoff', { category: 'handoff-required-enum', mutation: { field, variant }, sources: ['src/middleware/validate.js:validateCreateHandoff', 'src/features/handoffs/handoff.model.js'] });
