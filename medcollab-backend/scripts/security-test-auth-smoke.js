@@ -34,7 +34,7 @@ function assertSafeEnvironment() {
 }
 
 async function requestJson(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, options);
+  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, redirect: 'error', signal: AbortSignal.timeout(10000) });
   let body;
   try {
     body = await response.json();
@@ -61,6 +61,16 @@ async function authenticate(user) {
 
   if (!response.ok || !body.success || !body.data?.accessToken) {
     throw new Error(`OTP-bypass authentication failed for ${user.key}`);
+  }
+  // Runner commands register masking before GITHUB_ENV exposes tokens to later
+  // steps. GitHub consumes these commands; token values are redacted in logs.
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    for (const token of [body.data.accessToken, body.data.refreshToken]) {
+      if (typeof token === 'string') console.log(`::add-mask::${token}`);
+    }
+  }
+  if (body.data.isNewUser !== false || body.data.user?.name !== user.name) {
+    throw new Error(`Expected seeded identity missing for ${user.key}`);
   }
   return body.data.accessToken;
 }

@@ -9,6 +9,7 @@ permissions:
 jobs:
   boot-backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: medcollab-backend
@@ -76,6 +77,18 @@ jobs:
 
       - name: Smoke-test test-only authentication identities
         run: node scripts/security-test-auth-smoke.js
+
+      - name: Discover API authorization and validation behavior
+        run: node scripts/security-api-discovery.js
+
+      - name: Preserve security discovery reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vocle-security-discovery
+          path: ${{ runner.temp }}/vocle-security-results/
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Show diagnostics on failure
         if: failure()
