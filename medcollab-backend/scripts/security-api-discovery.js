@@ -8,7 +8,20 @@ const assert = require('node:assert/strict');
 const BASE = 'http://127.0.0.1:5000';
 const URI = 'mongodb://127.0.0.1:27017/vocle_ci';
 const source = (name) => `src/features/${name}/${name === 'spaces' ? 'space' : name === 'messages' ? 'message' : name === 'handoffs' ? 'handoff' : 'channel'}.controller.js`;
-const ids = Object.fromEntries(['space', 'otherSpace', 'channel', 'otherChannel', 'messageA', 'messageB', 'otherMessage', 'handoff'].map((key, i) => [key, `7ec0000000000000000000${String(i + 1).padStart(3, '0')}`]));
+// Fixed, valid 24-character ObjectIds reserved solely for this disposable
+// discovery world. Keeping them explicit prevents an accidental formatting
+// change from making fixture setup fail before any HTTP security case runs.
+const ids = {
+  space: '7ec000000000000000000001',
+  otherSpace: '7ec000000000000000000002',
+  channel: '7ec000000000000000000003',
+  otherChannel: '7ec000000000000000000004',
+  messageA: '7ec000000000000000000005',
+  messageB: '7ec000000000000000000006',
+  otherMessage: '7ec000000000000000000007',
+  handoff: '7ec000000000000000000008',
+};
+for (const [name, id] of Object.entries(ids)) assert.match(id, /^[a-f0-9]{24}$/, `Invalid scratch ObjectId for ${name}`);
 const mp = `/api/channels/${ids.channel}/messages`;
 const sp = `/api/spaces/${ids.space}`;
 const hp = `/api/handoffs/${ids.handoff}`;
