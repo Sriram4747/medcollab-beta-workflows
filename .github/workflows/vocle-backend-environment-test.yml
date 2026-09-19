@@ -81,12 +81,16 @@ jobs:
       - name: Discover API authorization and validation behavior
         run: node scripts/security-api-discovery.js
 
+      - name: Generate API coverage report
+        if: always()
+        run: node scripts/security-api-coverage-report.js
+
       - name: Preserve security discovery reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: vocle-security-discovery
-          # Includes results.json, summary.md, and generated security-test-report.md.
+          # Includes results.json, summary.md, security-test-report.md, and security-api-coverage-report.md.
           path: ${{ runner.temp }}/vocle-security-results/
           if-no-files-found: warn
           retention-days: 7
