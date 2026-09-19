@@ -86,6 +86,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vocle-security-discovery
+          # Includes results.json, summary.md, and generated security-test-report.md.
           path: ${{ runner.temp }}/vocle-security-results/
           if-no-files-found: warn
           retention-days: 7

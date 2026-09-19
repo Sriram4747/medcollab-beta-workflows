@@ -158,6 +158,91 @@ async function snapshot() {
   }
   return JSON.stringify(state);
 }
+function actorLabel(actor) {
+  return { A: 'User A (space owner/admin)', B: 'User B (normal space member)', C: 'User C (authenticated outsider)', anonymous: 'Anonymous caller (unauthenticated)' }[actor];
+}
+function securityArea(category) {
+  if (category === 'authentication-negative') return 'Authentication';
+  if (category === 'foreign-resource') return 'Resource Isolation / IDOR';
+  if (category === 'identity-permutation') return 'Authorization / Ownership';
+  if (category === 'replay') return 'Authorization / Workflow Integrity';
+  if (/schema|boundary|required|enum|object-id|pagination|ownership-fields/.test(category)) return 'Input Validation';
+  return 'Authorization';
+}
+function mutationDescription(c) {
+  if (c.header) return `Authorization header variant: ${c.header}.`;
+  if (c.foreignField) return `Replaced ${c.foreignField} with a valid controlled resource or identity from another security context.`;
+  if (c.mutation) return `${c.mutation.field} is ${c.mutation.variant}.`;
+  if (c.category.startsWith('schema-text-')) return `Message text variant: ${c.category.slice('schema-text-'.length)}.`;
+  if (c.category === 'schema-type-enum') return `Invalid message field variant: ${c.name.replace('message invalid ', '')}.`;
+  if (c.category === 'pagination-boundary') return `Pagination limit: ${new URL(c.endpoint, BASE).searchParams.get('limit')}.`;
+  if (c.category === 'object-id') return 'Malformed or non-existent object identifier.';
+  if (c.category === 'unexpected-ownership-fields') return 'Sent client-controlled ownership and deletion fields that the API should ignore.';
+  if (c.category === 'replay') return 'Repeated an acknowledgement after it was already accepted.';
+  return 'None; this is a baseline authorization or ownership request.';
+}
+function setupFor(c) {
+  if (c.category === 'authentication-negative') return ['No valid authenticated identity is supplied.'];
+  if (c.category === 'foreign-resource' && c.name.startsWith('cross-channel')) return [
+    `${actorLabel(c.actor)} has access to the controlled A/B channel.`,
+    'The target message belongs to User C in a separate controlled space and channel.',
+  ];
+  if (c.category === 'foreign-resource') return [
+    'User A owns the controlled space.',
+    'The referenced field is replaced with a valid controlled value from another identity or space context.',
+  ];
+  if (c.name.includes('message')) {
+    const owner = c.name.match(/(?:edit|delete) ([AB]) message/)?.[1];
+    return [
+      actorLabel(c.actor),
+      owner ? `The target message was created by User ${owner}.` : 'The target message is in the controlled A/B channel.',
+    ];
+  }
+  if (c.name.includes('handoff')) return [
+    actorLabel(c.actor),
+    'The controlled handoff was sent from User A to User B in the controlled space.',
+  ];
+  if (c.name.includes('space') || c.name.includes('member') || c.name.includes('channel')) return [
+    'User A owns the controlled space.',
+    'User B is a normal member of that space.',
+    c.actor === 'C' ? 'User C is not a member of that space.' : actorLabel(c.actor),
+  ].filter(Boolean);
+  return [actorLabel(c.actor)];
+}
+function whatItChecks(c) {
+  if (c.category === 'authentication-negative') return 'Checks that the protected profile endpoint rejects missing, malformed, incorrectly formatted, or tampered authentication credentials.';
+  if (c.name.startsWith('cross-channel')) return 'Checks that a caller who can access one channel cannot use that channel URL to operate on a message from another controlled channel.';
+  if (c.name.includes('edit A message') && c.actor === 'B') return 'Checks whether User B can modify a message created by User A. Message editing should be limited to the sender.';
+  if (c.name.includes('delete') && c.name.includes('message')) return 'Checks whether message deletion follows the route’s ownership and space-administration rules without allowing an unrelated caller to delete it.';
+  if (c.name.includes('create message')) return 'Checks that only members of the controlled space can create a channel message.';
+  if (c.name.includes('update space') || c.name.includes('remove member')) return 'Checks that an ordinary member or outsider cannot perform space-administration actions.';
+  if (c.name.includes('acknowledge')) return 'Checks that only the intended handoff recipient can acknowledge a submitted handoff, and that acknowledgement cannot be replayed.';
+  if (c.name.includes('draft handoff')) return 'Checks whether handoff creation or draft lifecycle actions are limited to the permitted space member and sender.';
+  if (c.category === 'foreign-resource') return 'Checks whether the API rejects a valid identifier when it belongs to a different controlled resource or identity context.';
+  if (/schema|boundary|required|enum|object-id|pagination|ownership-fields/.test(c.category)) return 'Checks that request validation safely handles the supplied boundary, type, identifier, enum, or client-controlled ownership-field mutation.';
+  if (c.name.startsWith('read ') || c.name.startsWith('list ')) return 'Checks whether reading this controlled resource is limited to authenticated callers with the required space membership.';
+  return 'Checks the endpoint’s current authentication, authorization, and input-handling contract for this controlled request.';
+}
+function expectedBehaviour(c) {
+  const statuses = c.statuses.join(' or ');
+  if (c.actor === 'anonymous' || c.category === 'authentication-negative') return `The API should reject the request with HTTP ${statuses} because no valid authenticated session is presented.`;
+  if (c.statuses.every(s => s >= 400)) return `The API should reject the request with HTTP ${statuses} under the endpoint’s current security contract and must not change the controlled state.`;
+  return `The API should return HTTP ${statuses} for this permitted controlled action. Where the request is denied by an alternate allowed response, controlled state must remain unchanged.`;
+}
+function actionPerformed(c, endpoint) {
+  const identity = c.actor === 'anonymous' ? 'Without a valid Authorization header' : `Authenticated as ${actorLabel(c.actor)}`;
+  return `${identity}, sent a ${c.method} request to ${endpoint}.`;
+}
+function whyItMatters(result) {
+  if (result.passed) return 'The observed response and controlled-state check match the security rule encoded from the implemented route, middleware, validator, and controller behavior.';
+  return 'The observed behavior differs from the encoded security expectation. It is recorded for review and is not, by itself, a confirmed vulnerability.';
+}
+function potentialImpact(result) {
+  if (result.report.securityArea.includes('Authentication')) return 'If confirmed exploitable, invalid or malformed credentials might not be consistently rejected by protected endpoints.';
+  if (result.report.securityArea.includes('IDOR') || result.report.securityArea.includes('Ownership') || result.report.securityArea.includes('Authorization')) return 'If confirmed exploitable, a caller could potentially read or change a resource outside their intended ownership or membership boundary.';
+  return 'If confirmed exploitable, malformed input could produce inconsistent request handling or weaken an expected server-side guard.';
+}
+function anchorFor(result) { return `${result.caseId.toLowerCase()}--${result.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`.replace(/-+$/, ''); }
 async function execute(c) {
   stage = `fixture reset for ${c.name}`;
   await reset();
@@ -180,10 +265,12 @@ async function execute(c) {
   const passed = c.statuses.includes(r.status) && !!r.data && r.data.success === !denial && semantic && (!denial || unchanged);
   const validation = /schema|boundary|required|enum|object-id/.test(c.category);
   const classification = passed ? 'confirmed expected behavior' : validation ? 'validation weakness/hardening opportunity' : (r.status < 300 && denial) || (denial && !unchanged) ? 'likely security finding' : 'ambiguous / requires manual investigation';
-  results.push({ caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, context: c.context, mutationCategory: c.category,
+  const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, context: c.context, mutationCategory: c.category,
     expected: { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
     actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, semanticCheckPassed: !!semantic, jsonResponse: !!r.data },
-    sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed });
+    sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
+    report: { securityArea: securityArea(c.category), whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
+  results.push(result);
   // A server error is an observation only if the service remains healthy.
   if (r.status >= 500) await health();
 }
@@ -195,6 +282,79 @@ function report() {
   fs.writeFileSync(path.join(directory, 'results.json'), JSON.stringify(summary, null, 2));
   const markdown = [`# Vocle API discovery`, '', `Executed ${summary.executed}/${summary.planned}; passed ${summary.passed}; observations ${summary.unexpected}.`, `Infrastructure: ${fatal || 'healthy'}.`, '', 'Observations are candidates, not confirmed vulnerabilities. See results.json for every case and source.', '', ...unexpected.map(r => `- ${r.caseId}: ${r.actor} ${r.method} ${r.endpoint}; ${r.mutationCategory}; expected ${r.expected.statuses.join('/')}, got ${r.actual.status}; ${r.classification}; manual confirmation worthwhile.`)].join('\n');
   fs.writeFileSync(path.join(directory, 'summary.md'), markdown);
+  const categoryBreakdown = Object.entries(results.reduce((counts, result) => {
+    counts[result.report.securityArea] = (counts[result.report.securityArea] || 0) + 1;
+    return counts;
+  }, {})).sort(([a], [b]) => a.localeCompare(b));
+  const detailed = [
+    '# Vocle API Security Test Report',
+    '',
+    'This report is generated from the security cases that actually executed in the disposable local CI environment. `results.json` remains the machine-readable source of truth; `summary.md` is the concise run summary.',
+    '',
+    '## Controlled test identities and resources',
+    '',
+    '- User A = space owner/admin.',
+    '- User B = normal member.',
+    '- User C = authenticated outsider/non-member.',
+    '- Anonymous = unauthenticated caller.',
+    '',
+    'Controlled resources include messages owned by Users A and B, plus handoffs between controlled users. All requests target the disposable local backend and database only.',
+    '',
+    '## Report summary',
+    '',
+    `- Total tests executed: ${summary.executed}/${summary.planned}`,
+    `- Passed: ${summary.passed}`,
+    `- Observations: ${summary.unexpected}`,
+    `- Infrastructure status: ${fatal || 'healthy'}`,
+    '- Security-area breakdown:',
+    ...categoryBreakdown.map(([area, count]) => `  - ${area}: ${count}`),
+    '',
+    '## Security Observations Requiring Review',
+    '',
+    ...(unexpected.length ? unexpected.map(result => `- [${result.caseId} — ${result.name}](#${anchorFor(result)}): expected HTTP ${result.expected.statuses.join('/')}, received HTTP ${result.actual.status}; ${result.classification}.`) : ['No observations were recorded in this execution.']),
+    '',
+    'Observations are not confirmed vulnerabilities. A finding is only labelled confirmed after separate review and reproduction.',
+    '',
+    '## Executed testcase catalog',
+    '',
+    ...results.flatMap(result => {
+      const state = result.actual.stateUnchanged ? 'controlled database/application state remained unchanged' : 'controlled database/application state changed';
+      const lines = [
+        `### ${result.caseId} — ${result.name}`,
+        '',
+        `**Security area:** ${result.report.securityArea}`,
+        '',
+        '**What this test checks:**',
+        result.report.whatItChecks,
+        '',
+        '**Test setup:**',
+        ...result.report.testSetup.map(item => `- ${item}`),
+        '',
+        '**Action performed:**',
+        result.report.actionPerformed,
+        `- HTTP method: \`${result.method}\``,
+        `- Endpoint: \`${result.endpoint}\``,
+        `- Mutation used: ${result.report.mutation}`,
+        '',
+        '**Expected security behaviour:**',
+        result.report.expectedSecurityBehaviour,
+        '',
+        '**Actual result:**',
+        `- HTTP status: ${result.actual.status}`,
+        `- Request succeeded: ${result.actual.success === true ? 'yes' : result.actual.success === false ? 'no' : 'not represented by the expected JSON envelope'}`,
+        `- State check: ${state}.`,
+        `- Semantic check: ${result.actual.semanticCheckPassed ? 'passed' : 'did not pass'}.`,
+        '',
+        `**Result:** ${result.passed ? 'PASS' : 'OBSERVATION'}`,
+        '',
+        '**Why this result matters:**',
+        whyItMatters(result),
+      ];
+      if (!result.passed) lines.push('', '**Potential security impact:**', potentialImpact(result), '', '**Recommended follow-up:**', result.manualConfirmationWorthwhile ? 'Manually reproduce with Reqable or an equivalent controlled client, then inspect the applicable route, middleware, validator, and controller before classifying severity.' : 'Review the recorded behavior in the controlled environment.');
+      return [...lines, ''];
+    }),
+  ].join('\n');
+  fs.writeFileSync(path.join(directory, 'security-test-report.md'), detailed);
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown + '\n');
   console.log(`API discovery: ${summary.executed}/${summary.planned} executed, ${summary.passed} passed, ${summary.unexpected} observations.`);
 }
