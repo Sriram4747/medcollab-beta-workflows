@@ -21,7 +21,8 @@
 | `flutter analyze --no-fatal-infos` (changed pkgs) | ✅ pass (info-only: prefer_const / trailing commas) |
 | `flutter test` | ✅ **33 passed** |
 | Release APK `Vocle-beta.apk` (1.0.0+20) | ✅ built |
-| `GET /health` after deploy | ☐ (post-push Railway) |
+| Push GitLab `origin/master` + GitHub `github/master` | ✅ `79ff755` |
+| `GET /health` after deploy | ⏳ pre-redeploy still up (Railway will pick up `79ff755`) |
 
 ## Device smoke (after APK)
 
