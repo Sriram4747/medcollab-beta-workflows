@@ -5,6 +5,7 @@ import 'package:medcollab_app/features/auth/data/models/availability_model.dart'
 import 'package:medcollab_app/features/auth/data/models/notification_preferences_model.dart';
 import 'package:medcollab_app/features/auth/data/models/update_profile_request.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
+import 'package:medcollab_app/features/messages/data/models/needl_thread_preview.dart';
 import 'package:medcollab_app/features/messages/data/models/user_lookup_result.dart';
 import 'package:medcollab_app/shared/data/repositories/base_repository.dart';
 
@@ -105,6 +106,20 @@ class UserRepository extends BaseRepository {
         ApiEndpoints.lookupUser,
         queryParameters: {'phone': phoneE164},
         parser: (json) => UserLookupResult.fromJson(json),
+      ),
+    );
+  }
+
+  /// `GET /api/users/me/needl` — thread inbox.
+  Future<List<NeedlThreadPreview>> getNeedl() {
+    return execute(
+      () => apiClient.get(
+        ApiEndpoints.needlThreads,
+        parser: (json) => parseNestedList(
+          json,
+          'threads',
+          NeedlThreadPreview.fromJson,
+        ),
       ),
     );
   }

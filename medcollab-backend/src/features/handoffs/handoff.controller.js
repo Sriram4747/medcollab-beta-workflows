@@ -134,6 +134,7 @@ const getHandoffById = asyncHandler(async (req, res) => {
   const handoff = await Handoff.findById(req.params.id)
     .populate('fromUserId', 'name displayTitle role avatarUrl speciality')
     .populate('toUserId', 'name displayTitle role avatarUrl speciality')
+    .populate('writeBackNotes.authorId', 'name displayTitle role avatarUrl')
     .lean();
 
   if (!handoff) return respond.notFound(res, 'Handoff not found');
@@ -292,6 +293,146 @@ const acknowledgeHandoff = asyncHandler(async (req, res) => {
 });
 
 /**
+ * POST /api/handoffs/:id/notes
+ * Assignee or sender adds a write-back note (can attend / can't / clinical update).
+ */
+const addHandoffNote = asyncHandler(async (req, res) => {
+  const text = (req.body.text || '').trim();
+  if (!text) return respond.badRequest(res, 'Note text is required');
+  if (text.length > 1000) {
+    return respond.badRequest(res, 'Note cannot exceed 1000 characters');
+  }
+  const kind = ['note', 'cant_cover', 'covered_late', 'reassign', 'missed'].includes(
+    req.body.kind
+  )
+    ? req.body.kind
+    : 'note';
+
+  const handoff = await Handoff.findById(req.params.id);
+  if (!handoff) return respond.notFound(res, 'Handoff not found');
+
+  const uid = req.user._id.toString();
+  const isParty =
+    handoff.fromUserId.toString() === uid || handoff.toUserId.toString() === uid;
+  if (!isParty) return respond.forbidden(res, 'Only participants can add notes');
+  if (handoff.status === HANDOFF_STATUS.DRAFT) {
+    return respond.badRequest(res, 'Submit the handoff before adding notes');
+  }
+
+  handoff.writeBackNotes.push({
+    authorId: req.user._id,
+    text,
+    kind,
+    createdAt: new Date(),
+  });
+  await handoff.save();
+
+  const populated = await Handoff.findById(handoff._id)
+    .populate('fromUserId', 'name displayTitle role avatarUrl')
+    .populate('toUserId', 'name displayTitle role avatarUrl')
+    .populate('writeBackNotes.authorId', 'name displayTitle role avatarUrl')
+    .lean();
+
+  respond.ok(res, 'Note added', { handoff: populated });
+
+  try {
+    getIO().to(`space:${handoff.spaceId}`).emit(SOCKET_EVENTS.HANDOFF_NOTE_ADDED, {
+      handoffId: handoff._id.toString(),
+      spaceId: handoff.spaceId.toString(),
+    });
+  } catch (err) {
+    logger.debug(`Handoff note socket skipped: ${err.message}`);
+  }
+});
+
+/**
+ * POST /api/handoffs/:id/reassign
+ * Current assignee (or sender) redirects to another space member.
+ */
+const reassignHandoff = asyncHandler(async (req, res) => {
+  const { toUserId, note } = req.body;
+  if (!toUserId) return respond.badRequest(res, 'toUserId is required');
+
+  const handoff = await Handoff.findById(req.params.id);
+  if (!handoff) return respond.notFound(res, 'Handoff not found');
+  if (handoff.status === HANDOFF_STATUS.DRAFT) {
+    return respond.badRequest(res, 'Submit before reassigning');
+  }
+
+  const uid = req.user._id.toString();
+  const isAssignee = handoff.toUserId.toString() === uid;
+  const isSender = handoff.fromUserId.toString() === uid;
+  if (!isAssignee && !isSender) {
+    return respond.forbidden(res, 'Only the assignee or sender can reassign');
+  }
+  if (toUserId === handoff.toUserId.toString()) {
+    return respond.badRequest(res, 'Already assigned to this doctor');
+  }
+
+  const space = await Space.findById(handoff.spaceId);
+  if (!space) return respond.notFound(res, 'Space not found');
+  if (!space.isMember(toUserId)) {
+    return respond.badRequest(res, 'New assignee must be a group member');
+  }
+
+  const previousTo = handoff.toUserId;
+  handoff.assignmentHistory.push({
+    fromUserId: previousTo,
+    toUserId,
+    byUserId: req.user._id,
+    note: (note || '').trim().slice(0, 500),
+    at: new Date(),
+  });
+  handoff.toUserId = toUserId;
+  handoff.status = HANDOFF_STATUS.SUBMITTED;
+  handoff.acknowledgedAt = null;
+  handoff.acknowledgementNote = '';
+  handoff.writeBackNotes.push({
+    authorId: req.user._id,
+    text:
+      (note || '').trim() ||
+      'Reassigned — please take over this shift handoff.',
+    kind: 'reassign',
+    createdAt: new Date(),
+  });
+  await handoff.save();
+
+  const populated = await Handoff.findById(handoff._id)
+    .populate('fromUserId', 'name displayTitle role avatarUrl')
+    .populate('toUserId', 'name displayTitle role avatarUrl')
+    .populate('writeBackNotes.authorId', 'name displayTitle role avatarUrl')
+    .lean();
+
+  const [fromUser, toUser] = await Promise.all([
+    User.findById(handoff.fromUserId).select('name avatarUrl fcmTokens'),
+    User.findById(toUserId).select('name avatarUrl fcmTokens'),
+  ]);
+
+  respond.ok(res, 'Handoff reassigned', { handoff: populated });
+
+  try {
+    getIO().to(`space:${handoff.spaceId}`).emit(SOCKET_EVENTS.HANDOFF_REASSIGNED, {
+      handoffId: handoff._id.toString(),
+      spaceId: handoff.spaceId.toString(),
+      toUserId: toUserId.toString(),
+      previousToUserId: previousTo.toString(),
+    });
+  } catch (err) {
+    logger.debug(`Handoff reassign socket skipped: ${err.message}`);
+  }
+
+  setImmediate(async () => {
+    try {
+      if (fromUser && toUser) {
+        await notifyHandoffReceived({ toUser, fromUser, handoff });
+      }
+    } catch (err) {
+      logger.error(`Handoff reassign notify failed: ${err.message}`);
+    }
+  });
+});
+
+/**
  * DELETE /api/handoffs/:id
  * Delete a DRAFT handoff (cannot delete submitted/acknowledged)
  */
@@ -354,5 +495,6 @@ const getSpaceHandoffs = asyncHandler(async (req, res) => {
 
 module.exports = {
   createHandoff, getMyHandoffs, getHandoffById, updateHandoff,
-  submitHandoff, acknowledgeHandoff, deleteHandoff, getSpaceHandoffs,
+  submitHandoff, acknowledgeHandoff, addHandoffNote, reassignHandoff,
+  deleteHandoff, getSpaceHandoffs,
 };

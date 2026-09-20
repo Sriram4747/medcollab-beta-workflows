@@ -87,6 +87,16 @@ channelRouter.post(
   channelController.createOrGetDM
 );
 
+channelRouter.post(
+  '/dm/group',
+  [
+    body('userIds').isArray({ min: 2 }).withMessage('userIds must be an array'),
+    body('userIds.*').isMongoId().withMessage('Invalid user ID'),
+    handleValidationErrors,
+  ],
+  channelController.createGroupDM
+);
+
 /**
  * @route   GET /api/channels/:id
  * @desc    Get channel info + pinned messages

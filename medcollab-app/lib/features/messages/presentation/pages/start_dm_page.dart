@@ -35,6 +35,8 @@ class _StartDmPageState extends State<StartDmPage> {
   String? _error;
   String? _busyUserId;
   String? _busyRequestId;
+  final Set<String> _multiSelectIds = {};
+  final Map<String, UserModel> _multiSelectUsers = {};
 
   @override
   void dispose() {
@@ -191,6 +193,46 @@ class _StartDmPageState extends State<StartDmPage> {
         const SnackBar(content: Text('Could not start conversation')),
       );
     }
+  }
+
+  Future<void> _createGroupDm() async {
+    if (_multiSelectIds.length < 2) return;
+    setState(() => _busyUserId = 'group');
+    try {
+      final channel = await AppDependencies.instance.channelRepository
+          .createGroupDm(_multiSelectIds.toList());
+      if (!mounted) return;
+      openDmChat(
+        context,
+        channelId: channel.id,
+        channel: channel,
+        replace: true,
+      );
+    } on AppException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message)),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not create group DM')),
+      );
+    } finally {
+      if (mounted) setState(() => _busyUserId = null);
+    }
+  }
+
+  void _toggleMulti(UserModel user) {
+    setState(() {
+      if (_multiSelectIds.contains(user.id)) {
+        _multiSelectIds.remove(user.id);
+        _multiSelectUsers.remove(user.id);
+      } else {
+        _multiSelectIds.add(user.id);
+        _multiSelectUsers[user.id] = user;
+      }
+    });
   }
 
   Future<void> _startDmOrRequest(UserModel user) async {
@@ -462,16 +504,46 @@ class _StartDmPageState extends State<StartDmPage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('New message'),
+        title: Text(
+          _multiSelectIds.isEmpty
+              ? 'New message'
+              : '${_multiSelectIds.length} selected',
+        ),
         backgroundColor: AppColors.background,
+        actions: [
+          if (_multiSelectIds.length >= 2)
+            TextButton(
+              onPressed: _busyUserId != null ? null : _createGroupDm,
+              child: const Text('Create'),
+            ),
+        ],
       ),
       body: Column(
         children: [
+          if (_multiSelectIds.isNotEmpty)
+            SizedBox(
+              height: 44,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                children: _multiSelectUsers.values
+                    .map(
+                      (u) => Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: InputChip(
+                          label: Text(u.displayName),
+                          onDeleted: () => _toggleMulti(u),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: AppSearchBar(
               controller: _searchController,
-              hintText: 'Name or mobile number',
+              hintText: 'Name or mobile — long-press to multi-select',
               onChanged: _onQueryChanged,
               onClear: () => _onQueryChanged(''),
             ),
@@ -506,6 +578,7 @@ class _StartDmPageState extends State<StartDmPage> {
                       else
                         ..._nameResults.map((user) {
                           final busy = _busyUserId == user.id;
+                          final selected = _multiSelectIds.contains(user.id);
                           return Padding(
                             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                             child: ClinicalCard(
@@ -517,6 +590,10 @@ class _StartDmPageState extends State<StartDmPage> {
                                       ),
                               child: Row(
                                 children: [
+                                  Checkbox(
+                                    value: selected,
+                                    onChanged: (_) => _toggleMulti(user),
+                                  ),
                                   AppAvatar(
                                     name: user.displayName,
                                     imageUrl: user.avatarUrl,
@@ -535,7 +612,9 @@ class _StartDmPageState extends State<StartDmPage> {
                                         ),
                                         _userSubtitle(user),
                                         Text(
-                                          'Tap profile · Message needs approval if new',
+                                          selected
+                                              ? 'Selected for group DM'
+                                              : 'Tap profile · Message needs approval if new',
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelSmall

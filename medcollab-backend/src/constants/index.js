@@ -179,6 +179,8 @@ const SOCKET_EVENTS = {
   // Handoffs
   HANDOFF_SUBMITTED: 'handoff_submitted',
   HANDOFF_ACKNOWLEDGED: 'handoff_acknowledged',
+  HANDOFF_NOTE_ADDED: 'handoff_note_added',
+  HANDOFF_REASSIGNED: 'handoff_reassigned',
 
   // Spaces
   SPACE_MEMBER_JOINED: 'space_member_joined',

@@ -263,7 +263,84 @@ const lookupByPhone = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * GET /api/users/me/needl
+ * Thread roots the doctor cares about (Needl inbox).
+ */
+const getNeedl = asyncHandler(async (req, res) => {
+  const Message = require('../messages/message.model');
+  const Channel = require('../channels/channel.model');
+  const Space = require('../spaces/space.model');
+
+  const spaces = await Space.find(
+    { 'members.userId': req.user._id, isActive: true },
+    { _id: 1 }
+  ).lean();
+  const spaceIds = spaces.map((s) => s._id);
+
+  const channels = await Channel.find({
+    isArchived: false,
+    $or: [
+      { members: req.user._id },
+      { spaceId: { $in: spaceIds } },
+    ],
+  })
+    .select('_id spaceId type name')
+    .lean();
+  const channelIds = channels.map((c) => c._id);
+  const channelById = Object.fromEntries(
+    channels.map((c) => [c._id.toString(), c])
+  );
+
+  if (channelIds.length === 0) {
+    return respond.ok(res, 'Needl empty', { threads: [] });
+  }
+
+  const myReplyRoots = await Message.find({
+    senderId: req.user._id,
+    threadId: { $ne: null },
+    isDeleted: false,
+    channelId: { $in: channelIds },
+  })
+    .select('threadId')
+    .limit(80)
+    .lean();
+  const replyRootIds = [
+    ...new Set(myReplyRoots.map((m) => m.threadId?.toString()).filter(Boolean)),
+  ];
+
+  const roots = await Message.find({
+    channelId: { $in: channelIds },
+    isDeleted: false,
+    $or: [
+      { threadId: null, replyCount: { $gt: 0 } },
+      { _id: { $in: replyRootIds } },
+    ],
+  })
+    .sort({ updatedAt: -1, _id: -1 })
+    .limit(40)
+    .populate('senderId', 'name displayTitle role avatarUrl')
+    .lean();
+
+  const threads = roots.map((m) => {
+    const ch = channelById[m.channelId?.toString()] || {};
+    return {
+      rootMessageId: m._id.toString(),
+      channelId: m.channelId?.toString(),
+      spaceId: ch.spaceId?.toString() || null,
+      channelName: ch.name || null,
+      channelType: ch.type || null,
+      preview: m.content?.text || '',
+      replyCount: m.replyCount || 0,
+      lastReplyAt: m.lastReply?.sentAt || m.updatedAt || m.createdAt,
+      sender: m.senderId,
+    };
+  });
+
+  return respond.ok(res, 'Needl threads', { threads });
+});
+
 module.exports = {
   getMe, updateMe, updateAvailability,
-  registerFcmToken, getUserById, searchUsers, lookupByPhone,
+  registerFcmToken, getUserById, searchUsers, lookupByPhone, getNeedl,
 };

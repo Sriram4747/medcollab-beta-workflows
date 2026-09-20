@@ -87,8 +87,7 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Close it honestly so your team’s list stays accurate. '
-                'Write-back / reassign for the next doctor is coming soon.',
+                'Close it honestly so your team’s list stays accurate.',
                 style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
                       color: AppColors.textMuted,
                     ),
@@ -117,6 +116,195 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
       await _acknowledge(handoff, note: 'Attended late — closed after shift.');
     } else if (choice == 'missed') {
       await _acknowledge(handoff, note: 'Missed / not attended.');
+    }
+  }
+
+  Future<void> _composeWriteBack(HandoffModel handoff) async {
+    final controller = TextEditingController();
+    String kind = 'note';
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setLocal) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                0,
+                16,
+                MediaQuery.viewInsetsOf(ctx).bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Write back',
+                    style: Theme.of(ctx).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      ChoiceChip(
+                        label: const Text('Note'),
+                        selected: kind == 'note',
+                        onSelected: (_) => setLocal(() => kind = 'note'),
+                      ),
+                      ChoiceChip(
+                        label: const Text("Can't cover"),
+                        selected: kind == 'cant_cover',
+                        onSelected: (_) =>
+                            setLocal(() => kind = 'cant_cover'),
+                      ),
+                      ChoiceChip(
+                        label: const Text('Covered late'),
+                        selected: kind == 'covered_late',
+                        onSelected: (_) =>
+                            setLocal(() => kind = 'covered_late'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: controller,
+                    maxLines: 4,
+                    maxLength: 1000,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: const InputDecoration(
+                      hintText:
+                          'e.g. Can take Bed 7 — redirect Bed 3 to night registrar',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(ctx, {
+                      'text': controller.text.trim(),
+                      'kind': kind,
+                    }),
+                    child: const Text('Post note'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+    controller.dispose();
+    if (result == null || result['text']?.isEmpty != false || !mounted) return;
+
+    setState(() {
+      _isBusy = true;
+      _error = null;
+    });
+    try {
+      await _repository.addNote(
+        handoff.id,
+        text: result['text']!,
+        kind: result['kind'] ?? 'note',
+      );
+      if (mounted) _reload();
+    } on AppException catch (e) {
+      setState(() => _error = e.message);
+    } finally {
+      if (mounted) setState(() => _isBusy = false);
+    }
+  }
+
+  Future<void> _reassign(HandoffModel handoff) async {
+    setState(() {
+      _isBusy = true;
+      _error = null;
+    });
+    try {
+      final members = await AppDependencies.instance.memberRepository
+          .getSpaceMembers(widget.spaceId);
+      if (!mounted) return;
+      setState(() => _isBusy = false);
+
+      final currentId = handoff.toUser.id;
+      final candidates = members
+          .where((m) => m.user.id != currentId)
+          .toList();
+      if (candidates.isEmpty) {
+        setState(() => _error = 'No other members in this group to reassign to');
+        return;
+      }
+
+      final noteController = TextEditingController();
+      final picked = await showModalBottomSheet<String>(
+        context: context,
+        isScrollControlled: true,
+        showDragHandle: true,
+        builder: (ctx) {
+          return SafeArea(
+            child: SizedBox(
+              height: MediaQuery.sizeOf(ctx).height * 0.65,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: Text(
+                      'Reassign handoff',
+                      style: Theme.of(ctx).textTheme.titleMedium,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TextField(
+                      controller: noteController,
+                      decoration: const InputDecoration(
+                        hintText: 'Optional note for the next doctor',
+                        border: OutlineInputBorder(),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: candidates.length,
+                      itemBuilder: (context, index) {
+                        final m = candidates[index];
+                        return ListTile(
+                          title: Text(m.user.displayName),
+                          subtitle: Text(
+                            m.user.speciality ?? m.user.role.label,
+                          ),
+                          onTap: () => Navigator.pop(ctx, m.user.id),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+      final note = noteController.text.trim();
+      noteController.dispose();
+      if (picked == null || !mounted) return;
+
+      setState(() => _isBusy = true);
+      final updated = await _repository.reassignHandoff(
+        handoff.id,
+        toUserId: picked,
+        note: note,
+      );
+      if (mounted) context.pop(updated);
+    } on AppException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _error = 'Could not reassign handoff');
+      }
+    } finally {
+      if (mounted) setState(() => _isBusy = false);
     }
   }
 
@@ -288,6 +476,79 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
                         'Acknowledgement: ${handoff.acknowledgementNote}',
                         style: AppTextStyles.body,
                       ),
+                    ],
+                    if (!handoff.isDraft) ...[
+                      const SizedBox(height: AppGaps.sectionGap),
+                      Text(
+                        'WRITE-BACK',
+                        style: AppTextStyles.sectionLabel,
+                      ),
+                      const SizedBox(height: 8),
+                      if (handoff.writeBackNotes.isEmpty)
+                        Text(
+                          'No replies yet. Add a note if you can cover, can’t cover, or need to redirect.',
+                          style: AppTextStyles.caption,
+                        )
+                      else
+                        ...handoff.writeBackNotes.map(
+                          (n) => Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: AppGaps.itemGap),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceCard,
+                                borderRadius: AppRadius.card,
+                                border: Border.all(
+                                  color: AppColors.borderDefault,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${n.author.displayName} · ${n.kindLabel}',
+                                    style: AppTextStyles.caption.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(n.text, style: AppTextStyles.body),
+                                  if (n.createdAt != null) ...[
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      DateFormat('d MMM, h:mm a')
+                                          .format(n.createdAt!.toLocal()),
+                                      style: AppTextStyles.caption,
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (isReceiver || isSender) ...[
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          onPressed: _isBusy
+                              ? null
+                              : () => _composeWriteBack(handoff),
+                          icon: const Icon(Icons.reply_outlined),
+                          label: const Text('Add note / reply'),
+                        ),
+                        if (isReceiver || isSender) ...[
+                          const SizedBox(height: 8),
+                          OutlinedButton.icon(
+                            onPressed: _isBusy
+                                ? null
+                                : () => _reassign(handoff),
+                            icon: const Icon(Icons.swap_horiz),
+                            label: const Text('Reassign to another doctor'),
+                          ),
+                        ],
+                      ],
                     ],
                     const SizedBox(height: 80),
                   ],

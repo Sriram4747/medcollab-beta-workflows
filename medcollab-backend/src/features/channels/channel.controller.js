@@ -96,11 +96,35 @@ const getChannelById = asyncHandler(async (req, res) => {
 
 /**
  * PUT /api/channels/:id
- * Update channel name or description (admin only)
+ * Update channel name or description (space admin, or any member of a group DM)
  */
 const updateChannel = asyncHandler(async (req, res) => {
   const channel = await Channel.findById(req.params.id);
   if (!channel) return respond.notFound(res, 'Channel not found');
+
+  const isDirect =
+    channel.type === CHANNEL_TYPES.DIRECT || !channel.spaceId;
+  const isMember = (channel.members || []).some(
+    (m) => m.toString() === req.user._id.toString()
+  );
+
+  if (isDirect) {
+    if (!isMember) return respond.forbidden(res, 'Not a conversation member');
+    if (req.body.name !== undefined) {
+      const name = String(req.body.name).trim().slice(0, 80);
+      channel.name = name || null;
+    }
+    await channel.save();
+    const populated = await Channel.findById(channel._id)
+      .populate(
+        'members',
+        'name displayTitle role speciality avatarUrl availability lastSeenAt'
+      )
+      .lean();
+    return respond.ok(res, 'Conversation renamed', {
+      channel: enrichDM(populated, req.user._id),
+    });
+  }
 
   const space = await Space.findById(channel.spaceId);
   if (!space?.isAdmin(req.user._id)) return respond.forbidden(res, 'Admins only');
@@ -261,6 +285,87 @@ const createOrGetDM = asyncHandler(async (req, res) => {
 });
 
 /**
+ * POST /api/channels/dm/group
+ * Create or get a multi-person DM (Slack-style MPIM).
+ * Body: { userIds: string[] } — other participants (caller included automatically).
+ */
+const createGroupDM = asyncHandler(async (req, res) => {
+  const rawIds = Array.isArray(req.body.userIds) ? req.body.userIds : [];
+  const uniqueOthers = [
+    ...new Set(
+      rawIds
+        .map((id) => id?.toString())
+        .filter((id) => id && id !== req.user._id.toString())
+    ),
+  ];
+  if (uniqueOthers.length < 2) {
+    return respond.badRequest(
+      res,
+      'Select at least two other doctors for a group DM'
+    );
+  }
+  if (uniqueOthers.length > 8) {
+    return respond.badRequest(res, 'Group DMs support up to 8 other people');
+  }
+
+  const User = require('../users/user.model');
+  const { canMessageUser, canRequestMessage } = require('../../utils/knownUsers');
+
+  for (const targetId of uniqueOthers) {
+    const target = await User.findById(targetId).select('_id name');
+    if (!target) return respond.notFound(res, 'One of the users was not found');
+    const allowed =
+      (await canMessageUser(req.user._id, targetId)) ||
+      (await canRequestMessage(req.user._id, targetId));
+    if (!allowed) {
+      return respond.forbidden(
+        res,
+        `Cannot add ${target.name || 'user'} — send a message request first or share a group`
+      );
+    }
+  }
+
+  const memberIds = [req.user._id.toString(), ...uniqueOthers].sort();
+  const objectIds = memberIds.map((id) => id);
+
+  let channel = await Channel.findOne({
+    type: CHANNEL_TYPES.DIRECT,
+    members: { $all: objectIds, $size: memberIds.length },
+    isArchived: false,
+  });
+
+  if (!channel) {
+    const users = await User.find({ _id: { $in: uniqueOthers } })
+      .select('name')
+      .lean();
+    const defaultName = users
+      .map((u) => u.name)
+      .filter(Boolean)
+      .slice(0, 3)
+      .join(', ');
+
+    channel = await Channel.create({
+      spaceId: null,
+      type: CHANNEL_TYPES.DIRECT,
+      members: objectIds,
+      createdBy: req.user._id,
+      name: defaultName || null,
+    });
+  }
+
+  const populated = await Channel.findById(channel._id)
+    .populate(
+      'members',
+      'name displayTitle role speciality avatarUrl availability lastSeenAt'
+    )
+    .lean();
+
+  return respond.ok(res, 'Group DM ready', {
+    channel: enrichDM(populated, req.user._id),
+  });
+});
+
+/**
  * GET /api/channels/:id/members
  * List members of a private channel or DM
  */
@@ -372,6 +477,6 @@ const unpinMessage = asyncHandler(async (req, res) => {
 
 module.exports = {
   createChannel, getSpaceChannels, getChannelById,
-  updateChannel, archiveChannel, getMyDMs, createOrGetDM,
+  updateChannel, archiveChannel, getMyDMs, createOrGetDM, createGroupDM,
   getChannelMembers, pinMessage, unpinMessage,
 };

@@ -145,6 +145,30 @@ handoffRouter.post(
   handoffController.acknowledgeHandoff
 );
 
+handoffRouter.post(
+  '/:id/notes',
+  validateMongoId('id'),
+  [
+    body('text').trim().notEmpty().withMessage('Note text is required')
+      .isLength({ max: 1000 }).withMessage('Note cannot exceed 1000 characters'),
+    body('kind').optional().isIn(['note', 'cant_cover', 'covered_late', 'reassign', 'missed']),
+    handleValidationErrors,
+  ],
+  handoffController.addHandoffNote
+);
+
+handoffRouter.post(
+  '/:id/reassign',
+  validateMongoId('id'),
+  [
+    body('toUserId').notEmpty().withMessage('toUserId is required')
+      .isMongoId().withMessage('Invalid toUserId'),
+    body('note').optional().trim().isLength({ max: 500 }),
+    handleValidationErrors,
+  ],
+  handoffController.reassignHandoff
+);
+
 /**
  * @route   DELETE /api/handoffs/:id
  * @desc    Delete a DRAFT handoff
