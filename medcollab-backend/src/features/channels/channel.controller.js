@@ -148,10 +148,12 @@ const enrichDM = (channel, currentUserId) => {
     (m) => (m._id || m).toString() !== currentUserId.toString()
   );
   const peerName = peer?.name || peer?.displayTitle || 'Direct message';
+  const isSelfNotes = !peer && members.length === 1;
   return {
     ...channel,
-    peer: peer || null,
-    name: channel.name || peerName,
+    peer: peer || (isSelfNotes ? members[0] || null : null),
+    name: channel.name || (isSelfNotes ? 'Notes to self' : peerName),
+    isSelfNotes,
   };
 };
 
@@ -184,8 +186,34 @@ const getMyDMs = asyncHandler(async (req, res) => {
 const createOrGetDM = asyncHandler(async (req, res) => {
   const { userId: targetUserId } = req.body;
 
-  if (targetUserId === req.user._id.toString()) {
-    return respond.badRequest(res, 'Cannot create a DM with yourself');
+  // Notes-to-self: single-member DM with own user id.
+  const isSelfNotes =
+    !targetUserId || targetUserId === req.user._id.toString();
+
+  if (isSelfNotes) {
+    let channel = await Channel.findOne({
+      type: CHANNEL_TYPES.DIRECT,
+      members: { $size: 1, $all: [req.user._id] },
+      isArchived: false,
+    });
+    if (!channel) {
+      channel = await Channel.create({
+        spaceId: null,
+        type: CHANNEL_TYPES.DIRECT,
+        members: [req.user._id],
+        createdBy: req.user._id,
+        name: 'Notes to self',
+      });
+    }
+    const populated = await Channel.findById(channel._id)
+      .populate(
+        'members',
+        'name displayTitle role speciality avatarUrl availability lastSeenAt'
+      )
+      .lean();
+    return respond.ok(res, 'Self notes ready', {
+      channel: enrichDM(populated, req.user._id),
+    });
   }
 
   const User = require('../users/user.model');

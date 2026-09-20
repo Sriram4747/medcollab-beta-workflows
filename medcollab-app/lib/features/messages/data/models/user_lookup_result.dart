@@ -10,6 +10,7 @@ class UserLookupResult extends Equatable {
     this.sharesGroup = false,
     this.acceptsMessageRequests = false,
     this.canRequest = false,
+    this.isSelf = false,
     this.pendingRequest,
   });
 
@@ -19,6 +20,8 @@ class UserLookupResult extends Equatable {
     final canRequest = json['canRequest'] as bool? ??
         json['acceptsMessageRequests'] as bool? ??
         false;
+    final isSelf = json['isSelf'] as bool? ??
+        json['relationship'] == 'self';
     return UserLookupResult(
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       relationship: json['relationship'] as String? ?? 'stranger',
@@ -27,6 +30,7 @@ class UserLookupResult extends Equatable {
           json['relationship'] == 'group_member',
       acceptsMessageRequests: canRequest,
       canRequest: canRequest,
+      isSelf: isSelf,
       pendingRequest: pending is Map<String, dynamic>
           ? PendingRequestHint.fromJson(pending)
           : null,
@@ -40,6 +44,7 @@ class UserLookupResult extends Equatable {
   /// Alias used by UI: may send a message request.
   final bool acceptsMessageRequests;
   final bool canRequest;
+  final bool isSelf;
   final PendingRequestHint? pendingRequest;
 
   @override
@@ -50,6 +55,7 @@ class UserLookupResult extends Equatable {
         sharesGroup,
         acceptsMessageRequests,
         canRequest,
+        isSelf,
         pendingRequest,
       ];
 }

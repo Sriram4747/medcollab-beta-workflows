@@ -8,6 +8,7 @@
 
 // ─── User Roles ────────────────────────────────────────────────────────────────
 const USER_ROLES = {
+  MBBS_STUDENT: 'mbbs_student',
   INTERN: 'intern',
   PG_RESIDENT: 'pg_resident',
   JUNIOR_CONSULTANT: 'junior_consultant',

@@ -2,6 +2,7 @@
 library;
 
 enum UserRole {
+  mbbsStudent('mbbs_student'),
   intern('intern'),
   pgResident('pg_resident'),
   juniorConsultant('junior_consultant'),
@@ -20,6 +21,7 @@ enum UserRole {
   }
 
   String get label => switch (this) {
+        UserRole.mbbsStudent => 'MBBS Student',
         UserRole.intern => 'MBBS Intern',
         UserRole.pgResident => 'PG Resident',
         UserRole.juniorConsultant => 'Junior Consultant',

@@ -126,13 +126,13 @@ class _ProfileDetailsFormState extends State<ProfileDetailsForm> {
             value: _pgPrep,
             isExpanded: true,
             decoration: const InputDecoration(
-              labelText: 'NEET PG subject (optional)',
-              hintText: 'If you are preparing for PG',
+              labelText: 'Clinical interest (optional)',
+              hintText: 'Skip if not preparing for PG / exam',
             ),
             items: [
               const DropdownMenuItem<String?>(
                 value: null,
-                child: Text('Not preparing / skip'),
+                child: Text('Skip / none'),
               ),
               ...ClinicalProfileOptions.neetPgSubjects.map(
                 (s) => DropdownMenuItem<String?>(
@@ -144,6 +144,8 @@ class _ProfileDetailsFormState extends State<ProfileDetailsForm> {
             onChanged: widget.enabled
                 ? (v) {
                     setState(() => _pgPrep = v);
+                    // Keep speciality controller in sync so save always persists.
+                    widget.specialityController.text = v ?? '';
                     widget.onPgPrepSubjectChanged?.call(v);
                   }
                 : null,
@@ -218,22 +220,22 @@ abstract final class ProfileDetailsFormHelper {
     required TextEditingController customRoleController,
     String? pgPrepSubject,
   }) {
+    if (ClinicalProfileOptions.skipSpeciality(role)) {
+      return '';
+    }
     if (role == UserRole.other) {
       final custom = customRoleController.text.trim();
       if (custom.isNotEmpty) return custom;
       final text = specialityController.text.trim();
-      return text.isNotEmpty ? text : null;
+      return text;
     }
     if (ClinicalProfileOptions.showPgPrepSubject(role)) {
-      return pgPrepSubject?.trim().isNotEmpty == true
-          ? pgPrepSubject!.trim()
-          : null;
+      return pgPrepSubject?.trim() ?? specialityController.text.trim();
     }
     if (ClinicalProfileOptions.showClinicalSpeciality(role) ||
         ClinicalProfileOptions.showFreeTextSpeciality(role)) {
-      final text = specialityController.text.trim();
-      return text.isNotEmpty ? text : null;
+      return specialityController.text.trim();
     }
-    return null;
+    return '';
   }
 }

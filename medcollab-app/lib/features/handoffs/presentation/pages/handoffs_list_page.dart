@@ -109,6 +109,11 @@ class _HandoffsListPageState extends State<HandoffsListPage> {
                             icon: Icon(Icons.assignment_turned_in_outlined),
                           ),
                           ButtonSegment(
+                            value: HandoffListFilter.completed,
+                            label: Text('Done'),
+                            icon: Icon(Icons.done_all_outlined),
+                          ),
+                          ButtonSegment(
                             value: HandoffListFilter.drafts,
                             label: Text('Drafts'),
                             icon: Icon(Icons.edit_note_outlined),
@@ -150,6 +155,8 @@ class _HandoffsListPageState extends State<HandoffsListPage> {
                                                 'No pending handoffs',
                                               HandoffListFilter.active =>
                                                 'No active handoffs',
+                                              HandoffListFilter.completed =>
+                                                'No completed handoffs',
                                               HandoffListFilter.drafts =>
                                                 'No drafts',
                                             }

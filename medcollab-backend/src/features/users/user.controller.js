@@ -47,6 +47,14 @@ const updateMe = asyncHandler(async (req, res) => {
     updates.isOnboarded = true;
   }
 
+  // Merge nested notifications so one toggle never wipes sibling prefs.
+  if (updates.notifications && typeof updates.notifications === 'object') {
+    const current = user.notifications?.toObject
+      ? user.notifications.toObject()
+      : { ...(user.notifications || {}) };
+    updates.notifications = { ...current, ...updates.notifications };
+  }
+
   const updated = await User.findByIdAndUpdate(
     req.user._id,
     { $set: updates },
@@ -199,7 +207,16 @@ const lookupByPhone = asyncHandler(async (req, res) => {
   }
 
   if (user._id.toString() === req.user._id.toString()) {
-    return respond.badRequest(res, 'That is your own number');
+    return respond.ok(res, 'Lookup result', {
+      user: user.toPublicProfile(),
+      relationship: 'self',
+      canMessage: true,
+      sharesGroup: false,
+      acceptsMessageRequests: false,
+      canRequest: false,
+      pendingRequest: null,
+      isSelf: true,
+    });
   }
 
   const { canMessageUser, canRequestMessage, shareActiveSpace } = require('../../utils/knownUsers');

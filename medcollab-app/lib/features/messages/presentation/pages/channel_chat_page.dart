@@ -28,12 +28,12 @@ import 'package:medcollab_app/features/messages/presentation/widgets/message_wid
 import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
 import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/forward_message_sheet.dart';
 import 'package:medcollab_app/shared/presentation/widgets/chat_network_image.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChannelChatPage extends StatefulWidget {
@@ -378,11 +378,17 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     if (!force && !_userNearBottom) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) return;
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-      );
+      final max = _scrollController.position.maxScrollExtent;
+      // Jump on first open so chat never lands mid-thread.
+      if (force) {
+        _scrollController.jumpTo(max);
+      } else {
+        _scrollController.animateTo(
+          max,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
@@ -734,8 +740,14 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         prev.messages != next.messages,
                     listener: (_, state) {
                       final grew = state.messages.length > _lastMessageCount;
+                      final firstPaint =
+                          _lastMessageCount == 0 && state.messages.isNotEmpty;
                       _lastMessageCount = state.messages.length;
-                      if (grew) _scrollToBottom();
+                      if (firstPaint) {
+                        _scrollToBottom(force: true);
+                      } else if (grew) {
+                        _scrollToBottom();
+                      }
                     },
                     builder: (context, state) {
                       if (state.isLoading && state.messages.isEmpty) {
@@ -758,7 +770,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             child: state.messages.isEmpty
                                 ? _EmptyChatState(isDm: _isDm)
                                 : ListView.builder(
-                                    key: const PageStorageKey('chat-list'),
+                                    key: PageStorageKey('chat-list-${widget.channelId}'),
                                     controller: _scrollController,
                                     cacheExtent: 480,
                                     padding: const EdgeInsets.symmetric(
@@ -1326,24 +1338,10 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   }
 
   Future<void> _forwardMessage(MessageModel message) async {
-    final body = message.displayText.trim();
-    if (body.isEmpty && !message.content.hasMedia) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nothing to forward from this message')),
-      );
-      return;
-    }
-    final media = message.content.mediaUrl?.trim();
-    final payload = StringBuffer()
-      ..writeln('↪️ Forwarded from ${message.sender.displayName} on Vocle')
-      ..writeln();
-    if (body.isNotEmpty) payload.writeln(body);
-    if (media != null && media.isNotEmpty) payload.writeln(media);
-
-    await Share.share(
-      payload.toString().trim(),
-      subject: 'Forwarded Vocle message',
+    await showForwardMessageSheet(
+      context,
+      message: message,
+      sourceChannelId: widget.channelId,
     );
   }
 

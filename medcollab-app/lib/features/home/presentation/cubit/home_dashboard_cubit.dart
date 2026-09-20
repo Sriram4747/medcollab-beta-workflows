@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
+import 'package:medcollab_app/core/constants/socket_events.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
+import 'package:medcollab_app/core/socket/socket_client.dart';
 import 'package:medcollab_app/core/storage/bookmark_service.dart';
 import 'package:medcollab_app/core/storage/recent_items_service.dart';
 import 'package:medcollab_app/features/channels/data/repositories/channel_repository.dart';
@@ -22,6 +26,7 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
     required BookmarkService bookmarkService,
     required DashboardPreferencesService dashboardPreferencesService,
     required this.currentUserId,
+    SocketClient? socketClient,
   })  : _spaceRepository = spaceRepository,
         _handoffRepository = handoffRepository,
         _channelRepository = channelRepository,
@@ -29,7 +34,9 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
         _recentItemsService = recentItemsService,
         _bookmarkService = bookmarkService,
         _dashboardPreferencesService = dashboardPreferencesService,
+        _socketClient = socketClient,
         super(const HomeDashboardState()) {
+    _listenHandoffAck();
     load();
   }
 
@@ -40,28 +47,50 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
   final RecentItemsService _recentItemsService;
   final BookmarkService _bookmarkService;
   final DashboardPreferencesService _dashboardPreferencesService;
+  final SocketClient? _socketClient;
   final String currentUserId;
 
-  Future<void> load() async {
-    emit(state.copyWith(isLoading: true, error: null));
-    try {
-      final spaces = await _spaceRepository.getMySpaces();
-      final handoffs = await _handoffRepository.getMyHandoffs();
-      final notificationsPage =
-          await _notificationRepository.getNotifications(limit: 50);
-      final recentSpaces = await _recentItemsService.getRecentSpaces();
-      final recentChannels = await _recentItemsService.getRecentChannels();
-      final pinnedItems = await _recentItemsService.getPinnedItems();
-      final bookmarks = await _bookmarkService.getAll();
-      final widgetPreferences = await _dashboardPreferencesService.load();
+  StreamSubscription<Map<String, dynamic>>? _ackSub;
 
-      // DMs require Sprint 8 backend (`GET /api/channels/dm`). Do not fail Home.
-      List<ChannelModel> recentDms = const [];
-      try {
-        recentDms = await _channelRepository.getMyDMs();
-      } catch (_) {
-        recentDms = const [];
-      }
+  void _listenHandoffAck() {
+    final socket = _socketClient;
+    if (socket == null) return;
+    _ackSub = socket.onMapEvent(SocketEvents.handoffAcknowledged).listen((_) {
+      // Silent refresh — keep UI snappy after ack elsewhere.
+      load(silent: true);
+    });
+  }
+
+  Future<void> load({bool silent = false}) async {
+    if (!silent) {
+      emit(state.copyWith(isLoading: true, error: null));
+    }
+    try {
+      final spacesFut = _spaceRepository.getMySpaces();
+      final handoffsFut = _handoffRepository.getMyHandoffs();
+      final notifFut = _notificationRepository.getNotifications(limit: 50);
+      final recentSpacesFut = _recentItemsService.getRecentSpaces();
+      final recentChannelsFut = _recentItemsService.getRecentChannels();
+      final pinnedFut = _recentItemsService.getPinnedItems();
+      final bookmarksFut = _bookmarkService.getAll();
+      final prefsFut = _dashboardPreferencesService.load();
+      final dmsFut = () async {
+        try {
+          return await _channelRepository.getMyDMs();
+        } catch (_) {
+          return <ChannelModel>[];
+        }
+      }();
+
+      final spaces = await spacesFut;
+      final handoffs = await handoffsFut;
+      final notificationsPage = await notifFut;
+      final recentSpaces = await recentSpacesFut;
+      final recentChannels = await recentChannelsFut;
+      final pinnedItems = await pinnedFut;
+      final bookmarks = await bookmarksFut;
+      final widgetPreferences = await prefsFut;
+      final recentDms = await dmsFut;
 
       final notifications = notificationsPage.notifications;
 
@@ -81,7 +110,6 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
           )
           .toList()
         ..sort((a, b) {
-          // Current shift pending first; overdue (not attended) next.
           final aPast = a.isShiftPast ? 1 : 0;
           final bPast = b.isShiftPast ? 1 : 0;
           if (aPast != bPast) return aPast.compareTo(bPast);
@@ -101,7 +129,8 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
 
       final unreadMentions = notifications
           .where(
-              (n) => !n.read && n.category == AppNotificationCategory.mention)
+            (n) => !n.read && n.category == AppNotificationCategory.mention,
+          )
           .length;
 
       final unreadThreads = notifications
@@ -210,5 +239,11 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> close() {
+    _ackSub?.cancel();
+    return super.close();
   }
 }

@@ -85,7 +85,8 @@ class _StartDmPageState extends State<StartDmPage> {
       return;
     }
 
-    final selfId = context.read<AuthBloc>().state.user?.id ?? '';
+    final selfUser = context.read<AuthBloc>().state.user;
+    final selfId = selfUser?.id ?? '';
     _debounce = Timer(const Duration(milliseconds: 400), () async {
       if (!mounted) return;
       setState(() {
@@ -97,8 +98,16 @@ class _StartDmPageState extends State<StartDmPage> {
         final users = await AppDependencies.instance.memberRepository
             .searchMembers(query: trimmed);
         if (!mounted) return;
+        final lower = trimmed.toLowerCase();
+        final includeSelf = selfUser != null &&
+            (selfUser.displayName.toLowerCase().contains(lower) ||
+                (selfUser.name?.toLowerCase().contains(lower) ?? false));
+        final others = users.where((u) => u.id != selfId).toList();
         setState(() {
-          _nameResults = users.where((u) => u.id != selfId).toList();
+          _nameResults = [
+            if (includeSelf) selfUser,
+            ...others,
+          ];
           _searching = false;
         });
       } catch (_) {
@@ -306,7 +315,14 @@ class _StartDmPageState extends State<StartDmPage> {
 
     Widget action;
     late final String helper;
-    if (lookup.canMessage) {
+    if (lookup.isSelf || lookup.relationship == 'self') {
+      action = FilledButton(
+        onPressed: busy ? null : () => _startDm(user),
+        child: const Text('Open notes to self'),
+      );
+      helper =
+          'Save personal reminders, differentials, or draft notes only you can see.';
+    } else if (lookup.canMessage) {
       action = FilledButton(
         onPressed: busy ? null : () => _startDm(user),
         child: const Text('Message'),

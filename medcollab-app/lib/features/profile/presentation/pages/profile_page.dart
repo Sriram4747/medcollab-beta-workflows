@@ -240,7 +240,6 @@ class ProfilePage extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.photo_library_outlined),
                   title: const Text('Change photo'),
-                  subtitle: const Text('Crop to circle before saving'),
                   onTap: () async {
                     Navigator.pop(sheetContext);
                     await _pickCropAndUpload(context, ImageSource.gallery);

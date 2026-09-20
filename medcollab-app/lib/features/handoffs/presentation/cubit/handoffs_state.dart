@@ -21,8 +21,14 @@ class HandoffsState extends Equatable {
     final q = searchQuery.toLowerCase();
     return handoffs.where((h) {
       final matchesFilter = switch (filter) {
-        HandoffListFilter.pending => h.status == HandoffStatus.submitted,
-        HandoffListFilter.active => h.status == HandoffStatus.acknowledged,
+        HandoffListFilter.pending =>
+          h.status == HandoffStatus.submitted && !h.isShiftPast,
+        HandoffListFilter.active =>
+          h.status == HandoffStatus.acknowledged && !h.isShiftPast,
+        HandoffListFilter.completed =>
+          h.isShiftPast &&
+              (h.status == HandoffStatus.acknowledged ||
+                  h.status == HandoffStatus.submitted),
         HandoffListFilter.drafts => h.status == HandoffStatus.draft,
       };
       if (!matchesFilter) return false;

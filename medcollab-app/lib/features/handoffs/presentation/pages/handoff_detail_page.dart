@@ -48,18 +48,75 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
     });
   }
 
-  Future<void> _acknowledge(HandoffModel handoff) async {
+  Future<void> _acknowledge(
+    HandoffModel handoff, {
+    String note = '',
+  }) async {
     setState(() {
       _isBusy = true;
       _error = null;
     });
     try {
-      final updated = await _repository.acknowledgeHandoff(handoff.id);
+      final updated = await _repository.acknowledgeHandoff(
+        handoff.id,
+        note: note,
+      );
       if (mounted) context.pop(updated);
     } on AppException catch (e) {
       setState(() => _error = e.message);
     } finally {
       if (mounted) setState(() => _isBusy = false);
+    }
+  }
+
+  /// Past-shift submitted handoffs: don't pretend they were attended.
+  Future<void> _resolveOverdue(HandoffModel handoff) async {
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'This shift ended without acknowledgement',
+                style: Theme.of(ctx).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Close it honestly so your team’s list stays accurate. '
+                'Write-back / reassign for the next doctor is coming soon.',
+                style: Theme.of(ctx).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, 'covered'),
+                child: const Text('I covered this shift (late)'),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                onPressed: () => Navigator.pop(ctx, 'missed'),
+                child: const Text('Close as missed'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (choice == null || !mounted) return;
+    if (choice == 'covered') {
+      await _acknowledge(handoff, note: 'Attended late — closed after shift.');
+    } else if (choice == 'missed') {
+      await _acknowledge(handoff, note: 'Missed / not attended.');
     }
   }
 
@@ -286,7 +343,13 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
                                 ),
                                 onPressed: _isBusy
                                     ? null
-                                    : () => _acknowledge(handoff),
+                                    : () {
+                                        if (handoff.isShiftPast) {
+                                          _resolveOverdue(handoff);
+                                        } else {
+                                          _acknowledge(handoff);
+                                        }
+                                      },
                                 child: _isBusy
                                     ? const SizedBox(
                                         width: 18,
@@ -298,7 +361,7 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
                                       )
                                     : Text(
                                         handoff.isShiftPast
-                                            ? 'Mark as attended'
+                                            ? 'Resolve overdue'
                                             : 'Acknowledge handoff',
                                         style: AppTextStyles.labelLarge
                                             .copyWith(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
@@ -10,6 +11,7 @@ import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_model.dart';
 import 'package:medcollab_app/features/handoffs/presentation/utils/handoff_priority_colors.dart';
 import 'package:medcollab_app/features/home/data/dashboard_preferences_service.dart';
+import 'package:medcollab_app/features/home/presentation/cubit/home_dashboard_cubit.dart';
 import 'package:medcollab_app/features/home/presentation/cubit/home_dashboard_state.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/availability_pill.dart';
@@ -308,9 +310,14 @@ class _PendingHandoffCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: AppRadius.card,
-        onTap: () => context.push(
-          AppRoutes.spaceHandoffDetailPath(handoff.spaceId, handoff.id),
-        ),
+        onTap: () async {
+          await context.push<HandoffModel>(
+            AppRoutes.spaceHandoffDetailPath(handoff.spaceId, handoff.id),
+          );
+          if (!context.mounted) return;
+          // Refresh Home immediately so pending list doesn't stay stale.
+          context.read<HomeDashboardCubit>().load();
+        },
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.surfaceCard,

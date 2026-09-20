@@ -42,6 +42,7 @@ class HomeDashboardPage extends StatelessWidget {
         bookmarkService: deps.bookmarkService,
         dashboardPreferencesService: deps.dashboardPreferencesService,
         currentUserId: userId,
+        socketClient: deps.socketClient,
       ),
       child: const _HomeDashboardView(),
     );

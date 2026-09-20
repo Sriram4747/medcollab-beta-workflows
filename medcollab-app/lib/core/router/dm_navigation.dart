@@ -4,6 +4,9 @@ import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 
 /// Opens a DM without stacking duplicate routes for the same channel.
+///
+/// Does **not** await route pop — awaiting `context.push` made Message taps
+/// feel multi-second laggy until the user left the chat.
 Future<void> openDmChat(
   BuildContext context, {
   required String channelId,
@@ -17,6 +20,6 @@ Future<void> openDmChat(
   if (replace) {
     context.pushReplacement(path, extra: channel);
   } else {
-    await context.push(path, extra: channel);
+    context.push(path, extra: channel);
   }
 }
