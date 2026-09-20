@@ -22,6 +22,9 @@ part 'channel_chat_state.dart';
 class ChannelChatCubit extends Cubit<ChannelChatState> {
   StreamSubscription<bool>? _connectionSub;
 
+  /// Dedupe socket fan-out (channel room + user room).
+  final Set<String> _seenSocketMessageIds = {};
+
   ChannelChatCubit({
     required MessageRepository messageRepository,
     required MediaRepository mediaRepository,
@@ -448,6 +451,9 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
   }
 
   void _handleIncomingMessage(MessageModel message) {
+    if (message.id.isNotEmpty && !_seenSocketMessageIds.add(message.id)) {
+      return;
+    }
     if (message.isThreadReply) {
       _applyThreadReplyToRoot(message);
       return;

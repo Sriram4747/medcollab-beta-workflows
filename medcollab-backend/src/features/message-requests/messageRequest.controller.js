@@ -7,7 +7,7 @@ const MessageRequest = require('./messageRequest.model');
 const User = require('../users/user.model');
 const { respond } = require('../../utils/apiResponse');
 const asyncHandler = require('../../utils/asyncHandler');
-const { canMessageUser } = require('../../utils/knownUsers');
+const { canMessageUser, canRequestMessage } = require('../../utils/knownUsers');
 const { MESSAGE_REQUEST_STATUS, NOTIFICATION_TYPES } = require('../../constants');
 const { sendNotification } = require('../../services/notification.service');
 
@@ -58,7 +58,7 @@ const createRequest = asyncHandler(async (req, res) => {
   }
 
   const target = await User.findById(toUserId).select(
-    '_id name isOnboarded isActive notifications.allowMessageRequestsFromAnyone'
+    '_id name isOnboarded isActive'
   );
   if (!target || !target.isActive || !target.isOnboarded) {
     return respond.notFound(res, 'Doctor not found');
@@ -71,8 +71,7 @@ const createRequest = asyncHandler(async (req, res) => {
     );
   }
 
-  // Opt-in privacy: strangers may only request if the target allows it.
-  if (target.notifications?.allowMessageRequestsFromAnyone !== true) {
+  if (!(await canRequestMessage(callerId, toUserId))) {
     return respond.forbidden(
       res,
       'This doctor is not accepting message requests from outside their network'

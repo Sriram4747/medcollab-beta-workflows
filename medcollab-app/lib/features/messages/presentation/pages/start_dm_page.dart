@@ -11,6 +11,7 @@ import 'package:medcollab_app/core/utils/phone_utils.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/messages/data/models/user_lookup_result.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_search_bar.dart';
@@ -116,6 +117,8 @@ class _StartDmPageState extends State<StartDmPage> {
       _searching = true;
       _error = null;
       _nameResults = const [];
+      _busyUserId = null;
+      _busyRequestId = null;
     });
     try {
       final result = await AppDependencies.instance.userRepository
@@ -124,6 +127,7 @@ class _StartDmPageState extends State<StartDmPage> {
       setState(() {
         _phoneLookup = result;
         _searching = false;
+        _error = null;
       });
     } on NotFoundException catch (e) {
       if (!mounted) return;
@@ -132,12 +136,14 @@ class _StartDmPageState extends State<StartDmPage> {
         _searching = false;
         _error = e.message;
       });
-    } catch (_) {
+    } catch (e) {
       if (!mounted) return;
       setState(() {
         _phoneLookup = null;
         _searching = false;
-        _error = 'Could not look up this number';
+        _error = e is AppException
+            ? e.message
+            : 'Could not look up this number';
       });
     }
   }
@@ -158,6 +164,14 @@ class _StartDmPageState extends State<StartDmPage> {
     } on AppException catch (e) {
       if (!mounted) return;
       setState(() => _busyUserId = null);
+      // Shared group / college no longer auto-opens DM — offer a request.
+      final msg = e.message.toLowerCase();
+      if (msg.contains('message request') ||
+          msg.contains('only after') ||
+          msg.contains('send a message request')) {
+        await _sendRequest(user);
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message)),
       );
@@ -170,8 +184,12 @@ class _StartDmPageState extends State<StartDmPage> {
     }
   }
 
+  Future<void> _startDmOrRequest(UserModel user) async {
+    await _startDm(user);
+  }
+
   Future<void> _sendRequest(UserModel user) async {
-    if (_busyUserId != null) return;
+    if (_busyUserId != null && _busyUserId != user.id) return;
 
     final introController = TextEditingController();
     final intro = await showDialog<String>(
@@ -293,7 +311,7 @@ class _StartDmPageState extends State<StartDmPage> {
         onPressed: busy ? null : () => _startDm(user),
         child: const Text('Message'),
       );
-      helper = 'You share a group or college — chat opens immediately.';
+      helper = 'You already have a chat (or an accepted request) with them.';
     } else if (pending?.isReceived == true) {
       action = Row(
         children: [
@@ -302,10 +320,15 @@ class _StartDmPageState extends State<StartDmPage> {
               onPressed: busy
                   ? null
                   : () async {
-                      await AppDependencies.instance.messageRequestRepository
-                          .declineRequest(pending!.id);
-                      if (!mounted) return;
-                      await _lookupPhone(_searchController.text.trim());
+                      setState(() => _busyRequestId = pending!.id);
+                      try {
+                        await AppDependencies.instance.messageRequestRepository
+                            .declineRequest(pending!.id);
+                        if (!mounted) return;
+                        await _lookupPhone(_searchController.text.trim());
+                      } finally {
+                        if (mounted) setState(() => _busyRequestId = null);
+                      }
                     },
               child: const Text('Decline'),
             ),
@@ -328,45 +351,56 @@ class _StartDmPageState extends State<StartDmPage> {
         child: Text('Request pending'),
       );
       helper = 'Waiting for them to accept. No chat or Seen until then.';
-    } else if (!lookup.acceptsMessageRequests) {
+    } else if (lookup.canRequest || lookup.acceptsMessageRequests) {
+      action = FilledButton(
+        onPressed: busy ? null : () => _sendRequest(user),
+        child: const Text('Send request'),
+      );
+      helper = lookup.sharesGroup
+          ? 'You share a group, but chat still needs their approval first.'
+          : 'They allow requests from anyone. They must approve before you can chat.';
+    } else {
       action = const OutlinedButton(
         onPressed: null,
         child: Text('Requests closed'),
       );
       helper =
-          'This doctor is not accepting message requests from outside their '
-          'network. Ask a mutual colleague to introduce you in a group.';
-    } else {
-      action = FilledButton(
-        onPressed: busy ? null : () => _sendRequest(user),
-        child: const Text('Send request'),
-      );
-      helper =
-          'Not in your groups yet. They must approve before you can chat — '
-          'no Seen until then.';
+          'They are not accepting requests from outside their network. '
+          'Join a mutual group first, or ask a colleague to introduce you.';
     }
 
     return ClinicalCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              AppAvatar(name: user.displayName, imageUrl: user.avatarUrl),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.displayName,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    _userSubtitle(user),
-                  ],
+          InkWell(
+            onTap: () => showPeerProfileCard(context, user: user),
+            borderRadius: BorderRadius.circular(8),
+            child: Row(
+              children: [
+                AppAvatar(name: user.displayName, imageUrl: user.avatarUrl),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.displayName,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      _userSubtitle(user),
+                      Text(
+                        'Tap for profile',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: AppColors.tealDark,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                const Icon(Icons.info_outline, color: AppColors.textMuted),
+              ],
+            ),
           ),
           const SizedBox(height: 12),
           Text(
@@ -459,7 +493,12 @@ class _StartDmPageState extends State<StartDmPage> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                             child: ClinicalCard(
-                              onTap: busy ? null : () => _startDm(user),
+                              onTap: busy
+                                  ? null
+                                  : () => showPeerProfileCard(
+                                        context,
+                                        user: user,
+                                      ),
                               child: Row(
                                 children: [
                                   AppAvatar(
@@ -479,6 +518,15 @@ class _StartDmPageState extends State<StartDmPage> {
                                               .titleSmall,
                                         ),
                                         _userSubtitle(user),
+                                        Text(
+                                          'Tap profile · Message needs approval if new',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall
+                                              ?.copyWith(
+                                                color: AppColors.textMuted,
+                                              ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -491,7 +539,11 @@ class _StartDmPageState extends State<StartDmPage> {
                                       ),
                                     )
                                   else
-                                    const Icon(Icons.chevron_right),
+                                    IconButton(
+                                      tooltip: 'Message / request',
+                                      onPressed: () => _startDmOrRequest(user),
+                                      icon: const Icon(Icons.chat_outlined),
+                                    ),
                                 ],
                               ),
                             ),

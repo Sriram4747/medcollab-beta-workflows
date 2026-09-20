@@ -264,7 +264,10 @@ const getThread = asyncHandler(async (req, res) => {
   const before = req.query.before;
 
   const threadQuery = {
-    threadId: rootMessage._id,
+    $or: [
+      { threadId: rootMessage._id },
+      { threadId: rootMessage._id.toString() },
+    ],
     isDeleted: false,
   };
   if (before) threadQuery._id = { $lt: before };

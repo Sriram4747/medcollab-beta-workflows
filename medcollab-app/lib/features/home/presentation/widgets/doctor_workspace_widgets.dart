@@ -253,7 +253,7 @@ class AssignedHandoffsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Vocle Home: surface only the 1–2 most urgent pending handoffs.
+    // Vocle Home: only handoffs still awaiting acknowledgement (submitted).
     final pending = handoffs.take(2).toList();
     return _DashboardSection(
       title: 'Pending handoffs',
@@ -264,7 +264,7 @@ class AssignedHandoffsWidget extends StatelessWidget {
               child: _EmptyWidgetMessage(
                 icon: Icons.assignment_turned_in_outlined,
                 title: 'No pending handoffs',
-                subtitle: 'New assignments will appear here.',
+                subtitle: 'Acknowledged handoffs move to Active / Completed.',
               ),
             )
           : Column(

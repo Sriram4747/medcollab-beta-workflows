@@ -7,19 +7,26 @@ class UserLookupResult extends Equatable {
     required this.user,
     required this.relationship,
     required this.canMessage,
+    this.sharesGroup = false,
     this.acceptsMessageRequests = false,
+    this.canRequest = false,
     this.pendingRequest,
   });
 
   factory UserLookupResult.fromJson(Map<String, dynamic> json) {
     final pending = json['pendingRequest'];
     final canMessage = json['canMessage'] as bool? ?? false;
+    final canRequest = json['canRequest'] as bool? ??
+        json['acceptsMessageRequests'] as bool? ??
+        false;
     return UserLookupResult(
       user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       relationship: json['relationship'] as String? ?? 'stranger',
       canMessage: canMessage,
-      acceptsMessageRequests:
-          json['acceptsMessageRequests'] as bool? ?? canMessage,
+      sharesGroup: json['sharesGroup'] as bool? ??
+          json['relationship'] == 'group_member',
+      acceptsMessageRequests: canRequest,
+      canRequest: canRequest,
       pendingRequest: pending is Map<String, dynamic>
           ? PendingRequestHint.fromJson(pending)
           : null,
@@ -29,13 +36,22 @@ class UserLookupResult extends Equatable {
   final UserModel user;
   final String relationship;
   final bool canMessage;
-  /// True when known (can message) or target opted into stranger requests.
+  final bool sharesGroup;
+  /// Alias used by UI: may send a message request.
   final bool acceptsMessageRequests;
+  final bool canRequest;
   final PendingRequestHint? pendingRequest;
 
   @override
-  List<Object?> get props =>
-      [user, relationship, canMessage, acceptsMessageRequests, pendingRequest];
+  List<Object?> get props => [
+        user,
+        relationship,
+        canMessage,
+        sharesGroup,
+        acceptsMessageRequests,
+        canRequest,
+        pendingRequest,
+      ];
 }
 
 class PendingRequestHint extends Equatable {

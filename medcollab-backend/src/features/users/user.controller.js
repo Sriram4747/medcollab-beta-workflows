@@ -202,13 +202,13 @@ const lookupByPhone = asyncHandler(async (req, res) => {
     return respond.badRequest(res, 'That is your own number');
   }
 
-  const { canMessageUser } = require('../../utils/knownUsers');
+  const { canMessageUser, canRequestMessage, shareActiveSpace } = require('../../utils/knownUsers');
   const MessageRequest = require('../message-requests/messageRequest.model');
 
   const canMessage = await canMessageUser(req.user._id, user._id);
-  const acceptsMessageRequests =
-    canMessage ||
-    user.notifications?.allowMessageRequestsFromAnyone === true;
+  const sharesGroup = await shareActiveSpace(req.user._id, user._id);
+  const canRequest = await canRequestMessage(req.user._id, user._id);
+  const acceptsMessageRequests = canRequest;
 
   let pendingRequest = null;
   const pending = await MessageRequest.findOne({
@@ -233,9 +233,15 @@ const lookupByPhone = asyncHandler(async (req, res) => {
 
   return respond.ok(res, 'Lookup result', {
     user: user.toPublicProfile(),
-    relationship: canMessage ? 'known' : 'stranger',
+    relationship: canMessage
+      ? 'known'
+      : sharesGroup
+        ? 'group_member'
+        : 'stranger',
     canMessage,
+    sharesGroup,
     acceptsMessageRequests,
+    canRequest,
     pendingRequest,
   });
 });

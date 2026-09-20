@@ -304,8 +304,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       child: SwitchListTile(
                         title: const Text('Allow message requests from anyone'),
                         subtitle: const Text(
-                          'Doctors who find your number on Vocle can ask to chat. '
-                          'Off = only colleagues from your groups / college.',
+                          'On: doctors who find your number can ask to chat. '
+                          'Off: only colleagues who already share a Vocle group with you can send a request. '
+                          'Chat never opens until you accept.',
                         ),
                         value: _prefs!.allowMessageRequestsFromAnyone,
                         onChanged: _saving

@@ -415,6 +415,7 @@ class AppRouter {
     if (location.startsWith('/spaces')) return true;
     if (location.startsWith('/dm')) return true;
     if (location.startsWith('/join')) return true;
+    if (location.startsWith('/profile')) return true;
     if (location == AppRoutes.scanInviteQr) return true;
     if (location == AppRoutes.search ||
         location == AppRoutes.bookmarks ||

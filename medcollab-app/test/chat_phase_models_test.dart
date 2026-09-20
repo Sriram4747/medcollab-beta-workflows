@@ -50,15 +50,37 @@ void main() {
   });
 
   group('UserLookupResult', () {
-    test('acceptsMessageRequests falls back to canMessage', () {
-      final json = {
+    test('canMessage does not imply canRequest (open DM vs request)', () {
+      final known = UserLookupResult.fromJson({
         'user': {'_id': 'u1', 'name': 'Dr Test'},
         'relationship': 'known',
         'canMessage': true,
-      };
-      final result = UserLookupResult.fromJson(json);
-      expect(result.canMessage, isTrue);
-      expect(result.acceptsMessageRequests, isTrue);
+      });
+      expect(known.canMessage, isTrue);
+      expect(known.canRequest, isFalse);
+      expect(known.acceptsMessageRequests, isFalse);
+
+      final requestable = UserLookupResult.fromJson({
+        'user': {'_id': 'u2', 'name': 'Dr Other'},
+        'relationship': 'group_member',
+        'canMessage': false,
+        'canRequest': true,
+        'sharesGroup': true,
+      });
+      expect(requestable.canMessage, isFalse);
+      expect(requestable.canRequest, isTrue);
+      expect(requestable.acceptsMessageRequests, isTrue);
+    });
+
+    test('acceptsMessageRequests aliases canRequest from legacy field', () {
+      final legacy = UserLookupResult.fromJson({
+        'user': {'_id': 'u3', 'name': 'Dr Legacy'},
+        'relationship': 'stranger',
+        'canMessage': false,
+        'acceptsMessageRequests': true,
+      });
+      expect(legacy.canRequest, isTrue);
+      expect(legacy.acceptsMessageRequests, isTrue);
     });
   });
 }

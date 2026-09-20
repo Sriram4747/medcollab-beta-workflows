@@ -77,14 +77,18 @@ class HomeDashboardCubit extends Cubit<HomeDashboardState> {
           .where(
             (handoff) =>
                 handoff.toUser.id == currentUserId &&
-                handoff.status != HandoffStatus.draft,
+                handoff.status == HandoffStatus.submitted,
           )
           .toList()
-        ..sort(
-          (a, b) => (b.lastUpdated ?? b.shiftDate ?? DateTime(0)).compareTo(
+        ..sort((a, b) {
+          // Current shift pending first; overdue (not attended) next.
+          final aPast = a.isShiftPast ? 1 : 0;
+          final bPast = b.isShiftPast ? 1 : 0;
+          if (aPast != bPast) return aPast.compareTo(bPast);
+          return (b.lastUpdated ?? b.shiftDate ?? DateTime(0)).compareTo(
             a.lastUpdated ?? a.shiftDate ?? DateTime(0),
-          ),
-        );
+          );
+        });
 
       final now = DateTime.now();
       final todayHandoffs = assignedHandoffs.where((handoff) {

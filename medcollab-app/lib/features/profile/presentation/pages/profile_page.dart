@@ -95,11 +95,11 @@ class ProfilePage extends StatelessWidget {
                         _SettingsRow(
                           icon: Icons.lock_outline,
                           label: 'Messaging privacy',
-                          subtitle: user?.notifications
-                                      .allowMessageRequestsFromAnyone ==
-                                  true
-                              ? 'Anyone can send a request'
-                              : 'Only your network can message you',
+                        subtitle: user?.notifications
+                                    .allowMessageRequestsFromAnyone ==
+                                true
+                            ? 'Anyone with your number can send a request'
+                            : 'Only shared-group doctors can send a request',
                           onTap: () =>
                               context.push(AppRoutes.notificationSettings),
                         ),

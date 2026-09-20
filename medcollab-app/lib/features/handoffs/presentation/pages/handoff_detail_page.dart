@@ -297,7 +297,9 @@ class _HandoffDetailPageState extends State<HandoffDetailPage> {
                                         ),
                                       )
                                     : Text(
-                                        'Acknowledge Handoff',
+                                        handoff.isShiftPast
+                                            ? 'Mark as attended'
+                                            : 'Acknowledge handoff',
                                         style: AppTextStyles.labelLarge
                                             .copyWith(
                                           color: AppColors.textOnDark,

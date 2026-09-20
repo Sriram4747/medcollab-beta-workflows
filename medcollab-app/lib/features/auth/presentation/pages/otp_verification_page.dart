@@ -268,9 +268,30 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   .add(const AuthChangePhoneRequested()),
           child: Form(
             key: _formKey,
-            child: Column(
+            child: AutofillGroup(
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Android/iOS SMS autofill lands here (full 6-digit code).
+                Offstage(
+                  offstage: true,
+                  child: TextField(
+                    controller: _otpController,
+                    keyboardType: TextInputType.number,
+                    autofillHints: const [AutofillHints.oneTimeCode],
+                    onChanged: (value) {
+                      final digits = value.replaceAll(RegExp(r'\D'), '');
+                      if (digits.isEmpty) return;
+                      _applyOtpDigits(digits);
+                      if (_digitControllers.every((c) => c.text.isNotEmpty) &&
+                          !expired &&
+                          !state.isLoading) {
+                        TextInput.finishAutofillContext(shouldSave: false);
+                        _submit();
+                      }
+                    },
+                  ),
+                ),
                 if (state.errorMessage != null) ...[
                   AuthErrorBanner(
                     message: state.errorMessage!,
@@ -303,6 +324,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                               focusNode: _focusNodes[i],
                               enabled: !state.isLoading && !expired,
                               autofocus: i == 0,
+                              autofillHint: i == 0
+                                  ? AutofillHints.oneTimeCode
+                                  : null,
                               onChanged: (v) {
                                 _onDigitChanged(i, v);
                                 field.didChange(_otpController.text);
@@ -375,6 +399,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                 ],
               ],
             ),
+            ),
           ),
         );
       },
@@ -389,6 +414,7 @@ class _OtpDigitBox extends StatelessWidget {
     required this.onChanged,
     this.enabled = true,
     this.autofocus = false,
+    this.autofillHint,
     this.onSubmitted,
   });
 
@@ -397,6 +423,7 @@ class _OtpDigitBox extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final bool enabled;
   final bool autofocus;
+  final String? autofillHint;
   final ValueChanged<String>? onSubmitted;
 
   static const _radius = BorderRadius.all(Radius.circular(10));
@@ -413,6 +440,8 @@ class _OtpDigitBox extends StatelessWidget {
         autofocus: autofocus,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
+        autofillHints:
+            autofillHint != null ? <String>[autofillHint!] : null,
         textInputAction: onSubmitted != null
             ? TextInputAction.done
             : TextInputAction.next,
@@ -423,7 +452,10 @@ class _OtpDigitBox extends StatelessWidget {
         ),
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(1),
+          // First box may receive the full SMS OTP via autofill.
+          LengthLimitingTextInputFormatter(
+            autofillHint != null ? AppConstants.otpLength : 1,
+          ),
         ],
         decoration: const InputDecoration(
           isDense: true,
