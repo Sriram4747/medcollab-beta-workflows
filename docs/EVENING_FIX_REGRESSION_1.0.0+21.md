@@ -36,5 +36,5 @@
 |-------|--------|
 | `flutter analyze --no-fatal-infos` (touched) | ✅ info-only |
 | `flutter test` | ✅ 33 passed |
-| Push GitHub `master` | ☐ |
-| APK `Vocle-beta.apk` | ☐ |
+| Push GitHub `master` | ✅ `a9878cd` |
+| APK `Vocle-beta.apk` | ✅ built (1.0.0+21) |
