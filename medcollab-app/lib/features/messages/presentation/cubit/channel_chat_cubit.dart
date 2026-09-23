@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/chat/active_chat_tracker.dart';
+import 'package:medcollab_app/core/chat/chat_transcript_cache.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/constants/socket_events.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
@@ -39,7 +40,15 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
         _socketClient = socketClient,
         _notificationRepository = notificationRepository,
         _onChannelAlertsCleared = onChannelAlertsCleared,
-        super(const ChannelChatState()) {
+        super(
+          ChannelChatState(
+            messages: ChatTranscriptCache.messagesFor(channelId) ?? const [],
+            hasMore: ChatTranscriptCache.hasMoreFor(channelId),
+            isLoading:
+                (ChatTranscriptCache.messagesFor(channelId) ?? const [])
+                    .isEmpty,
+          ),
+        ) {
     _listenForSocketMessages();
     _listenForSocketUpdates();
     _listenForTyping();
@@ -54,7 +63,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       _socketClient.joinChannel(channelId);
     }
     ActiveChatTracker.instance.enter(channelId);
-    loadMessages();
+    loadMessages(silent: state.messages.isNotEmpty);
     _markChannelNotificationsRead();
   }
 
@@ -100,6 +109,11 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
           hasMore: page.hasMore,
           isLoading: false,
         ),
+      );
+      ChatTranscriptCache.save(
+        channelId,
+        page.messages,
+        hasMore: page.hasMore,
       );
       _socketClient.joinChannel(channelId);
       unawaited(_markMessagesRead(page.messages));
@@ -206,6 +220,10 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     String? caption,
   }) async {
     if (state.isSending) return;
+    if (bytes.length > 25 * 1024 * 1024) {
+      emit(state.copyWith(error: 'That file is over 25 MB'));
+      return;
+    }
 
     final replySource = state.pendingReply;
     final replyTo = replySource == null || replySource.localOnly
@@ -219,12 +237,12 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
           );
 
     final tempId = 'local-${DateTime.now().millisecondsSinceEpoch}';
-    final isImage = mimeType.startsWith('image/');
+    final mediaType = MessageType.forMime(mimeType);
     final optimistic = MessageModel(
       id: tempId,
       channelId: channelId,
       sender: UserModel(id: currentUserId),
-      type: isImage ? MessageType.image : MessageType.document,
+      type: mediaType,
       content: MessageContent(
         text: caption,
         fileName: fileName,
@@ -252,7 +270,7 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       );
       final message = await _messageRepository.sendMediaMessage(
         channelId: channelId,
-        type: isImage ? MessageType.image : MessageType.document,
+        type: mediaType,
         upload: upload,
         caption: caption,
         replyToId: replyTo?.messageId,
@@ -526,6 +544,11 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
       updated.sort(_compareByCreatedAt);
     }
     emit(state.copyWith(messages: updated));
+    ChatTranscriptCache.save(
+      channelId,
+      updated,
+      hasMore: state.hasMore,
+    );
   }
 
   bool _messagesMatch(MessageModel a, MessageModel b) {
@@ -533,7 +556,9 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     if (a.type == MessageType.text) {
       return a.content.text?.trim() == b.content.text?.trim();
     }
-    if (a.type == MessageType.image || a.type == MessageType.document) {
+    if (a.type == MessageType.image ||
+        a.type == MessageType.video ||
+        a.type == MessageType.document) {
       return a.content.fileName == b.content.fileName &&
           a.content.text == b.content.text;
     }

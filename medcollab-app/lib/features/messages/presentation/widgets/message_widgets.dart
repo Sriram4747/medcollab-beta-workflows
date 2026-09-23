@@ -52,7 +52,7 @@ class MessageComposer extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Gallery'),
+              title: const Text('Photos & videos'),
               onTap: () {
                 Navigator.pop(ctx);
                 onPickGallery?.call();
@@ -633,31 +633,82 @@ class MessageBubble extends StatelessWidget {
       ),
     );
 
-    // Swipe → WhatsApp quote reply (not Slack thread).
+    // Swipe follows the finger, then snaps back. A short drag quotes the message.
     final canSwipe = onQuoteReply != null && !message.localOnly;
     return GestureDetector(
       onLongPress: () => _showActions(context),
       child: !canSwipe
           ? bubble
-          : Dismissible(
-              key: ValueKey('swipe-${message.id}'),
-              direction: isMine
-                  ? DismissDirection.endToStart
-                  : DismissDirection.startToEnd,
-              confirmDismiss: (_) async {
-                onQuoteReply?.call();
-                return false; // never remove the bubble
-              },
-              background: Align(
-                alignment:
-                    isMine ? Alignment.centerRight : Alignment.centerLeft,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Icon(Icons.reply, color: AppColors.tealDark),
-                ),
-              ),
+          : _FingerSwipeReply(
+              fromLeft: !isMine,
+              onReply: () => onQuoteReply?.call(),
               child: bubble,
             ),
+    );
+  }
+}
+
+/// Horizontal drag stays 1:1 with the finger and never travels the screen width.
+class _FingerSwipeReply extends StatefulWidget {
+  const _FingerSwipeReply({
+    required this.child,
+    required this.fromLeft,
+    required this.onReply,
+  });
+
+  final Widget child;
+  final bool fromLeft;
+  final VoidCallback onReply;
+
+  @override
+  State<_FingerSwipeReply> createState() => _FingerSwipeReplyState();
+}
+
+class _FingerSwipeReplyState extends State<_FingerSwipeReply> {
+  static const double _maxTravel = 64;
+  static const double _trigger = 36;
+  double _dx = 0;
+
+  void _onUpdate(DragUpdateDetails details) {
+    final next = widget.fromLeft
+        ? (_dx + details.delta.dx).clamp(0.0, _maxTravel)
+        : (_dx + details.delta.dx).clamp(-_maxTravel, 0.0);
+    if (next == _dx) return;
+    setState(() => _dx = next);
+  }
+
+  void _onEnd(DragEndDetails _) {
+    final fired = widget.fromLeft ? _dx >= _trigger : _dx <= -_trigger;
+    setState(() => _dx = 0);
+    if (fired) widget.onReply();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final showIcon = _dx.abs() > 8;
+    return GestureDetector(
+      onHorizontalDragUpdate: _onUpdate,
+      onHorizontalDragEnd: _onEnd,
+      onHorizontalDragCancel: () => setState(() => _dx = 0),
+      child: Stack(
+        alignment: widget.fromLeft ? Alignment.centerLeft : Alignment.centerRight,
+        children: [
+          if (showIcon)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.reply,
+                color: AppColors.tealDark.withValues(
+                  alpha: (_dx.abs() / _maxTravel).clamp(0.35, 1),
+                ),
+              ),
+            ),
+          Transform.translate(
+            offset: Offset(_dx, 0),
+            child: widget.child,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1016,6 +1067,51 @@ class _MessageBody extends StatelessWidget {
             ),
           ],
         ],
+      );
+    }
+
+    if (message.type == MessageType.video) {
+      final name = message.content.fileName ?? 'Video';
+      final url = message.content.mediaUrl;
+      return InkWell(
+        onTap: url != null && !message.localOnly ? () => onDocumentTap(url) : null,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.videocam_outlined, color: AppColors.primary),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      message.localOnly ? 'Uploading…' : 'Tap to play',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 

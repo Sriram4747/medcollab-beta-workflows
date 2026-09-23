@@ -113,6 +113,7 @@ enum ChannelType {
 enum MessageType {
   text('text'),
   image('image'),
+  video('video'),
   document('document'),
   ecg('ecg'),
   handoff('handoff'),
@@ -126,6 +127,13 @@ enum MessageType {
       (e) => e.value == raw,
       orElse: () => MessageType.text,
     );
+  }
+
+  static MessageType forMime(String mime) {
+    final value = mime.toLowerCase();
+    if (value.startsWith('image/')) return MessageType.image;
+    if (value.startsWith('video/')) return MessageType.video;
+    return MessageType.document;
   }
 }
 

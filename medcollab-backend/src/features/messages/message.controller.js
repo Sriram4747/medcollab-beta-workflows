@@ -133,7 +133,9 @@ const sendMessage = asyncHandler(async (req, res) => {
       parent.content?.text?.slice(0, 120) ||
       (parent.type === MESSAGE_TYPES.IMAGE || parent.type === MESSAGE_TYPES.ECG
         ? 'Photo'
-        : parent.type === MESSAGE_TYPES.DOCUMENT
+        : parent.type === MESSAGE_TYPES.VIDEO
+          ? 'Video'
+          : parent.type === MESSAGE_TYPES.DOCUMENT
           ? parent.content?.fileName || 'Document'
           : parent.type === MESSAGE_TYPES.HANDOFF
             ? 'Handoff'
@@ -173,7 +175,9 @@ const sendMessage = asyncHandler(async (req, res) => {
     content?.text?.slice(0, 200) ||
     (type === MESSAGE_TYPES.IMAGE || type === MESSAGE_TYPES.ECG
       ? '📷 Photo'
-      : type === MESSAGE_TYPES.DOCUMENT
+      : type === MESSAGE_TYPES.VIDEO
+        ? '🎥 Video'
+        : type === MESSAGE_TYPES.DOCUMENT
         ? '📎 Document'
         : type === MESSAGE_TYPES.HANDOFF
           ? '🔄 Handoff'

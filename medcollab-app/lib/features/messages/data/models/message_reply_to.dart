@@ -52,6 +52,8 @@ class MessageReplyTo extends Equatable {
       case MessageType.image:
       case MessageType.ecg:
         return 'Photo';
+      case MessageType.video:
+        return 'Video';
       case MessageType.document:
         return 'Document';
       case MessageType.handoff:

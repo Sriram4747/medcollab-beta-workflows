@@ -3,6 +3,7 @@ import 'package:medcollab_app/core/config/env_config.dart';
 import 'package:medcollab_app/core/network/api_client.dart';
 import 'package:medcollab_app/core/notifications/fcm_service.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
+import 'package:medcollab_app/core/realtime/typing_presence.dart';
 import 'package:medcollab_app/core/router/app_router.dart';
 import 'package:medcollab_app/core/socket/socket_client.dart';
 import 'package:medcollab_app/core/storage/bookmark_service.dart';
@@ -67,6 +68,7 @@ class AppDependencies {
     secureStorage = SecureStorageService();
     apiClient = ApiClient(storage: secureStorage);
     socketClient = SocketClient();
+    TypingPresence.instance.attach(socketClient);
     authRepository = AuthRepository(
       apiClient: apiClient,
       storage: secureStorage,

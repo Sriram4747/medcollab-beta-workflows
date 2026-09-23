@@ -21,9 +21,24 @@
  * not received from clients here. Clients listen for it.
  */
 
+const Channel = require('../../features/channels/channel.model');
 const { SOCKET_EVENTS } = require('../../constants');
 const { canAccessChannel } = require('../../utils/channelAccess');
 const logger = require('../../utils/logger');
+
+const typingMembers = new Map();
+
+async function peerUserIds(channelId, selfId) {
+  const key = String(channelId);
+  const hit = typingMembers.get(key);
+  if (hit && Date.now() - hit.at < 60_000) {
+    return hit.ids.filter((id) => id !== String(selfId));
+  }
+  const channel = await Channel.findById(channelId).select('members').lean();
+  const ids = (channel?.members || []).map((member) => String(member));
+  typingMembers.set(key, { ids, at: Date.now() });
+  return ids.filter((id) => id !== String(selfId));
+}
 
 /**
  * Register message-related socket event handlers for a connected socket
@@ -97,11 +112,19 @@ const registerMessageHandlers = (io, socket) => {
     if (!channelId) return;
 
     const room = `channel:${channelId}`;
-    socket.to(room).emit(SOCKET_EVENTS.USER_TYPING, {
+    const payload = {
       channelId,
       userId,
       userName,
-    });
+    };
+    socket.to(room).emit(SOCKET_EVENTS.USER_TYPING, payload);
+    peerUserIds(channelId, userId)
+      .then((peers) => {
+        for (const id of peers) {
+          io.to(`user:${id}`).emit(SOCKET_EVENTS.USER_TYPING, payload);
+        }
+      })
+      .catch(() => {});
   });
 
   /**
@@ -113,10 +136,18 @@ const registerMessageHandlers = (io, socket) => {
     if (!channelId) return;
 
     const room = `channel:${channelId}`;
-    socket.to(room).emit(SOCKET_EVENTS.USER_STOPPED_TYPING, {
+    const payload = {
       channelId,
       userId,
-    });
+    };
+    socket.to(room).emit(SOCKET_EVENTS.USER_STOPPED_TYPING, payload);
+    peerUserIds(channelId, userId)
+      .then((peers) => {
+        for (const id of peers) {
+          io.to(`user:${id}`).emit(SOCKET_EVENTS.USER_STOPPED_TYPING, payload);
+        }
+      })
+      .catch(() => {});
   });
 };
 

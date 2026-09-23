@@ -59,6 +59,7 @@ const CHANNEL_TYPES = {
 const MESSAGE_TYPES = {
   TEXT: 'text',
   IMAGE: 'image',         // X-rays, clinical photos
+  VIDEO: 'video',         // Short clinical clips
   DOCUMENT: 'document',   // PDF reports, discharge summaries
   ECG: 'ecg',             // ECG strips (image, but categorised separately for UI)
   HANDOFF: 'handoff',     // System message when a handoff is submitted
@@ -137,6 +138,10 @@ const MEDIA = {
     'image/webp',
     'image/heic',
     'image/heif',
+    'video/mp4',
+    'video/quicktime',
+    'video/webm',
+    'video/3gpp',
     'application/pdf',
   ],
 };

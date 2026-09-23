@@ -35,6 +35,7 @@ class LastMessagePreview extends Equatable {
     if (t != null && t.isNotEmpty) return t;
     return switch (type) {
       MessageType.image => '📷 Photo',
+      MessageType.video => '🎥 Video',
       MessageType.document => '📎 Document',
       MessageType.ecg => '📈 ECG',
       MessageType.handoff => '🔄 Handoff',

@@ -179,6 +179,11 @@ class MessageModel extends Equatable {
   String get displayText {
     if (isDeleted) return 'This message was deleted';
     if (type == MessageType.image) return content.text ?? 'Image';
+    if (type == MessageType.video) {
+      return content.text?.trim().isNotEmpty == true
+          ? content.text!
+          : (content.fileName ?? 'Video');
+    }
     if (type == MessageType.document) {
       return content.fileName ?? content.text ?? 'Document';
     }

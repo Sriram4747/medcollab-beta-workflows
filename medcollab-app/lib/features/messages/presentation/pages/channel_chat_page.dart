@@ -32,6 +32,7 @@ import 'package:medcollab_app/features/messages/presentation/widgets/forward_mes
 import 'package:medcollab_app/shared/presentation/widgets/chat_network_image.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
+import 'package:medcollab_app/shared/presentation/widgets/typing_bubble.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -878,8 +879,16 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (state.typingLabel.isNotEmpty)
-                          _TypingIndicator(label: state.typingLabel),
+                        if (state.typingUserNames.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TypingBubble(
+                                label: state.typingUserNames.join(', '),
+                              ),
+                            ),
+                          ),
                         if (state.pendingReply != null)
                           ReplyQuoteBar(
                             message: state.pendingReply!,
@@ -1081,15 +1090,21 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         .where(
           (m) =>
               !m.isDeleted &&
-              (m.type == MessageType.image || m.type == MessageType.document) &&
+              (m.type == MessageType.image ||
+                  m.type == MessageType.video ||
+                  m.type == MessageType.document) &&
               (m.content.mediaUrl?.isNotEmpty ?? false),
         )
         .toList()
         .reversed
         .toList();
     final images = media.where((m) => m.type == MessageType.image).toList();
-    final documents =
-        media.where((m) => m.type == MessageType.document).toList();
+    final documents = media
+        .where(
+          (m) =>
+              m.type == MessageType.document || m.type == MessageType.video,
+        )
+        .toList();
 
     await showModalBottomSheet<void>(
       context: context,
@@ -1458,31 +1473,6 @@ class _TypingBinderState extends State<_TypingBinder> {
 
   @override
   Widget build(BuildContext context) => widget.child;
-}
-
-class _TypingIndicator extends StatelessWidget {
-  const _TypingIndicator({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppGaps.screenH,
-        vertical: 4,
-      ),
-      color: AppColors.surfaceInput,
-      child: Text(
-        label,
-        style: AppTextStyles.caption.copyWith(
-          color: AppColors.textSecondary,
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-    );
-  }
 }
 
 class _EmptyChatState extends StatelessWidget {

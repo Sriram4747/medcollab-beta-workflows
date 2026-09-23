@@ -12,6 +12,8 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
   late final StreamSubscription<dynamic> _subscription;
 
+  void refresh() => notifyListeners();
+
   @override
   void dispose() {
     unawaited(_subscription.cancel());

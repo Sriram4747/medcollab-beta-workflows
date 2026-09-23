@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
+import 'package:medcollab_app/core/realtime/typing_presence.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/router/dm_navigation.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
@@ -915,23 +916,31 @@ class _DirectTabState extends State<_DirectTab> {
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
-                      child: DMRow(
-                        key: ValueKey('dm-${dm.id}'),
-                        name: dm.displayName,
-                        preview: previewText,
-                        imageUrl: peer?.avatarUrl,
-                        timestamp: hasDraft
-                            ? null
-                            : _formatTimestamp(preview?.sentAt),
-                        unreadCount: unreadByChannel[dm.id] ?? 0,
-                        isOnline: isOnline,
-                        onTap: () async {
-                          await openDmChat(
-                            context,
-                            channelId: dm.id,
-                            channel: dm,
+                      child: ListenableBuilder(
+                        listenable: TypingPresence.instance,
+                        builder: (context, _) {
+                          final typing =
+                              TypingPresence.instance.labelFor(dm.id);
+                          return DMRow(
+                            key: ValueKey('dm-${dm.id}'),
+                            name: dm.displayName,
+                            preview: previewText,
+                            imageUrl: peer?.avatarUrl,
+                            timestamp: hasDraft
+                                ? null
+                                : _formatTimestamp(preview?.sentAt),
+                            unreadCount: unreadByChannel[dm.id] ?? 0,
+                            isOnline: isOnline,
+                            typingLabel: typing,
+                            onTap: () async {
+                              await openDmChat(
+                                context,
+                                channelId: dm.id,
+                                channel: dm,
+                              );
+                              widget.onReload();
+                            },
                           );
-                          widget.onReload();
                         },
                       ),
                     );
