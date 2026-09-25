@@ -1,3 +1,102 @@
+# Current route-level security coverage — 2026-09-25
+
+This section supersedes the historical 146-case map below. Recomputed from current Express mounts/routes and retained run 36168079327 results at source a0b1f72. **73 explicit method/path operations; 32 exercised by discovery (43.8%), 41 without discovery cases.** Static uploads, Socket.IO, implicit HEAD/OPTIONS are outside that denominator. Setup calls are not discovery cases. No route is claimed comprehensively secure.
+
+Execution status and security breadth are separate: IMPLEMENTED + EXECUTED means a real discovery request exists, including observations. PARTIALLY COVERED means limited boundaries or setup-only evidence. IMPLEMENTED BUT EXECUTION EVIDENCE INCOMPLETE applies to implemented cases without completed trustworthy execution; there are **zero unexecuted cases in the current 243 manifest**, although fresh-DM positive semantics remain incomplete. NOT COVERED means no security cases. INTENTIONALLY DEFERRED records an explicit environment boundary, not a pass. Media/realtime manifests are design documents, not implemented tests.
+
+Shared message URLs retain baseline/DM module counts. A DM detail/pin test gives no group/private-channel coverage. Route matching prefers literal /users/me over /users/:id. Case 159 remains an observation, and coverage does not imply successful authorization enforcement.
+
+| Method | Route | Execution status | Exact discovery evidence | Breadth / remaining gap |
+| --- | --- | --- | --- | --- |
+| POST | `/api/auth/logout` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/auth/refresh` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/auth/request-otp` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/auth/verify-msg91-token` | INTENTIONALLY DEFERRED | NOT YET EXERCISED | External widget verification prohibited in this CI; isolated input/guard tests still unimplemented. |
+| POST | `/api/auth/verify-otp` | PARTIALLY COVERED | NOT YET EXERCISED | Real CI setup/health call only, outside 243 discovery results; security permutations absent. |
+| GET | `/api/channels/:channelId/messages` | IMPLEMENTED + EXECUTED | EXERCISED — 14 pass (Baseline group, space, and handoff security: 9; Direct Messages: 5) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/channels/:channelId/messages` | IMPLEMENTED + EXECUTED | EXERCISED — 23 pass, 2 observation (Baseline group, space, and handoff security: 20; Direct Messages: 5) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/channels/:channelId/messages/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 16 pass (Baseline group, space, and handoff security: 10; Direct Messages: 6) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| PUT | `/api/channels/:channelId/messages/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 24 pass, 2 observation (Baseline group, space, and handoff security: 20; Direct Messages: 6) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/channels/:channelId/messages/:id/react` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/channels/:channelId/messages/:id/reply` | IMPLEMENTED + EXECUTED | EXERCISED — 2 pass, 4 observation (Baseline group, space, and handoff security: 2; Direct Messages: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/channels/:channelId/messages/:id/thread` | IMPLEMENTED + EXECUTED | EXERCISED — 9 pass (Baseline group, space, and handoff security: 3; Direct Messages: 6) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/channels/:channelId/messages/read` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Direct Messages: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/channels/:id` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/channels/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Direct Messages: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| PUT | `/api/channels/:id` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/channels/:id/members` | IMPLEMENTED + EXECUTED | EXERCISED — 3 pass, 1 observation (Direct Messages: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/channels/:id/pin/:messageId` | IMPLEMENTED + EXECUTED | EXERCISED — 1 pass (Direct Messages: 1) | PARTIALLY COVERED: one DM outsider denial only; positive unpin untested. |
+| POST | `/api/channels/:id/pin/:messageId` | IMPLEMENTED + EXECUTED | EXERCISED — 3 pass (Direct Messages: 3) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/channels/dm` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Direct Messages: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/channels/dm` | IMPLEMENTED + EXECUTED | EXERCISED — 8 pass, 3 observation (Direct Messages: 9; Message Requests: 2) | PARTIALLY COVERED: fresh-pair positive semantics incomplete (168/169/242 return 500); existing pair and negative cases executed. |
+| POST | `/api/dev/seed-conversation` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/dev/seed-handoff` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/dev/seed-notifications` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/handoffs` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/handoffs` | IMPLEMENTED + EXECUTED | EXERCISED — 15 pass, 1 observation (Baseline group, space, and handoff security: 16) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/handoffs/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 8 pass (Baseline group, space, and handoff security: 8) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/handoffs/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 5 pass (Baseline group, space, and handoff security: 5) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| PUT | `/api/handoffs/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 8 pass (Baseline group, space, and handoff security: 8) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/handoffs/:id/acknowledge` | IMPLEMENTED + EXECUTED | EXERCISED — 5 pass (Baseline group, space, and handoff security: 5) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/handoffs/:id/submit` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/media/:publicId` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/media/upload` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/message-requests` | IMPLEMENTED + EXECUTED | EXERCISED — 6 pass (Message Requests: 6) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/message-requests` | IMPLEMENTED + EXECUTED | EXERCISED — 17 pass (Message Requests: 17) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/message-requests/:id/accept` | IMPLEMENTED + EXECUTED | EXERCISED — 5 pass (Message Requests: 5) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/message-requests/:id/decline` | IMPLEMENTED + EXECUTED | EXERCISED — 3 pass (Message Requests: 3) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/message-requests/pending-count` | IMPLEMENTED + EXECUTED | EXERCISED — 3 pass (Message Requests: 3) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/notifications` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| DELETE | `/api/notifications/:id` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/notifications/:id/read` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/notifications/:id/unread` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/notifications/read-all` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/notifications/read-by-channel/:channelId` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/notifications/unread-count` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/join/:code` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/health` | PARTIALLY COVERED | NOT YET EXERCISED | Real CI setup/health call only, outside 243 discovery results; security permutations absent. |
+| GET | `/api/search` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/spaces/:spaceId/channels` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/spaces/:spaceId/channels` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/spaces/:spaceId/handoffs` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/spaces` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/spaces` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/spaces/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 6 pass (Baseline group, space, and handoff security: 6) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| PUT | `/api/spaces/:id` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| POST | `/api/spaces/:id/invite` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/spaces/:id/leave` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/spaces/:id/members` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| DELETE | `/api/spaces/:id/members/:userId` | IMPLEMENTED + EXECUTED | EXERCISED — 4 pass (Baseline group, space, and handoff security: 4) | PARTIALLY COVERED: only the listed case/module contexts; no whole-route assurance. |
+| GET | `/api/spaces/invite/:code` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/spaces/join` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/support/bug` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/support/feature` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| POST | `/api/support/feedback` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/users/:id` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/users/lookup` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/users/me` | IMPLEMENTED + EXECUTED | EXERCISED — 6 pass (Baseline group, space, and handoff security: 6) | PARTIALLY COVERED: six invalid-token/header cases; identity success only in setup. |
+| PUT | `/api/users/me` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/users/me/availability` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| PUT | `/api/users/me/fcm-token` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+| GET | `/api/users/search` | NOT COVERED | NOT YET EXERCISED | No discovery case; see priority roadmap. |
+
+## Priority gaps after this milestone
+
+1. Realtime private-message user-room fallback, stale membership, typing access and recovery have no execution evidence.
+2. Media upload/delete/static serving and URL sinks have no dedicated execution evidence. Test local ownership/canonical path handling first; Cloudinary live behavior is intentionally deferred.
+3. Private group channels, independent admin, stale membership, reactions, successful unpin and direct body threadId binding remain untested.
+4. Notifications (all seven routes), search, received handoff inbox/draft filtering and profile/lookup privacy need real tests. Existing handoff detail cases do not credit inbox or search.
+5. Auth/session endpoints, invitation/leave/create transitions, developer-tool guards, support validation and rate limiting remain gaps. NODE_ENV=test skips the global limiter; unit code is not rate-limit execution proof.
+
+See [review and prioritized roadmap](SECURITY_RESEARCH_BATCH_2026-09-25.md), [media manifest](SECURITY_MEDIA_MANIFEST.md), and [realtime manifest](SECURITY_REALTIME_MANIFEST.md) for fixtures, invariants and observations. Existing 61 DM and 36 request cases have now run; none remains merely pending execution. Their unresolved 500 results are preserved.
+
+---
+
+# Historical 146-case map and implementation notes (superseded)
+
+The following is retained for continuity only. Pending-execution statements and eight-observation counts describe the earlier review, not current evidence.
 # Vocle security coverage map
 
 Reviewed 2026-09-19. Evidence is the 146-case executed artifact identified in

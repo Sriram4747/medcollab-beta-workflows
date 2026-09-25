@@ -1,3 +1,9 @@
+# Current observation review — 2026-09-25
+
+The [243-case evidence review](SECURITY_RESEARCH_BATCH_2026-09-25.md) supersedes baseline counts and pending-execution statements below: 230 passes, 13 observations; three confirmed security roots, four hardening cases and three unresolved functional errors. VOCLE-159 is the new DM member-list authorization finding; 193/197 extend the known reply-binding root. Corrected 137 now passes with 404. Original historical evidence and findings remain unchanged below.
+
+---
+
 # Review of the eight baseline observations
 
 Reviewed 2026-09-19 against source at `bb05fb875263102823fdd994e6ec48c99330c4b6`.
