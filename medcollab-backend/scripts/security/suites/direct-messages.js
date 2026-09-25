@@ -26,6 +26,19 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
     const members = (channel?.members || []).map((member) => String(member._id || member)).sort();
     return members.length === 2 && members.join(',') === [String(first), String(second)].sort().join(',');
   };
+  const persistedPair = async (ctx, channelId, first, second) => {
+    const channel = channelId && await ctx.models.Channel.findById(channelId).lean();
+    return !!channel && channel.type === 'direct' && !channel.spaceId &&
+      exactlyMembers(channel, first, second);
+  };
+  const persistedMessage = async (body, ctx, expected) => {
+    const id = body.data?.message?._id;
+    const message = id && await ctx.models.Message.findById(id).lean();
+    return !!message && String(message.channelId) === expected.channelId &&
+      String(message.senderId) === String(expected.senderId) &&
+      (expected.threadId === undefined || String(message.threadId) === String(expected.threadId)) &&
+      message.content?.text === expected.text;
+  };
 
   for (const actor of ['A', 'B', 'D', 'anonymous']) {
     const participant = actor === 'A' || actor === 'B';
@@ -49,18 +62,27 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
     addDm('read direct-message messages', actor, 'GET', mp, [participant ? 200 : actor === 'anonymous' ? 401 : 403], undefined, {
       category: 'direct-participant-access',
       sources: [...directSources, 'src/features/messages/message.controller.js:getMessages'],
-      check: participant ? (body) => body.data?.messages?.some((message) => message._id === ids.dmMessageA) : undefined,
+      check: participant ? (body) => {
+        const messages = body.data?.messages || [];
+        const messageIds = messages.map(message => message._id).sort();
+        return messageIds.join(',') === [ids.dmMessageA, ids.dmMessageB].sort().join(',') &&
+          messages.every(message => String(message.channelId) === dm);
+      } : undefined,
     });
     addDm('send direct-message text', actor, 'POST', mp, [participant ? 201 : actor === 'anonymous' ? 401 : 403], { type: 'text', content: { text: 'Direct security fixture message' } }, {
       category: 'direct-write-participant-access',
       sources: [...directSources, 'src/features/messages/message.controller.js:sendMessage'],
-      check: participant ? (body, ctx) => String(body.data?.message?.senderId?._id) === String(ctx.users[actor]._id) && String(body.data?.message?.channelId) === dm : undefined,
+      check: participant ? (body, ctx) => persistedMessage(body, ctx, {
+        channelId: dm, senderId: ctx.users[actor]._id, text: 'Direct security fixture message',
+      }) : undefined,
     });
   }
 
   addDm('existing DM creation returns the fixed pair', 'A', 'POST', '/api/channels/dm', [200], { userId: ':B' }, {
     category: 'direct-idempotence',
-    check: (body, ctx) => body.data?.channel?._id === dm && exactlyMembers(body.data.channel, ctx.users.A._id, ctx.users.B._id),
+    check: async (body, ctx) => body.data?.channel?._id === dm && exactlyMembers(body.data.channel, ctx.users.A._id, ctx.users.B._id) &&
+      await persistedPair(ctx, dm, ctx.users.A._id, ctx.users.B._id) &&
+      await ctx.models.Channel.countDocuments({ type: 'direct', members: { $all: [ctx.users.A._id, ctx.users.B._id], $size: 2 } }) === 1,
   });
   addDm('same-institution DM creation is pair-idempotent', 'A', 'POST', '/api/channels/dm', [200], { userId: ':D' }, {
     category: 'direct-known-user-idempotence',
@@ -74,7 +96,8 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
   });
   addDm('accepted message-request permits DM creation', 'E', 'POST', '/api/channels/dm', [200], { userId: ':H' }, {
     category: 'direct-accepted-request-binding',
-    check: (body, ctx) => exactlyMembers(body.data?.channel, ctx.users.E._id, ctx.users.H._id),
+    check: async (body, ctx) => exactlyMembers(body.data?.channel, ctx.users.E._id, ctx.users.H._id) &&
+      await persistedPair(ctx, body.data.channel._id, ctx.users.E._id, ctx.users.H._id),
   });
   addDm('unrelated identity cannot create a DM', 'E', 'POST', '/api/channels/dm', [403], { userId: ':F' }, { category: 'direct-unrelated-identity' });
   addDm('self DM is rejected', 'E', 'POST', '/api/channels/dm', [400], { userId: ':E' }, { category: 'direct-self-target' });
@@ -102,12 +125,16 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
     addDm('read direct-message thread', actor, 'GET', `${mp}/${ids.dmMessageA}/thread`, [status], undefined, {
       category: 'direct-thread-participant-access',
       sources: [...directSources, 'src/features/messages/message.controller.js:getThread'],
-      check: status === 200 ? (body) => body.data?.rootMessage?._id === ids.dmMessageA : undefined,
+      check: status === 200 ? (body) => body.data?.rootMessage?._id === ids.dmMessageA &&
+        String(body.data.rootMessage.channelId) === dm &&
+        (body.data?.replies || []).every(reply => String(reply.channelId) === dm && String(reply.threadId) === ids.dmMessageA) : undefined,
     });
   }
   addDm('reply to direct-message thread as participant', 'B', 'POST', `${mp}/${ids.dmMessageA}/reply`, [201], { type: 'text', content: { text: 'Direct reply' } }, {
     category: 'direct-thread-participant-access',
-    check: (body) => body.data?.message?.threadId === ids.dmMessageA && body.data?.message?.channelId === dm,
+    check: (body, ctx) => persistedMessage(body, ctx, {
+      channelId: dm, senderId: ctx.users.B._id, threadId: ids.dmMessageA, text: 'Direct reply',
+    }),
   });
   addDm('outsider cannot reply to direct-message thread', 'D', 'POST', `${mp}/${ids.dmMessageA}/reply`, [403], { type: 'text', content: { text: 'Foreign direct reply' } }, { category: 'direct-thread-participant-access' });
 
@@ -121,6 +148,11 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
       addDm(`foreign direct-message ID ${action}`, actor, method, `${mp}/${otherMessage}${suffix}`, [403, 404], body, {
         category: 'direct-foreign-message-binding',
         sources: [...directSources, 'src/utils/channelAccess.js:assertMessageInChannel'],
+        check: action === 'reply' ? async (responseBody, ctx, response) => {
+          if (response.status >= 400) return true;
+          const reply = responseBody.data?.message?._id && await ctx.models.Message.findById(responseBody.data.message._id).lean();
+          return !reply || String(reply.channelId) !== dm || String(reply.threadId) !== otherMessage;
+        } : undefined,
       });
     }
   }

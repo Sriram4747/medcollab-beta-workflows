@@ -17,19 +17,33 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
     },
   );
   const requestIds = (body) => (body.data?.requests || []).map((request) => request.id);
+  const exactIds = (body, expected) => {
+    const actual = requestIds(body).sort();
+    return actual.length === expected.length && actual.join(',') === expected.map(String).sort().join(',');
+  };
+  const exactPairCount = (ctx, from, to, status) => ctx.models.MessageRequest.countDocuments({
+    fromUserId: ctx.users[from]._id,
+    toUserId: ctx.users[to]._id,
+    ...(status ? { status } : {}),
+  });
   const prepareFresh = async (ctx) => {
     const r = await ctx.http('F', 'POST', base, { toUserId: String(ctx.users.H._id), introMessage: 'Fresh controlled request' });
     if (r.status !== 201 || !r.data?.data?.request?.id) throw new Error('Message-request preparation failed');
     ctx.preparedRequestId = r.data.data.request.id;
+    const request = await ctx.models.MessageRequest.findById(ctx.preparedRequestId).lean();
+    if (!request || String(request.fromUserId) !== String(ctx.users.F._id) ||
+      String(request.toUserId) !== String(ctx.users.H._id) || request.status !== 'pending') {
+      throw new Error('Message-request preparation did not persist the required pending relationship');
+    }
   };
 
   addRequest('list received pending requests', 'F', 'GET', base, [200], undefined, {
     category: 'message-request-list-isolation',
-    check: (body) => requestIds(body).includes(ids.requestPending) && !requestIds(body).includes(ids.requestDeclined),
+    check: (body) => exactIds(body, [ids.requestPending]),
   });
   addRequest('sender does not receive its own pending request', 'E', 'GET', base, [200], undefined, {
     category: 'message-request-list-isolation',
-    check: (body) => !requestIds(body).includes(ids.requestPending),
+    check: (body) => exactIds(body, []),
   });
   addRequest('unrelated identity cannot list other requests', 'D', 'GET', base, [200], undefined, {
     category: 'message-request-list-isolation',
@@ -58,15 +72,19 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
   addRequest('known same-institution user needs no message request', 'A', 'POST', base, [400], { toUserId: ':D' }, { category: 'message-request-known-user' });
   addRequest('pending request is idempotent for the sender', 'E', 'POST', base, [200], { toUserId: ':F' }, {
     category: 'message-request-pending-replay',
-    check: (body) => body.data?.request?.id === ids.requestPending && body.data?.request?.direction === 'sent',
+    check: async (body, ctx) => body.data?.request?.id === ids.requestPending &&
+      body.data?.request?.direction === 'sent' && await exactPairCount(ctx, 'E', 'F', 'pending') === 1,
   });
   addRequest('reciprocal pending request exposes accept-incoming only to sender', 'F', 'POST', base, [200], { toUserId: ':E' }, {
     category: 'message-request-reciprocal-pending',
-    check: (body) => body.data?.request?.id === ids.requestPending && body.data?.action === 'accept_incoming' && body.data?.request?.direction === 'received',
+    check: async (body, ctx) => body.data?.request?.id === ids.requestPending && body.data?.action === 'accept_incoming' &&
+      body.data?.request?.direction === 'received' && await exactPairCount(ctx, 'E', 'F', 'pending') === 1 &&
+      await exactPairCount(ctx, 'F', 'E') === 0,
   });
   addRequest('declined relationship can create a fresh request', 'E', 'POST', base, [201], { toUserId: ':G', introMessage: 'Follow-up controlled request' }, {
     category: 'message-request-declined-transition',
-    check: (body) => body.data?.request?.status === 'pending' && body.data?.request?.direction === 'sent',
+    check: async (body, ctx) => body.data?.request?.status === 'pending' && body.data?.request?.direction === 'sent' &&
+      await exactPairCount(ctx, 'E', 'G', 'pending') === 1 && await exactPairCount(ctx, 'E', 'G', 'declined') === 1,
   });
   addRequest('accepted relationship uses DM rather than a new request', 'E', 'POST', base, [400], { toUserId: ':H' }, { category: 'message-request-accepted-transition' });
   addRequest('blocked relationship rejects a new request from sender', 'F', 'POST', base, [403], { toUserId: ':G' }, { category: 'message-request-blocked-transition' });
@@ -87,13 +105,21 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
     if (introMessage !== undefined) body.introMessage = introMessage;
     addRequest(`message-request ${label} validation`, 'F', 'POST', base, [status], body, {
       category: 'message-request-intro-schema',
-      check: status === 201 ? (response) => response.data?.request?.status === 'pending' : undefined,
+      failureClassification: 'validation weakness/hardening opportunity',
+      check: status === 201 ? async (response, ctx) => {
+        const id = response.data?.request?.id;
+        const request = id && await ctx.models.MessageRequest.findById(id).lean();
+        return response.data?.request?.status === 'pending' && !!request &&
+          String(request.fromUserId) === String(ctx.users.F._id) && String(request.toUserId) === String(ctx.users.H._id) &&
+          request.introMessage === (introMessage || '');
+      } : undefined,
     });
   }
 
   addRequest('recipient accepts a pending request', 'F', 'POST', `${base}/${ids.requestPending}/accept`, [200], undefined, {
     category: 'message-request-recipient-transition',
-    check: async (_body, ctx) => (await ctx.models.MessageRequest.findById(ids.requestPending)).status === 'accepted',
+    check: async (body, ctx) => body.data?.request?.id === ids.requestPending && body.data?.request?.status === 'accepted' &&
+      (await ctx.models.MessageRequest.findById(ids.requestPending)).status === 'accepted',
   });
   addRequest('sender cannot accept its own pending request', 'E', 'POST', `${base}/${ids.requestPending}/accept`, [403], undefined, { category: 'message-request-recipient-transition' });
   addRequest('outsider cannot accept another request', 'D', 'POST', `${base}/${ids.requestPending}/accept`, [403], undefined, { category: 'message-request-recipient-transition' });
@@ -103,7 +129,8 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
   addRequest('recipient declines a fresh request', 'H', 'POST', (ctx) => `${base}/${ctx.preparedRequestId}/decline`, [200], undefined, {
     category: 'message-request-recipient-transition',
     prepare: prepareFresh,
-    check: async (_body, ctx) => (await ctx.models.MessageRequest.findById(ctx.preparedRequestId)).status === 'declined',
+    check: async (body, ctx) => body.data?.request?.id === ctx.preparedRequestId && body.data?.request?.status === 'declined' &&
+      (await ctx.models.MessageRequest.findById(ctx.preparedRequestId)).status === 'declined',
   });
   addRequest('sender cannot decline its own fresh request', 'F', 'POST', (ctx) => `${base}/${ctx.preparedRequestId}/decline`, [403], undefined, {
     category: 'message-request-recipient-transition',
@@ -114,7 +141,8 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
     prepare: async (ctx) => {
       await prepareFresh(ctx);
       const r = await ctx.http('H', 'POST', `${base}/${ctx.preparedRequestId}/decline`);
-      if (r.status !== 200) throw new Error('Decline replay preparation failed');
+      const request = await ctx.models.MessageRequest.findById(ctx.preparedRequestId).lean();
+      if (r.status !== 200 || request?.status !== 'declined') throw new Error('Decline replay preparation failed');
     },
   });
   addRequest('accepted request enables the new DM pair', 'F', 'POST', '/api/channels/dm', [200], { userId: ':H' }, {
@@ -122,11 +150,16 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
     prepare: async (ctx) => {
       await prepareFresh(ctx);
       const r = await ctx.http('H', 'POST', `${base}/${ctx.preparedRequestId}/accept`);
-      if (r.status !== 200) throw new Error('Accept-to-DM preparation failed');
+      const request = await ctx.models.MessageRequest.findById(ctx.preparedRequestId).lean();
+      if (r.status !== 200 || request?.status !== 'accepted') throw new Error('Accept-to-DM preparation failed');
     },
-    check: (body, ctx) => {
+    check: async (body, ctx) => {
       const members = (body.data?.channel?.members || []).map((member) => String(member._id || member)).sort();
-      return members.join(',') === [String(ctx.users.F._id), String(ctx.users.H._id)].sort().join(',');
+      const channel = body.data?.channel?._id && await ctx.models.Channel.findById(body.data.channel._id).lean();
+      const persistedMembers = (channel?.members || []).map(String).sort();
+      const expected = [String(ctx.users.F._id), String(ctx.users.H._id)].sort();
+      return members.length === 2 && members.join(',') === expected.join(',') &&
+        persistedMembers.length === 2 && persistedMembers.join(',') === expected.join(',');
     },
   });
   addRequest('declined request does not enable a DM', 'F', 'POST', '/api/channels/dm', [403], { userId: ':H' }, {
@@ -134,7 +167,8 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
     prepare: async (ctx) => {
       await prepareFresh(ctx);
       const r = await ctx.http('H', 'POST', `${base}/${ctx.preparedRequestId}/decline`);
-      if (r.status !== 200) throw new Error('Decline-to-DM preparation failed');
+      const request = await ctx.models.MessageRequest.findById(ctx.preparedRequestId).lean();
+      if (r.status !== 200 || request?.status !== 'declined') throw new Error('Decline-to-DM preparation failed');
     },
   });
 };

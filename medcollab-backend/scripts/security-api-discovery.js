@@ -45,19 +45,70 @@ function add(name, actor, method, endpoint, statuses, body, options = {}) {
     module: 'Baseline group, space, and handoff security',
     ...options });
 }
+const objectId = (value) => String(value?._id || value?.id || value || '');
+const exactIds = (values, expected) => {
+  const actualIds = (values || []).map(objectId).sort();
+  const expectedIds = expected.map(String).sort();
+  return actualIds.length === expectedIds.length && actualIds.join(',') === expectedIds.join(',');
+};
+const persistedMessage = async (body, ctx, expected) => {
+  const responseMessage = body.data?.message;
+  if (!responseMessage?._id) return false;
+  const message = await ctx.models.Message.findById(responseMessage._id).lean();
+  return !!message &&
+    String(message.channelId) === expected.channelId &&
+    String(message.senderId) === String(expected.senderId) &&
+    (expected.threadId === undefined || String(message.threadId) === String(expected.threadId)) &&
+    (expected.text === undefined || message.content?.text === expected.text);
+};
+const baselineReadCheck = (endpoint, actor) => async (body) => {
+  if (endpoint === sp) {
+    return objectId(body.data?.space) === ids.space &&
+      (body.data.space.channels || []).every(channel => String(channel.spaceId) === ids.space);
+  }
+  if (endpoint === `${sp}/members`) {
+    return exactIds(body.data?.members, [users.A._id, users.B._id]);
+  }
+  if (endpoint === `${sp}/channels`) {
+    return exactIds(body.data?.channels, [ids.channel]) &&
+      body.data.channels.every(channel => String(channel.spaceId) === ids.space);
+  }
+  if (endpoint === mp) {
+    return exactIds(body.data?.messages, [ids.messageA, ids.messageB]) &&
+      body.data.messages.every(message => String(message.channelId) === ids.channel);
+  }
+  if (endpoint === hp) {
+    const handoff = body.data?.handoff;
+    return objectId(handoff) === ids.handoff && String(handoff.spaceId) === ids.space &&
+      String(handoff.channelId) === ids.channel && objectId(handoff.fromUserId) === String(users.A._id) &&
+      objectId(handoff.toUserId) === String(users.B._id);
+  }
+  if (endpoint === `${sp}/handoffs`) {
+    return exactIds(body.data?.handoffs, [ids.handoff]) &&
+      body.data.handoffs.every(handoff => String(handoff.spaceId) === ids.space);
+  }
+  return false;
+};
 for (const actor of ['A', 'B', 'C', 'anonymous']) {
   const member = actor === 'A' || actor === 'B';
   const denial = actor === 'anonymous' ? 401 : 403;
   for (const endpoint of [sp, `${sp}/members`, `${sp}/channels`, mp, hp, `${sp}/handoffs`]) {
     add(`read ${endpoint}`, actor, 'GET', endpoint, [member ? 200 : denial], undefined, {
-      check: member && endpoint === mp ? (b) => b.data?.messages?.length === 2 : undefined,
+      check: member ? baselineReadCheck(endpoint, actor) : undefined,
     });
   }
   add('list only own spaces', actor, 'GET', '/api/spaces', [actor === 'anonymous' ? 401 : 200], undefined, {
-    check: actor === 'anonymous' ? undefined : (b) => b.data?.spaces?.some(s => s._id === ids.space) === member,
+    check: actor === 'anonymous' ? undefined : (b) => exactIds(b.data?.spaces, member ? [ids.space] : [ids.otherSpace]),
   });
-  add('update space admin boundary', actor, 'PUT', sp, [actor === 'A' ? 200 : denial], { description: 'Discovery update' });
-  add('create message member boundary', actor, 'POST', mp, [member ? 201 : denial], { type: 'text', content: { text: 'Discovery create' } });
+  add('update space admin boundary', actor, 'PUT', sp, [actor === 'A' ? 200 : denial], { description: 'Discovery update' }, {
+    check: actor === 'A' ? async (body) => body.data?.space?._id === ids.space &&
+      (await models.Space.findById(ids.space).lean()).description === 'Discovery update' : undefined,
+  });
+  add('create message member boundary', actor, 'POST', mp, [member ? 201 : denial], { type: 'text', content: { text: 'Discovery create' } }, {
+    check: member ? (body, ctx) => persistedMessage(body, ctx, {
+      channelId: ids.channel, senderId: users[actor]._id, text: 'Discovery create',
+    }) : undefined,
+  });
   for (const owner of ['A', 'B']) {
     add(`edit ${owner} message`, actor, 'PUT', `${mp}/${ids[`message${owner}`]}`, [actor === owner ? 200 : denial], { content: { text: 'Discovery edit' } }, {
       check: actor === owner ? async () => (await models.Message.findById(ids[`message${owner}`])).content.text === 'Discovery edit' : undefined,
@@ -69,30 +120,67 @@ for (const actor of ['A', 'B', 'C', 'anonymous']) {
   add('edit submitted handoff', actor, 'PUT', hp, [actor === 'A' ? 400 : denial], { shiftSummary: 'Attempted edit' });
   add('delete submitted handoff', actor, 'DELETE', hp, [actor === 'A' ? 400 : denial]);
   add('acknowledge receiver only', actor, 'POST', `${hp}/acknowledge`, [actor === 'B' ? 200 : actor === 'anonymous' ? 401 : 400], { note: 'CI acknowledgement' }, {
-    check: actor === 'B' ? async () => (await models.Handoff.findById(ids.handoff)).status === 'acknowledged' : undefined,
+    check: actor === 'B' ? async (body) => body.data?.handoff?._id === ids.handoff &&
+      (await models.Handoff.findById(ids.handoff)).status === 'acknowledged' : undefined,
   });
   add('remove member admin boundary', actor, 'DELETE', `${sp}/members/:B`, [actor === 'A' ? 200 : denial], undefined, {
     check: actor === 'A' ? async () => !(await models.Space.findById(ids.space)).isMember(users.B._id) : undefined,
   });
-  add('draft handoff create', actor, 'POST', '/api/handoffs', [member ? 201 : denial], 'handoff');
+  add('draft handoff create', actor, 'POST', '/api/handoffs', [member ? 201 : denial], 'handoff', {
+    check: member ? async (body) => {
+      const id = body.data?.handoff?._id;
+      const handoff = id && await models.Handoff.findById(id).lean();
+      return !!handoff && String(handoff.spaceId) === ids.space && String(handoff.channelId) === ids.channel &&
+        String(handoff.fromUserId) === String(users[actor]._id) && String(handoff.toUserId) === String(users.B._id) &&
+        handoff.status === 'draft';
+    } : undefined,
+  });
   for (const action of ['edit', 'delete', 'submit']) {
     add(`draft handoff ${action}`, actor, action === 'edit' ? 'PUT' : action === 'delete' ? 'DELETE' : 'POST', action === 'submit' ? `${hp}/submit` : hp,
       [actor === 'A' ? 200 : denial], action === 'edit' ? { shiftSummary: 'Draft update' } : undefined,
-      { prepare: 'draft', context: 'Draft handoff A to B in AB space; only sender may edit/delete/submit' });
+      { prepare: 'draft', context: 'Draft handoff A to B in AB space; only sender may edit/delete/submit',
+        check: actor === 'A' ? async () => {
+          const handoff = await models.Handoff.findById(ids.handoff).lean();
+          if (action === 'delete') return handoff === null;
+          return action === 'edit' ? handoff?.shiftSummary === 'Draft update' : handoff?.status === 'submitted' && !!handoff.submittedAt;
+        } : undefined });
   }
 }
-for (const header of ['missing', 'Basic invalid', 'Bearer', 'Bearer invalid', 'bearer invalid', 'tampered']) {
-  add(`authentication header ${header}`, 'anonymous', 'GET', '/api/users/me', [401], undefined, { category: 'authentication-negative', header, sources: ['src/middleware/auth.js:protect'] });
+for (const [label, header] of [
+  ['missing', 'missing'],
+  ['basic scheme', 'Basic invalid'],
+  ['bearer without token', 'Bearer'],
+  ['invalid bearer token', 'Bearer invalid'],
+  ['lowercase bearer scheme', 'bearer invalid'],
+  ['tampered bearer token', 'tampered'],
+]) {
+  add(`authentication header ${label}`, 'anonymous', 'GET', '/api/users/me', [401], undefined, { category: 'authentication-negative', header, sources: ['src/middleware/auth.js:protect'] });
 }
 for (const owner of ['A', 'B']) {
   for (const action of ['thread', 'edit', 'delete', 'reply']) {
     add(`cross-channel ${action} by ${owner}`, owner, action === 'thread' ? 'GET' : action === 'edit' ? 'PUT' : action === 'delete' ? 'DELETE' : 'POST',
       `${mp}/${ids.otherMessage}${action === 'thread' || action === 'reply' ? `/${action}` : ''}`, [403, 404], action === 'edit' || action === 'reply' ? { type: 'text', content: { text: 'Cross-channel attempt' } } : undefined,
-      { category: 'foreign-resource', context: 'C owns target message in C-only space; A/B can access URL channel only', sources: [source('messages'), 'src/utils/channelAccess.js:assertMessageInChannel'] });
+      { category: 'foreign-resource', context: 'C owns target message in C-only space; A/B can access URL channel only', sources: [source('messages'), 'src/utils/channelAccess.js:assertMessageInChannel'],
+        check: action === 'reply' ? async (body, ctx, response) => {
+          if (response.status >= 400) return true;
+          const reply = body.data?.message?._id && await ctx.models.Message.findById(body.data.message._id).lean();
+          return !reply || String(reply.channelId) !== ids.channel || String(reply.threadId) !== ids.otherMessage;
+        } : undefined });
   }
 }
 for (const field of ['channelId', 'spaceId', 'toUserId']) {
-  add(`handoff foreign ${field}`, 'A', 'POST', '/api/handoffs', [400, 403, 404], 'handoff', { category: 'foreign-resource', foreignField: field, sources: [source('handoffs') + ':createHandoff'] });
+  add(`handoff foreign ${field}`, 'A', 'POST', '/api/handoffs', [400, 403, 404], 'handoff', {
+    category: 'foreign-resource',
+    foreignField: field,
+    sources: [source('handoffs') + ':createHandoff'],
+    check: async (body, ctx, response) => {
+      if (response.status >= 400) return true;
+      const id = body.data?.handoff?._id;
+      const handoff = id && await ctx.models.Handoff.findById(id).lean();
+      return !handoff || (String(handoff.spaceId) === ids.space && String(handoff.channelId) === ids.channel &&
+        String(handoff.toUserId) === String(users.B._id));
+    },
+  });
 }
 add('acknowledgement replay', 'B', 'POST', `${hp}/acknowledge`, [400], {}, { category: 'replay', prepare: 'acknowledge' });
 for (const [label, value, accepted] of [
@@ -102,15 +190,47 @@ for (const [label, value, accepted] of [
   ['at-max', 'x'.repeat(4000), true], ['above-max', 'x'.repeat(4001), false],
 ]) {
   for (const method of ['POST', 'PUT']) add(`message text ${label} ${method}`, 'A', method, method === 'POST' ? mp : `${mp}/${ids.messageA}`, [accepted ? method === 'POST' ? 201 : 200 : 400],
-    { type: 'text', content: value === undefined ? {} : { text: value } }, { category: `schema-text-${label}`, sources: ['src/middleware/validate.js:validateSendMessage', 'src/features/messages/message.routes.js', 'src/features/messages/message.model.js:content.text'] });
+    { type: 'text', content: value === undefined ? {} : { text: value } }, {
+      category: `schema-text-${label}`,
+      failureClassification: 'validation weakness/hardening opportunity',
+      sources: ['src/middleware/validate.js:validateSendMessage', 'src/features/messages/message.routes.js', 'src/features/messages/message.model.js:content.text'],
+      check: accepted ? async (body, ctx) => {
+        const messageId = method === 'POST' ? body.data?.message?._id : ids.messageA;
+        const message = messageId && await ctx.models.Message.findById(messageId).lean();
+        return !!message && String(message.channelId) === ids.channel && message.content?.text === value;
+      } : undefined,
+    });
 }
-for (const [field, value] of [['type', 'unknown'], ['priority', 'unknown'], ['threadId', 'invalid-id'], ['content', null], ['content', []]]) {
-  add(`message invalid ${field}`, 'A', 'POST', mp, [400], { type: 'text', content: { text: 'CI' }, [field]: value }, { category: 'schema-type-enum', sources: ['src/middleware/validate.js:validateSendMessage', 'src/features/messages/message.model.js'] });
+for (const [label, field, value] of [
+  ['type enum', 'type', 'unknown'],
+  ['priority enum', 'priority', 'unknown'],
+  ['threadId format', 'threadId', 'invalid-id'],
+  ['null content', 'content', null],
+  ['array content', 'content', []],
+]) {
+  add(`message invalid ${label}`, 'A', 'POST', mp, [400], { type: 'text', content: { text: 'CI' }, [field]: value }, { category: 'schema-type-enum', failureClassification: 'validation weakness/hardening opportunity', sources: ['src/middleware/validate.js:validateSendMessage', 'src/features/messages/message.model.js'] });
 }
 add('message ownership fields ignored', 'B', 'POST', mp, [201], { type: 'text', content: { text: 'CI' }, senderId: ':A', spaceId: ids.otherSpace, isDeleted: true }, {
-  category: 'unexpected-ownership-fields', check: b => b.data?.message?.senderId?._id === String(users.B._id) && b.data?.message?.spaceId === ids.space && b.data?.message?.isDeleted === false,
+  category: 'unexpected-ownership-fields', failureClassification: 'likely security finding',
+  check: async (b, ctx) => {
+    const responseMessage = b.data?.message;
+    const message = responseMessage?._id && await ctx.models.Message.findById(responseMessage._id).lean();
+    return responseMessage?.senderId?._id === String(users.B._id) && responseMessage?.spaceId === ids.space &&
+      responseMessage?.isDeleted === false && String(message?.senderId) === String(users.B._id) &&
+      String(message?.spaceId) === ids.space && message?.isDeleted === false;
+  },
 });
-for (const limit of [0, 1, 99, 100, 101]) add(`pagination boundary ${limit}`, 'A', 'GET', `${mp}?limit=${limit}`, [limit >= 1 && limit <= 100 ? 200 : 400], undefined, { category: 'pagination-boundary', sources: ['src/middleware/validate.js:validatePagination'] });
+for (const limit of [0, 1, 99, 100, 101]) add(`pagination boundary ${limit}`, 'A', 'GET', `${mp}?limit=${limit}`, [limit >= 1 && limit <= 100 ? 200 : 400], undefined, {
+  category: 'pagination-boundary',
+  failureClassification: 'validation weakness/hardening opportunity',
+  sources: ['src/middleware/validate.js:validatePagination'],
+  check: limit >= 1 && limit <= 100 ? (body) => {
+    const messages = body.data?.messages || [];
+    return messages.length === Math.min(limit, 2) &&
+      messages.every(message => String(message.channelId) === ids.channel) &&
+      body.data?.hasMore === (limit === 1);
+  } : undefined,
+});
 // VOCLE-137 previously used a 25-character ID: 400 was correct for that input.
 // Keep the intended valid-but-absent case separate from malformed-ID cases.
 const absentSpaceId = '7ec000000000000000000999';
@@ -168,8 +288,13 @@ async function reset() {
   const directChannelIds = directChannels.map((channel) => channel._id);
   await models.Message.deleteMany({ $or: [{ channelId: { $in: directChannelIds } }, { _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] });
   await models.MessageRequest.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { fromUserId: { $in: fixtureUserIds } }, { toUserId: { $in: fixtureUserIds } }] });
+  await models.Notification.deleteMany({ $or: [
+    { userId: { $in: fixtureUserIds } },
+    { actorId: { $in: fixtureUserIds } },
+    { referenceId: { $in: Object.values(ids) } },
+  ] });
   await models.Channel.deleteMany({ type: 'direct', createdBy: { $in: fixtureUserIds } });
-  for (const model of Object.values(models).filter(m => m !== models.User)) await model.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] });
+  for (const model of Object.values(models).filter(m => m !== models.User && m !== models.Notification)) await model.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] });
   await models.Space.create([
     { _id: ids.space, name: 'Discovery AB', type: 'department', inviteCode: 'DSCABA', createdBy: users.A._id, members: [{ userId: users.A._id, role: 'owner' }, { userId: users.B._id, role: 'member' }] },
     { _id: ids.otherSpace, name: 'Discovery C', type: 'department', inviteCode: 'DSCCCA', createdBy: users.C._id, members: [{ userId: users.C._id, role: 'owner' }] },
@@ -208,10 +333,64 @@ async function snapshot() {
         ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { senderId: { $in: fixtureUserIds }, spaceId: null }] }
         : name === 'MessageRequest'
           ? { $or: [{ _id: { $in: Object.values(ids) } }, { fromUserId: { $in: fixtureUserIds } }, { toUserId: { $in: fixtureUserIds } }] }
-          : { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] };
+          : name === 'Notification'
+            ? { $or: [{ userId: { $in: fixtureUserIds } }, { actorId: { $in: fixtureUserIds } }, { referenceId: { $in: Object.values(ids) } }] }
+            : { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] };
     state[name] = await model.find(query).sort({ _id: 1 }).lean();
   }
   return JSON.stringify(state);
+}
+const wait = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
+async function settledSnapshot() {
+  // Give post-response setImmediate work a real observation window before
+  // looking for two equal database states.
+  await wait(75);
+  let previous = await snapshot();
+  let stableIntervals = 0;
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    await wait(25);
+    const current = await snapshot();
+    if (current === previous) {
+      stableIntervals += 1;
+      if (stableIntervals >= 2) return current;
+    } else {
+      stableIntervals = 0;
+    }
+    previous = current;
+  }
+  throw new Error('Tracked fixture state did not settle after asynchronous side effects');
+}
+async function verifyResetState() {
+  const fixtureUserIds = Object.values(users).map(user => user._id);
+  const [spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
+    models.Space.countDocuments({ _id: { $in: [ids.space, ids.otherSpace] } }),
+    models.Channel.countDocuments({ $or: [
+      { _id: { $in: Object.values(ids) } },
+      { spaceId: { $in: [ids.space, ids.otherSpace] } },
+      { type: 'direct', createdBy: { $in: fixtureUserIds } },
+    ] }),
+    models.Message.countDocuments({ $or: [
+      { _id: { $in: Object.values(ids) } },
+      { spaceId: { $in: [ids.space, ids.otherSpace] } },
+      { senderId: { $in: fixtureUserIds }, spaceId: null },
+    ] }),
+    models.Handoff.countDocuments({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] }),
+    models.MessageRequest.countDocuments({ $or: [
+      { _id: { $in: Object.values(ids) } },
+      { fromUserId: { $in: fixtureUserIds } },
+      { toUserId: { $in: fixtureUserIds } },
+    ] }),
+    models.Notification.countDocuments({ $or: [
+      { userId: { $in: fixtureUserIds } },
+      { actorId: { $in: fixtureUserIds } },
+      { referenceId: { $in: Object.values(ids) } },
+    ] }),
+  ]);
+  assert.deepEqual(
+    { spaces, channels, messages, handoffs, requests, notifications },
+    { spaces: 2, channels: 5, messages: 6, handoffs: 1, requests: 4, notifications: 0 },
+    'Fixture reset did not restore the exact controlled baseline',
+  );
 }
 function actorLabel(actor) {
   return { A: 'User A (space owner/admin)', B: 'User B (normal space member)', C: 'User C (authenticated outsider)', D: 'User D (same-institution medical peer)', E: 'User E (unrelated controlled identity)', F: 'User F (unrelated controlled identity)', G: 'User G (unrelated controlled identity)', H: 'User H (unrelated controlled identity)', anonymous: 'Anonymous caller (unauthenticated)' }[actor];
@@ -316,9 +495,19 @@ function anchorFor(result) { return `${result.caseId.toLowerCase()}--${result.na
 async function execute(c) {
   stage = `fixture reset for ${c.name}`;
   await reset();
+  // Confirm cleanup and fixture creation are quiet before the request. The
+  // post-request settled snapshot below drains each case before the next reset,
+  // preventing an old callback from mutating newly recreated fixed IDs.
+  await settledSnapshot();
+  await verifyResetState();
   const ctx = { http, models, users, ids };
   if (typeof c.prepare === 'function') await c.prepare(ctx);
-  if (c.prepare === 'acknowledge') assert.equal((await http('B', 'POST', `${hp}/acknowledge`, {})).status, 200, 'Replay prerequisite failed');
+  if (c.prepare === 'acknowledge') {
+    const prerequisite = await http('B', 'POST', `${hp}/acknowledge`, {});
+    const handoff = await models.Handoff.findById(ids.handoff).lean();
+    assert.ok(prerequisite.status === 200 && prerequisite.data?.data?.handoff?._id === ids.handoff &&
+      handoff?.status === 'acknowledged', 'Replay prerequisite failed');
+  }
   if (c.prepare === 'draft') await models.Handoff.findByIdAndUpdate(ids.handoff, { status: 'draft', submittedAt: null }, { runValidators: true });
   let body = c.body === 'handoff' ? handoffBody() : typeof c.body === 'function' ? c.body(ctx) : c.body && structuredClone(c.body);
   if (c.foreignField) body[c.foreignField] = c.foreignField === 'channelId' ? ids.otherChannel : c.foreignField === 'spaceId' ? ids.otherSpace : String(users.C._id);
@@ -334,18 +523,24 @@ async function execute(c) {
   };
   body = replaceFixtureReferences(body);
   const endpoint = replaceFixtureReferences(typeof c.endpoint === 'function' ? c.endpoint(ctx) : c.endpoint);
-  const before = await snapshot();
+  const before = await settledSnapshot();
   stage = `${c.actor} ${c.method} ${c.endpoint}`;
   const r = await http(c.actor, c.method, endpoint, body, c.header);
-  const unchanged = before === await snapshot();
+  const unchanged = before === await settledSnapshot();
   const denial = c.statuses.every(s => s >= 400);
-  const semantic = !c.check || (r.data !== null && await c.check(r.data, ctx));
-  const passed = c.statuses.includes(r.status) && !!r.data && r.data.success === !denial && semantic && (!denial || unchanged);
+  const deniedResponseDataAbsent = !denial || r.data?.data == null;
+  const semantic = !c.check || (r.data !== null && await c.check(r.data, ctx, r));
+  const passed = c.statuses.includes(r.status) && !!r.data && r.data.success === !denial &&
+    semantic && deniedResponseDataAbsent && (!denial || unchanged);
   const validation = /schema|boundary|required|enum|object-id/.test(c.category);
-  const classification = passed ? 'confirmed expected behavior' : validation ? 'validation weakness/hardening opportunity' : (r.status < 300 && denial) || (denial && !unchanged) ? 'likely security finding' : 'ambiguous / requires manual investigation';
+  const classification = passed ? 'confirmed expected behavior' : c.failureClassification ||
+    (validation ? 'validation weakness/hardening opportunity' :
+      (r.status < 300 && denial) || (denial && !unchanged) || (denial && !deniedResponseDataAbsent)
+        ? 'likely security finding'
+        : 'ambiguous / requires manual investigation');
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
-    actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, semanticCheckPassed: !!semantic, jsonResponse: !!r.data },
+    actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
   results.push(result);
@@ -430,6 +625,7 @@ function report() {
         `- HTTP status: ${result.actual.status}`,
         `- Request succeeded: ${result.actual.success === true ? 'yes' : result.actual.success === false ? 'no' : 'not represented by the expected JSON envelope'}`,
         `- State check: ${state}.`,
+        `- Rejection payload check: ${result.expected.successfulEnvelope ? 'not applicable' : result.actual.deniedResponseDataAbsent ? 'no success data returned' : 'response exposed a success data payload'}.`,
         `- Semantic check: ${result.actual.semanticCheckPassed ? 'passed' : 'did not pass'}.`,
         '',
         `**Result:** ${result.passed ? 'PASS' : 'OBSERVATION'}`,
@@ -449,7 +645,7 @@ async function main() {
   safety();
   stage = 'database and authentication preflight';
   mongoose = require('mongoose');
-  models = Object.fromEntries(['User', 'Space', 'Channel', 'Message', 'Handoff'].map(n => [n, require(`../src/features/${n === 'Handoff' ? 'handoffs' : n.toLowerCase() + 's'}/${n.toLowerCase()}.model`)]));
+  models = Object.fromEntries(['User', 'Space', 'Channel', 'Message', 'Handoff', 'Notification'].map(n => [n, require(`../src/features/${n === 'Handoff' ? 'handoffs' : n.toLowerCase() + 's'}/${n.toLowerCase()}.model`)]));
   models.MessageRequest = require('../src/features/message-requests/messageRequest.model');
   await mongoose.connect(URI, { serverSelectionTimeoutMS: 10000 });
   users = {};
@@ -470,7 +666,16 @@ async function main() {
   await health();
 }
 if (process.argv.includes('--list')) {
-  console.log(JSON.stringify({ count: cases.length, cases: cases.map(({ name, actor, method, endpoint, category }) => ({ name, actor, method, endpoint, category })) }, null, 2));
+  console.log(JSON.stringify({ count: cases.length, cases: cases.map(({ name, actor, method, endpoint, statuses, category, check, prepare }) => ({
+    name,
+    actor,
+    method,
+    endpoint: typeof endpoint === 'string' ? endpoint : '[dynamic endpoint]',
+    statuses,
+    category,
+    hasSemanticCheck: typeof check === 'function',
+    hasPreparation: !!prepare,
+  })) }, null, 2));
 } else {
   main().catch(() => { fatal = `Execution prerequisite failed at ${stage}. Raw errors omitted to protect credentials.`; console.error(fatal); process.exitCode = 1; }).finally(async () => {
     try { report(); } finally { if (mongoose) await mongoose.disconnect(); }
