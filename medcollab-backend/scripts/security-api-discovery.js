@@ -461,6 +461,10 @@ async function main() {
     const r = await http(actor, 'GET', '/api/users/me');
     assert.ok(r.status === 200 && r.data?.data?.user?._id === String(users[actor]._id), 'Authentication identity preflight failed');
   }
+  // I is deliberately inactive and target-only. It must be available for
+  // deterministic placeholder resolution but must never receive a test token.
+  users.I = await models.User.findOne({ phone: '+15550000009', isActive: false, isOnboarded: true, isVerified: true });
+  assert.ok(users.I, 'Inactive target fixture identity missing');
   await health();
   for (const c of cases) await execute(c);
   await health();
