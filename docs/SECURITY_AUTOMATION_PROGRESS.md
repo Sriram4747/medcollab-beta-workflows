@@ -22,6 +22,15 @@ Source a0b1f722160b0a8df94780d10ebc3c1dca46d45a; successful backend workflow run
 
 Next implementation: improve 159 response identity evidence and sanitized fresh-DM failure diagnostics; then prioritize realtime private-channel fan-out/typing/stale rooms and local media ownership/path containment. Manifests contain payload families, actors, controls, invariants, prerequisites and limits. Do not classify source-only attack chains as executed vulnerabilities.
 
+## Suite quality hardening after the reviewed run
+
+The bounded [suite quality review](SECURITY_SUITE_QUALITY_REVIEW_2026-09-25.md)
+keeps 243 cases while adding settled side-effect snapshots, notification cleanup
+and mutation tracking, exact reset checks, denial-payload checks, unique case names,
+persisted success assertions, replay counts and explicit parent/child binding
+checks. Historical run 36168079327 predates these stronger assertions. Do not quote
+new pass/observation totals until the hardened suite completes in isolated CI.
+
 ## Architecture and safety
 
 - Current branch master, experimental origin Sriram4747/medcollab-beta-workflows only. Never write upstream mathiharan29/medcollab-beta, change its URL, or reuse design/clinical-design-system. Preserve unrelated Flutter/Android worktree changes.

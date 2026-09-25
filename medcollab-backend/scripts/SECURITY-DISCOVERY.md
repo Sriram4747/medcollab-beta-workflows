@@ -59,11 +59,13 @@ messages and one handoff use reserved deterministic IDs. Real Mongoose models
 create/reset them before each case; only their IDs and dependent scratch resources
 are removed. This enables independent destructive cases and repeatable reruns.
 Test actions themselves go through HTTP, Express, auth, controllers and MongoDB.
-MongoDB snapshots independently detect writes during denied requests. Expected
-successful edits/deletes/acknowledgements/member removal also check persistence;
-lists and ownership injection have selected content assertions. This is not a
-complete response-schema or side-effect audit. Asynchronous notifications are
-outside snapshot scope; concurrency testing is deferred.
+Settled MongoDB snapshots independently detect writes during denied requests,
+including fixture notifications. The runner waits for post-response work before
+comparing state and verifies the exact reset baseline before each case. Every
+currently successful case has a semantic check: allowed reads assert controlled
+identities/containment and mutations assert persisted state. Expected denials also
+require an error envelope without a success `data` payload. Socket/FCM delivery,
+complete response minimization and concurrency testing remain outside this suite.
 
 JSON includes every case, source paths, expected statuses, actual status/envelope,
 state preservation, classification and manual follow-up flag. Markdown summarizes
@@ -108,12 +110,14 @@ security observation.
 Local validation covers syntax, manifest generation and fail-closed preflight.
 This does not establish API results: run the workflow to obtain the baseline.
 
-## Reviewed baseline and continuation
+## Reviewed evidence and continuation
 
-The downloaded execution artifact was reviewed: 146 cases, 138 passes, eight
-observations. See [observation classifications](../../docs/SECURITY_OBSERVATION_REVIEW.md),
-[coverage map and next phase](../../docs/SECURITY_TEST_COVERAGE.md), and
+The latest reviewed artifact before the quality hardening is run 36168079327:
+243 cases, 230 passes and 13 observations. See the
+[quality review](../../docs/SECURITY_SUITE_QUALITY_REVIEW_2026-09-25.md),
+[observation classifications](../../docs/SECURITY_OBSERVATION_REVIEW.md),
+[coverage map](../../docs/SECURITY_TEST_COVERAGE.md), and
 [continuity instructions](../../docs/SECURITY_AUTOMATION_PROGRESS.md).
-The absent-ID input is now corrected; new execution results remain pending.
-The coverage matcher no longer double-counts /users/me as /users/:id (20 distinct
-operations in the reviewed baseline). DM API security remains untested.
+The corrected absent-ID case passed; DM and message-request suites executed.
+Post-quality-change results require a fresh isolated workflow run and must not be
+inferred from syntax or manifest checks.
