@@ -25,8 +25,8 @@ as API execution. An observation still counts as exercised, not as secured.
 | Channel management: `GET/PUT/DELETE /api/channels/:id`, `GET /:id/members`, `POST/DELETE /:id/pin/:messageId` | No direct requests | Not covered | Detail/member privacy, archive/admin boundary, pin ownership/foreign messages, limits, private/DM context. Pin controller allows space members/DM participants; stale route comments say admins—derive tests from reviewed policy, not comments alone |
 | Group/channel messages: `GET/POST /api/channels/:channelId/messages`, `PUT/DELETE /:id`, `POST /:id/react`, `POST /read` | Read/create/edit/delete permutations; text, enums, pagination, ownership-field mutations | Partially covered | Sender ownership/admin deletion, public space membership. Missing reactions, positive foreign-parent containment for direct threadId submission, archived/private channels, mentions/media references, announcement restrictions. DM receipts not tested |
 | Threads/replies: `GET .../messages/:id/thread`, `POST .../messages/:id/reply` | Foreign root variants for A/B; malformed root ID | Partially covered | Missing valid same-channel reply/thread paths, anonymous/C positive-resource variants, reply pagination/deleted root, completed async effects. Two confirmed foreign-reply observations remain |
-| Direct Messages: `GET/POST /api/channels/dm`, shared channel detail/members/pins and message routes using `type: direct` | **Zero DM cases; no direct-channel fixture** | Not covered | Participant-only read/write/edit/delete/threads/receipts; DM pair uniqueness/idempotence; known-user eligibility; self/third-party/archived/deactivated targets; pin and member metadata isolation |
-| Message requests: `GET/POST /api/message-requests`, `GET /pending-count`, `POST /:id/accept`, `POST /:id/decline`; `utils/knownUsers.js` | Zero API cases. Existing knownUsers unit test checks institution normalization only | Not covered | Recipient-only transitions; pending/accepted/declined/blocked; sender/recipient/outsider listing; replay, reciprocal requests; relationship change enabling a DM |
+| Direct Messages: `GET/POST /api/channels/dm`, shared channel detail/members/pins and message routes using `type: direct` | 61 deterministic real-API cases are implemented in `scripts/security/suites/direct-messages.js`; fresh execution evidence is pending | Implemented; pending execution | Participant-only read/write/edit/delete/threads/receipts; DM pair uniqueness/idempotence; same-institution vs genuinely unrelated eligibility; self/inactive/absent targets; archived conversations; pin and member metadata isolation |
+| Message requests: `GET/POST /api/message-requests`, `GET /pending-count`, `POST /:id/accept`, `POST /:id/decline`; `utils/knownUsers.js` | 36 deterministic real-API cases are implemented in `scripts/security/suites/message-requests.js`; fresh execution evidence is pending | Implemented; pending execution | Recipient-only transitions; pending/accepted/declined/blocked; sender/recipient/outsider listing; replay, reciprocal requests; accepted/declined relationship binding to DM creation |
 | Handoffs: `GET/POST /api/handoffs`, `GET/PUT/DELETE /:id`, `POST /:id/submit`, `POST /:id/acknowledge`, `GET /api/spaces/:spaceId/handoffs` | Seven of eight route operations; participant/outsider, lifecycle, replay, foreign references, required fields | Partially covered | Missing personal inbox GET filters, draft visibility to receiver/nonparticipant/admin, third-party member vs participant distinction, patient nested limits, stale membership, concurrent transitions; unchecked channel binding confirmed |
 | Media: `POST /api/media/upload`, `DELETE /api/media/:publicId` | Zero | Not covered | MIME/size/content checks, encoded IDs/path containment, file ownership, handoff upload context. Local disk fallback exists; later tests need no Cloudinary credentials |
 | Static uploads: `/uploads/*` via `express.static` | Zero; not counted among 73 explicit handlers | Not covered | Read authorization/public URL policy, guessed IDs, traversal, unsafe active content, cache/privacy behavior |
@@ -53,16 +53,21 @@ handoffs 6/7 plus space handoff list 1/1; users 1/7; all other explicit route gr
 0 in the discovery results. The health/auth setup calls are outside that count.
 The old generated report showed 21 due to double-crediting `/users/me`.
 
-**Direct Messages are not covered by the 146-case suite.** Both scratch channels
+**Direct Messages were not covered by the 146-case suite.** Both scratch channels
 default to GENERAL, have a space ID and exercise public-space membership rules.
 The DIRECT branch in `resolveChannelAccess`, `getMessages` and `markAsRead` never
 runs in these fixtures. Shared URL patterns do not imply shared security coverage.
 The fixture users share an institution, so C being a space outsider is not enough
 to expect that C cannot create a DM through `canMessageUser`.
 
-## Next phase: DM and message-request boundaries
+The manifest now extends that historical baseline to 243 planned cases (61 DM,
+36 message-request cases), but these new cases must not be described as executed
+until a fresh disposable-run artifact is reviewed. Module labels on every result
+distinguish executions of shared message routes in group versus direct contexts.
 
-Recommended next implementation, suitable for a separate Terra task:
+## DM and message-request phase implementation specification
+
+Implemented in the current worktree; fresh execution confirmation remains pending:
 
 1. Read AGENTS.md, SECURITY_AUTOMATION_PROGRESS.md, this map and the reviewed
    observations. Preserve one workflow and the current demonstration cases.

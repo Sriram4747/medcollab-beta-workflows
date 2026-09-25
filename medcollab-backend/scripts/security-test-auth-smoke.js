@@ -16,6 +16,11 @@ const users = [
   { key: 'USER_A', phone: '+15550000001', name: 'Vocle Security User A' },
   { key: 'USER_B', phone: '+15550000002', name: 'Vocle Security User B' },
   { key: 'USER_C', phone: '+15550000003', name: 'Vocle Security User C' },
+  { key: 'USER_D', phone: '+15550000004', name: 'Vocle Security User D' },
+  { key: 'USER_E', phone: '+15550000005', name: 'Vocle Security User E' },
+  { key: 'USER_F', phone: '+15550000006', name: 'Vocle Security User F' },
+  { key: 'USER_G', phone: '+15550000007', name: 'Vocle Security User G' },
+  { key: 'USER_H', phone: '+15550000008', name: 'Vocle Security User H' },
 ];
 
 function assertSafeEnvironment() {
@@ -101,7 +106,7 @@ async function main() {
   }
   await verifyUnauthenticatedRejection();
   storeTokens(tokens);
-  console.log('Authentication smoke test passed for userA, userB, userC; unauthenticated access was rejected.');
+  console.log('Authentication smoke test passed for userA through userH; unauthenticated access was rejected.');
 }
 
 main().catch((error) => {

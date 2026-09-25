@@ -47,6 +47,16 @@ const FIXTURE = {
       name: 'Vocle Security User C',
       role: USER_ROLES.INTERN,
     },
+    // D shares the institution but no space with A/B/C. E–H deliberately do
+    // not share an institution or space with one another; they exercise the
+    // stranger message-request boundary rather than a superficial outsider.
+    { key: 'userD', phone: '+15550000004', name: 'Vocle Security User D', role: USER_ROLES.CONSULTANT },
+    { key: 'userE', phone: '+15550000005', name: 'Vocle Security User E', role: USER_ROLES.PG_RESIDENT, institution: 'Vocle External Alpha' },
+    { key: 'userF', phone: '+15550000006', name: 'Vocle Security User F', role: USER_ROLES.NURSE, institution: 'Vocle External Beta' },
+    { key: 'userG', phone: '+15550000007', name: 'Vocle Security User G', role: USER_ROLES.INTERN, institution: 'Vocle External Gamma' },
+    { key: 'userH', phone: '+15550000008', name: 'Vocle Security User H', role: USER_ROLES.JUNIOR_CONSULTANT, institution: 'Vocle External Delta' },
+    // This identity is intentionally inactive and is never authenticated.
+    { key: 'userI', phone: '+15550000009', name: 'Vocle Security User I', role: USER_ROLES.CONSULTANT, institution: 'Vocle CI Fixture', isActive: false },
   ],
   inviteCode: 'VCLTST',
   spaceName: 'Vocle Security Test Space',
@@ -82,10 +92,10 @@ async function seed() {
           name: fixtureUser.name,
           role: fixtureUser.role,
           speciality: 'Security Test Only',
-          institution: 'Vocle CI Fixture',
+          institution: fixtureUser.institution || 'Vocle CI Fixture',
           isVerified: true,
           isOnboarded: true,
-          isActive: true,
+          isActive: fixtureUser.isActive !== false,
           fcmTokens: [],
         },
       },
@@ -219,6 +229,10 @@ async function verify() {
   }
   if (!space.isMember(users.userB._id)) throw new Error('userB is not a fixture space member');
   if (space.isMember(users.userC._id)) throw new Error('userC must not be a fixture space member');
+  if (space.isMember(users.userD._id)) throw new Error('userD must not share the fixture space');
+  if (users.userD.institution !== users.userA.institution) throw new Error('userD must be a same-institution peer');
+  if (users.userE.institution === users.userF.institution) throw new Error('message-request fixtures must be genuinely unrelated');
+  if (users.userI.isActive) throw new Error('userI must remain inactive for target-eligibility checks');
 
   const channel = await Channel.findOne({ spaceId: space._id, name: FIXTURE.channelName, isArchived: false });
   if (!channel) throw new Error('Missing fixture channel');

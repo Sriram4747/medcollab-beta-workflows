@@ -1,6 +1,6 @@
 # Vocle security automation continuity
 
-Updated 2026-09-19. A new session should read **AGENTS.md and this file first**,
+Updated 2026-09-25. A new session should read **AGENTS.md and this file first**,
 then the linked review/map before changing tests.
 
 ## Architecture and safety
@@ -71,18 +71,41 @@ manual scenarios and gate decisions.
 Full map: [SECURITY_TEST_COVERAGE.md](SECURITY_TEST_COVERAGE.md).
 73 explicit HTTP operations, plus static uploads and realtime events. Auth,
 users, spaces/member boundaries, public channels/messages/threads and handoffs
-are partial. DM, message requests, media/static delivery, notifications, search,
-support, developer tools and Socket.IO security are not covered by the suite.
-No complete business module is comprehensively covered.
+are partial. At the reviewed baseline, DM, message requests, media/static
+delivery, notifications, search, support, developer tools and Socket.IO security
+were not covered. DM/message-request execution evidence is now pending a fresh
+run; no complete business module is comprehensively covered.
 
-**Direct Messages have zero API security cases.** GENERAL fixtures never exercise
+**At the 146-case baseline, Direct Messages had zero API security cases.** GENERAL fixtures never exercise
 DIRECT membership/receipt logic. Existing institution-normalization unit tests
 are not DM integration coverage.
 
 Exact next step: run the existing workflow on origin/master and review corrected
-VOCLE-137 and the 20-route attribution. Then implement the bounded DM + message-
-request phase described in the coverage map, preferably in a separate Terra task.
-Add genuinely unrelated controlled identities (A/B/C share an institution),
-preserve existing fixtures/case IDs and one workflow, and use modular suites.
+VOCLE-137, the 20-route attribution, and the now-implemented bounded DM +
+message-request phase. It adds genuinely unrelated controlled identities while
+preserving A/B/C, existing fixture/case IDs, and the single workflow.
 Keep findings visible and bring application fixes through separate authorization.
 Do not perform mobile interception; manual Reqable scenarios are documented only.
+
+## DM and message-request implementation (pending fresh API evidence)
+
+The bounded DM/message-request phase is implemented in the existing serial
+discovery command, without a new workflow. The original 146 baseline cases and
+their IDs are retained; the manifest now plans **243** cases: **61 Direct
+Messages** and **36 Message Requests** additions. Results now carry a `module`
+field and module/context information in the JSON summary, concise summary,
+human-readable test report, and route coverage report.
+
+New deterministic fixture identities are A–I. A/B/C remain unchanged. D is a
+same-institution peer with no shared space; E–H have different institutions and
+no shared space; I is inactive and target-only. Per-case resets explicitly model
+an existing DM, archived DM, pending, declined, blocked, and accepted request
+states. The suites make real HTTP calls and use models only for reset and
+independent persistence/containment checks.
+
+This workstation has no Docker, `mongod`, or `mongosh`; therefore no local API
+run was substituted with mocks or `mongodb-memory-server`. Syntax, manifest, and
+report-generator validation completed, but there is no fresh execution evidence
+yet and no new observation is classified from this implementation alone. The
+next required evidence is the existing origin/master workflow against its
+loopback Docker MongoDB, followed by review of its generated `results.json`.

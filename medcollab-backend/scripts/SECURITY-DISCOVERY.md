@@ -3,7 +3,9 @@
 Run only in the existing backend environment workflow, after fixture verification
 and authentication smoke checks. `node scripts/security-api-discovery.js --list`
 prints the complete deterministic manifest without connecting to any service.
-The default command executes 146 cases serially against the real local API.
+The default command executes 243 cases serially against the real local API: the
+preserved 146-case group/space/handoff baseline, 61 direct-message cases, and 36
+message-request cases.
 
 ## Authorization matrix and evidence
 
@@ -80,6 +82,28 @@ also includes shared institution/accepted requests, so C being outside AB does n
 imply C cannot DM A/B (all original fixtures share an institution). Broad DM,
 private-channel, media, Socket.IO, load, refresh/expiry and randomized fuzz testing
 are intentionally deferred. No application security behavior is changed here.
+
+## Direct-message and message-request phase
+
+The modular suites in `security/suites/direct-messages.js` and
+`security/suites/message-requests.js` run after the baseline in the same process
+and workflow. A/B are participants in a controlled DM; D is a same-institution
+nonparticipant; E–H are different-institution, no-shared-space identities; I is
+an inactive target-only identity. Resets establish an existing and archived DM,
+plus pending, declined, blocked, and accepted request states.
+
+The suites cover participant/third-party/anonymous permutations for DM list,
+creation, detail, member metadata, messages, ownership, threads, foreign-message
+binding, receipts, pins, archived access, known-user pair idempotency, and target
+validation. Request coverage includes recipient-scoped list/count, pending and
+reciprocal behavior, each relationship state, recipient-only accept/decline,
+replay, request schemas, blocked paths, and accepted/declined DM binding.
+
+`results.json` records each case's `module`; the human security report includes
+module/context per case and the route coverage report preserves module counts for
+shared group/DM message paths. These are execution reports: inspect a fresh
+artifact before stating any expanded case passed or before classifying a case as a
+security observation.
 
 Local validation covers syntax, manifest generation and fail-closed preflight.
 This does not establish API results: run the workflow to obtain the baseline.

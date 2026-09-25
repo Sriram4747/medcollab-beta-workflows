@@ -93,7 +93,13 @@ function statusFor(route, routes, results, infrastructureFailure) {
   if (!matching.length) return infrastructureFailure ? 'NOT RUN — discovery infrastructure did not complete' : 'NOT YET EXERCISED';
   const passed = matching.filter(result => result.passed).length;
   const observations = matching.length - passed;
-  return observations ? `EXERCISED — ${passed} pass, ${observations} observation` : `EXERCISED — ${passed} pass`;
+  const modules = Object.entries(matching.reduce((counts, result) => {
+    const module = result.module || 'Unlabelled legacy case';
+    counts[module] = (counts[module] || 0) + 1;
+    return counts;
+  }, {})).map(([module, count]) => `${module}: ${count}`).join('; ');
+  const outcome = observations ? `EXERCISED — ${passed} pass, ${observations} observation` : `EXERCISED — ${passed} pass`;
+  return `${outcome} (${modules})`;
 }
 function main() {
   fs.mkdirSync(outputDir, { recursive: true });
@@ -141,7 +147,7 @@ function main() {
     ]),
     '## Status definitions',
     '',
-    '- **EXERCISED**: one or more current security cases called this exact HTTP method and route pattern; the status includes their pass/observation count.',
+    '- **EXERCISED**: one or more current security cases called this exact HTTP method and route pattern; the status includes their pass/observation count and module labels, so shared group/DM message routes remain distinguishable.',
     '- **NOT YET EXERCISED**: the route was found in the backend but has no case in the current security suite.',
     '- **NOT RUN**: the discovery suite could not complete, so route-level execution status is unavailable.',
   ].join('\n');
