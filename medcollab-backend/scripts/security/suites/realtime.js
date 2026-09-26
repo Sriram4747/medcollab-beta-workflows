@@ -25,7 +25,7 @@ async function controlEdit(c, socket, channelId, messageId) {
   assert.equal(r.status, 200); const p = await received; assert.equal(String(p.messageId), messageId);
 }
 module.exports = ({ add, ids }) => {
-  const reg = (name, work) => add(name, 'A', 'SOCKET', '/socket.io/', [200], undefined, {
+  const reg = (name, work, actor = 'A') => add(name, actor, 'SOCKET', '/socket.io/', [200], undefined, {
     module: 'Realtime', category: 'realtime-authorization', context: 'Actual websocket clients, real REST producers, authenticated controls; 1500 ms quiet window.', sources: ['src/socket/index.js', 'src/socket/handlers/message.handler.js', 'src/utils/channelAccess.js'],
     run: async c => { c.evidence.quietWindowMs = QUIET; c.evidence.invariantHeld = await work(c); return c.http('anonymous', 'GET', '/health').then(r => ({ status: r.status, data: { success: r.data?.status === 'ok' } })); },
     check: (_, c) => c.evidence.invariantHeld,
@@ -43,14 +43,14 @@ module.exports = ({ add, ids }) => {
     ['private group', 'B', ids.channel, ids.messageA, true],
   ]) {
     const setup = async c => { if (privateChannel) await c.models.Channel.findByIdAndUpdate(channel, { isPrivate: true, members: [c.users.A._id] }); const victim = await connect(c, channel === ids.otherChannel ? 'C' : 'A'); const attacker = await connect(c, actor); await join(victim, channel); await join(attacker, channel, false); assert.equal((await c.http(actor, 'GET', `/api/channels/${channel}/messages`)).status, 403); return { victim, attacker }; };
-    reg('socket denied join prevents channel edit delivery ' + label, async c => { const { victim, attacker } = await setup(c); const packets = collect(attacker, 'message_updated', p => String(p.messageId) === message); await controlEdit(c, victim, channel, message); await wait(QUIET); c.evidence.unauthorizedEvents = packets.length; c.evidence.authorizedControl = true; return packets.length === 0; });
+    reg('socket denied join prevents channel edit delivery ' + label, async c => { const { victim, attacker } = await setup(c); const packets = collect(attacker, 'message_updated', p => String(p.messageId) === message); await controlEdit(c, victim, channel, message); await wait(QUIET); c.evidence.unauthorizedEvents = packets.length; c.evidence.authorizedControl = true; return packets.length === 0; }, actor);
     for (const [input, output] of [['typing_start', 'user_typing'], ['typing_stop', 'user_stopped_typing']]) reg('socket unauthorized ' + input + ' ' + label, async c => {
       const { victim, attacker } = await setup(c);
       const legitimate = await connect(c, channel === ids.otherChannel ? 'C' : 'A'); const control = once(victim, output); legitimate.emit(input, { channelId: channel }); await control;
       const packets = collect(victim, output, p => p.channelId === channel && String(p.userId) === String(c.users[actor]._id));
       attacker.emit(input, { channelId: channel, userId: String(c.users.A._id) }); await wait(QUIET);
       c.evidence.unauthorizedEvents = packets.length; c.evidence.serverAttributedAttacker = packets.length > 0; c.evidence.authorizedControl = true; return packets.length === 0;
-    });
+    }, actor);
   }
   reg('private REST message personal-room audience', async c => {
     await c.models.Channel.findByIdAndUpdate(ids.channel, { isPrivate: true, members: [c.users.A._id] });
@@ -59,7 +59,7 @@ module.exports = ({ add, ids }) => {
     const packets = collect(excluded, 'new_message', p => p.content?.text === 'Private delivery canary'); const control = once(victim, 'new_message');
     const r = await c.http('A', 'POST', `/api/channels/${ids.channel}/messages`, { content: { text: 'Private delivery canary' } }); assert.equal(r.status, 201); assert.equal((await control)._id, r.data.data.message._id); await wait(QUIET);
     c.evidence.unauthorizedEvents = packets.length; c.evidence.fullCanaryDisclosed = packets.some(p => p._id === r.data.data.message._id); c.evidence.authorizedControl = true; return packets.length === 0;
-  });
+  }, 'B');
   for (const sync of [false, true]) reg('membership revocation stale channel room ' + (sync ? 'after sync' : 'before sync'), async c => {
     const owner = await connect(c, 'A'); const member = await connect(c, 'B'); await join(owner, ids.channel); await join(member, ids.channel);
     await controlEdit(c, member, ids.channel, ids.messageA);
@@ -68,7 +68,7 @@ module.exports = ({ add, ids }) => {
     if (sync) { const done = once(member, 'sync_space_rooms'); member.emit('sync_space_rooms', {}); await done; }
     const packets = collect(member, 'message_updated', p => String(p.messageId) === ids.messageA);
     await controlEdit(c, owner, ids.channel, ids.messageA); await wait(QUIET); c.evidence.unauthorizedEvents = packets.length; c.evidence.authorizedControl = true; return packets.length === 0;
-  });
+  }, 'B');
   reg('explicit leave removes channel-only delivery', async c => {
     const a = await connect(c, 'A'); const b = await connect(c, 'B'); await join(a, ids.channel); await join(b, ids.channel); await controlEdit(c, b, ids.channel, ids.messageA);
     b.emit('leave_channel', { channelId: ids.channel }); await wait(100);
