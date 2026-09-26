@@ -250,6 +250,9 @@ for (const field of ['toUserId', 'shiftDate', 'shiftType']) {
 
 require('./security/suites/direct-messages')({ add, ids });
 require('./security/suites/message-requests')({ add, ids });
+require('./security/suites/extended-api')({ add, ids });
+require('./security/suites/media')({ add, ids });
+require('./security/suites/realtime')({ add, ids });
 
 let mongoose, models, users;
 const tokens = {};
@@ -510,7 +513,8 @@ async function execute(c) {
   // preventing an old callback from mutating newly recreated fixed IDs.
   await settledSnapshot();
   await verifyResetState();
-  const ctx = { http, models, users, ids };
+  const ctx = { http, models, users, ids, tokens, evidence: {}, cleanup: [] };
+  try {
   if (typeof c.prepare === 'function') await c.prepare(ctx);
   if (c.prepare === 'acknowledge') {
     const prerequisite = await http('B', 'POST', `${hp}/acknowledge`, {});
@@ -535,7 +539,7 @@ async function execute(c) {
   const endpoint = replaceFixtureReferences(typeof c.endpoint === 'function' ? c.endpoint(ctx) : c.endpoint);
   const before = await settledSnapshot();
   stage = `${c.actor} ${c.method} ${c.endpoint}`;
-  const r = await http(c.actor, c.method, endpoint, body, c.header);
+  const r = c.run ? await c.run(ctx) : await http(c.actor, c.method, endpoint, body, c.header);
   const unchanged = before === await settledSnapshot();
   const denial = c.statuses.every(s => s >= 400);
   const deniedResponseDataAbsent = !denial || r.data?.data == null;
@@ -550,12 +554,16 @@ async function execute(c) {
         : 'ambiguous / requires manual investigation');
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
-    actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data },
+    actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
   results.push(result);
   // A server error is an observation only if the service remains healthy.
   if (r.status >= 500) await health();
+  } finally {
+    for (const cleanup of ctx.cleanup.reverse()) await cleanup();
+    await wait(150);
+  }
 }
 function report() {
   const directory = path.join(process.env.RUNNER_TEMP || require('node:os').tmpdir(), 'vocle-security-results');
