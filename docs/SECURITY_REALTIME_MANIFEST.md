@@ -5,7 +5,7 @@ Planned, not implemented or executed. Source a0b1f72, reviewed 2026-09-25. Use a
 
 ## Event and identity inventory
 
-`socket/index.js` authenticates handshake.auth.token using authenticateSocket: signature/expiry and active DB user. userId/name are attached from that user, not client identity fields. No requireOnboarding check. Initial connection queries active space memberships; presence registration joins user:<id>; join_channel uses canAccessChannel (DM members, space members, private member/admin, nonarchived channel). Space IDs come from DB. Leave operates on the caller's socket.
+`socket/index.js` authenticates handshake.auth.token using authenticateSocket: signed-token expiry and active DB user. userId/name are attached from that user, not client identity fields. No requireOnboarding check. Initial connection queries active space memberships; presence registration joins user:<id>; join_channel uses canAccessChannel (DM members, space members, private member/admin, nonarchived channel). Space IDs come from DB. Leave operates on the caller's socket.
 
 | Direction | Event / payload | Source and behavior |
 | --- | --- | --- |

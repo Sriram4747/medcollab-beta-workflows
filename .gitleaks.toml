@@ -1,0 +1,8 @@
+title = "Vocle Gitleaks configuration"
+
+[allowlist]
+description = "Reviewed historical test and documentation false positives"
+commits = [
+  "26e09a12fc877c89356eb490ecabebf6e677e568",
+  "95a1362c22789abc304886c0513747cd4621f4a8",
+]
