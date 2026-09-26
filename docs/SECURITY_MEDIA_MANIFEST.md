@@ -1,3 +1,4 @@
+> Execution update, 2026-09-26: The focused subset documented in [the expansion report](SECURITY_EXPANSION_2026-09-26.md) has now run in real isolated CI, run 36225164443. The broader original plan below is retained; unimplemented variants are not credited as executed. See the report for exact cases, confirmed roots and explicit deferrals.
 # Media security implementation manifest
 
 Planned, not implemented or executed. Source: a0b1f72, reviewed 2026-09-25. Hypotheses here are not new confirmed findings.

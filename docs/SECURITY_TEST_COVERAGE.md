@@ -1,3 +1,16 @@
+# Current execution — 2026-09-26
+
+The [expanded implementation and evidence report](SECURITY_EXPANSION_2026-09-26.md) supersedes the historical counts and pending-execution notes below. Final isolated [run 36225164443](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36225164443), source 63bb75df3f05e150ef444e96a186528d0f9a6143: **352/352 executed, 311 passed, 41 observations, infrastructure healthy**. Three observations remain inconclusive fresh-DM failures; none of the 352 is unexecuted.
+
+Added 109 meaningful cases: Extended API 49, Media 31, Realtime 21 and Cross-module 8. The original 243 cases retain 230 passes and 13 observations. Exact-route execution increased from 32/73 to **46/73**; see the [generated coverage map](security-evidence/36225164443/security-api-coverage-report.md). Coverage remains partial, not whole-route assurance.
+
+Six newly confirmed roots: draft handoff visibility, private-channel detail authorization, local-media canonical ownership, typing room authorization, private-message personal-room fan-out and stale channel-room revocation. Existing foreign-thread binding and member-list authorization gained additional evidence; all three previously confirmed roots are preserved. [Reviewed classifications](security-evidence/36225164443/reviewed-observations.json) distinguish security defects, hardening, expected behavior and inconclusive results. No application remediation occurred; no workflow YAML change was required.
+
+Media and realtime manifests below/linked remain broader than implemented coverage. Recovery replay, crash-prone malformed socket payloads, live Cloudinary behavior and other explicit limitations are listed in the current report. Do not treat the historical planned manifests as executed in full.
+
+---
+
+## Historical continuity material
 # Current route-level security coverage — 2026-09-25
 
 This section supersedes the historical 146-case map below. Recomputed from current Express mounts/routes and retained run 36168079327 results at source a0b1f72. **73 explicit method/path operations; 32 exercised by discovery (43.8%), 41 without discovery cases.** Static uploads, Socket.IO, implicit HEAD/OPTIONS are outside that denominator. Setup calls are not discovery cases. No route is claimed comprehensively secure.

@@ -1,0 +1,258 @@
+{
+  "runId": 36225164443,
+  "executedSource": "63bb75df3f05e150ef444e96a186528d0f9a6143",
+  "classificationCounts": {
+    "confirmed security defect": 25,
+    "validation/hardening issue": 12,
+    "expected behavior": 1,
+    "inconclusive": 3
+  },
+  "observations": [
+    {
+      "caseId": "VOCLE-094",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-098",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-193",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-197",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-275",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-276",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-foreign-thread-binding",
+      "review": "Foreign parent binding accepted; new direct-body cases also prove persisted cross-context child and foreign parent replyCount=1."
+    },
+    {
+      "caseId": "VOCLE-099",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-handoff-channel-binding",
+      "review": "Previously confirmed foreign channel reference acceptance preserved; no new downstream-delivery claim."
+    },
+    {
+      "caseId": "VOCLE-159",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-channel-member-list-authorization",
+      "review": "Member-list controller lacks channel membership authorization; private-group case extends the existing DM root."
+    },
+    {
+      "caseId": "VOCLE-273",
+      "classification": "confirmed security defect",
+      "rootCause": "existing-channel-member-list-authorization",
+      "review": "Member-list controller lacks channel membership authorization; private-group case extends the existing DM root."
+    },
+    {
+      "caseId": "VOCLE-267",
+      "classification": "confirmed security defect",
+      "rootCause": "draft-handoff-visibility",
+      "review": "Draft receiver and unrelated ordinary space member receive draft data through explicit inbox status, detail or search, contradicting sender-only draft privacy documented in handoff.model.js. Grouped as one draft-visibility root."
+    },
+    {
+      "caseId": "VOCLE-268",
+      "classification": "confirmed security defect",
+      "rootCause": "draft-handoff-visibility",
+      "review": "Draft receiver and unrelated ordinary space member receive draft data through explicit inbox status, detail or search, contradicting sender-only draft privacy documented in handoff.model.js. Grouped as one draft-visibility root."
+    },
+    {
+      "caseId": "VOCLE-270",
+      "classification": "confirmed security defect",
+      "rootCause": "draft-handoff-visibility",
+      "review": "Draft receiver and unrelated ordinary space member receive draft data through explicit inbox status, detail or search, contradicting sender-only draft privacy documented in handoff.model.js. Grouped as one draft-visibility root."
+    },
+    {
+      "caseId": "VOCLE-271",
+      "classification": "confirmed security defect",
+      "rootCause": "draft-handoff-visibility",
+      "review": "Draft receiver and unrelated ordinary space member receive draft data through explicit inbox status, detail or search, contradicting sender-only draft privacy documented in handoff.model.js. Grouped as one draft-visibility root."
+    },
+    {
+      "caseId": "VOCLE-272",
+      "classification": "confirmed security defect",
+      "rootCause": "private-channel-detail-authorization",
+      "review": "Same-space member excluded from private channel gets detail data despite message and socket join denial; detail controller checks space membership only."
+    },
+    {
+      "caseId": "VOCLE-313",
+      "classification": "confirmed security defect",
+      "rootCause": "local-media-canonical-ownership",
+      "review": "Single/double encoded path containing caller ownership substring deletes another synthetic uploader file. Exact normalized target and pre-existing bytes were verified; foreignFileSurvived=false."
+    },
+    {
+      "caseId": "VOCLE-314",
+      "classification": "confirmed security defect",
+      "rootCause": "local-media-canonical-ownership",
+      "review": "Single/double encoded path containing caller ownership substring deletes another synthetic uploader file. Exact normalized target and pre-existing bytes were verified; foreignFileSurvived=false."
+    },
+    {
+      "caseId": "VOCLE-339",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-340",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-342",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-343",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-345",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-346",
+      "classification": "confirmed security defect",
+      "rootCause": "typing-room-authorization",
+      "review": "Victim receives attacker-attributed typing after attacker join and REST access are denied; permitted controls delivered. Same root across space, DM and private group."
+    },
+    {
+      "caseId": "VOCLE-347",
+      "classification": "confirmed security defect",
+      "rootCause": "private-message-personal-room-fanout",
+      "review": "Excluded member personal socket receives exact private message ID and full text canary despite REST denial; authorized control delivered."
+    },
+    {
+      "caseId": "VOCLE-348",
+      "classification": "confirmed security defect",
+      "rootCause": "stale-channel-room-revocation",
+      "review": "Removed member continues receiving channel message edits before and after sync; fresh REST denial and authorized delivery controls succeed. Same stale-room root."
+    },
+    {
+      "caseId": "VOCLE-349",
+      "classification": "confirmed security defect",
+      "rootCause": "stale-channel-room-revocation",
+      "review": "Removed member continues receiving channel message edits before and after sync; fresh REST denial and authorized delivery controls succeed. Same stale-room root."
+    },
+    {
+      "caseId": "VOCLE-109",
+      "classification": "validation/hardening issue",
+      "rootCause": "text-coercion",
+      "review": "Previously reviewed coercion observations; no new exploit claim."
+    },
+    {
+      "caseId": "VOCLE-110",
+      "classification": "validation/hardening issue",
+      "rootCause": "text-coercion",
+      "review": "Previously reviewed coercion observations; no new exploit claim."
+    },
+    {
+      "caseId": "VOCLE-111",
+      "classification": "validation/hardening issue",
+      "rootCause": "text-coercion",
+      "review": "Previously reviewed coercion observations; no new exploit claim."
+    },
+    {
+      "caseId": "VOCLE-112",
+      "classification": "validation/hardening issue",
+      "rootCause": "text-coercion",
+      "review": "Previously reviewed coercion observations; no new exploit claim."
+    },
+    {
+      "caseId": "VOCLE-301",
+      "classification": "validation/hardening issue",
+      "rootCause": "upload-client-error-mapping",
+      "review": "Invalid multipart/type requests rejected with 500 rather than 400; zero files added and backend healthy. No authorization bypass demonstrated."
+    },
+    {
+      "caseId": "VOCLE-302",
+      "classification": "validation/hardening issue",
+      "rootCause": "upload-client-error-mapping",
+      "review": "Invalid multipart/type requests rejected with 500 rather than 400; zero files added and backend healthy. No authorization bypass demonstrated."
+    },
+    {
+      "caseId": "VOCLE-303",
+      "classification": "validation/hardening issue",
+      "rootCause": "upload-client-error-mapping",
+      "review": "Invalid multipart/type requests rejected with 500 rather than 400; zero files added and backend healthy. No authorization bypass demonstrated."
+    },
+    {
+      "caseId": "VOCLE-304",
+      "classification": "validation/hardening issue",
+      "rootCause": "upload-client-error-mapping",
+      "review": "Invalid multipart/type requests rejected with 500 rather than 400; zero files added and backend healthy. No authorization bypass demonstrated."
+    },
+    {
+      "caseId": "VOCLE-306",
+      "classification": "validation/hardening issue",
+      "rootCause": "local-upload-byte-validation",
+      "review": "Empty/mismatched inert bytes are stored. No active payload or browser exploit was executed."
+    },
+    {
+      "caseId": "VOCLE-307",
+      "classification": "validation/hardening issue",
+      "rootCause": "local-upload-byte-validation",
+      "review": "Empty/mismatched inert bytes are stored. No active payload or browser exploit was executed."
+    },
+    {
+      "caseId": "VOCLE-321",
+      "classification": "validation/hardening issue",
+      "rootCause": "media-url-scheme-validation",
+      "review": "Trusted-host URL check accepts FTP/HTTP; URLs are data only, not evidence of backend fetching or SSRF."
+    },
+    {
+      "caseId": "VOCLE-322",
+      "classification": "validation/hardening issue",
+      "rootCause": "media-url-scheme-validation",
+      "review": "Trusted-host URL check accepts FTP/HTTP; URLs are data only, not evidence of backend fetching or SSRF."
+    },
+    {
+      "caseId": "VOCLE-323",
+      "classification": "expected behavior",
+      "rootCause": "local-media-message-integration",
+      "review": "Local upload works but message trusted-host allowlist rejects loopback URL. Source-expected behavior exposes a functional integration mismatch, not a security bypass. Positive integration assertion remains unchanged."
+    },
+    {
+      "caseId": "VOCLE-168",
+      "classification": "inconclusive",
+      "rootCause": "fresh-dm-creation-errors",
+      "review": "Existing fresh-DM positives return 500. Functional failure observed; security significance and exact root unresolved, not newly confirmed vulnerabilities."
+    },
+    {
+      "caseId": "VOCLE-169",
+      "classification": "inconclusive",
+      "rootCause": "fresh-dm-creation-errors",
+      "review": "Existing fresh-DM positives return 500. Functional failure observed; security significance and exact root unresolved, not newly confirmed vulnerabilities."
+    },
+    {
+      "caseId": "VOCLE-242",
+      "classification": "inconclusive",
+      "rootCause": "fresh-dm-creation-errors",
+      "review": "Existing fresh-DM positives return 500. Functional failure observed; security significance and exact root unresolved, not newly confirmed vulnerabilities."
+    }
+  ]
+}
