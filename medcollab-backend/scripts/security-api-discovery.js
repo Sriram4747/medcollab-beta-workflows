@@ -470,6 +470,7 @@ function setupFor(c) {
   return [actorLabel(c.actor)];
 }
 function whatItChecks(c) {
+  if (c.method === 'SOCKET') return 'Checks actual realtime authentication, room authorization or recipient isolation using socket clients and controlled REST producers. Missing delivery controls fail the infrastructure prerequisite.';
   if (c.module === 'Direct Messages') return 'Checks direct-message participant, relationship, resource-binding, receipt, and metadata isolation using the implemented channel and message routes.';
   if (c.module === 'Message Requests') return 'Checks request visibility, recipient-only lifecycle transitions, relationship-state binding, and bounded request input handling.';
   if (c.category === 'authentication-negative') return 'Checks that the protected profile endpoint rejects missing, malformed, incorrectly formatted, or tampered authentication credentials.';
@@ -634,7 +635,7 @@ function report() {
         '',
         '**Action performed:**',
         result.report.actionPerformed,
-        `- HTTP method: \`${result.method}\``,
+        `- Transport/method: \`${result.method}\``,
         `- Endpoint: \`${result.endpoint}\``,
         `- Mutation used: ${result.report.mutation}`,
         '',
@@ -642,11 +643,12 @@ function report() {
         result.report.expectedSecurityBehaviour,
         '',
         '**Actual result:**',
-        `- HTTP status: ${result.actual.status}`,
+        result.method === 'SOCKET' ? `- Separate backend health status: ${result.actual.healthStatus}; socket events have no HTTP response status.` : `- HTTP status: ${result.actual.status}`,
         `- Request succeeded: ${result.actual.success === true ? 'yes' : result.actual.success === false ? 'no' : 'not represented by the expected JSON envelope'}`,
         `- State check: ${state}.`,
         `- Rejection payload check: ${result.expected.successfulEnvelope ? 'not applicable' : result.actual.deniedResponseDataAbsent ? 'no success data returned' : 'response exposed a success data payload'}.`,
         `- Semantic check: ${result.actual.semanticCheckPassed ? 'passed' : 'did not pass'}.`,
+        ...(Object.keys(result.actual.evidence || {}).length ? [`- Sanitized scenario evidence: \`${JSON.stringify(result.actual.evidence)}\`.`] : []),
         '',
         `**Result:** ${result.passed ? 'PASS' : 'OBSERVATION'}`,
         '',
