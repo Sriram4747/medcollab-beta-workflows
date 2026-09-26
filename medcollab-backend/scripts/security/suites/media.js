@@ -69,4 +69,12 @@ module.exports = ({ add, ids }) => {
   ]) reg('message media URL ' + label, 'A', 'POST', `/api/channels/${ids.channel}/messages`, [status], { type: 'image', content: { mediaUrl: url } }, { category: 'media-schema', check: status === 201 ? async (b, c) => (await c.models.Message.findById(b.data.message._id)).content.mediaUrl === url : undefined });
   reg('local upload to authorized message integration', 'A', 'POST', `/api/channels/${ids.channel}/messages`, [201], c => ({ type: 'image', content: { mediaUrl: c.media.url } }), { prepare: prepareUpload, check: async (b, c) => !!b.data?.message?._id && (await c.models.Message.findById(b.data.message._id)).content.mediaUrl === c.media.url });
   for (const channel of [ids.otherChannel, ids.dmOther]) reg('uploaded media does not grant foreign channel access ' + channel, 'A', 'POST', `/api/channels/${channel}/messages`, [403], c => ({ type: 'image', content: { mediaUrl: c.media.url } }), { module: 'Cross-module', prepare: prepareUpload, check: (_, c) => fs.readFileSync(safeFile(c.media.publicId)).equals(png) });
+  for (const actor of ['A', 'B', 'C', 'anonymous']) reg('handoff attachment sender ownership ' + actor, actor, 'PUT', `/api/handoffs/${ids.handoff}`, [actor === 'A' ? 200 : actor === 'anonymous' ? 401 : 403], c => ({ patients: [{ bedNumber: 'CI', clinicalAlias: 'Synthetic', attachments: [{ url: c.media.url, fileName: 'canary.png', mimeType: 'image/png' }] }] }), {
+    module: 'Cross-module', prepare: async c => { await prepareUpload(c); await c.models.Handoff.findByIdAndUpdate(ids.handoff, { status: 'draft', submittedAt: null }); },
+    check: async (_, c) => { const d = await c.models.Handoff.findById(ids.handoff).lean(); return String(d.fromUserId) === String(c.users.A._id) && (actor === 'A' ? d.patients[0].attachments[0]?.url === c.media.url : !d.patients[0].attachments?.length) && fs.existsSync(safeFile(c.media.publicId)); },
+  });
+  const pdf = Buffer.from('%PDF-1.1\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Count 0 /Kids [] >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF');
+  for (const mime of ['application/pdf', 'application/octet-stream']) reg('local PDF bytes retained ' + mime, 'C', 'POST', '/api/media/upload', [200], undefined, {
+    run: c => upload(c, 'C', { mime, name: 'canary.pdf', bytes: pdf }), check: (b, c) => b.data?.publicId?.startsWith(`medcollab/messages/${c.users.C._id}/`) && fs.readFileSync(safeFile(b.data.publicId)).equals(pdf),
+  });
 };

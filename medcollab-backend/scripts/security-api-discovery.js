@@ -486,12 +486,14 @@ function whatItChecks(c) {
   return 'Checks the endpoint’s current authentication, authorization, and input-handling contract for this controlled request.';
 }
 function expectedBehaviour(c) {
+  if (c.method === 'SOCKET') return 'The named realtime invariant must hold with an authenticated delivery control; backend health is checked separately. No HTTP status is assigned to a socket event.';
   const statuses = c.statuses.join(' or ');
   if (c.actor === 'anonymous' || c.category === 'authentication-negative') return `The API should reject the request with HTTP ${statuses} because no valid authenticated session is presented.`;
   if (c.statuses.every(s => s >= 400)) return `The API should reject the request with HTTP ${statuses} under the endpoint’s current security contract and must not change the controlled state.`;
   return `The API should return HTTP ${statuses} for this permitted controlled action. Where the request is denied by an alternate allowed response, controlled state must remain unchanged.`;
 }
 function actionPerformed(c, endpoint) {
+  if (c.method === 'SOCKET') return `Executed actual Socket.IO scenario: ${c.name}. See sanitized event evidence in results.json.`;
   const identity = c.actor === 'anonymous' ? 'Without a valid Authorization header' : `Authenticated as ${actorLabel(c.actor)}`;
   return `${identity}, sent a ${c.method} request to ${endpoint}.`;
 }
@@ -554,7 +556,7 @@ async function execute(c) {
         : 'ambiguous / requires manual investigation');
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
-    actual: { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
+    actual: { status: c.method === 'SOCKET' ? null : r.status, healthStatus: c.method === 'SOCKET' ? r.status : undefined, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
   results.push(result);
@@ -573,7 +575,7 @@ function report() {
     counts[result.module] = (counts[result.module] || 0) + 1;
     return counts;
   }, {})).sort(([a], [b]) => a.localeCompare(b));
-  const summary = { planned: cases.length, executed: results.length, passed: results.length - unexpected.length, unexpected: unexpected.length, infrastructureFailure: fatal, moduleBreakdown: Object.fromEntries(moduleBreakdown), results };
+  const summary = { planned: cases.length, executed: results.length, passed: results.length - unexpected.length, unexpected: unexpected.length, notExecuted: cases.length - results.length, infrastructureFailure: fatal, moduleBreakdown: Object.fromEntries(moduleBreakdown), results };
   fs.writeFileSync(path.join(directory, 'results.json'), JSON.stringify(summary, null, 2));
   const markdown = [`# Vocle API discovery`, '', `Executed ${summary.executed}/${summary.planned}; passed ${summary.passed}; observations ${summary.unexpected}.`, `Infrastructure: ${fatal || 'healthy'}.`, '', 'Module breakdown:', ...moduleBreakdown.map(([module, count]) => `- ${module}: ${count}`), '', 'Observations are candidates, not confirmed vulnerabilities. See results.json for every case and source.', '', ...unexpected.map(r => `- ${r.caseId}: ${r.actor} ${r.method} ${r.endpoint}; ${r.mutationCategory}; expected ${r.expected.statuses.join('/')}, got ${r.actual.status}; ${r.classification}; manual confirmation worthwhile.`)].join('\n');
   fs.writeFileSync(path.join(directory, 'summary.md'), markdown);

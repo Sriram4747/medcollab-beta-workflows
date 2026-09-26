@@ -16,7 +16,23 @@ module.exports = ({ add, ids }) => {
   }
   const privatePrepare = async c => c.models.Channel.findByIdAndUpdate(ids.channel, { isPrivate: true, members: [c.users.A._id] });
   for (const suffix of ['', '/members', '/messages']) register('private group excluded member read ' + suffix, 'B', 'GET', `/api/channels/${ids.channel}${suffix}`, [403], undefined, { prepare: privatePrepare });
-  for (const threadId of [ids.otherMessage, ids.dmOtherMessage]) register('direct body foreign thread binding ' + threadId, 'A', 'POST', `/api/channels/${ids.channel}/messages`, [400, 403, 404], { content: { text: 'Cross-context canary' }, threadId }, { module: 'Cross-module', category: 'foreign-resource' });
+  for (const threadId of [ids.otherMessage, ids.dmOtherMessage]) register('direct body foreign thread binding ' + threadId, 'A', 'POST', `/api/channels/${ids.channel}/messages`, [400, 403, 404], { content: { text: 'Cross-context canary' }, threadId }, {
+    module: 'Cross-module', category: 'foreign-resource', check: async (b, c) => {
+      const child = b.data?.message?._id && await c.models.Message.findById(b.data.message._id).lean();
+      const parent = await c.models.Message.findById(threadId).lean();
+      c.evidence.foreignBindingPersisted = !!child && String(child.channelId) === ids.channel && String(child.threadId) === threadId && String(parent.channelId) !== ids.channel;
+      c.evidence.foreignParentReplyCount = parent.replyCount;
+      return !c.evidence.foreignBindingPersisted && parent.replyCount === 0;
+    },
+  });
+  for (const variant of ['expired', 'wrong-key', 'inactive', 'refresh']) register('REST authentication ' + variant, 'A', 'GET', '/api/users/me', [401], undefined, {
+    category: 'authentication-negative', run: c => {
+      const jwt = require('jsonwebtoken');
+      const key = variant === 'wrong-key' ? 'disposable-wrong-key' : variant === 'refresh' ? process.env.JWT_REFRESH_SECRET : process.env.JWT_SECRET;
+      const token = jwt.sign({ userId: String(c.users[variant === 'inactive' ? 'I' : 'A']._id) }, key, { expiresIn: variant === 'expired' ? -1 : 60 });
+      return c.http('A', 'GET', '/api/users/me', undefined, 'Bearer ' + token);
+    },
+  });
   const prep = async c => {
     const type = c.models.Notification.schema.path('type').enumValues[0];
     const docs = await c.models.Notification.create(['A', 'B'].map(actor => ({ userId: c.users[actor]._id, actorId: c.users.C._id, type, body: 'Synthetic notification', referenceId: ids.messageA, referenceType: 'Message', metadata: { channelId: ids.channel }, read: false })));
