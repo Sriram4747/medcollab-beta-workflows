@@ -253,24 +253,26 @@ const createOrGetDM = asyncHandler(async (req, res) => {
     );
   }
 
-  // Atomic upsert to prevent TOCTOU race when two users create the same DM simultaneously.
+  // Retain compatibility with DMs created before directKey was introduced.
   const sortedMembers = [req.user._id.toString(), targetUserId].sort();
-  let channel = await Channel.findOneAndUpdate(
-    {
-      type: CHANNEL_TYPES.DIRECT,
-      'members': { $all: sortedMembers, $size: 2 },
-    },
-    {
-      $setOnInsert: {
-        spaceId: null,
-        type: CHANNEL_TYPES.DIRECT,
-        members: [req.user._id, targetUserId],
-        createdBy: req.user._id,
-        name: null,
+  let channel = await Channel.findDMChannel(...sortedMembers);
+  if (!channel) {
+    const directKey = Channel.directMemberKey(...sortedMembers);
+    channel = await Channel.findOneAndUpdate(
+      { type: CHANNEL_TYPES.DIRECT, directKey },
+      {
+        $setOnInsert: {
+          spaceId: null,
+          type: CHANNEL_TYPES.DIRECT,
+          directKey,
+          members: [req.user._id, targetUserId],
+          createdBy: req.user._id,
+          name: null,
+        },
       },
-    },
-    { upsert: true, new: true }
-  );
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
 
   const populated = await Channel.findById(channel._id)
     .populate(

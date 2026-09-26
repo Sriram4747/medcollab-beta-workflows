@@ -216,22 +216,24 @@ const acceptRequest = asyncHandler(async (req, res) => {
   const fromId = request.fromUserId._id.toString();
   const toId = request.toUserId._id.toString();
   const sortedMembers = [fromId, toId].sort();
-  const channel = await Channel.findOneAndUpdate(
-    {
-      type: CHANNEL_TYPES.DIRECT,
-      members: { $all: sortedMembers, $size: 2 },
-    },
-    {
-      $setOnInsert: {
-        spaceId: null,
-        type: CHANNEL_TYPES.DIRECT,
-        members: [request.fromUserId._id, request.toUserId._id],
-        createdBy: req.user._id,
-        name: null,
+  let channel = await Channel.findDMChannel(...sortedMembers);
+  if (!channel) {
+    const directKey = Channel.directMemberKey(...sortedMembers);
+    channel = await Channel.findOneAndUpdate(
+      { type: CHANNEL_TYPES.DIRECT, directKey },
+      {
+        $setOnInsert: {
+          spaceId: null,
+          type: CHANNEL_TYPES.DIRECT,
+          directKey,
+          members: [request.fromUserId._id, request.toUserId._id],
+          createdBy: req.user._id,
+          name: null,
+        },
       },
-    },
-    { upsert: true, new: true }
-  );
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
 
   const populated = await Channel.findById(channel._id)
     .populate(

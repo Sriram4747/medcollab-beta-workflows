@@ -85,6 +85,16 @@ const channelSchema = new mongoose.Schema(
       },
     ],
 
+    // Canonical pair key for a two-person DM. Existing channels created before
+    // this field are still found by their members; new channels use it as the
+    // atomic upsert key.
+    directKey: {
+      type: String,
+      trim: true,
+      maxlength: 49,
+      default: null,
+    },
+
     // ── Last Message Preview ──────────────────────────────────────────────
     // Embedded for channel list screen performance
     lastMessage: {
@@ -142,6 +152,16 @@ channelSchema.index({ spaceId: 1, type: 1 });
 channelSchema.index({ spaceId: 1, isArchived: 1, position: 1 });
 // For DM lookup: find the DM channel between two specific users
 channelSchema.index({ type: 1, members: 1 });
+channelSchema.index(
+  { type: 1, directKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      type: CHANNEL_TYPES.DIRECT,
+      directKey: { $type: 'string' },
+    },
+  }
+);
 
 // ── Statics ───────────────────────────────────────────────────────────────────
 
@@ -153,6 +173,10 @@ channelSchema.statics.findDMChannel = async function (userId1, userId2) {
     type: CHANNEL_TYPES.DIRECT,
     members: { $all: [userId1, userId2], $size: 2 },
   });
+};
+
+channelSchema.statics.directMemberKey = function (userId1, userId2) {
+  return [String(userId1), String(userId2)].sort().join(':');
 };
 
 const Channel = mongoose.model('Channel', channelSchema);
