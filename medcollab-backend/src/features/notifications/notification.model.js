@@ -77,7 +77,7 @@ const notificationSchema = new mongoose.Schema(
     referenceType: {
       type: String,
       required: true,
-      enum: ['Message', 'Handoff', 'Space', 'Channel'],
+      enum: ['Message', 'Handoff', 'Space', 'Channel', 'MessageRequest'],
     },
 
     // Deep link data for client-side navigation
@@ -87,6 +87,7 @@ const notificationSchema = new mongoose.Schema(
       channelId: { type: mongoose.Schema.Types.ObjectId },
       messageId: { type: mongoose.Schema.Types.ObjectId },
       handoffId: { type: mongoose.Schema.Types.ObjectId },
+      messageRequestId: { type: mongoose.Schema.Types.ObjectId },
     },
 
     // Who triggered this notification (the sender, not the receiver)
