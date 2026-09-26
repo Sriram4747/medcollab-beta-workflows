@@ -214,7 +214,6 @@ const handoffSchema = new mongoose.Schema(
           default: 'note',
         },
         createdAt: { type: Date, default: Date.now },
-        _id: true,
       },
     ],
 
