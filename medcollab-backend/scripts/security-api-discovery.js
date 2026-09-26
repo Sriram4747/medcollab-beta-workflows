@@ -663,6 +663,14 @@ function report() {
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown + '\n');
   console.log(`API discovery: ${summary.executed}/${summary.planned} executed, ${summary.passed} passed, ${summary.unexpected} observations.`);
 }
+function safeFailureSummary(error) {
+  const name = error instanceof Error && error.name ? error.name : 'Error';
+  const message = String(error?.message || 'Unknown failure')
+    .replace(/Bearer\s+[^\s]+/gi, 'Bearer [REDACTED]')
+    .replace(/mongodb(?:\+srv)?:\/\/[^\s'"]+/gi, 'mongodb://[REDACTED]')
+    .replace(/\b(JWT_SECRET|JWT_REFRESH_SECRET|API_KEY|AUTH_KEY|PRIVATE_KEY)\s*[=:]\s*[^\s,;]+/gi, (_match, key) => `${key}=[REDACTED]`);
+  return `${name}: ${message}`.slice(0, 500);
+}
 async function main() {
   safety();
   stage = 'database and authentication preflight';
@@ -699,7 +707,11 @@ if (process.argv.includes('--list')) {
     hasPreparation: !!prepare,
   })) }, null, 2));
 } else {
-  main().catch(() => { fatal = `Execution prerequisite failed at ${stage}. Raw errors omitted to protect credentials.`; console.error(fatal); process.exitCode = 1; }).finally(async () => {
+  main().catch((error) => {
+    fatal = `Execution prerequisite failed at ${stage}: ${safeFailureSummary(error)}`;
+    console.error(fatal);
+    process.exitCode = 1;
+  }).finally(async () => {
     try { report(); } finally { if (mongoose) await mongoose.disconnect(); }
   });
 }
