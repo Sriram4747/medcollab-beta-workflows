@@ -281,20 +281,28 @@ async function health() {
   assert.ok(r.status === 200 && r.data?.database === 'connected' && r.data?.environment === 'test' && r.data?.firebase === false && r.data?.cloudinary === false, 'Local backend health/safety preflight failed');
 }
 async function reset() {
-  // Exact scratch IDs plus direct/request resources created by fixture actors.
+  // Exact scratch IDs plus resources created by fixture actors.
   // The fixture users exist only in the disposable local vocle_ci database.
   const fixtureUserIds = Object.values(users).map((user) => user._id);
+  const fixtureSpaces = await models.Space.find({ createdBy: { $in: fixtureUserIds } }).select('_id').lean();
+  const fixtureSpaceIds = fixtureSpaces.map((space) => space._id);
   const directChannels = await models.Channel.find({ type: 'direct', createdBy: { $in: fixtureUserIds } }).select('_id').lean();
   const directChannelIds = directChannels.map((channel) => channel._id);
-  await models.Message.deleteMany({ $or: [{ channelId: { $in: directChannelIds } }, { _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] });
+  await models.Message.deleteMany({ $or: [{ channelId: { $in: directChannelIds } }, { _id: { $in: Object.values(ids) } }, { spaceId: { $in: fixtureSpaceIds } }] });
   await models.MessageRequest.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { fromUserId: { $in: fixtureUserIds } }, { toUserId: { $in: fixtureUserIds } }] });
   await models.Notification.deleteMany({ $or: [
     { userId: { $in: fixtureUserIds } },
     { actorId: { $in: fixtureUserIds } },
     { referenceId: { $in: Object.values(ids) } },
   ] });
-  await models.Channel.deleteMany({ type: 'direct', createdBy: { $in: fixtureUserIds } });
-  for (const model of Object.values(models).filter(m => m !== models.User && m !== models.Notification)) await model.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] });
+  await models.Channel.deleteMany({ $or: [
+    { type: 'direct', createdBy: { $in: fixtureUserIds } },
+    { spaceId: { $in: fixtureSpaceIds } },
+  ] });
+  for (const model of Object.values(models).filter(m => ![models.User, models.Space, models.Channel, models.Message, models.MessageRequest, models.Notification].includes(m))) {
+    await model.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: fixtureSpaceIds } }] });
+  }
+  await models.Space.deleteMany({ createdBy: { $in: fixtureUserIds } });
   await models.Space.create([
     { _id: ids.space, name: 'Discovery AB', type: 'department', inviteCode: 'DSCABA', createdBy: users.A._id, members: [{ userId: users.A._id, role: 'owner' }, { userId: users.B._id, role: 'member' }] },
     { _id: ids.otherSpace, name: 'Discovery C', type: 'department', inviteCode: 'DSCCCA', createdBy: users.C._id, members: [{ userId: users.C._id, role: 'owner' }] },
@@ -327,7 +335,9 @@ async function snapshot() {
   const state = {};
   const fixtureUserIds = Object.values(users).map((user) => user._id);
   for (const [name, model] of Object.entries(models).filter(([n]) => n !== 'User')) {
-    const query = name === 'Channel'
+    const query = name === 'Space'
+      ? { $or: [{ _id: { $in: Object.values(ids) } }, { createdBy: { $in: fixtureUserIds } }] }
+      : name === 'Channel'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { type: 'direct', createdBy: { $in: fixtureUserIds } }] }
       : name === 'Message'
         ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { senderId: { $in: fixtureUserIds }, spaceId: null }] }
@@ -363,7 +373,7 @@ async function settledSnapshot() {
 async function verifyResetState() {
   const fixtureUserIds = Object.values(users).map(user => user._id);
   const [spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
-    models.Space.countDocuments({ _id: { $in: [ids.space, ids.otherSpace] } }),
+    models.Space.countDocuments({ createdBy: { $in: fixtureUserIds } }),
     models.Channel.countDocuments({ $or: [
       { _id: { $in: Object.values(ids) } },
       { spaceId: { $in: [ids.space, ids.otherSpace] } },
