@@ -148,7 +148,6 @@ const spaceSchema = new mongoose.Schema(
 );
 
 // ── Indexes ───────────────────────────────────────────────────────────────────
-spaceSchema.index({ inviteCode: 1 }); // Fast join-by-code lookups
 spaceSchema.index({ 'members.userId': 1 }); // Fast "find all spaces for a user"
 spaceSchema.index({ createdBy: 1 });
 
