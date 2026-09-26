@@ -28,7 +28,9 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
   });
   const prepareFresh = async (ctx) => {
     const r = await ctx.http('F', 'POST', base, { toUserId: String(ctx.users.H._id), introMessage: 'Fresh controlled request' });
-    if (r.status !== 201 || !r.data?.data?.request?.id) throw new Error('Message-request preparation failed');
+    if (r.status !== 201 || !r.data?.data?.request?.id) {
+      throw new Error(`Message-request preparation failed with HTTP ${r.status}`);
+    }
     ctx.preparedRequestId = r.data.data.request.id;
     const request = await ctx.models.MessageRequest.findById(ctx.preparedRequestId).lean();
     if (!request || String(request.fromUserId) !== String(ctx.users.F._id) ||
