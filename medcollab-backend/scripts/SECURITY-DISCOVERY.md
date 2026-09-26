@@ -1,3 +1,13 @@
+# Current suite status — 2026-09-26
+
+The serial suite now registers **352 cases**. [Run 36228675577](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36228675577) executed all: 312 passed, 40 observations. Read the [current findings](../../docs/SECURITY_FINDINGS_2026-09-26.md) and [Terra plan](../../docs/SECURITY_TERRA_NEXT_PHASE.md) before implementation. Current coverage is 46/77 routes. Media and 21 actual socket cases are implemented; older deferral/count statements below are historical.
+
+Current policy: shared institution permits discovery, not automatic DM; active existing DM or accepted request permits messaging. Shared active space or target opt-in permits message requests. Self notes are intentional. Three lifecycle cases currently fail their opt-in precondition; see the review. Use `--list` for an offline manifest. No application fix is authorized in this analysis phase.
+
+---
+
+## Historical implementation notes
+
 # Disposable API discovery baseline
 
 Run only in the existing backend environment workflow, after fixture verification

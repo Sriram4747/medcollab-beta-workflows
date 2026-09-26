@@ -1,3 +1,5 @@
+> Current evidence: [run 36228675577 review](SECURITY_FINDINGS_2026-09-26.md), 352 executed / 312 passed / 40 observations; [next-phase plan](SECURITY_TERRA_NEXT_PHASE.md). Earlier execution totals below are historical. Manifest items beyond implemented cases remain planned, not executed.
+
 > Execution update, 2026-09-26: The focused subset documented in [the expansion report](SECURITY_EXPANSION_2026-09-26.md) has now run in real isolated CI, run 36225164443. The broader original plan below is retained; unimplemented variants are not credited as executed. See the report for exact cases, confirmed roots and explicit deferrals.
 # Socket.IO security implementation manifest
 

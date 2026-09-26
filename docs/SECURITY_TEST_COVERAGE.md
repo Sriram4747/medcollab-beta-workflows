@@ -1,3 +1,15 @@
+# Current route coverage — reviewed 2026-09-26
+
+[Run 36228675577](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36228675577) at source `91d237294625288bd7f304871a4df3a9ea50fcdd`: **352/352 executed, 312 passed, 40 observations; 46/77 explicit HTTP method/path operations exercised (59.7%), 31 uncovered**. See the [retained generated inventory](security-evidence/36228675577/security-api-coverage-report.md) for every route, [reviewed findings](SECURITY_FINDINGS_2026-09-26.md) for all 40 dispositions, and [Terra plan](SECURITY_TERRA_NEXT_PHASE.md) for the exact uncovered list and implementation sequence.
+
+The new denominator includes group DM, Needl, handoff notes and reassign. Setup/auth/health calls and Socket.IO/static delivery are not exact discovery route credits. 46 exercised routes remain partially covered; positive request lifecycle branches in 219–221 are not proven despite POST route execution. No coverage was added by this documentation review.
+
+Priorities: first repair stale expectations/fixtures/reporting; then widget identity verification and OTP/session lifecycle, user/profile/lookup and Needl, space membership/invites plus group-DM consent and handoff transitions. **P0 source finding:** MSG91 widget service accepts decoded phone without signature verification; not part of the hosted 40 and needs isolated HTTP confirmation. Live providers remain deferred. Historical counts/plans below are superseded, not additional execution.
+
+---
+
+## Historical coverage snapshots
+
 # Current execution — 2026-09-26
 
 The [expanded implementation and evidence report](SECURITY_EXPANSION_2026-09-26.md) supersedes the historical counts and pending-execution notes below. Final isolated [run 36225164443](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36225164443), source 63bb75df3f05e150ef444e96a186528d0f9a6143: **352/352 executed, 311 passed, 41 observations, infrastructure healthy**. Three observations remain inconclusive fresh-DM failures; none of the 352 is unexecuted.

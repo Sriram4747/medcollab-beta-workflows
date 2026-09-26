@@ -1,0 +1,815 @@
+{
+  "runId": 36228675577,
+  "executedSource": "91d237294625288bd7f304871a4df3a9ea50fcdd",
+  "rawResultsSha256": "83e127476cc94a4ac538ec23216b04b7665f6cf03a7b0249053490ec22250037",
+  "classificationCounts": {
+    "confirmed security defect": 25,
+    "validation/hardening issue": 8,
+    "incorrect test expectation": 3,
+    "harness/test defect": 3,
+    "unresolved/manual-confirmation required": 1
+  },
+  "confirmedHostedRoots": 9,
+  "sourceOnlyFinding": "MSG91 decoded phone accepted without signature verification; separate from hosted 40; see findings and Terra plan.",
+  "observations": [
+    {
+      "caseId": "VOCLE-094",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-098",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-099",
+      "classification": "confirmed security defect",
+      "rootCause": "S2",
+      "review": "Handoff persists channelId without checking its space or caller access; downstream delivery not established.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/spaces/space.model.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-110",
+      "classification": "validation/hardening issue",
+      "rootCause": "H1",
+      "review": "PUT text trim coerces number/object before String persistence; sender and channel checks remain. POST strict-type cases now pass.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-112",
+      "classification": "validation/hardening issue",
+      "rootCause": "H1",
+      "review": "PUT text trim coerces number/object before String persistence; sender and channel checks remain. POST strict-type cases now pass.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-159",
+      "classification": "confirmed security defect",
+      "rootCause": "S3",
+      "review": "getChannelMembers returns channel member metadata without caller membership authorization. Exact response identity capture is a follow-up.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/features/channels/channel.model.js",
+        "src/features/users/user.model.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-168",
+      "classification": "incorrect test expectation",
+      "rootCause": "T1",
+      "review": "Institution membership is discovery-only; no existing DM/accepted request means expected 403, not obsolete 200.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/knownUsers.js"
+      ],
+      "actualStatus": 403,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-171",
+      "classification": "incorrect test expectation",
+      "rootCause": "T2",
+      "review": "Self notes are an explicit single-member DM feature. Replace obsolete rejection assertion with caller-only persisted membership/creator/isSelfNotes checks.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-193",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-197",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-218",
+      "classification": "incorrect test expectation",
+      "rootCause": "T3",
+      "review": "Same institution no longer bypasses request consent. D has no opt-in/shared space; 403 is correct, not old no-request-needed 400.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/message-requests/messageRequest.routes.js",
+        "src/features/message-requests/messageRequest.controller.js",
+        "src/utils/knownUsers.js"
+      ],
+      "actualStatus": 403,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-219",
+      "classification": "harness/test defect",
+      "rootCause": "T4",
+      "review": "Seeded lifecycle state lacks target opt-in/shared space; canRequestMessage denies before pending/declined branch. Prepare and restore target F/E/G opt-in respectively; retain separate opt-out denials.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/message-requests/messageRequest.controller.js",
+        "src/features/message-requests/messageRequest.model.js",
+        "src/utils/knownUsers.js",
+        "src/features/users/user.model.js"
+      ],
+      "actualStatus": 403,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-220",
+      "classification": "harness/test defect",
+      "rootCause": "T4",
+      "review": "Seeded lifecycle state lacks target opt-in/shared space; canRequestMessage denies before pending/declined branch. Prepare and restore target F/E/G opt-in respectively; retain separate opt-out denials.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/message-requests/messageRequest.controller.js",
+        "src/features/message-requests/messageRequest.model.js",
+        "src/utils/knownUsers.js",
+        "src/features/users/user.model.js"
+      ],
+      "actualStatus": 403,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-221",
+      "classification": "harness/test defect",
+      "rootCause": "T4",
+      "review": "Seeded lifecycle state lacks target opt-in/shared space; canRequestMessage denies before pending/declined branch. Prepare and restore target F/E/G opt-in respectively; retain separate opt-out denials.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/message-requests/messageRequest.controller.js",
+        "src/features/message-requests/messageRequest.model.js",
+        "src/utils/knownUsers.js",
+        "src/features/users/user.model.js"
+      ],
+      "actualStatus": 403,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-267",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/search/search.routes.js",
+        "src/features/search/search.controller.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-268",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/search/search.routes.js",
+        "src/features/search/search.controller.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-270",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/search/search.routes.js",
+        "src/features/search/search.controller.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-271",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/search/search.routes.js",
+        "src/features/search/search.controller.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-272",
+      "classification": "confirmed security defect",
+      "rootCause": "S5",
+      "review": "Private channel detail checks space membership but omits private member/admin guard.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/features/channels/channel.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-273",
+      "classification": "confirmed security defect",
+      "rootCause": "S3",
+      "review": "getChannelMembers returns channel member metadata without caller membership authorization. Exact response identity capture is a follow-up.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/features/channels/channel.model.js",
+        "src/features/users/user.model.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {},
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-275",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {
+        "foreignBindingPersisted": true,
+        "foreignParentReplyCount": 1
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-276",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "actualStatus": 201,
+      "healthStatus": null,
+      "evidence": {
+        "foreignBindingPersisted": true,
+        "foreignParentReplyCount": 1
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-301",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/middleware/errorHandler.js"
+      ],
+      "actualStatus": 500,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-302",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/middleware/errorHandler.js"
+      ],
+      "actualStatus": 500,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-303",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/middleware/errorHandler.js"
+      ],
+      "actualStatus": 500,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-304",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/middleware/errorHandler.js"
+      ],
+      "actualStatus": 500,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-306",
+      "classification": "validation/hardening issue",
+      "rootCause": "H3",
+      "review": "Allowed caller MIME reaches raw local buffer storage despite empty/mismatched content. One file added; active content/client execution untested.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-307",
+      "classification": "validation/hardening issue",
+      "rootCause": "H3",
+      "review": "Allowed caller MIME reaches raw local buffer storage despite empty/mismatched content. One file added; active content/client execution untested.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "manualConfirmation": "not required for classification",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-313",
+      "classification": "confirmed security defect",
+      "rootCause": "S6",
+      "review": "Decoded owner substring passes before path normalization; exact synthetic foreign file is deleted. No outside-upload or Cloudinary exploit executed.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200,
+        "foreignFileSurvived": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-314",
+      "classification": "confirmed security defect",
+      "rootCause": "S6",
+      "review": "Decoded owner substring passes before path normalization; exact synthetic foreign file is deleted. No outside-upload or Cloudinary exploit executed.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "actualStatus": 200,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200,
+        "foreignFileSurvived": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-323",
+      "classification": "unresolved/manual-confirmation required",
+      "rootCause": "U1",
+      "review": "Local upload succeeds but HTTP loopback media URL fails HTTPS requirement before Cloudinary host check. Functional integration contract needs local mobile/Reqable confirmation; no authorization bypass.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js",
+        "src/features/messages/message.controller.js"
+      ],
+      "actualStatus": 400,
+      "healthStatus": null,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "manualConfirmation": "required to resolve local integration contract",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-339",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-340",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-342",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-343",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-345",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-346",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-347",
+      "classification": "confirmed security defect",
+      "rootCause": "S8",
+      "review": "sendMessage uses all space members for private-message personal-room recipients; exact full canary arrives at excluded B.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/messages/message.controller.js",
+        "src/socket/index.js",
+        "src/socket/handlers/presence.handler.js",
+        "src/features/spaces/space.model.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "fullCanaryDisclosed": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-348",
+      "classification": "confirmed security defect",
+      "rootCause": "S9",
+      "review": "Member removal does not evict channel rooms and sync only adds rooms; removed B receives edits despite fresh REST denial.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/spaces/space.controller.js",
+        "src/socket/spaceRooms.js",
+        "src/socket/handlers/space.handler.js",
+        "src/socket/index.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    },
+    {
+      "caseId": "VOCLE-349",
+      "classification": "confirmed security defect",
+      "rootCause": "S9",
+      "review": "Member removal does not evict channel rooms and sync only adds rooms; removed B receives edits despite fresh REST denial.",
+      "sources": [
+        "src/middleware/auth.js",
+        "src/features/spaces/space.controller.js",
+        "src/socket/spaceRooms.js",
+        "src/socket/handlers/space.handler.js",
+        "src/socket/index.js"
+      ],
+      "actualStatus": null,
+      "healthStatus": 200,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "manualConfirmation": "optional for reproduced root; required before claiming additional mobile/downstream impact",
+      "traceDocument": "../../SECURITY_FINDINGS_2026-09-26.md"
+    }
+  ]
+}

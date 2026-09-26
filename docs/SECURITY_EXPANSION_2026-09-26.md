@@ -1,3 +1,5 @@
+> Historical review. The [current 352/312/40 observation analysis](SECURITY_FINDINGS_2026-09-26.md) and [Terra continuation plan](SECURITY_TERRA_NEXT_PHASE.md) supersede current-status claims below. Original evidence remains unchanged.
+
 # Expanded isolated security execution — 2026-09-26
 
 Starting repository: c115fa89a9106f4f12736ed4017eba50ed1219fb on master. The hardened baseline had 243 cases, 230 passes and 13 observations (successful run 36210983563; repository quality review). Existing confirmed roots and historical evidence remain preserved.
