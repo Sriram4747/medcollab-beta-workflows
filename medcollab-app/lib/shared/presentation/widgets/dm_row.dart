@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
+import 'package:medcollab_app/shared/presentation/widgets/typing_bubble.dart';
 
 /// Direct-message list row (brief SCREEN 2).
 class DMRow extends StatelessWidget {
@@ -12,6 +13,7 @@ class DMRow extends StatelessWidget {
     this.timestamp,
     this.unreadCount = 0,
     this.isOnline = false,
+    this.typingLabel,
     this.onTap,
     super.key,
   });
@@ -22,6 +24,7 @@ class DMRow extends StatelessWidget {
   final String? timestamp;
   final int unreadCount;
   final bool isOnline;
+  final String? typingLabel;
   final VoidCallback? onTap;
 
   static Color colorFromName(String name) {
@@ -55,8 +58,10 @@ class DMRow extends StatelessWidget {
             color: AppColors.surfaceCard,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             border: Border.all(
-              color: AppColors.borderDefault,
-              width: 0.5,
+              color: typingLabel != null
+                  ? AppColors.tealPrimary
+                  : AppColors.borderDefault,
+              width: typingLabel != null ? 1 : 0.5,
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -83,12 +88,15 @@ class DMRow extends StatelessWidget {
                       style: AppTextStyles.cardTitle,
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      preview,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.caption,
-                    ),
+                    if (typingLabel != null)
+                      TypingBubble(compact: true, label: typingLabel)
+                    else
+                      Text(
+                        preview,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.caption,
+                      ),
                   ],
                 ),
               ),

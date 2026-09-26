@@ -298,6 +298,27 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.md),
+                    _SettingsSectionTitle('Messaging privacy'),
+                    ClinicalCard(
+                      padding: EdgeInsets.zero,
+                      child: SwitchListTile(
+                        title: const Text('Allow message requests from anyone'),
+                        subtitle: const Text(
+                          'On: doctors who find your number can ask to chat. '
+                          'Off: only colleagues who already share a Vocle group with you can send a request. '
+                          'Chat never opens until you accept.',
+                        ),
+                        value: _prefs!.allowMessageRequestsFromAnyone,
+                        onChanged: _saving
+                            ? null
+                            : (v) => _save(
+                                  _prefs!.copyWith(
+                                    allowMessageRequestsFromAnyone: v,
+                                  ),
+                                ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
                     _SettingsSectionTitle('Quiet hours'),
                     ClinicalCard(
                       padding: EdgeInsets.zero,

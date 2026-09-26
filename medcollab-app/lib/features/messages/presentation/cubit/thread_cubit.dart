@@ -54,6 +54,7 @@ class ThreadCubit extends Cubit<ThreadState> {
   StreamSubscription<Map<String, dynamic>>? _stoppedTypingSub;
 
   final Map<String, String> _typingUsers = {};
+  final Set<String> _seenReplyIds = {};
 
   Future<void> loadThread({bool silent = false}) async {
     if (!silent) {
@@ -64,6 +65,9 @@ class ThreadCubit extends Cubit<ThreadState> {
         channelId,
         rootMessageId,
       );
+      for (final r in detail.replies) {
+        if (r.id.isNotEmpty) _seenReplyIds.add(r.id);
+      }
       emit(
         state.copyWith(
           rootMessage: detail.rootMessage,
@@ -89,6 +93,8 @@ class ThreadCubit extends Cubit<ThreadState> {
         text: trimmed,
       );
       _upsertReply(reply);
+      // Re-fetch so empty-race / ObjectId mismatches cannot hide replies.
+      await loadThread(silent: true);
       emit(state.copyWith(isSending: false));
     } on AppException catch (e) {
       emit(state.copyWith(isSending: false, error: e.message));
@@ -103,14 +109,18 @@ class ThreadCubit extends Cubit<ThreadState> {
     required String mimeType,
   }) async {
     if (state.isSending) return;
+    if (bytes.length > 25 * 1024 * 1024) {
+      emit(state.copyWith(error: 'That file is over 25 MB'));
+      return;
+    }
 
     final tempId = 'local-${DateTime.now().millisecondsSinceEpoch}';
-    final isImage = mimeType.startsWith('image/');
+    final mediaType = MessageType.forMime(mimeType);
     final optimistic = MessageModel(
       id: tempId,
       channelId: channelId,
       sender: UserModel(id: currentUserId),
-      type: isImage ? MessageType.image : MessageType.document,
+      type: mediaType,
       content: MessageContent(fileName: fileName, mimeType: mimeType),
       threadId: rootMessageId,
       createdAt: DateTime.now(),
@@ -128,7 +138,7 @@ class ThreadCubit extends Cubit<ThreadState> {
       final reply = await _threadRepository.sendReplyMedia(
         channelId: channelId,
         rootMessageId: rootMessageId,
-        type: isImage ? MessageType.image : MessageType.document,
+        type: mediaType,
         upload: upload,
       );
       _replaceLocalReply(tempId, reply);
@@ -136,11 +146,13 @@ class ThreadCubit extends Cubit<ThreadState> {
     } on AppException catch (e) {
       emit(state.copyWith(isSending: false, isUploading: false, error: e.message));
     } catch (_) {
-      emit(state.copyWith(
-        isSending: false,
-        isUploading: false,
-        error: 'Failed to send attachment',
-      ));
+      emit(
+        state.copyWith(
+          isSending: false,
+          isUploading: false,
+          error: 'Failed to send attachment',
+        ),
+      );
     }
   }
 
@@ -165,6 +177,7 @@ class ThreadCubit extends Cubit<ThreadState> {
       if (message.channelId.isNotEmpty && message.channelId != channelId) {
         return;
       }
+      if (message.id.isNotEmpty && !_seenReplyIds.add(message.id)) return;
       _upsertReply(message);
     });
   }
@@ -216,6 +229,7 @@ class ThreadCubit extends Cubit<ThreadState> {
   }
 
   void _upsertReply(MessageModel reply) {
+    if (reply.id.isNotEmpty) _seenReplyIds.add(reply.id);
     final existing = state.replies.indexWhere((r) => r.id == reply.id);
     final updated = List<MessageModel>.from(state.replies);
     if (existing >= 0) {

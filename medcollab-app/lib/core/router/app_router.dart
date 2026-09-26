@@ -379,6 +379,11 @@ class AppRouter {
         return AppRoutes.profileSetup;
 
       case AuthStatus.authenticated:
+        final pendingNotif = _pendingNotificationRoute;
+        if (pendingNotif != null && pendingNotif.startsWith('/')) {
+          _pendingNotificationRoute = null;
+          if (location != pendingNotif) return pendingNotif;
+        }
         final pending = _pendingJoinLocation;
         if (pending != null &&
             pending.startsWith('/join/') &&
@@ -404,6 +409,15 @@ class AppRouter {
   }
 
   String? _pendingJoinLocation;
+  String? _pendingNotificationRoute;
+
+  /// Cold-start notification taps arrive before auth/router are ready.
+  /// Remember the chat path and open it once the session is authenticated.
+  void rememberNotificationRoute(String route) {
+    if (route.isEmpty) return;
+    _pendingNotificationRoute = route;
+    _refreshListenable.refresh();
+  }
 
   bool _isPublicLegalRoute(String location) =>
       location == AppRoutes.privacy ||
@@ -415,6 +429,7 @@ class AppRouter {
     if (location.startsWith('/spaces')) return true;
     if (location.startsWith('/dm')) return true;
     if (location.startsWith('/join')) return true;
+    if (location.startsWith('/profile')) return true;
     if (location == AppRoutes.scanInviteQr) return true;
     if (location == AppRoutes.search ||
         location == AppRoutes.bookmarks ||

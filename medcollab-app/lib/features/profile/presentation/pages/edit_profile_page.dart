@@ -131,8 +131,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onRoleChanged: (role) {
                 setState(() {
                   _role = role;
-                  if (!ClinicalProfileOptions.showClinicalSpeciality(role) &&
-                      !ClinicalProfileOptions.showFreeTextSpeciality(role)) {
+                  if (ClinicalProfileOptions.skipSpeciality(role) ||
+                      (!ClinicalProfileOptions.showClinicalSpeciality(role) &&
+                          !ClinicalProfileOptions.showFreeTextSpeciality(
+                            role,
+                          ) &&
+                          !ClinicalProfileOptions.showPgPrepSubject(role))) {
                     _specialityController.clear();
                   }
                   if (!ClinicalProfileOptions.showPgPrepSubject(role)) {

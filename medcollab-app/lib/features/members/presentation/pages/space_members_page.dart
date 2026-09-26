@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
+import 'package:medcollab_app/core/error/app_exception.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
 import 'package:medcollab_app/core/router/dm_navigation.dart';
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:medcollab_app/features/auth/presentation/bloc/auth_state.dart';
 import 'package:medcollab_app/features/members/data/models/space_member_model.dart';
 import 'package:medcollab_app/features/members/presentation/cubit/members_cubit.dart';
 import 'package:medcollab_app/features/members/presentation/widgets/member_widgets.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/message_request_prompt.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_search_bar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
@@ -205,10 +207,43 @@ class _SpaceMembersPageState extends State<SpaceMembersPage> {
                                                         if (!context.mounted) {
                                                           return;
                                                         }
-                                                        await openDmChat(
+                                                        openDmChat(
                                                           context,
                                                           channelId: channel.id,
                                                           channel: channel,
+                                                        );
+                                                      } on AppException catch (e) {
+                                                        if (!context.mounted) {
+                                                          return;
+                                                        }
+                                                        final msg =
+                                                            e.message.toLowerCase();
+                                                        if (msg.contains(
+                                                              'message request',
+                                                            ) ||
+                                                            msg.contains(
+                                                              'only after',
+                                                            ) ||
+                                                            msg.contains(
+                                                              'send a message',
+                                                            )) {
+                                                          await promptAndSendMessageRequest(
+                                                            context,
+                                                            toUserId:
+                                                                member.user.id,
+                                                            peerName: member
+                                                                .user
+                                                                .displayName,
+                                                          );
+                                                          return;
+                                                        }
+                                                        ScaffoldMessenger.of(
+                                                          context,
+                                                        ).showSnackBar(
+                                                          SnackBar(
+                                                            content:
+                                                                Text(e.message),
+                                                          ),
                                                         );
                                                       } catch (_) {
                                                         if (!context.mounted) {

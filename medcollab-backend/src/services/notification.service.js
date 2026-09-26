@@ -162,27 +162,26 @@ const sendFCMPush = async ({ tokens, title, body, data = {}, priority }) => {
       try {
         await messaging.send({
           token,
-          notification: { title, body },
-          data: stringData,
+          // Data-only on Android so the app owns the shade and can append
+          // lines from the same conversation into one notification.
+          data: {
+            ...stringData,
+            title: String(title ?? ''),
+            body: String(body ?? ''),
+          },
           android: {
-            priority: fcmPriority,
-            notification: {
-              // Emergency gets a distinct sound and vibration pattern
-              sound: priority === MESSAGE_PRIORITY.EMERGENCY ? 'emergency_alert' : 'default',
-              channelId: priority === MESSAGE_PRIORITY.EMERGENCY
-                ? 'emergency'
-                : 'messages',
-            },
+            priority: 'high',
+            collapseKey: stringData.channelId || stringData.handoffId || 'vocle',
           },
           apns: {
             payload: {
               aps: {
+                alert: { title, body },
                 sound: priority === MESSAGE_PRIORITY.EMERGENCY
                   ? 'emergency_alert.wav'
                   : 'default',
                 badge: 1,
-                // Critical alerts bypass Do Not Disturb on iOS
-                // Requires special Apple entitlement — plan for later
+                'thread-id': stringData.channelId || stringData.handoffId || 'vocle',
               },
             },
             headers: {
@@ -301,7 +300,11 @@ const notifyNewMessage = async ({ recipientIds, message, sender, channel }) => {
       title: isEmergency ? '🚨 Emergency Alert' : sender.name || 'New message',
       body: message.content?.text
         ? message.content.text.slice(0, 100)
-        : `Sent ${message.type === 'image' ? 'an image' : 'a file'}`,
+        : message.type === 'image'
+          ? 'Sent a photo'
+          : message.type === 'video'
+            ? 'Sent a video'
+            : 'Sent a file',
       referenceId: message._id,
       referenceType: 'Message',
       metadata: {

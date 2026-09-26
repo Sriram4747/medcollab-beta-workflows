@@ -64,6 +64,11 @@ abstract final class ApiEndpoints {
   static String handoffById(String id) => '$handoffs/$id';
   static String submitHandoff(String id) => '$handoffs/$id/submit';
   static String acknowledgeHandoff(String id) => '$handoffs/$id/acknowledge';
+  static String handoffNotes(String id) => '$handoffs/$id/notes';
+  static String reassignHandoff(String id) => '$handoffs/$id/reassign';
+  static const String createGroupDm = '$channels/dm/group';
+  static String renameChannel(String id) => '$channels/$id';
+  static const String needlThreads = '$users/me/needl';
 
   // Media
   static const String uploadMedia = '$media/upload';

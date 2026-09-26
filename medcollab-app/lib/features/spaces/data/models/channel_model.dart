@@ -61,16 +61,32 @@ class ChannelModel extends Equatable {
 
   bool get isDirect => type == ChannelType.direct;
 
+  /// 1:1 DM vs multi-person (Slack MPIM) vs notes-to-self.
+  bool get isGroupDm =>
+      isDirect && members.length > 2;
+
+  bool get isSelfNotes =>
+      isDirect && members.length == 1;
+
   String get displayName {
     if (isDirect) {
-      if (peer != null && peer!.displayName.trim().isNotEmpty) {
-        return peer!.displayName;
-      }
       if (name.isNotEmpty &&
           name != 'channel' &&
           name.toLowerCase() != 'direct message') {
         return name;
       }
+      if (isGroupDm) {
+        final others = members
+            .map((m) => m.displayName.trim())
+            .where((n) => n.isNotEmpty)
+            .take(3)
+            .join(', ');
+        return others.isNotEmpty ? others : 'Group DM';
+      }
+      if (peer != null && peer!.displayName.trim().isNotEmpty) {
+        return peer!.displayName;
+      }
+      if (isSelfNotes) return 'Notes to self';
       return 'Direct message';
     }
     return name.startsWith('#') ? name : '#$name';

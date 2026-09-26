@@ -198,6 +198,37 @@ const handoffSchema = new mongoose.Schema(
       maxlength: 500,
       default: '',
     },
+
+    // Ongoing write-back: assignee / sender notes after submit (not EMR)
+    writeBackNotes: [
+      {
+        authorId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+        text: { type: String, required: true, maxlength: 1000, trim: true },
+        kind: {
+          type: String,
+          enum: ['note', 'cant_cover', 'covered_late', 'reassign', 'missed'],
+          default: 'note',
+        },
+        createdAt: { type: Date, default: Date.now },
+        _id: true,
+      },
+    ],
+
+    // Audit trail when responsibility moves to another doctor
+    assignmentHistory: [
+      {
+        fromUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        toUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        byUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        note: { type: String, maxlength: 500, default: '' },
+        at: { type: Date, default: Date.now },
+        _id: false,
+      },
+    ],
   },
   {
     timestamps: true,

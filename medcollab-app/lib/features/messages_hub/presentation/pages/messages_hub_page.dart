@@ -4,18 +4,21 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/presence/presence_cubit.dart';
+import 'package:medcollab_app/core/realtime/typing_presence.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 import 'package:medcollab_app/core/router/dm_navigation.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/messages/data/models/message_request_model.dart';
+import 'package:medcollab_app/features/messages/data/models/needl_thread_preview.dart';
 import 'package:medcollab_app/features/channels/presentation/widgets/create_channel_dialog.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/last_message_preview.dart';
 import 'package:medcollab_app/features/spaces/data/models/space_model.dart';
 import 'package:medcollab_app/features/spaces/presentation/widgets/space_invite_share_sheet.dart';
 import 'package:medcollab_app/features/notifications/presentation/utils/notification_unread_utils.dart';
+import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/dm_row.dart';
@@ -36,6 +39,7 @@ class _MessagesHubPageState extends State<MessagesHubPage>
   late TabController _tabController;
   late Future<List<SpaceModel>> _spacesFuture;
   late Future<List<ChannelModel>> _dmsFuture;
+  late Future<List<NeedlThreadPreview>> _needlFuture;
   late Future<List<MessageRequestModel>> _pendingRequestsFuture;
   late Future<Set<String>> _draftIdsFuture;
   late Future<Map<String, int>> _unreadByChannelFuture;
@@ -43,7 +47,7 @@ class _MessagesHubPageState extends State<MessagesHubPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _reload();
   }
 
@@ -52,6 +56,7 @@ class _MessagesHubPageState extends State<MessagesHubPage>
       _spacesFuture =
           AppDependencies.instance.spaceRepository.getMySpaces();
       _dmsFuture = AppDependencies.instance.channelRepository.getMyDMs();
+      _needlFuture = AppDependencies.instance.userRepository.getNeedl();
       _pendingRequestsFuture = AppDependencies.instance.messageRequestRepository
           .listRequests(direction: 'received', status: 'pending')
           .catchError((_) => <MessageRequestModel>[]);
@@ -97,6 +102,10 @@ class _MessagesHubPageState extends State<MessagesHubPage>
                   pendingRequestsFuture: _pendingRequestsFuture,
                   draftIdsFuture: _draftIdsFuture,
                   unreadByChannelFuture: _unreadByChannelFuture,
+                  onReload: _reload,
+                ),
+                _NeedlTab(
+                  needlFuture: _needlFuture,
                   onReload: _reload,
                 ),
                 _GroupsTab(
@@ -183,11 +192,87 @@ class _MessagesHeader extends StatelessWidget {
             dividerColor: AppColors.borderLight,
             tabs: const [
               Tab(text: 'Direct'),
+              Tab(text: 'Needl'),
               Tab(text: 'Groups'),
             ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _NeedlTab extends StatelessWidget {
+  const _NeedlTab({
+    required this.needlFuture,
+    required this.onReload,
+  });
+
+  final Future<List<NeedlThreadPreview>> needlFuture;
+  final VoidCallback onReload;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<NeedlThreadPreview>>(
+      future: needlFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const AppCardSkeleton();
+        }
+        final threads = snapshot.data ?? const <NeedlThreadPreview>[];
+        return RefreshIndicator(
+          onRefresh: () async => onReload(),
+          child: threads.isEmpty
+              ? ListView(
+                  children: const [
+                    SizedBox(height: 80),
+                    AppEmptyState(
+                      icon: Icons.forum_outlined,
+                      title: 'No Needl threads yet',
+                      subtitle:
+                          'Reply in a channel or DM thread and it will show up here.',
+                    ),
+                  ],
+                )
+              : ListView.separated(
+                  itemCount: threads.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, index) {
+                    final t = threads[index];
+                    return ListTile(
+                      leading: const Icon(Icons.forum_outlined),
+                      title: Text(
+                        t.preview.isEmpty ? 'Thread' : t.preview,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        '${t.replyCount} replies'
+                        '${t.channelName != null ? ' · #${t.channelName}' : ''}',
+                      ),
+                      onTap: () {
+                        if (t.spaceId != null && t.spaceId!.isNotEmpty) {
+                          context.push(
+                            AppRoutes.threadPath(
+                              t.spaceId!,
+                              t.channelId,
+                              t.rootMessageId,
+                            ),
+                          );
+                        } else {
+                          context.push(
+                            AppRoutes.dmThreadPath(
+                              t.channelId,
+                              t.rootMessageId,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
+        );
+      },
     );
   }
 }
@@ -590,10 +675,11 @@ class _DirectTabState extends State<_DirectTab> {
     if (_busyRequestId != null) return;
     setState(() => _busyRequestId = request.id);
     try {
-      await AppDependencies.instance.messageRequestRepository
+      final result = await AppDependencies.instance.messageRequestRepository
           .acceptRequest(request.id);
-      final channel = await AppDependencies.instance.channelRepository
-          .createOrGetDM(request.peer.id);
+      final channel = result.channel ??
+          await AppDependencies.instance.channelRepository
+              .createOrGetDM(request.peer.id);
       if (!mounted) return;
       await openDmChat(
         context,
@@ -675,7 +761,8 @@ class _DirectTabState extends State<_DirectTab> {
             title: 'No direct messages yet',
             subtitle:
                 'Search by name or mobile number to start a private chat. '
-                'Doctors outside your groups must approve a message request first.',
+                'Doctors outside your network must approve a request first — '
+                'no chat or Seen until they accept.',
             action: FilledButton.icon(
               onPressed: () => context.push(AppRoutes.startDm),
               icon: const Icon(Icons.edit_outlined, size: 18),
@@ -698,9 +785,22 @@ class _DirectTabState extends State<_DirectTab> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Text(
+                      'No chat or Seen until you accept',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                    ),
                     const SizedBox(height: AppGaps.itemGap),
                     ...pending.map((request) {
                       final busy = _busyRequestId == request.id;
+                      final peerLine = [
+                        request.peer.role.label,
+                        if (request.peer.speciality?.isNotEmpty == true)
+                          request.peer.speciality!,
+                        if (request.peer.institution?.isNotEmpty == true)
+                          request.peer.institution!,
+                      ].join(' · ');
                       return Padding(
                         padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
                         child: Material(
@@ -711,18 +811,44 @@ class _DirectTabState extends State<_DirectTab> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Text(
-                                  request.peer.displayName,
-                                  style: AppTextStyles.cardTitle,
+                                Row(
+                                  children: [
+                                    AppAvatar(
+                                      name: request.peer.displayName,
+                                      imageUrl: request.peer.avatarUrl,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            request.peer.displayName,
+                                            style: AppTextStyles.cardTitle,
+                                          ),
+                                          if (peerLine.isNotEmpty)
+                                            Text(
+                                              peerLine,
+                                              style: AppTextStyles.caption
+                                                  .copyWith(
+                                                color: AppColors.textMuted,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 if (request.introMessage.isNotEmpty)
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
+                                    padding: const EdgeInsets.only(top: 8),
                                     child: Text(
-                                      request.introMessage,
+                                      '"${request.introMessage}"',
                                       style: AppTextStyles.cardTitle.copyWith(
                                         fontWeight: FontWeight.w400,
                                         fontSize: 13,
+                                        fontStyle: FontStyle.italic,
                                         color: AppColors.textMuted,
                                       ),
                                     ),
@@ -752,7 +878,7 @@ class _DirectTabState extends State<_DirectTab> {
                                                   strokeWidth: 2,
                                                 ),
                                               )
-                                            : const Text('Accept'),
+                                            : const Text('Accept & chat'),
                                       ),
                                     ),
                                   ],
@@ -790,23 +916,31 @@ class _DirectTabState extends State<_DirectTab> {
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: AppGaps.itemGap),
-                      child: DMRow(
-                        key: ValueKey('dm-${dm.id}'),
-                        name: dm.displayName,
-                        preview: previewText,
-                        imageUrl: peer?.avatarUrl,
-                        timestamp: hasDraft
-                            ? null
-                            : _formatTimestamp(preview?.sentAt),
-                        unreadCount: unreadByChannel[dm.id] ?? 0,
-                        isOnline: isOnline,
-                        onTap: () async {
-                          await openDmChat(
-                            context,
-                            channelId: dm.id,
-                            channel: dm,
+                      child: ListenableBuilder(
+                        listenable: TypingPresence.instance,
+                        builder: (context, _) {
+                          final typing =
+                              TypingPresence.instance.labelFor(dm.id);
+                          return DMRow(
+                            key: ValueKey('dm-${dm.id}'),
+                            name: dm.displayName,
+                            preview: previewText,
+                            imageUrl: peer?.avatarUrl,
+                            timestamp: hasDraft
+                                ? null
+                                : _formatTimestamp(preview?.sentAt),
+                            unreadCount: unreadByChannel[dm.id] ?? 0,
+                            isOnline: isOnline,
+                            typingLabel: typing,
+                            onTap: () async {
+                              await openDmChat(
+                                context,
+                                channelId: dm.id,
+                                channel: dm,
+                              );
+                              widget.onReload();
+                            },
                           );
-                          widget.onReload();
                         },
                       ),
                     );

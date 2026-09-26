@@ -6,19 +6,55 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/widgets.dart';
 import 'package:medcollab_app/core/chat/active_chat_tracker.dart';
+import 'package:medcollab_app/core/notifications/grouped_message_notification.dart';
+import 'package:medcollab_app/core/notifications/notification_reply_sender.dart';
 import 'package:medcollab_app/core/storage/secure_storage_service.dart';
 import 'package:medcollab_app/features/auth/data/repositories/user_repository.dart';
 
 /// Top-level background handler — must be a top-level function.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // Keep minimal — OS already shows the system notification when app is killed.
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp();
   } catch (_) {
     // Firebase not configured on this build.
   }
+  await _ensureLocalNotifications();
+  await GroupedMessageNotification.showFromRemote(message);
+}
+
+@pragma('vm:entry-point')
+void onBackgroundNotificationResponse(NotificationResponse response) {
+  if (response.actionId == 'reply') {
+    unawaited(NotificationReplySender.send(response));
+  }
+}
+
+Future<void> _ensureLocalNotifications() async {
+  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const iosInit = DarwinInitializationSettings();
+  await GroupedMessageNotification.plugin.initialize(
+    const InitializationSettings(android: androidInit, iOS: iosInit),
+    onDidReceiveNotificationResponse: _onLocalNotificationResponse,
+    onDidReceiveBackgroundNotificationResponse:
+        onBackgroundNotificationResponse,
+  );
+}
+
+void _onLocalNotificationResponse(NotificationResponse response) {
+  if (response.actionId == 'reply') {
+    unawaited(NotificationReplySender.send(response));
+    return;
+  }
+  final raw = response.payload;
+  if (raw == null || raw.isEmpty) return;
+  try {
+    final map = jsonDecode(raw) as Map<String, dynamic>;
+    FcmService.tapController.add(PushPayload.fromMap(map));
+  } catch (_) {}
 }
 
 /// Push notification payload used for deep-link routing after tap.
@@ -74,10 +110,7 @@ class FcmService {
   final UserRepository _userRepository;
   final SecureStorageService _storage;
 
-  final FlutterLocalNotificationsPlugin _local =
-      FlutterLocalNotificationsPlugin();
-
-  final _tapController = StreamController<PushPayload>.broadcast();
+  static final tapController = StreamController<PushPayload>.broadcast();
 
   StreamSubscription<String>? _tokenRefreshSub;
   StreamSubscription<RemoteMessage>? _foregroundSub;
@@ -87,7 +120,7 @@ class FcmService {
   bool _firebaseReady = false;
 
   /// Stream of notification taps (foreground local + background/terminated).
-  Stream<PushPayload> get onNotificationTap => _tapController.stream;
+  Stream<PushPayload> get onNotificationTap => tapController.stream;
 
   bool get isReady => _firebaseReady;
 
@@ -110,6 +143,14 @@ class FcmService {
 
     await _initLocalNotifications();
     await _requestPermissions();
+
+    final launch = await GroupedMessageNotification.plugin
+        .getNotificationAppLaunchDetails();
+    final launchResponse = launch?.notificationResponse;
+    if ((launch?.didNotificationLaunchApp ?? false) &&
+        launchResponse != null) {
+      _onLocalNotificationResponse(launchResponse);
+    }
 
     // Create Android channels matching backend `channelId` values.
     await _ensureAndroidChannels();
@@ -178,29 +219,10 @@ class FcmService {
     await _tokenRefreshSub?.cancel();
     await _foregroundSub?.cancel();
     await _openedSub?.cancel();
-    await _tapController.close();
+    // Shared across the process — do not close on one service dispose.
   }
 
-  Future<void> _initLocalNotifications() async {
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosInit = DarwinInitializationSettings();
-    const initSettings = InitializationSettings(
-      android: androidInit,
-      iOS: iosInit,
-    );
-
-    await _local.initialize(
-      initSettings,
-      onDidReceiveNotificationResponse: (response) {
-        final raw = response.payload;
-        if (raw == null || raw.isEmpty) return;
-        try {
-          final map = jsonDecode(raw) as Map<String, dynamic>;
-          _tapController.add(PushPayload.fromMap(map));
-        } catch (_) {}
-      },
-    );
-  }
+  Future<void> _initLocalNotifications() => _ensureLocalNotifications();
 
   Future<void> _requestPermissions() async {
     final messaging = FirebaseMessaging.instance;
@@ -213,16 +235,18 @@ class FcmService {
     );
 
     if (Platform.isAndroid) {
-      final android = _local.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final android = GroupedMessageNotification.plugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
       await android?.requestNotificationsPermission();
     }
   }
 
   Future<void> _ensureAndroidChannels() async {
     if (!Platform.isAndroid) return;
-    final android = _local.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+    final android = GroupedMessageNotification.plugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
     if (android == null) return;
 
     await android.createNotificationChannel(
@@ -262,41 +286,14 @@ class FcmService {
       return;
     }
 
-    final channelId = payload.isEmergency ? 'emergency' : 'messages';
-    final importance =
-        payload.isEmergency ? Importance.max : Importance.high;
-    final priority =
-        payload.isEmergency ? Priority.max : Priority.high;
-
-    await _local.show(
-      message.hashCode,
-      title,
-      body,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          channelId == 'emergency' ? 'Emergency' : 'Messages',
-          channelDescription: channelId == 'emergency'
-              ? 'Emergency channel alerts'
-              : 'Clinical chat and handoffs',
-          importance: importance,
-          priority: priority,
-          icon: '@mipmap/ic_launcher',
-        ),
-        iOS: const DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      ),
-      payload: jsonEncode({
-        'type': payload.type,
-        'notificationId': payload.notificationId,
-        'spaceId': payload.spaceId,
-        'channelId': payload.channelId,
-        'messageId': payload.messageId,
-        'handoffId': payload.handoffId,
-      }),
+    await GroupedMessageNotification.show(
+      title: title,
+      body: body,
+      data: {
+        ...data,
+        'title': title,
+        'body': body,
+      },
     );
   }
 
@@ -310,6 +307,6 @@ class FcmService {
     if (message.notification?.body != null) {
       data.putIfAbsent('body', () => message.notification!.body);
     }
-    _tapController.add(PushPayload.fromMap(data));
+    tapController.add(PushPayload.fromMap(data));
   }
 }

@@ -39,12 +39,14 @@ class MessageRepository extends BaseRepository {
     required String channelId,
     required String text,
     List<String> mentions = const [],
+    String? replyToId,
   }) {
     return _sendMessage(
       channelId: channelId,
       type: MessageType.text,
       content: MessageContent(text: text),
       mentions: mentions,
+      replyToId: replyToId,
     );
   }
 
@@ -53,6 +55,7 @@ class MessageRepository extends BaseRepository {
     required MessageType type,
     required MediaUploadResult upload,
     String? caption,
+    String? replyToId,
   }) {
     return _sendMessage(
       channelId: channelId,
@@ -67,6 +70,7 @@ class MessageRepository extends BaseRepository {
         width: upload.width,
         height: upload.height,
       ),
+      replyToId: replyToId,
     );
   }
 
@@ -75,6 +79,7 @@ class MessageRepository extends BaseRepository {
     required MessageType type,
     required MessageContent content,
     List<String> mentions = const [],
+    String? replyToId,
   }) {
     return execute(
       () => apiClient.post(
@@ -83,6 +88,7 @@ class MessageRepository extends BaseRepository {
           'type': type.value,
           'content': content.toJson(),
           if (mentions.isNotEmpty) 'mentions': mentions,
+          if (replyToId != null && replyToId.isNotEmpty) 'replyToId': replyToId,
         },
         parser: (json) =>
             parseNested(json, 'message', MessageModel.fromJson),

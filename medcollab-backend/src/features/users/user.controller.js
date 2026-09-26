@@ -47,6 +47,14 @@ const updateMe = asyncHandler(async (req, res) => {
     updates.isOnboarded = true;
   }
 
+  // Merge nested notifications so one toggle never wipes sibling prefs.
+  if (updates.notifications && typeof updates.notifications === 'object') {
+    const current = user.notifications?.toObject
+      ? user.notifications.toObject()
+      : { ...(user.notifications || {}) };
+    updates.notifications = { ...current, ...updates.notifications };
+  }
+
   const updated = await User.findByIdAndUpdate(
     req.user._id,
     { $set: updates },
@@ -199,13 +207,25 @@ const lookupByPhone = asyncHandler(async (req, res) => {
   }
 
   if (user._id.toString() === req.user._id.toString()) {
-    return respond.badRequest(res, 'That is your own number');
+    return respond.ok(res, 'Lookup result', {
+      user: user.toPublicProfile(),
+      relationship: 'self',
+      canMessage: true,
+      sharesGroup: false,
+      acceptsMessageRequests: false,
+      canRequest: false,
+      pendingRequest: null,
+      isSelf: true,
+    });
   }
 
-  const { canMessageUser } = require('../../utils/knownUsers');
+  const { canMessageUser, canRequestMessage, shareActiveSpace } = require('../../utils/knownUsers');
   const MessageRequest = require('../message-requests/messageRequest.model');
 
   const canMessage = await canMessageUser(req.user._id, user._id);
+  const sharesGroup = await shareActiveSpace(req.user._id, user._id);
+  const canRequest = await canRequestMessage(req.user._id, user._id);
+  const acceptsMessageRequests = canRequest;
 
   let pendingRequest = null;
   const pending = await MessageRequest.findOne({
@@ -230,13 +250,97 @@ const lookupByPhone = asyncHandler(async (req, res) => {
 
   return respond.ok(res, 'Lookup result', {
     user: user.toPublicProfile(),
-    relationship: canMessage ? 'known' : 'stranger',
+    relationship: canMessage
+      ? 'known'
+      : sharesGroup
+        ? 'group_member'
+        : 'stranger',
     canMessage,
+    sharesGroup,
+    acceptsMessageRequests,
+    canRequest,
     pendingRequest,
   });
 });
 
+/**
+ * GET /api/users/me/needl
+ * Thread roots the doctor cares about (Needl inbox).
+ */
+const getNeedl = asyncHandler(async (req, res) => {
+  const Message = require('../messages/message.model');
+  const Channel = require('../channels/channel.model');
+  const Space = require('../spaces/space.model');
+
+  const spaces = await Space.find(
+    { 'members.userId': req.user._id, isActive: true },
+    { _id: 1 }
+  ).lean();
+  const spaceIds = spaces.map((s) => s._id);
+
+  const channels = await Channel.find({
+    isArchived: false,
+    $or: [
+      { members: req.user._id },
+      { spaceId: { $in: spaceIds } },
+    ],
+  })
+    .select('_id spaceId type name')
+    .lean();
+  const channelIds = channels.map((c) => c._id);
+  const channelById = Object.fromEntries(
+    channels.map((c) => [c._id.toString(), c])
+  );
+
+  if (channelIds.length === 0) {
+    return respond.ok(res, 'Needl empty', { threads: [] });
+  }
+
+  const myReplyRoots = await Message.find({
+    senderId: req.user._id,
+    threadId: { $ne: null },
+    isDeleted: false,
+    channelId: { $in: channelIds },
+  })
+    .select('threadId')
+    .limit(80)
+    .lean();
+  const replyRootIds = [
+    ...new Set(myReplyRoots.map((m) => m.threadId?.toString()).filter(Boolean)),
+  ];
+
+  const roots = await Message.find({
+    channelId: { $in: channelIds },
+    isDeleted: false,
+    $or: [
+      { threadId: null, replyCount: { $gt: 0 } },
+      { _id: { $in: replyRootIds } },
+    ],
+  })
+    .sort({ updatedAt: -1, _id: -1 })
+    .limit(40)
+    .populate('senderId', 'name displayTitle role avatarUrl')
+    .lean();
+
+  const threads = roots.map((m) => {
+    const ch = channelById[m.channelId?.toString()] || {};
+    return {
+      rootMessageId: m._id.toString(),
+      channelId: m.channelId?.toString(),
+      spaceId: ch.spaceId?.toString() || null,
+      channelName: ch.name || null,
+      channelType: ch.type || null,
+      preview: m.content?.text || '',
+      replyCount: m.replyCount || 0,
+      lastReplyAt: m.lastReply?.sentAt || m.updatedAt || m.createdAt,
+      sender: m.senderId,
+    };
+  });
+
+  return respond.ok(res, 'Needl threads', { threads });
+});
+
 module.exports = {
   getMe, updateMe, updateAvailability,
-  registerFcmToken, getUserById, searchUsers, lookupByPhone,
+  registerFcmToken, getUserById, searchUsers, lookupByPhone, getNeedl,
 };

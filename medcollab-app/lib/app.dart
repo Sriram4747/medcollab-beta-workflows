@@ -30,13 +30,9 @@ class _MedCollabAppState extends State<MedCollabApp> {
     super.initState();
     final deps = AppDependencies.instance;
     _pushTapSub = deps.fcmService.onNotificationTap.listen((payload) {
-      // Wait a frame so GoRouter / auth redirect settle after cold start.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final ctx = deps.appRouter.rootNavigatorKey.currentContext;
-        if (ctx != null && ctx.mounted) {
-          PushNotificationRouter.open(ctx, payload);
-        }
-      });
+      // Cold start: the navigator may not exist yet. The router holds the
+      // target until auth finishes, then opens that chat instead of Home.
+      PushNotificationRouter.open(payload);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       deps.navBadgesCubit.setUserId(deps.authBloc.state.user?.id);

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,8 +10,10 @@ import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/messages/data/models/message_delivery_state.dart';
 import 'package:medcollab_app/features/messages/data/models/message_model.dart';
+import 'package:medcollab_app/features/messages/data/models/message_reply_to.dart';
 import 'package:medcollab_app/features/messages/presentation/utils/message_list_utils.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/read_receipt_footer.dart';
+import 'package:medcollab_app/shared/presentation/widgets/chat_network_image.dart';
 import 'package:medcollab_app/shared/presentation/widgets/mention_rich_text.dart';
 
 /// Text input bar — attach button next to send for quick uploads.
@@ -21,21 +22,25 @@ class MessageComposer extends StatelessWidget {
   const MessageComposer({
     required this.controller,
     required this.onSend,
+    this.focusNode,
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
     this.hintText = 'Message… @ to mention',
     this.isBusy = false,
+    this.showTopBorder = true,
     super.key,
   });
 
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final ValueChanged<String> onSend;
   final VoidCallback? onPickGallery;
   final VoidCallback? onPickCamera;
   final VoidCallback? onPickDocument;
   final String hintText;
   final bool isBusy;
+  final bool showTopBorder;
 
   void _showAttachMenu(BuildContext context) {
     showModalBottomSheet<void>(
@@ -47,7 +52,7 @@ class MessageComposer extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
-              title: const Text('Gallery'),
+              title: const Text('Photos & videos'),
               onTap: () {
                 Navigator.pop(ctx);
                 onPickGallery?.call();
@@ -83,11 +88,13 @@ class MessageComposer extends StatelessWidget {
         onPickCamera != null;
 
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: AppColors.surfaceCard,
-        border: Border(
-          top: BorderSide(color: AppColors.borderDefault, width: 0.5),
-        ),
+        border: showTopBorder
+            ? const Border(
+                top: BorderSide(color: AppColors.borderDefault, width: 0.5),
+              )
+            : null,
       ),
       child: SafeArea(
         top: false,
@@ -99,6 +106,7 @@ class MessageComposer extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: controller,
+                  focusNode: focusNode,
                   minLines: 1,
                   maxLines: 5,
                   textCapitalization: TextCapitalization.sentences,
@@ -287,7 +295,9 @@ class MessageBubble extends StatelessWidget {
     required this.isMine,
     this.showSender = true,
     this.showTimestamp = true,
+    this.onQuoteReply,
     this.onOpenThread,
+    this.onJumpToQuoted,
     this.onImageTap,
     this.onEdit,
     this.onDelete,
@@ -296,11 +306,14 @@ class MessageBubble extends StatelessWidget {
     this.onUnpin,
     this.onReact,
     this.onForward,
+    this.onCopy,
     this.currentUserId,
     this.nameByUserId = const {},
     this.showReadReceipts = true,
     this.isDm = false,
     this.isPinned = false,
+    this.isHighlighted = false,
+    this.localImageBytes,
     super.key,
   });
 
@@ -308,8 +321,13 @@ class MessageBubble extends StatelessWidget {
   final bool isMine;
   final bool showSender;
   final bool showTimestamp;
+  /// WhatsApp-style quote reply (swipe / Reply action).
+  final VoidCallback? onQuoteReply;
+  /// Slack-style side thread (long-press menu).
   final VoidCallback? onOpenThread;
   final void Function(String url)? onImageTap;
+  /// Jump to the quoted parent message in the timeline.
+  final VoidCallback? onJumpToQuoted;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onBookmark;
@@ -317,13 +335,21 @@ class MessageBubble extends StatelessWidget {
   final VoidCallback? onUnpin;
   final ValueChanged<String>? onReact;
   final VoidCallback? onForward;
+  final VoidCallback? onCopy;
   final String? currentUserId;
   final Map<String, String> nameByUserId;
   final bool showReadReceipts;
   final bool isDm;
   final bool isPinned;
+  final bool isHighlighted;
+  final List<int>? localImageBytes;
 
   static const quickReactions = ['👍', '❤️', '😂', '🙏', '✅', '👏'];
+  static const moreReactions = [
+    '👍', '❤️', '😂', '😮', '😢', '🙏',
+    '✅', '👏', '🔥', '💯', '👀', '🫡',
+    '🩺', '💉', '🏥', '📋', '⚠️', '🚨',
+  ];
 
   Future<void> _showActions(BuildContext context) async {
     if (message.isDeleted || message.localOnly) return;
@@ -338,29 +364,50 @@ class MessageBubble extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: quickReactions
-                      .map(
-                        (e) => InkWell(
+                  children: [
+                    ...quickReactions.map(
+                      (e) => Expanded(
+                        child: InkWell(
                           onTap: () => Navigator.pop(ctx, 'react:$e'),
                           borderRadius: BorderRadius.circular(20),
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Text(e, style: const TextStyle(fontSize: 26)),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Center(
+                              child: Text(e, style: const TextStyle(fontSize: 26)),
+                            ),
                           ),
                         ),
-                      )
-                      .toList(),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'More reactions',
+                      onPressed: () => Navigator.pop(ctx, 'more-react'),
+                      icon: const Icon(Icons.add_reaction_outlined),
+                    ),
+                  ],
                 ),
               ),
               const Divider(height: 1),
             ],
+            if (onQuoteReply != null)
+              ListTile(
+                leading: const Icon(Icons.reply),
+                title: const Text('Reply'),
+                subtitle: const Text('Quote in this chat'),
+                onTap: () => Navigator.pop(ctx, 'quote'),
+              ),
             if (onOpenThread != null)
               ListTile(
-                leading: const Icon(Icons.reply_outlined),
+                leading: const Icon(Icons.forum_outlined),
                 title: const Text('Reply in thread'),
-                subtitle: const Text('Keep discussion side-by-side'),
-                onTap: () => Navigator.pop(ctx, 'reply'),
+                subtitle: const Text('Side discussion — keep main chat clean'),
+                onTap: () => Navigator.pop(ctx, 'thread'),
+              ),
+            if (onCopy != null)
+              ListTile(
+                leading: const Icon(Icons.copy_outlined),
+                title: const Text('Copy'),
+                onTap: () => Navigator.pop(ctx, 'copy'),
               ),
             if (onForward != null)
               ListTile(
@@ -405,10 +452,19 @@ class MessageBubble extends StatelessWidget {
       ),
     );
     if (!context.mounted || action == null) return;
+    if (action == 'more-react') {
+      final emoji = await _pickMoreReaction(context);
+      if (emoji != null) onReact?.call(emoji);
+      return;
+    }
     if (action.startsWith('react:')) {
       onReact?.call(action.substring(6));
-    } else if (action == 'reply') {
+    } else if (action == 'quote') {
+      onQuoteReply?.call();
+    } else if (action == 'thread') {
       onOpenThread?.call();
+    } else if (action == 'copy') {
+      onCopy?.call();
     } else if (action == 'forward') {
       onForward?.call();
     } else if (action == 'edit') {
@@ -422,6 +478,47 @@ class MessageBubble extends StatelessWidget {
     } else if (action == 'unpin') {
       onUnpin?.call();
     }
+  }
+
+  Future<String?> _pickMoreReaction(BuildContext context) {
+    return showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'React',
+                style: Theme.of(ctx).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children: moreReactions
+                    .map(
+                      (e) => InkWell(
+                        onTap: () => Navigator.pop(ctx, e),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(e, style: const TextStyle(fontSize: 28)),
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -458,6 +555,9 @@ class MessageBubble extends StatelessWidget {
               showTimestamp: showTimestamp,
               currentUserId: currentUserId,
               isPinned: isPinned,
+              isHighlighted: isHighlighted,
+              localImageBytes: localImageBytes,
+              onJumpToQuoted: onJumpToQuoted,
               onImageTap:
                   onImageTap ?? (url) => _openImage(context, url, message),
               onDocumentTap: (url) => DocumentOpenService.open(
@@ -516,7 +616,7 @@ class MessageBubble extends StatelessWidget {
               ThreadCountBadge(
                 replyCount: message.replyCount,
                 onTap: onOpenThread,
-                alwaysShow: true,
+                alwaysShow: message.replyCount > 0,
               ),
             ],
             if (isMine &&
@@ -533,30 +633,82 @@ class MessageBubble extends StatelessWidget {
       ),
     );
 
-    // Swipe toward reply (right for peers, left for mine) opens thread.
+    // Swipe follows the finger, then snaps back. A short drag quotes the message.
+    final canSwipe = onQuoteReply != null && !message.localOnly;
     return GestureDetector(
       onLongPress: () => _showActions(context),
-      child: onOpenThread == null
+      child: !canSwipe
           ? bubble
-          : Dismissible(
-              key: ValueKey('swipe-${message.id}'),
-              direction: isMine
-                  ? DismissDirection.endToStart
-                  : DismissDirection.startToEnd,
-              confirmDismiss: (_) async {
-                onOpenThread?.call();
-                return false; // never remove the bubble
-              },
-              background: Align(
-                alignment:
-                    isMine ? Alignment.centerRight : Alignment.centerLeft,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Icon(Icons.reply, color: AppColors.tealDark),
-                ),
-              ),
+          : _FingerSwipeReply(
+              fromLeft: !isMine,
+              onReply: () => onQuoteReply?.call(),
               child: bubble,
             ),
+    );
+  }
+}
+
+/// Horizontal drag stays 1:1 with the finger and never travels the screen width.
+class _FingerSwipeReply extends StatefulWidget {
+  const _FingerSwipeReply({
+    required this.child,
+    required this.fromLeft,
+    required this.onReply,
+  });
+
+  final Widget child;
+  final bool fromLeft;
+  final VoidCallback onReply;
+
+  @override
+  State<_FingerSwipeReply> createState() => _FingerSwipeReplyState();
+}
+
+class _FingerSwipeReplyState extends State<_FingerSwipeReply> {
+  static const double _maxTravel = 64;
+  static const double _trigger = 36;
+  double _dx = 0;
+
+  void _onUpdate(DragUpdateDetails details) {
+    final next = widget.fromLeft
+        ? (_dx + details.delta.dx).clamp(0.0, _maxTravel)
+        : (_dx + details.delta.dx).clamp(-_maxTravel, 0.0);
+    if (next == _dx) return;
+    setState(() => _dx = next);
+  }
+
+  void _onEnd(DragEndDetails _) {
+    final fired = widget.fromLeft ? _dx >= _trigger : _dx <= -_trigger;
+    setState(() => _dx = 0);
+    if (fired) widget.onReply();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final showIcon = _dx.abs() > 8;
+    return GestureDetector(
+      onHorizontalDragUpdate: _onUpdate,
+      onHorizontalDragEnd: _onEnd,
+      onHorizontalDragCancel: () => setState(() => _dx = 0),
+      child: Stack(
+        alignment: widget.fromLeft ? Alignment.centerLeft : Alignment.centerRight,
+        children: [
+          if (showIcon)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.reply,
+                color: AppColors.tealDark.withValues(
+                  alpha: (_dx.abs() / _maxTravel).clamp(0.35, 1),
+                ),
+              ),
+            ),
+          Transform.translate(
+            offset: Offset(_dx, 0),
+            child: widget.child,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -571,6 +723,9 @@ class MessageBubbleContent extends StatelessWidget {
     required this.onDocumentTap,
     this.currentUserId,
     this.isPinned = false,
+    this.isHighlighted = false,
+    this.localImageBytes,
+    this.onJumpToQuoted,
     super.key,
   });
 
@@ -582,6 +737,9 @@ class MessageBubbleContent extends StatelessWidget {
   final void Function(String url) onDocumentTap;
   final String? currentUserId;
   final bool isPinned;
+  final bool isHighlighted;
+  final List<int>? localImageBytes;
+  final VoidCallback? onJumpToQuoted;
 
   @override
   Widget build(BuildContext context) {
@@ -593,12 +751,17 @@ class MessageBubbleContent extends StatelessWidget {
     final timestampColor =
         isMine ? AppColors.textOnDarkMuted : AppColors.textMuted;
 
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: AppDecorations.bubble(isMine: isMine).copyWith(
-        border: isPinned && !isMine
-            ? Border.all(color: AppColors.tealPrimary.withValues(alpha: 0.55))
-            : null,
+        border: isHighlighted
+            ? Border.all(color: AppColors.tealPrimary, width: 2)
+            : (isPinned && !isMine
+                ? Border.all(
+                    color: AppColors.tealPrimary.withValues(alpha: 0.55),
+                  )
+                : null),
       ),
       child: Column(
         crossAxisAlignment:
@@ -641,11 +804,21 @@ class MessageBubbleContent extends StatelessWidget {
                 ),
               ),
             ),
+          if (message.hasQuoteReply)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: _QuotedReplyPreview(
+                replyTo: message.replyTo!,
+                isMine: isMine,
+                onTap: onJumpToQuoted,
+              ),
+            ),
           _MessageBody(
             message: message,
             isMine: isMine,
             textColor: textColor,
             currentUserId: currentUserId,
+            localImageBytes: localImageBytes,
             onImageTap: onImageTap,
             onDocumentTap: onDocumentTap,
           ),
@@ -690,6 +863,136 @@ class MessageBubbleContent extends StatelessWidget {
   }
 }
 
+/// WhatsApp-style quote strip inside a bubble.
+class _QuotedReplyPreview extends StatelessWidget {
+  const _QuotedReplyPreview({
+    required this.replyTo,
+    required this.isMine,
+    this.onTap,
+  });
+
+  final MessageReplyTo replyTo;
+  final bool isMine;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = isMine ? AppColors.textOnDark : AppColors.tealPrimary;
+    final nameColor = isMine ? AppColors.textOnDark : AppColors.tealDark;
+    final bodyColor =
+        isMine ? AppColors.textOnDarkMuted : AppColors.textSecondary;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.chipValue),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
+          decoration: BoxDecoration(
+            color: isMine
+                ? Colors.black.withValues(alpha: 0.18)
+                : AppColors.surfaceInput,
+            borderRadius: BorderRadius.circular(AppRadius.chipValue),
+            border: Border(
+              left: BorderSide(color: accent, width: 3),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                replyTo.senderName?.trim().isNotEmpty == true
+                    ? replyTo.senderName!
+                    : 'Message',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.caption.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: nameColor,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                replyTo.previewLabel,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.caption.copyWith(color: bodyColor),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Composer bar: “Replying to …” with clear (WhatsApp-style).
+class ReplyQuoteBar extends StatelessWidget {
+  const ReplyQuoteBar({
+    required this.message,
+    required this.onCancel,
+    super.key,
+  });
+
+  final MessageModel message;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.surfaceCard,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 8, 4, 8),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.borderDefault),
+            left: BorderSide(color: AppColors.tealPrimary, width: 3),
+          ),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.reply, size: 18, color: AppColors.tealDark),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Replying to ${message.sender.displayName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.caption.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.tealDark,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    message.displayText,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              tooltip: 'Cancel reply',
+              onPressed: onCancel,
+              icon: const Icon(Icons.close, size: 20),
+              color: AppColors.textMuted,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _MessageBody extends StatelessWidget {
   const _MessageBody({
     required this.message,
@@ -698,6 +1001,7 @@ class _MessageBody extends StatelessWidget {
     required this.onImageTap,
     required this.onDocumentTap,
     this.currentUserId,
+    this.localImageBytes,
   });
 
   final MessageModel message;
@@ -706,6 +1010,7 @@ class _MessageBody extends StatelessWidget {
   final void Function(String url) onImageTap;
   final void Function(String url) onDocumentTap;
   final String? currentUserId;
+  final List<int>? localImageBytes;
 
   @override
   Widget build(BuildContext context) {
@@ -722,41 +1027,32 @@ class _MessageBody extends StatelessWidget {
       );
     }
 
-    if (message.type == MessageType.image && message.content.hasMedia) {
-      final url = message.content.mediaUrl!;
-      final thumb = message.content.thumbnailUrl ?? url;
+    if (message.type == MessageType.image) {
+      final url = message.content.mediaUrl ?? message.content.thumbnailUrl ?? '';
+      final bytes = localImageBytes != null
+          ? Uint8List.fromList(localImageBytes!)
+          : null;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: message.localOnly ? null : () => onImageTap(url),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: message.localOnly
-                  ? Container(
-                      width: 200,
-                      height: 140,
-                      color: AppColors.surfaceVariant,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: thumb,
-                      width: 220,
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => Container(
-                        width: 200,
-                        height: 140,
-                        color: AppColors.surfaceVariant,
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      ),
-                      errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
-                    ),
-            ),
+          ChatNetworkImage(
+            imageUrl: url,
+            localBytes: bytes,
+            onTap: message.localOnly || url.isEmpty
+                ? null
+                : () => onImageTap(url),
           ),
+          if (message.localOnly) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Uploading…',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: isMine
+                        ? AppColors.textOnDarkMuted
+                        : AppColors.textSecondary,
+                  ),
+            ),
+          ],
           if (message.content.text != null &&
               message.content.text!.trim().isNotEmpty) ...[
             const SizedBox(height: 6),
@@ -771,6 +1067,51 @@ class _MessageBody extends StatelessWidget {
             ),
           ],
         ],
+      );
+    }
+
+    if (message.type == MessageType.video) {
+      final name = message.content.fileName ?? 'Video';
+      final url = message.content.mediaUrl;
+      return InkWell(
+        onTap: url != null && !message.localOnly ? () => onDocumentTap(url) : null,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            border: Border.all(color: AppColors.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.videocam_outlined, color: AppColors.primary),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      message.localOnly ? 'Uploading…' : 'Tap to play',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
@@ -927,6 +1268,7 @@ class MessageListView extends StatelessWidget {
     required this.items,
     required this.currentUserId,
     required this.onOpenThread,
+    this.onQuoteReply,
     this.onImageTap,
     super.key,
   });
@@ -934,6 +1276,7 @@ class MessageListView extends StatelessWidget {
   final List<MessageListItem> items;
   final String currentUserId;
   final void Function(MessageModel message) onOpenThread;
+  final void Function(MessageModel message)? onQuoteReply;
   final void Function(String url, MessageModel message)? onImageTap;
 
   @override
@@ -950,6 +1293,9 @@ class MessageListView extends StatelessWidget {
               message: message,
               isMine: isMine,
               showSender: showSender,
+              onQuoteReply: onQuoteReply == null || message.localOnly
+                  ? null
+                  : () => onQuoteReply!(message),
               onOpenThread: () => onOpenThread(message),
               onImageTap: onImageTap != null
                   ? (url) => onImageTap!(url, message)
@@ -1000,17 +1346,12 @@ class _ImagePreviewRoute extends StatelessWidget {
         child: InteractiveViewer(
           minScale: 0.5,
           maxScale: 4,
-          child: CachedNetworkImage(
+          child: ChatNetworkImage(
             imageUrl: imageUrl,
+            width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height * 0.75,
             fit: BoxFit.contain,
-            placeholder: (_, __) => const CircularProgressIndicator(
-              color: Colors.white54,
-            ),
-            errorWidget: (_, __, ___) => const Icon(
-              Icons.broken_image_outlined,
-              color: Colors.white54,
-              size: 64,
-            ),
+            borderRadius: BorderRadius.zero,
           ),
         ),
       ),

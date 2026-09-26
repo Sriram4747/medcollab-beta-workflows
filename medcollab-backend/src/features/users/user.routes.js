@@ -40,6 +40,8 @@ router.use(protect);
  */
 router.get('/me', userController.getMe);
 
+router.get('/me/needl', requireOnboarding, userController.getNeedl);
+
 /**
  * @route   PUT /api/users/me
  * @desc    Update profile fields

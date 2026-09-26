@@ -85,19 +85,68 @@ const sendMessage = asyncHandler(async (req, res) => {
     return respond.forbidden(res, 'Only admins can post in this channel');
   }
 
-  const { type = MESSAGE_TYPES.TEXT, content, priority = MESSAGE_PRIORITY.NORMAL, threadId, mentions } = req.body;
+  const {
+    type = MESSAGE_TYPES.TEXT,
+    content,
+    priority = MESSAGE_PRIORITY.NORMAL,
+    threadId,
+    mentions,
+    replyToId,
+  } = req.body;
 
   // Validate media URLs point to trusted domains only.
   if (content?.mediaUrl) {
     const allowedHosts = ['res.cloudinary.com', 'cloudinary.com'];
     try {
-      const host = new URL(content.mediaUrl).hostname;
+      const parsed = new URL(content.mediaUrl);
+      if (parsed.protocol !== 'https:') {
+        return respond.badRequest(res, 'Media URL must use HTTPS');
+      }
+      const host = parsed.hostname;
       if (!allowedHosts.some((h) => host === h || host.endsWith('.' + h))) {
         return respond.badRequest(res, 'Media URL must point to a trusted host');
       }
     } catch {
       return respond.badRequest(res, 'Invalid media URL');
     }
+  }
+
+  // WhatsApp-style quote: parent must be in this channel (root or any).
+  let replyTo = undefined;
+  if (replyToId) {
+    const parent = await Message.findOne({
+      _id: replyToId,
+      channelId: channel._id,
+    })
+      .populate('senderId', 'name displayTitle')
+      .lean();
+    if (!parent) {
+      return respond.badRequest(res, 'Quoted message not found in this chat');
+    }
+    const parentSender = parent.senderId;
+    const senderName =
+      (parentSender && typeof parentSender === 'object'
+        ? [parentSender.displayTitle, parentSender.name].filter(Boolean).join(' ').trim() ||
+          parentSender.name
+        : null) || 'Doctor';
+    const preview =
+      parent.content?.text?.slice(0, 120) ||
+      (parent.type === MESSAGE_TYPES.IMAGE || parent.type === MESSAGE_TYPES.ECG
+        ? 'Photo'
+        : parent.type === MESSAGE_TYPES.VIDEO
+          ? 'Video'
+          : parent.type === MESSAGE_TYPES.DOCUMENT
+          ? parent.content?.fileName || 'Document'
+          : parent.type === MESSAGE_TYPES.HANDOFF
+            ? 'Handoff'
+            : 'Message');
+    replyTo = {
+      messageId: parent._id,
+      senderId: parentSender?._id || parentSender || null,
+      senderName,
+      text: preview,
+      type: parent.type,
+    };
   }
 
   // Emergency channel always gets emergency priority
@@ -113,6 +162,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     content,
     priority: effectivePriority,
     threadId: threadId || null,
+    ...(replyTo ? { replyTo } : {}),
     mentions: mentions || [],
   });
 
@@ -125,7 +175,9 @@ const sendMessage = asyncHandler(async (req, res) => {
     content?.text?.slice(0, 200) ||
     (type === MESSAGE_TYPES.IMAGE || type === MESSAGE_TYPES.ECG
       ? '📷 Photo'
-      : type === MESSAGE_TYPES.DOCUMENT
+      : type === MESSAGE_TYPES.VIDEO
+        ? '🎥 Video'
+        : type === MESSAGE_TYPES.DOCUMENT
         ? '📎 Document'
         : type === MESSAGE_TYPES.HANDOFF
           ? '🔄 Handoff'
@@ -216,7 +268,10 @@ const getThread = asyncHandler(async (req, res) => {
   const before = req.query.before;
 
   const threadQuery = {
-    threadId: rootMessage._id,
+    $or: [
+      { threadId: rootMessage._id },
+      { threadId: rootMessage._id.toString() },
+    ],
     isDeleted: false,
   };
   if (before) threadQuery._id = { $lt: before };

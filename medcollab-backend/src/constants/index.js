@@ -8,6 +8,7 @@
 
 // ─── User Roles ────────────────────────────────────────────────────────────────
 const USER_ROLES = {
+  MBBS_STUDENT: 'mbbs_student',
   INTERN: 'intern',
   PG_RESIDENT: 'pg_resident',
   JUNIOR_CONSULTANT: 'junior_consultant',
@@ -58,6 +59,7 @@ const CHANNEL_TYPES = {
 const MESSAGE_TYPES = {
   TEXT: 'text',
   IMAGE: 'image',         // X-rays, clinical photos
+  VIDEO: 'video',         // Short clinical clips
   DOCUMENT: 'document',   // PDF reports, discharge summaries
   ECG: 'ecg',             // ECG strips (image, but categorised separately for UI)
   HANDOFF: 'handoff',     // System message when a handoff is submitted
@@ -136,6 +138,10 @@ const MEDIA = {
     'image/webp',
     'image/heic',
     'image/heif',
+    'video/mp4',
+    'video/quicktime',
+    'video/webm',
+    'video/3gpp',
     'application/pdf',
   ],
 };
@@ -178,6 +184,8 @@ const SOCKET_EVENTS = {
   // Handoffs
   HANDOFF_SUBMITTED: 'handoff_submitted',
   HANDOFF_ACKNOWLEDGED: 'handoff_acknowledged',
+  HANDOFF_NOTE_ADDED: 'handoff_note_added',
+  HANDOFF_REASSIGNED: 'handoff_reassigned',
 
   // Spaces
   SPACE_MEMBER_JOINED: 'space_member_joined',

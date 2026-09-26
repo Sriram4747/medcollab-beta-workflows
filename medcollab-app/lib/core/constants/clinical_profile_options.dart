@@ -30,8 +30,11 @@ abstract final class ClinicalProfileOptions {
       role == UserRole.juniorConsultant ||
       role == UserRole.consultant;
 
-  /// Optional NEET PG prep track for interns / MBBS graduates.
+  /// Optional interest/subject for interns (not NEET-branded).
   static bool showPgPrepSubject(UserRole role) => role == UserRole.intern;
+
+  /// MBBS students skip speciality entirely.
+  static bool skipSpeciality(UserRole role) => role == UserRole.mbbsStudent;
 
   /// Free-text speciality for nurse / other.
   static bool showFreeTextSpeciality(UserRole role) =>

@@ -3,6 +3,7 @@ import 'package:medcollab_app/core/utils/json_map_utils.dart';
 import 'package:medcollab_app/core/constants/app_enums.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
 import 'package:medcollab_app/features/handoffs/data/models/handoff_patient_model.dart';
+import 'package:medcollab_app/features/handoffs/data/models/handoff_write_back_note.dart';
 
 /// Clinical shift handoff — maps to backend `Handoff` document.
 class HandoffModel extends Equatable {
@@ -20,6 +21,7 @@ class HandoffModel extends Equatable {
     this.submittedAt,
     this.acknowledgedAt,
     this.acknowledgementNote = '',
+    this.writeBackNotes = const [],
     this.createdAt,
     this.updatedAt,
   });
@@ -58,6 +60,7 @@ class HandoffModel extends Equatable {
           ? DateTime.tryParse(json['acknowledgedAt'].toString())
           : null,
       acknowledgementNote: json['acknowledgementNote'] as String? ?? '',
+      writeBackNotes: parseWriteBackNotes(json['writeBackNotes']),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString())
           : null,
@@ -80,6 +83,7 @@ class HandoffModel extends Equatable {
   final DateTime? submittedAt;
   final DateTime? acknowledgedAt;
   final String acknowledgementNote;
+  final List<HandoffWriteBackNote> writeBackNotes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -112,7 +116,6 @@ class HandoffModel extends Equatable {
 
   DateTime? get lastUpdated => updatedAt ?? submittedAt ?? createdAt;
 
-  /// Highest-priority patient drives list accent colour.
   HandoffPatientModel? get primaryPatient =>
       patients.isNotEmpty ? patients.first : null;
 
@@ -132,6 +135,7 @@ class HandoffModel extends Equatable {
     DateTime? submittedAt,
     DateTime? acknowledgedAt,
     String? acknowledgementNote,
+    List<HandoffWriteBackNote>? writeBackNotes,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -149,6 +153,7 @@ class HandoffModel extends Equatable {
       submittedAt: submittedAt ?? this.submittedAt,
       acknowledgedAt: acknowledgedAt ?? this.acknowledgedAt,
       acknowledgementNote: acknowledgementNote ?? this.acknowledgementNote,
+      writeBackNotes: writeBackNotes ?? this.writeBackNotes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -169,6 +174,7 @@ class HandoffModel extends Equatable {
         submittedAt,
         acknowledgedAt,
         acknowledgementNote,
+        writeBackNotes,
         createdAt,
         updatedAt,
       ];

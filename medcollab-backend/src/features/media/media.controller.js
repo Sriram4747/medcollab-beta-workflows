@@ -29,6 +29,7 @@ const uploadFile = asyncHandler(async (req, res) => {
 
   const { context = 'message' } = req.body;
   const isImage = req.file.mimetype.startsWith('image/');
+  const isVideo = req.file.mimetype.startsWith('video/');
   const isPDF = req.file.mimetype === 'application/pdf';
   const userId = req.user._id.toString();
 
@@ -51,7 +52,7 @@ const uploadFile = asyncHandler(async (req, res) => {
       mimeType: req.file.mimetype,
       width: null,
       height: null,
-      format: isPDF ? 'pdf' : isImage ? 'image' : null,
+      format: isPDF ? 'pdf' : isVideo ? 'video' : isImage ? 'image' : null,
       storage: 'local',
     });
   }
@@ -71,7 +72,7 @@ const uploadFile = asyncHandler(async (req, res) => {
 
     const uploadOptions = {
       folder,
-      resource_type: isPDF ? 'raw' : 'image',
+      resource_type: isPDF ? 'raw' : isVideo ? 'video' : 'image',
       use_filename: true,
       unique_filename: true,
       filename_override: baseName.slice(0, 100),
@@ -88,6 +89,15 @@ const uploadFile = asyncHandler(async (req, res) => {
         crop: 'limit',
         quality: 'auto',
         format: 'webp',
+      });
+    } else if (isVideo) {
+      thumbnailUrl = cloudinary.url(result.public_id, {
+        resource_type: 'video',
+        format: 'jpg',
+        start_offset: '0',
+        width: 400,
+        crop: 'limit',
+        secure: true,
       });
     } else if (isPDF) {
       // Attachment flag suggests the original filename to browsers / downloaders.

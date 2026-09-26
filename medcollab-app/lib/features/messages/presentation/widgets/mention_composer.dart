@@ -11,10 +11,12 @@ class MentionAwareComposer extends StatefulWidget {
     required this.onSend,
     required this.mentionCandidates,
     this.excludeSelfId,
+    this.focusNode,
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
     this.isBusy = false,
+    this.showTopBorder = true,
     super.key,
   });
 
@@ -23,10 +25,12 @@ class MentionAwareComposer extends StatefulWidget {
   final List<UserModel> mentionCandidates;
   /// Current user — excluded from mention suggestions and mention payloads.
   final String? excludeSelfId;
+  final FocusNode? focusNode;
   final VoidCallback? onPickGallery;
   final VoidCallback? onPickCamera;
   final VoidCallback? onPickDocument;
   final bool isBusy;
+  final bool showTopBorder;
 
   @override
   State<MentionAwareComposer> createState() => _MentionAwareComposerState();
@@ -188,7 +192,9 @@ class _MentionAwareComposerState extends State<MentionAwareComposer> {
           ),
         MessageComposer(
           controller: widget.controller,
+          focusNode: widget.focusNode,
           isBusy: widget.isBusy,
+          showTopBorder: widget.showTopBorder,
           onSend: (_) => _send(),
           onPickGallery: widget.onPickGallery,
           onPickCamera: widget.onPickCamera,

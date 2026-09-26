@@ -10,17 +10,16 @@ class MediaPickerService {
   final ImagePicker _imagePicker;
 
   Future<PickedAttachment?> pickFromGallery() async {
-    final file = await _imagePicker.pickImage(
-      source: ImageSource.gallery,
+    final file = await _imagePicker.pickMedia(
       imageQuality: 85,
-      maxWidth: 2048,
     );
     if (file == null) return null;
     final bytes = await file.readAsBytes();
+    final mime = file.mimeType ?? _guessMediaMime(file.name);
     return PickedAttachment(
       bytes: bytes,
       fileName: file.name,
-      mimeType: _guessImageMime(file.name),
+      mimeType: mime,
     );
   }
 
@@ -57,6 +56,21 @@ class MediaPickerService {
     );
   }
 
+  String _guessMediaMime(String name) {
+    final lower = name.toLowerCase();
+    if (lower.endsWith('.png')) return 'image/png';
+    if (lower.endsWith('.webp')) return 'image/webp';
+    if (lower.endsWith('.gif')) return 'image/gif';
+    if (lower.endsWith('.heic')) return 'image/heic';
+    if (lower.endsWith('.mp4')) return 'video/mp4';
+    if (lower.endsWith('.mov')) return 'video/quicktime';
+    if (lower.endsWith('.webm')) return 'video/webm';
+    if (lower.endsWith('.3gp')) return 'video/3gpp';
+    if (lower.endsWith('.mkv')) return 'video/x-matroska';
+    if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+    return 'application/octet-stream';
+  }
+
   String _guessImageMime(String name) {
     final lower = name.toLowerCase();
     if (lower.endsWith('.png')) return 'image/png';
@@ -89,4 +103,5 @@ class PickedAttachment {
   final String mimeType;
 
   bool get isImage => mimeType.startsWith('image/');
+  bool get isVideo => mimeType.startsWith('video/');
 }

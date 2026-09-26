@@ -24,8 +24,8 @@ class UpdateProfileRequest extends Equatable {
   Map<String, dynamic> toJson() => {
         'name': name.trim(),
         'role': role.value,
-        if (speciality != null && speciality!.trim().isNotEmpty)
-          'speciality': speciality!.trim(),
+        // Always send speciality so clearing / role switches persist on server.
+        'speciality': speciality?.trim() ?? '',
         if (institution != null && institution!.trim().isNotEmpty)
           'institution': institution!.trim(),
         if (city != null && city!.trim().isNotEmpty) 'city': city!.trim(),

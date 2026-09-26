@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -28,11 +28,13 @@ import 'package:medcollab_app/features/messages/presentation/widgets/message_wid
 import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
 import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/forward_message_sheet.dart';
+import 'package:medcollab_app/shared/presentation/widgets/chat_network_image.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_empty_state.dart';
+import 'package:medcollab_app/shared/presentation/widgets/typing_bubble.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_skeleton.dart';
 import 'package:medcollab_app/shared/presentation/widgets/error_banner.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChannelChatPage extends StatefulWidget {
@@ -56,6 +58,7 @@ class ChannelChatPage extends StatefulWidget {
 
 class _ChannelChatPageState extends State<ChannelChatPage> {
   final _textController = TextEditingController();
+  final _composerFocusNode = FocusNode();
   final _scrollController = ScrollController();
   final _mediaPicker = MediaPickerService();
   int _lastMessageCount = 0;
@@ -66,7 +69,9 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   ChannelModel? _resolvedChannel;
   Timer? _draftDebounce;
   Timer? _typingStopDebounce;
+  Timer? _highlightClearTimer;
   bool _isTyping = false;
+  String? _highlightMessageId;
 
   bool get _isDm => widget.isDm;
 
@@ -320,6 +325,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   void dispose() {
     _draftDebounce?.cancel();
     _typingStopDebounce?.cancel();
+    _highlightClearTimer?.cancel();
     // Flush latest draft before leaving so the parent list sees it immediately.
     unawaited(
       AppDependencies.instance.draftMessageService.saveDraft(
@@ -330,6 +336,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     _scrollController.removeListener(_onScroll);
     _textController.removeListener(_onDraftChanged);
     _textController.dispose();
+    _composerFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -372,11 +379,17 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
     if (!force && !_userNearBottom) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) return;
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeOut,
-      );
+      final max = _scrollController.position.maxScrollExtent;
+      // Jump on first open so chat never lands mid-thread.
+      if (force) {
+        _scrollController.jumpTo(max);
+      } else {
+        _scrollController.animateTo(
+          max,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+        );
+      }
     });
   }
 
@@ -728,8 +741,14 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         prev.messages != next.messages,
                     listener: (_, state) {
                       final grew = state.messages.length > _lastMessageCount;
+                      final firstPaint =
+                          _lastMessageCount == 0 && state.messages.isNotEmpty;
                       _lastMessageCount = state.messages.length;
-                      if (grew) _scrollToBottom();
+                      if (firstPaint) {
+                        _scrollToBottom(force: true);
+                      } else if (grew) {
+                        _scrollToBottom();
+                      }
                     },
                     builder: (context, state) {
                       if (state.isLoading && state.messages.isEmpty) {
@@ -752,7 +771,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             child: state.messages.isEmpty
                                 ? _EmptyChatState(isDm: _isDm)
                                 : ListView.builder(
-                                    key: const PageStorageKey('chat-list'),
+                                    key: PageStorageKey('chat-list-${widget.channelId}'),
                                     controller: _scrollController,
                                     cacheExtent: 480,
                                     padding: const EdgeInsets.symmetric(
@@ -771,6 +790,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                           :final isMine,
                                         ) =>
                                           MessageBubble(
+                                            key: GlobalObjectKey(message.id),
                                             message: message,
                                             isMine: isMine,
                                             // Sender name only in group chats.
@@ -781,12 +801,34 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                                             showReadReceipts: showReadReceipts,
                                             nameByUserId: nameByUserId,
                                             isPinned: _isMessagePinned(message),
+                                            isHighlighted:
+                                                _highlightMessageId ==
+                                                    message.id,
+                                            localImageBytes: state
+                                                .localMediaByMessageId[message.id],
+                                            onQuoteReply: message.localOnly
+                                                ? null
+                                                : () {
+                                                    context
+                                                        .read<ChannelChatCubit>()
+                                                        .setPendingReply(message);
+                                                    _composerFocusNode.requestFocus();
+                                                  },
+                                            onJumpToQuoted:
+                                                message.hasQuoteReply
+                                                    ? () => _jumpToQuoted(
+                                                          message.replyTo!
+                                                              .messageId,
+                                                        )
+                                                    : null,
                                             onOpenThread: message.localOnly
                                                 ? null
                                                 : () => _openThread(
                                                       context,
                                                       message,
                                                     ),
+                                            onCopy: () =>
+                                                _copyMessage(message),
                                             onEdit: isMine &&
                                                     message.type ==
                                                         MessageType.text
@@ -830,23 +872,39 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                   buildWhen: (p, n) =>
                       p.isSending != n.isSending ||
                       p.isUploading != n.isUploading ||
-                      p.typingUserNames != n.typingUserNames,
+                      p.typingUserNames != n.typingUserNames ||
+                      p.pendingReply != n.pendingReply,
                   builder: (context, state) {
                     final cubit = context.read<ChannelChatCubit>();
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (state.typingLabel.isNotEmpty)
-                          _TypingIndicator(label: state.typingLabel),
+                        if (state.typingUserNames.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: TypingBubble(
+                                label: state.typingUserNames.join(', '),
+                              ),
+                            ),
+                          ),
+                        if (state.pendingReply != null)
+                          ReplyQuoteBar(
+                            message: state.pendingReply!,
+                            onCancel: cubit.clearPendingReply,
+                          ),
                         _TypingBinder(
                           controller: _textController,
                           cubit: cubit,
                           onTyping: _handleTyping,
                           child: MentionAwareComposer(
                           controller: _textController,
+                          focusNode: _composerFocusNode,
                           mentionCandidates: _mentionCandidates,
                           excludeSelfId: currentUserId,
                           isBusy: state.isSending || state.isUploading,
+                          showTopBorder: state.pendingReply == null,
                           onSend: (text, mentions) async {
                             cubit.sendMessage(text, mentions: mentions);
                             _textController.clear();
@@ -1032,15 +1090,21 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         .where(
           (m) =>
               !m.isDeleted &&
-              (m.type == MessageType.image || m.type == MessageType.document) &&
+              (m.type == MessageType.image ||
+                  m.type == MessageType.video ||
+                  m.type == MessageType.document) &&
               (m.content.mediaUrl?.isNotEmpty ?? false),
         )
         .toList()
         .reversed
         .toList();
     final images = media.where((m) => m.type == MessageType.image).toList();
-    final documents =
-        media.where((m) => m.type == MessageType.document).toList();
+    final documents = media
+        .where(
+          (m) =>
+              m.type == MessageType.document || m.type == MessageType.video,
+        )
+        .toList();
 
     await showModalBottomSheet<void>(
       context: context,
@@ -1289,18 +1353,62 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
   }
 
   Future<void> _forwardMessage(MessageModel message) async {
+    await showForwardMessageSheet(
+      context,
+      message: message,
+      sourceChannelId: widget.channelId,
+    );
+  }
+
+  Future<void> _copyMessage(MessageModel message) async {
     final body = message.displayText.trim();
     if (body.isEmpty) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nothing to forward from this message')),
+        const SnackBar(content: Text('Nothing to copy')),
       );
       return;
     }
-    await Share.share(
-      body,
-      subject: 'Vocle message from ${message.sender.displayName}',
+    await Clipboard.setData(ClipboardData(text: body));
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied')),
     );
+  }
+
+  void _jumpToQuoted(String messageId) {
+    if (messageId.isEmpty) return;
+    final exists = context
+        .read<ChannelChatCubit>()
+        .state
+        .messages
+        .any((m) => m.id == messageId);
+    if (!exists) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Original message is not loaded in this chat yet'),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _highlightMessageId = messageId);
+    _highlightClearTimer?.cancel();
+    _highlightClearTimer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      setState(() => _highlightMessageId = null);
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final target = GlobalObjectKey(messageId).currentContext;
+      if (target == null) return;
+      Scrollable.ensureVisible(
+        target,
+        duration: const Duration(milliseconds: 280),
+        alignment: 0.35,
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   Future<void> _bookmarkMessage(
@@ -1367,31 +1475,6 @@ class _TypingBinderState extends State<_TypingBinder> {
   Widget build(BuildContext context) => widget.child;
 }
 
-class _TypingIndicator extends StatelessWidget {
-  const _TypingIndicator({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppGaps.screenH,
-        vertical: 4,
-      ),
-      color: AppColors.surfaceInput,
-      child: Text(
-        label,
-        style: AppTextStyles.caption.copyWith(
-          color: AppColors.textSecondary,
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-    );
-  }
-}
-
 class _EmptyChatState extends StatelessWidget {
   const _EmptyChatState({required this.isDm});
 
@@ -1439,16 +1522,11 @@ class _ChatMediaGrid extends StatelessWidget {
               context: context,
               builder: (ctx) => Dialog(
                 child: InteractiveViewer(
-                  child: CachedNetworkImage(
+                  child: ChatNetworkImage(
                     imageUrl: full,
+                    width: 320,
+                    height: 320,
                     fit: BoxFit.contain,
-                    placeholder: (_, __) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (_, __, ___) => const Icon(
-                      Icons.broken_image_outlined,
-                      size: 48,
-                    ),
                   ),
                 ),
               ),
@@ -1456,16 +1534,11 @@ class _ChatMediaGrid extends StatelessWidget {
           },
           child: url.isEmpty
               ? Container(color: AppColors.surfaceInput)
-              : CachedNetworkImage(
+              : ChatNetworkImage(
                   imageUrl: url,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => Container(
-                    color: AppColors.surfaceInput,
-                  ),
-                  errorWidget: (_, __, ___) => Container(
-                    color: AppColors.surfaceInput,
-                    child: const Icon(Icons.broken_image_outlined, size: 20),
-                  ),
+                  width: double.infinity,
+                  height: double.infinity,
+                  borderRadius: BorderRadius.zero,
                 ),
         );
       },

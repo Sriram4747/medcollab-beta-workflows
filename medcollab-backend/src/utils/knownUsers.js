@@ -1,6 +1,12 @@
 /**
- * Privacy: users a doctor may discover / message.
- * Known = shared active spaces ∪ existing DM peers ∪ same institution (exact).
+ * Privacy helpers for discovery + DMs.
+ *
+ * Open DM (canMessage): existing DM channel OR accepted message request only.
+ * Shared groups / same college do NOT auto-open a chat — they may request.
+ *
+ * Message request (canRequestMessage):
+ *  - mutual active group → always allowed (network intro)
+ *  - otherwise → only if target opted in allowMessageRequestsFromAnyone
  */
 
 const Space = require('../features/spaces/space.model');
@@ -14,10 +20,9 @@ function normalizeInstitution(value) {
 }
 
 /**
- * @param {import('mongoose').Types.ObjectId|string} userId
- * @returns {Promise<string[]>} other user ids (never includes self)
+ * Shared active space member ids (never includes self).
  */
-async function resolveKnownUserIds(userId) {
+async function resolveSharedSpaceUserIds(userId) {
   const selfId = userId.toString();
   const known = new Set();
 
@@ -32,6 +37,18 @@ async function resolveKnownUserIds(userId) {
       if (id && id !== selfId) known.add(id);
     }
   }
+
+  return [...known];
+}
+
+/**
+ * Users visible in name search: shared spaces ∪ DM peers ∪ same institution.
+ * @param {import('mongoose').Types.ObjectId|string} userId
+ * @returns {Promise<string[]>}
+ */
+async function resolveKnownUserIds(userId) {
+  const selfId = userId.toString();
+  const known = new Set(await resolveSharedSpaceUserIds(userId));
 
   const dms = await Channel.find({
     type: CHANNEL_TYPES.DIRECT,
@@ -70,9 +87,13 @@ async function resolveKnownUserIds(userId) {
   return [...known];
 }
 
+async function shareActiveSpace(callerId, targetUserId) {
+  const shared = await resolveSharedSpaceUserIds(callerId);
+  return shared.includes(targetUserId.toString());
+}
+
 /**
- * @param {string} callerId
- * @param {string} targetUserId
+ * True when caller may open a full DM (Seen, chat history) with target.
  */
 async function canMessageUser(callerId, targetUserId) {
   if (!targetUserId || callerId.toString() === targetUserId.toString()) {
@@ -99,12 +120,35 @@ async function canMessageUser(callerId, targetUserId) {
     .lean();
   if (acceptedRequest) return true;
 
-  const known = await resolveKnownUserIds(callerId);
-  return known.includes(targetUserId.toString());
+  return false;
+}
+
+/**
+ * True when caller may send a message request to target.
+ */
+async function canRequestMessage(callerId, targetUserId) {
+  if (!targetUserId || callerId.toString() === targetUserId.toString()) {
+    return false;
+  }
+  if (await canMessageUser(callerId, targetUserId)) {
+    return false;
+  }
+
+  if (await shareActiveSpace(callerId, targetUserId)) {
+    return true;
+  }
+
+  const target = await User.findById(targetUserId)
+    .select('notifications.allowMessageRequestsFromAnyone')
+    .lean();
+  return target?.notifications?.allowMessageRequestsFromAnyone === true;
 }
 
 module.exports = {
   resolveKnownUserIds,
+  resolveSharedSpaceUserIds,
+  shareActiveSpace,
   canMessageUser,
+  canRequestMessage,
   normalizeInstitution,
 };

@@ -143,17 +143,33 @@ const validateSendMessage = [
   body('type')
     .optional()
     .isIn(['text', 'image', 'document', 'ecg']).withMessage('Invalid message type'),
-  body('content.text')
-    .if(body('type').equals('text'))
-    .trim()
-    .notEmpty().withMessage('Message text cannot be empty')
-    .isLength({ max: 4000 }).withMessage('Message cannot exceed 4000 characters'),
+  body('content.text').custom((value, { req }) => {
+    const type = req.body?.type || 'text';
+    if (type === 'text') {
+      if (typeof value !== 'string') {
+        throw new Error('Message text must be a string');
+      }
+      const trimmed = value.trim();
+      if (!trimmed) {
+        throw new Error('Message text cannot be empty');
+      }
+      if (trimmed.length > 4000) {
+        throw new Error('Message cannot exceed 4000 characters');
+      }
+    } else if (value != null && typeof value !== 'string') {
+      throw new Error('content.text must be a string when provided');
+    }
+    return true;
+  }),
   body('priority')
     .optional()
     .isIn(['normal', 'urgent', 'emergency']).withMessage('Invalid priority level'),
   body('threadId')
     .optional()
     .isMongoId().withMessage('Invalid thread ID'),
+  body('replyToId')
+    .optional({ nullable: true })
+    .isMongoId().withMessage('Invalid replyToId'),
   handleValidationErrors,
 ];
 

@@ -50,14 +50,14 @@ const fileFilter = (req, file, cb) => {
   const name = (file.originalname || '').toLowerCase();
   if (
     file.mimetype === 'application/octet-stream' &&
-    /\.(jpe?g|png|webp|heic|heif|pdf)$/.test(name)
+    /\.(jpe?g|png|webp|heic|heif|pdf|mp4|mov|webm|3gp)$/.test(name)
   ) {
     cb(null, true);
     return;
   }
 
   cb(
-    new Error('File type not allowed. Accepted: JPEG, PNG, WebP, HEIC, PDF'),
+    new Error('File type not allowed. Accepted: JPEG, PNG, WebP, HEIC, PDF, MP4, MOV'),
     false,
   );
 };

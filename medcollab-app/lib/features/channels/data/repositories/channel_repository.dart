@@ -46,6 +46,28 @@ class ChannelRepository extends BaseRepository {
     );
   }
 
+  /// `POST /api/channels/dm/group`
+  Future<ChannelModel> createGroupDm(List<String> userIds) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.createGroupDm,
+        data: {'userIds': userIds},
+        parser: (json) => parseNested(json, 'channel', ChannelModel.fromJson),
+      ),
+    );
+  }
+
+  /// `PUT /api/channels/:id` — rename group DM (or space channel if admin).
+  Future<ChannelModel> renameChannel(String channelId, String name) {
+    return execute(
+      () => apiClient.put(
+        ApiEndpoints.renameChannel(channelId),
+        data: {'name': name},
+        parser: (json) => parseNested(json, 'channel', ChannelModel.fromJson),
+      ),
+    );
+  }
+
   /// `GET /api/channels/:id/members`
   Future<List<UserModel>> getChannelMembers(String channelId) {
     return execute(

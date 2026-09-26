@@ -91,6 +91,18 @@ class ProfilePage extends StatelessWidget {
                           onTap: () =>
                               context.push(AppRoutes.notificationSettings),
                         ),
+                        const _RowDivider(),
+                        _SettingsRow(
+                          icon: Icons.lock_outline,
+                          label: 'Messaging privacy',
+                        subtitle: user?.notifications
+                                    .allowMessageRequestsFromAnyone ==
+                                true
+                            ? 'Anyone with your number can send a request'
+                            : 'Only shared-group doctors can send a request',
+                          onTap: () =>
+                              context.push(AppRoutes.notificationSettings),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -228,7 +240,6 @@ class ProfilePage extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.photo_library_outlined),
                   title: const Text('Change photo'),
-                  subtitle: const Text('Crop to circle before saving'),
                   onTap: () async {
                     Navigator.pop(sheetContext);
                     await _pickCropAndUpload(context, ImageSource.gallery);

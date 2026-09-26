@@ -7,7 +7,7 @@ const MessageRequest = require('./messageRequest.model');
 const User = require('../users/user.model');
 const { respond } = require('../../utils/apiResponse');
 const asyncHandler = require('../../utils/asyncHandler');
-const { canMessageUser } = require('../../utils/knownUsers');
+const { canMessageUser, canRequestMessage } = require('../../utils/knownUsers');
 const { MESSAGE_REQUEST_STATUS, NOTIFICATION_TYPES } = require('../../constants');
 const { sendNotification } = require('../../services/notification.service');
 
@@ -57,7 +57,9 @@ const createRequest = asyncHandler(async (req, res) => {
     return respond.badRequest(res, 'Cannot send a request to yourself');
   }
 
-  const target = await User.findById(toUserId).select('_id name isOnboarded isActive');
+  const target = await User.findById(toUserId).select(
+    '_id name isOnboarded isActive'
+  );
   if (!target || !target.isActive || !target.isOnboarded) {
     return respond.notFound(res, 'Doctor not found');
   }
@@ -66,6 +68,13 @@ const createRequest = asyncHandler(async (req, res) => {
     return respond.badRequest(
       res,
       'You can message this doctor directly — no request needed'
+    );
+  }
+
+  if (!(await canRequestMessage(callerId, toUserId))) {
+    return respond.forbidden(
+      res,
+      'This doctor is not accepting message requests from outside their network'
     );
   }
 
@@ -183,8 +192,12 @@ const pendingCount = asyncHandler(async (req, res) => {
 
 /**
  * POST /api/message-requests/:id/accept
+ * Accept → open DM (no chat / Seen until this step).
  */
 const acceptRequest = asyncHandler(async (req, res) => {
+  const Channel = require('../channels/channel.model');
+  const { CHANNEL_TYPES } = require('../../constants');
+
   const request = await MessageRequest.findById(req.params.id)
     .populate('fromUserId', userSelect)
     .populate('toUserId', userSelect);
@@ -200,8 +213,56 @@ const acceptRequest = asyncHandler(async (req, res) => {
   request.status = MESSAGE_REQUEST_STATUS.ACCEPTED;
   await request.save();
 
+  const fromId = request.fromUserId._id.toString();
+  const toId = request.toUserId._id.toString();
+  const sortedMembers = [fromId, toId].sort();
+  const channel = await Channel.findOneAndUpdate(
+    {
+      type: CHANNEL_TYPES.DIRECT,
+      members: { $all: sortedMembers, $size: 2 },
+    },
+    {
+      $setOnInsert: {
+        spaceId: null,
+        type: CHANNEL_TYPES.DIRECT,
+        members: [request.fromUserId._id, request.toUserId._id],
+        createdBy: req.user._id,
+        name: null,
+      },
+    },
+    { upsert: true, new: true }
+  );
+
+  const populated = await Channel.findById(channel._id)
+    .populate(
+      'members',
+      'name displayTitle role speciality avatarUrl availability lastSeenAt'
+    )
+    .lean();
+
+  // Lightweight enrich (peer for current viewer) — mirrors channel.controller
+  const peer = (populated.members || []).find(
+    (m) => m._id.toString() !== req.user._id.toString()
+  );
+  const enrichedChannel = {
+    ...populated,
+    id: populated._id.toString(),
+    peer: peer
+      ? {
+          _id: peer._id,
+          name: peer.name,
+          displayTitle: peer.displayTitle,
+          role: peer.role,
+          speciality: peer.speciality,
+          avatarUrl: peer.avatarUrl,
+          availability: peer.availability,
+          lastSeenAt: peer.lastSeenAt,
+        }
+      : null,
+  };
+
   await sendNotification({
-    userId: request.fromUserId._id.toString(),
+    userId: fromId,
     type: NOTIFICATION_TYPES.MESSAGE_REQUEST,
     title: 'Request accepted',
     body: `${req.user.name} accepted your message request`,
@@ -211,12 +272,14 @@ const acceptRequest = asyncHandler(async (req, res) => {
       messageRequestId: request._id.toString(),
       toUserId: req.user._id.toString(),
       accepted: true,
+      channelId: channel._id.toString(),
     },
     actor: req.user,
   });
 
   return respond.ok(res, 'Request accepted', {
     request: serializeRequest(request, req.user._id),
+    channel: enrichedChannel,
   });
 });
 

@@ -168,6 +168,41 @@ class HandoffRepository extends BaseRepository {
     );
   }
 
+  /// `POST /api/handoffs/:id/notes`
+  Future<HandoffModel> addNote(
+    String handoffId, {
+    required String text,
+    String kind = 'note',
+  }) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.handoffNotes(handoffId),
+        data: {'text': text, 'kind': kind},
+        parser: (json) =>
+            parseNested(json, 'handoff', HandoffModel.fromJson),
+      ),
+    );
+  }
+
+  /// `POST /api/handoffs/:id/reassign`
+  Future<HandoffModel> reassignHandoff(
+    String handoffId, {
+    required String toUserId,
+    String note = '',
+  }) {
+    return execute(
+      () => apiClient.post(
+        ApiEndpoints.reassignHandoff(handoffId),
+        data: {
+          'toUserId': toUserId,
+          if (note.isNotEmpty) 'note': note,
+        },
+        parser: (json) =>
+            parseNested(json, 'handoff', HandoffModel.fromJson),
+      ),
+    );
+  }
+
   /// `DELETE /api/handoffs/:id` — draft only.
   Future<void> deleteHandoff(String handoffId) {
     return execute(() => apiClient.delete(ApiEndpoints.handoffById(handoffId)));
