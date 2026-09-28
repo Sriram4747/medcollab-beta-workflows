@@ -579,7 +579,7 @@ async function execute(c) {
       ? { httpStatus: 'not applicable', invariant: 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
       : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
     actual: realtime
-      ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!c.evidence.invariantHeld, authenticatedControl: c.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
+      ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!ctx.evidence.invariantHeld, authenticatedControl: ctx.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
       : { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
