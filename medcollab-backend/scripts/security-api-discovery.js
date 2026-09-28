@@ -253,8 +253,10 @@ require('./security/suites/message-requests')({ add, ids });
 require('./security/suites/extended-api')({ add, ids });
 require('./security/suites/media')({ add, ids });
 require('./security/suites/realtime')({ add, ids });
+require('./security/suites/phase0-repairs')({ add, ids });
 
 let mongoose, models, users;
+let fixtureUserBaseline;
 const tokens = {};
 const results = [];
 let fatal = null;
@@ -287,6 +289,11 @@ async function reset() {
   // Exact scratch IDs plus resources created by fixture actors.
   // The fixture users exist only in the disposable local vocle_ci database.
   const fixtureUserIds = Object.values(users).map((user) => user._id);
+  await models.OTP.deleteMany({ phone: { $in: Object.values(users).map(user => user.phone) } });
+  for (const [actor, user] of Object.entries(users)) {
+    if (!fixtureUserBaseline?.[actor]) continue;
+    await models.User.findByIdAndUpdate(user._id, fixtureUserBaseline[actor], { runValidators: true });
+  }
   const fixtureSpaces = await models.Space.find({ createdBy: { $in: fixtureUserIds } }).select('_id').lean();
   const fixtureSpaceIds = fixtureSpaces.map((space) => space._id);
   const directChannels = await models.Channel.find({ type: 'direct', createdBy: { $in: fixtureUserIds } }).select('_id').lean();
@@ -337,8 +344,12 @@ function handoffBody() {
 async function snapshot() {
   const state = {};
   const fixtureUserIds = Object.values(users).map((user) => user._id);
-  for (const [name, model] of Object.entries(models).filter(([n]) => n !== 'User')) {
-    const query = name === 'Space'
+  for (const [name, model] of Object.entries(models)) {
+    const query = name === 'User'
+      ? { _id: { $in: fixtureUserIds } }
+      : name === 'OTP'
+        ? { phone: { $in: Object.values(users).map(user => user.phone) } }
+      : name === 'Space'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { createdBy: { $in: fixtureUserIds } }] }
       : name === 'Channel'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { type: 'direct', createdBy: { $in: fixtureUserIds } }] }
@@ -349,7 +360,12 @@ async function snapshot() {
           : name === 'Notification'
             ? { $or: [{ userId: { $in: fixtureUserIds } }, { actorId: { $in: fixtureUserIds } }, { referenceId: { $in: Object.values(ids) } }] }
             : { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] };
-    state[name] = await model.find(query).sort({ _id: 1 }).lean();
+    const records = await model.find(query).sort({ _id: 1 }).lean();
+    // lastSeenAt is intentionally volatile and unrelated to an API action's
+    // ownership result. Everything else on synthetic users remains tracked.
+    state[name] = name === 'User'
+      ? records.map(({ lastSeenAt, updatedAt, ...user }) => user)
+      : records;
   }
   return JSON.stringify(state);
 }
@@ -375,7 +391,9 @@ async function settledSnapshot() {
 }
 async function verifyResetState() {
   const fixtureUserIds = Object.values(users).map(user => user._id);
-  const [spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
+  const [usersCount, otps, spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
+    models.User.countDocuments({ _id: { $in: fixtureUserIds } }),
+    models.OTP.countDocuments({ phone: { $in: Object.values(users).map(user => user.phone) } }),
     models.Space.countDocuments({ createdBy: { $in: fixtureUserIds } }),
     models.Channel.countDocuments({ $or: [
       { _id: { $in: Object.values(ids) } },
@@ -400,8 +418,8 @@ async function verifyResetState() {
     ] }),
   ]);
   assert.deepEqual(
-    { spaces, channels, messages, handoffs, requests, notifications },
-    { spaces: 2, channels: 5, messages: 6, handoffs: 1, requests: 4, notifications: 0 },
+    { usersCount, otps, spaces, channels, messages, handoffs, requests, notifications },
+    { usersCount: 9, otps: 0, spaces: 2, channels: 5, messages: 6, handoffs: 1, requests: 4, notifications: 0 },
     'Fixture reset did not restore the exact controlled baseline',
   );
 }
@@ -555,9 +573,14 @@ async function execute(c) {
       (r.status < 300 && denial) || (denial && !unchanged) || (denial && !deniedResponseDataAbsent)
         ? 'likely security finding'
         : 'ambiguous / requires manual investigation');
+  const realtime = c.method === 'SOCKET';
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
-    expected: { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
-    actual: { status: c.method === 'SOCKET' ? null : r.status, healthStatus: c.method === 'SOCKET' ? r.status : undefined, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
+    expected: realtime
+      ? { httpStatus: 'not applicable', invariant: 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
+      : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
+    actual: realtime
+      ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!c.evidence.invariantHeld, authenticatedControl: c.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
+      : { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
   results.push(result);
@@ -643,7 +666,13 @@ function report() {
         result.report.expectedSecurityBehaviour,
         '',
         '**Actual result:**',
-        result.method === 'SOCKET' ? `- Separate backend health status: ${result.actual.healthStatus}; socket events have no HTTP response status.` : `- HTTP status: ${result.actual.status}`,
+        result.method === 'SOCKET' ? '- HTTP expectation/status: not applicable (raw measured HTTP status remains null).' : `- HTTP status: ${result.actual.status}`,
+        ...(result.method === 'SOCKET' ? [
+          `- Health status: ${result.actual.healthStatus}.`,
+          `- Invariant: ${result.actual.invariant ? 'held' : 'not held'}.`,
+          `- Authenticated control: ${result.actual.authenticatedControl === true ? 'observed' : result.actual.authenticatedControl === false ? 'not observed' : 'not applicable for this scenario'}.`,
+          `- Event evidence: \`${JSON.stringify(result.actual.eventEvidence)}\`.`,
+        ] : []),
         `- Request succeeded: ${result.actual.success === true ? 'yes' : result.actual.success === false ? 'no' : 'not represented by the expected JSON envelope'}`,
         `- State check: ${state}.`,
         `- Rejection payload check: ${result.expected.successfulEnvelope ? 'not applicable' : result.actual.deniedResponseDataAbsent ? 'no success data returned' : 'response exposed a success data payload'}.`,
@@ -676,6 +705,7 @@ async function main() {
   stage = 'database and authentication preflight';
   mongoose = require('mongoose');
   models = Object.fromEntries(['User', 'Space', 'Channel', 'Message', 'Handoff', 'Notification'].map(n => [n, require(`../src/features/${n === 'Handoff' ? 'handoffs' : n.toLowerCase() + 's'}/${n.toLowerCase()}.model`)]));
+  models.OTP = require('../src/features/auth/otp.model');
   models.MessageRequest = require('../src/features/message-requests/messageRequest.model');
   await mongoose.connect(URI, { serverSelectionTimeoutMS: 10000 });
   users = {};
@@ -691,6 +721,11 @@ async function main() {
   // deterministic placeholder resolution but must never receive a test token.
   users.I = await models.User.findOne({ phone: '+15550000009', isActive: false, isOnboarded: true, isVerified: true });
   assert.ok(users.I, 'Inactive target fixture identity missing');
+  fixtureUserBaseline = Object.fromEntries(Object.entries(users).map(([actor, user]) => {
+    const baseline = user.toObject();
+    delete baseline._id; delete baseline.__v; delete baseline.createdAt; delete baseline.updatedAt; delete baseline.lastSeenAt;
+    return [actor, baseline];
+  }));
   await health();
   for (const c of cases) await execute(c);
   await health();

@@ -57,7 +57,12 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
     addDm('read direct-message member metadata', actor, 'GET', `/api/channels/${dm}/members`, [participant ? 200 : actor === 'anonymous' ? 401 : 403], undefined, {
       category: 'direct-member-metadata-isolation',
       sources: [...directSources, 'src/features/channels/channel.controller.js:getChannelMembers'],
-      check: participant ? (body, ctx) => exactlyMembers({ members: body.data?.members }, ctx.users.A._id, ctx.users.B._id) : undefined,
+      check: actor === 'anonymous' ? undefined : (body, ctx) => {
+        const members = body.data?.members || [];
+        ctx.evidence.returnedMemberIds = members.map(member => String(member._id)).sort();
+        ctx.evidence.returnedMemberFields = [...new Set(members.flatMap(member => Object.keys(member || {})))].sort();
+        return participant ? exactlyMembers({ members }, ctx.users.A._id, ctx.users.B._id) : true;
+      },
     });
     addDm('read direct-message messages', actor, 'GET', mp, [participant ? 200 : actor === 'anonymous' ? 401 : 403], undefined, {
       category: 'direct-participant-access',
@@ -84,15 +89,11 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
       await persistedPair(ctx, dm, ctx.users.A._id, ctx.users.B._id) &&
       await ctx.models.Channel.countDocuments({ type: 'direct', members: { $all: [ctx.users.A._id, ctx.users.B._id], $size: 2 } }) === 1,
   });
-  addDm('same-institution DM creation is pair-idempotent', 'A', 'POST', '/api/channels/dm', [200], { userId: ':D' }, {
-    category: 'direct-known-user-idempotence',
-    check: async (body, ctx) => {
-      const channel = body.data?.channel;
-      if (!channel || !exactlyMembers(channel, ctx.users.A._id, ctx.users.D._id)) return false;
-      const again = await ctx.http('A', 'POST', '/api/channels/dm', { userId: String(ctx.users.D._id) });
-      const count = await ctx.models.Channel.countDocuments({ type: 'direct', members: { $all: [ctx.users.A._id, ctx.users.D._id], $size: 2 } });
-      return again.status === 200 && again.data?.success === true && again.data?.data?.channel?._id === channel._id && count === 1;
-    },
+  addDm('same-institution alone cannot create a DM', 'A', 'POST', '/api/channels/dm', [403], { userId: ':D' }, {
+    category: 'direct-known-user-denial',
+    check: async (_body, ctx) => await ctx.models.Channel.countDocuments({
+      type: 'direct', members: { $all: [ctx.users.A._id, ctx.users.D._id], $size: 2 },
+    }) === 0,
   });
   addDm('accepted message-request permits DM creation', 'E', 'POST', '/api/channels/dm', [200], { userId: ':H' }, {
     category: 'direct-accepted-request-binding',
@@ -100,7 +101,21 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
       await persistedPair(ctx, body.data.channel._id, ctx.users.E._id, ctx.users.H._id),
   });
   addDm('unrelated identity cannot create a DM', 'E', 'POST', '/api/channels/dm', [403], { userId: ':F' }, { category: 'direct-unrelated-identity' });
-  addDm('self DM is rejected', 'E', 'POST', '/api/channels/dm', [400], { userId: ':E' }, { category: 'direct-self-target' });
+  addDm('self DM creates caller-only self notes', 'E', 'POST', '/api/channels/dm', [200], { userId: ':E' }, {
+    category: 'direct-self-notes-isolation',
+    check: async (body, ctx) => {
+      const channel = body.data?.channel;
+      const persisted = channel?._id && await ctx.models.Channel.findById(channel._id).lean();
+      const callerOnly = persisted && persisted.type === 'direct' && persisted.isSelfNotes === true && !persisted.spaceId &&
+        String(persisted.createdBy) === String(ctx.users.E._id) && (persisted.members || []).length === 1 &&
+        String(persisted.members[0]) === String(ctx.users.E._id);
+      if (!callerOnly) return false;
+      const replay = await ctx.http('E', 'POST', '/api/channels/dm', { userId: String(ctx.users.E._id) });
+      const outsider = await ctx.http('D', 'GET', `/api/channels/${channel._id}`);
+      return replay.status === 200 && replay.data?.data?.channel?._id === channel._id && outsider.status === 403 &&
+        await ctx.models.Channel.countDocuments({ type: 'direct', isSelfNotes: true, members: { $all: [ctx.users.E._id], $size: 1 } }) === 1;
+    },
+  });
   addDm('inactive DM target is not eligible through relationships', 'A', 'POST', '/api/channels/dm', [403], { userId: ':I' }, { category: 'direct-inactive-target' });
   addDm('absent DM target is not found', 'E', 'POST', '/api/channels/dm', [404], { userId: ids.absentUser }, { category: 'direct-absent-target' });
   addDm('malformed DM target is rejected', 'E', 'POST', '/api/channels/dm', [400], { userId: 'not-an-id' }, { category: 'direct-target-schema' });

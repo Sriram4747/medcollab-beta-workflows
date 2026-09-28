@@ -28,12 +28,35 @@ module.exports = ({ add, ids }) => {
   for (const [actor, suffix, visible] of [['A', '?type=sent', true], ['B', '?type=received', false], ['C', '', false], ['B', '?type=received&status=draft', false]]) register('handoff draft inbox privacy ' + suffix, actor, 'GET', '/api/handoffs' + suffix, [200], undefined, {
     prepare: draft, check: (b, c) => { const list = b.data?.handoffs; c.evidence.draftDisclosed = list?.some(h => h._id === ids.handoff && h.shiftSummary === 'DraftCanary'); return Array.isArray(list) && (visible ? list.length === 1 && c.evidence.draftDisclosed : list.length === 0); },
   });
-  register('handoff draft direct receiver privacy', 'B', 'GET', `/api/handoffs/${ids.handoff}`, [403, 404], undefined, { prepare: draft });
+  register('handoff draft direct receiver privacy', 'B', 'GET', `/api/handoffs/${ids.handoff}`, [403, 404], undefined, {
+    prepare: draft,
+    check: (body, c) => {
+      const handoff = body.data?.handoff;
+      c.evidence.returnedHandoffId = handoff?._id || null;
+      c.evidence.returnedHandoffFields = handoff ? Object.keys(handoff).sort() : [];
+      return true;
+    },
+  });
   for (const actor of ['A', 'B', 'D']) register('search draft handoff privacy', actor, 'GET', '/api/search?q=DraftCanary&type=handoffs', [200], undefined, {
     prepare: async c => { await draft(c); await c.models.Space.findByIdAndUpdate(ids.space, { $push: { members: { userId: c.users.D._id, role: 'member' } } }); const control = await c.http('A', 'GET', '/api/search?q=DraftCanary&type=handoffs'); if (control.status !== 200 || control.data?.data?.handoffs?.length !== 1) throw Error('Draft search control failed'); },
     check: (b, c) => { const list = b.data?.handoffs; c.evidence.draftDisclosed = list?.some(h => h._id === ids.handoff && h.shiftSummary === 'DraftCanary'); return Array.isArray(list) && (actor === 'A' ? list.length === 1 && c.evidence.draftDisclosed : list.length === 0); },
   });
-  for (const suffix of ['', '/members', '/messages']) register('private group excluded member read ' + suffix, 'B', 'GET', `/api/channels/${ids.channel}${suffix}`, [403], undefined, { prepare: privatePrepare });
+  for (const suffix of ['', '/members', '/messages']) register('private group excluded member read ' + suffix, 'B', 'GET', `/api/channels/${ids.channel}${suffix}`, [403], undefined, {
+    prepare: privatePrepare,
+    check: (body, c) => {
+      if (suffix === '') {
+        const channel = body.data?.channel;
+        c.evidence.returnedChannelId = channel?._id || null;
+        c.evidence.returnedChannelFields = channel ? Object.keys(channel).sort() : [];
+      }
+      if (suffix === '/members') {
+        const members = body.data?.members || [];
+        c.evidence.returnedMemberIds = members.map(member => String(member._id)).sort();
+        c.evidence.returnedMemberFields = [...new Set(members.flatMap(member => Object.keys(member || {})))].sort();
+      }
+      return true;
+    },
+  });
   for (const threadId of [ids.otherMessage, ids.dmOtherMessage]) register('direct body foreign thread binding ' + threadId, 'A', 'POST', `/api/channels/${ids.channel}/messages`, [400, 403, 404], { content: { text: 'Cross-context canary' }, threadId }, {
     module: 'Cross-module', category: 'foreign-resource', check: async (b, c) => {
       const child = b.data?.message?._id && await c.models.Message.findById(b.data.message._id).lean();

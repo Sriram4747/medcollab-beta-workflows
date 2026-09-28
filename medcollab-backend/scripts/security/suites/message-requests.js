@@ -38,6 +38,16 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
       throw new Error('Message-request preparation did not persist the required pending relationship');
     }
   };
+  const optInTarget = async (ctx, actor) => {
+    const target = await ctx.models.User.findById(ctx.users[actor]._id).select('notifications').lean();
+    const original = target?.notifications?.allowMessageRequestsFromAnyone;
+    await ctx.models.User.findByIdAndUpdate(ctx.users[actor]._id, { 'notifications.allowMessageRequestsFromAnyone': true });
+    ctx.cleanup.push(() => ctx.models.User.findByIdAndUpdate(ctx.users[actor]._id, { 'notifications.allowMessageRequestsFromAnyone': original }));
+    const { canRequestMessage } = require('../../../src/utils/knownUsers');
+    if (!await canRequestMessage(ctx.users[ctx.requestActor]._id, ctx.users[actor]._id)) {
+      throw new Error(`Request eligibility preparation failed for ${ctx.requestActor}->${actor}`);
+    }
+  };
 
   addRequest('list received pending requests', 'F', 'GET', base, [200], undefined, {
     category: 'message-request-list-isolation',
@@ -71,26 +81,44 @@ module.exports = function registerMessageRequestCases({ add, ids }) {
   addRequest('anonymous caller cannot read pending count', 'anonymous', 'GET', `${base}/pending-count`, [401], undefined, { category: 'message-request-anonymous' });
 
   addRequest('reject message request to self', 'E', 'POST', base, [400], { toUserId: ':E' }, { category: 'message-request-self-target' });
-  addRequest('known same-institution user needs no message request', 'A', 'POST', base, [400], { toUserId: ':D' }, { category: 'message-request-known-user' });
+  addRequest('same-institution opted-out user denies message request', 'A', 'POST', base, [403], { toUserId: ':D' }, {
+    category: 'message-request-known-user-denial',
+    check: async (_body, ctx) => await exactPairCount(ctx, 'A', 'D') === 0,
+  });
   addRequest('pending request is idempotent for the sender', 'E', 'POST', base, [200], { toUserId: ':F' }, {
     category: 'message-request-pending-replay',
+    prepare: async ctx => { ctx.requestActor = 'E'; await optInTarget(ctx, 'F'); },
     check: async (body, ctx) => body.data?.request?.id === ids.requestPending &&
       body.data?.request?.direction === 'sent' && await exactPairCount(ctx, 'E', 'F', 'pending') === 1,
   });
   addRequest('reciprocal pending request exposes accept-incoming only to sender', 'F', 'POST', base, [200], { toUserId: ':E' }, {
     category: 'message-request-reciprocal-pending',
+    prepare: async ctx => { ctx.requestActor = 'F'; await optInTarget(ctx, 'E'); },
     check: async (body, ctx) => body.data?.request?.id === ids.requestPending && body.data?.action === 'accept_incoming' &&
       body.data?.request?.direction === 'received' && await exactPairCount(ctx, 'E', 'F', 'pending') === 1 &&
       await exactPairCount(ctx, 'F', 'E') === 0,
   });
   addRequest('declined relationship can create a fresh request', 'E', 'POST', base, [201], { toUserId: ':G', introMessage: 'Follow-up controlled request' }, {
     category: 'message-request-declined-transition',
+    prepare: async ctx => { ctx.requestActor = 'E'; await optInTarget(ctx, 'G'); },
     check: async (body, ctx) => body.data?.request?.status === 'pending' && body.data?.request?.direction === 'sent' &&
-      await exactPairCount(ctx, 'E', 'G', 'pending') === 1 && await exactPairCount(ctx, 'E', 'G', 'declined') === 1,
+      body.data?.request?.id !== ids.requestDeclined && await exactPairCount(ctx, 'E', 'G', 'pending') === 1 &&
+      await ctx.models.MessageRequest.findById(ids.requestDeclined).then(request => request?.status === 'declined') &&
+      await exactPairCount(ctx, 'E', 'G', 'declined') === 1,
   });
   addRequest('accepted relationship uses DM rather than a new request', 'E', 'POST', base, [400], { toUserId: ':H' }, { category: 'message-request-accepted-transition' });
-  addRequest('blocked relationship rejects a new request from sender', 'F', 'POST', base, [403], { toUserId: ':G' }, { category: 'message-request-blocked-transition' });
-  addRequest('blocked relationship rejects a reciprocal request', 'G', 'POST', base, [403], { toUserId: ':F' }, { category: 'message-request-blocked-transition' });
+  addRequest('blocked relationship rejects a new request from sender', 'F', 'POST', base, [403], { toUserId: ':G' }, {
+    category: 'message-request-blocked-transition',
+    prepare: async ctx => { ctx.requestActor = 'F'; await optInTarget(ctx, 'G'); },
+    check: async (_body, ctx) => await exactPairCount(ctx, 'F', 'G', 'blocked') === 1 &&
+      await ctx.models.Channel.countDocuments({ type: 'direct', members: { $all: [ctx.users.F._id, ctx.users.G._id], $size: 2 } }) === 0,
+  });
+  addRequest('blocked relationship rejects a reciprocal request', 'G', 'POST', base, [403], { toUserId: ':F' }, {
+    category: 'message-request-blocked-transition',
+    prepare: async ctx => { ctx.requestActor = 'G'; await optInTarget(ctx, 'F'); },
+    check: async (_body, ctx) => await exactPairCount(ctx, 'F', 'G', 'blocked') === 1 &&
+      await ctx.models.Channel.countDocuments({ type: 'direct', members: { $all: [ctx.users.F._id, ctx.users.G._id], $size: 2 } }) === 0,
+  });
   addRequest('inactive request target is not exposed', 'E', 'POST', base, [404], { toUserId: ':I' }, { category: 'message-request-inactive-target' });
   addRequest('absent request target is not exposed', 'E', 'POST', base, [404], { toUserId: ids.absentUser }, { category: 'message-request-absent-target' });
   addRequest('malformed request target is rejected by model/controller', 'E', 'POST', base, [400], { toUserId: 'not-an-id' }, { category: 'message-request-target-schema' });

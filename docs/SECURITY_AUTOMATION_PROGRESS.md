@@ -1,3 +1,13 @@
+# Current security analysis — 2026-09-28
+
+## Phase 0 implementation pending isolated execution
+
+Phase 0 test/evidence repairs are implemented locally, without any application or workflow changes. The original 352 registrations remain in order; appended opt-out denial controls are VOCLE-353 through VOCLE-355. Corrected legacy semantics are 168 (same-institution-only DM denied), 171 (caller-only self notes with replay and outsider isolation), and 218 (same-institution opted-out request denied). Cases 219–221 and 223–224 now explicitly opt in their target, assert effective `canRequestMessage` eligibility, and restore the fixture preference in cleanup; 219–221 retain lifecycle IDs/direction/count expectations and 223–224 assert the blocked gate without creating a DM.
+
+Fixture snapshots/resets now cover synthetic User records (excluding intentionally volatile `lastSeenAt`) and fixture-phone OTP records. Socket output now declares HTTP status not applicable while retaining raw `null`, health, invariant/control/event evidence. Cases 159/268/272/273 record sanitized returned IDs and field names only. Syntax and manifest checks pass locally: **355 cases**, with all original case positions unchanged and no execution result claimed. Docker is unavailable on this workstation, so the required loopback MongoDB/Express run and regenerated four reports remain pending in the existing isolated GitHub Actions workflow.
+
+---
+
 # Current security analysis — 2026-09-26
 
 Authoritative reviewed evidence: [run 36228675577](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36228675577), executed source `91d237294625288bd7f304871a4df3a9ea50fcdd`: **352/352 executed, 312 passed, 40 observations, infrastructure healthy**. This supersedes the execution summaries below.
