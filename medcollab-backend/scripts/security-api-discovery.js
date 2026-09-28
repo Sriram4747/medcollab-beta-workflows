@@ -635,7 +635,11 @@ function report() {
     '',
     '## Security Observations Requiring Review',
     '',
-    ...(unexpected.length ? unexpected.map(result => `- [${result.caseId} — ${result.name}](#${anchorFor(result)}): expected HTTP ${result.expected.statuses.join('/')}, received HTTP ${result.actual.status}; ${result.classification}.`) : ['No observations were recorded in this execution.']),
+    ...(unexpected.length ? unexpected.map(result => {
+      const expectedStatus = result.expected.statuses?.join('/') || 'not applicable';
+      const actualStatus = result.method === 'SOCKET' ? 'not applicable' : result.actual.status;
+      return `- [${result.caseId} — ${result.name}](#${anchorFor(result)}): expected HTTP ${expectedStatus}, received HTTP ${actualStatus}; ${result.classification}.`;
+    }) : ['No observations were recorded in this execution.']),
     '',
     'Observations are not confirmed vulnerabilities. A finding is only labelled confirmed after separate review and reproduction.',
     '',
