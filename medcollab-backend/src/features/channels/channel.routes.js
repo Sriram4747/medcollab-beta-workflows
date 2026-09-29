@@ -90,11 +90,41 @@ channelRouter.post(
 channelRouter.post(
   '/dm/group',
   [
-    body('userIds').isArray({ min: 2 }).withMessage('userIds must be an array'),
+    body('userIds').isArray({ min: 1 }).withMessage('userIds must be an array'),
     body('userIds.*').isMongoId().withMessage('Invalid user ID'),
     handleValidationErrors,
   ],
   channelController.createGroupDM
+);
+
+// Alias — older clients / proxies may block nested /dm/group
+channelRouter.post(
+  '/group-dm',
+  [
+    body('userIds').isArray({ min: 1 }).withMessage('userIds must be an array'),
+    body('userIds.*').isMongoId().withMessage('Invalid user ID'),
+    handleValidationErrors,
+  ],
+  channelController.createGroupDM
+);
+
+/**
+ * @route   POST /api/channels/:id/expand
+ * @desc    Add people to a Needl / DM (Slack-style history options)
+ */
+channelRouter.post(
+  '/:id/expand',
+  validateMongoId('id'),
+  [
+    body('userIds').isArray({ min: 1 }).withMessage('userIds must be an array'),
+    body('userIds.*').isMongoId().withMessage('Invalid user ID'),
+    body('history')
+      .optional()
+      .isIn(['all', 'today', 'none'])
+      .withMessage('history must be all, today, or none'),
+    handleValidationErrors,
+  ],
+  channelController.expandDM
 );
 
 /**

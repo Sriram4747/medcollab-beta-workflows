@@ -67,6 +67,8 @@ abstract final class ApiEndpoints {
   static String handoffNotes(String id) => '$handoffs/$id/notes';
   static String reassignHandoff(String id) => '$handoffs/$id/reassign';
   static const String createGroupDm = '$channels/dm/group';
+  static const String createGroupDmAlias = '$channels/group-dm';
+  static String expandDm(String id) => '$channels/$id/expand';
   static String renameChannel(String id) => '$channels/$id';
   static const String needlThreads = '$users/me/needl';
 

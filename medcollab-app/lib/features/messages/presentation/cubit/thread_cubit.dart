@@ -109,8 +109,8 @@ class ThreadCubit extends Cubit<ThreadState> {
     required String mimeType,
   }) async {
     if (state.isSending) return;
-    if (bytes.length > 25 * 1024 * 1024) {
-      emit(state.copyWith(error: 'That file is over 25 MB'));
+    if (bytes.length > 50 * 1024 * 1024) {
+      emit(state.copyWith(error: 'That file is over 50 MB'));
       return;
     }
 

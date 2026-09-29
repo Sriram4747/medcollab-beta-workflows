@@ -196,11 +196,15 @@ class _StartDmPageState extends State<StartDmPage> {
   }
 
   Future<void> _createGroupDm() async {
-    if (_multiSelectIds.length < 2) return;
+    if (_multiSelectIds.isEmpty) return;
     setState(() => _busyUserId = 'group');
     try {
-      final channel = await AppDependencies.instance.channelRepository
-          .createGroupDm(_multiSelectIds.toList());
+      final ids = _multiSelectIds.toList();
+      final channel = ids.length == 1
+          ? await AppDependencies.instance.channelRepository
+              .createOrGetDM(ids.first)
+          : await AppDependencies.instance.channelRepository
+              .createGroupDm(ids);
       if (!mounted) return;
       openDmChat(
         context,
@@ -216,7 +220,7 @@ class _StartDmPageState extends State<StartDmPage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not create group DM')),
+        const SnackBar(content: Text('Could not create Needl')),
       );
     } finally {
       if (mounted) setState(() => _busyUserId = null);
@@ -506,44 +510,56 @@ class _StartDmPageState extends State<StartDmPage> {
       appBar: AppBar(
         title: Text(
           _multiSelectIds.isEmpty
-              ? 'New message'
+              ? 'New Needl'
               : '${_multiSelectIds.length} selected',
         ),
         backgroundColor: AppColors.background,
         actions: [
-          if (_multiSelectIds.length >= 2)
+          if (_multiSelectIds.isNotEmpty)
             TextButton(
               onPressed: _busyUserId != null ? null : _createGroupDm,
-              child: const Text('Create'),
+              child: Text(_multiSelectIds.length >= 2 ? 'Create Needl' : 'Message'),
             ),
         ],
       ),
       body: Column(
         children: [
           if (_multiSelectIds.isNotEmpty)
-            SizedBox(
-              height: 44,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                children: _multiSelectUsers.values
-                    .map(
-                      (u) => Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: InputChip(
-                          label: Text(u.displayName),
-                          onDeleted: () => _toggleMulti(u),
-                        ),
-                      ),
-                    )
-                    .toList(),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+              color: AppColors.surfaceCard,
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _multiSelectUsers.values.map((u) {
+                  final label = u.displayName.trim().isEmpty
+                      ? 'Doctor'
+                      : u.displayName.trim();
+                  return InputChip(
+                    avatar: AppAvatar(
+                      name: label,
+                      imageUrl: u.avatarUrl,
+                      size: 24,
+                    ),
+                    label: Text(
+                      label,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    deleteIconColor: AppColors.textSecondary,
+                    onDeleted: () => _toggleMulti(u),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  );
+                }).toList(),
               ),
             ),
           Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
             child: AppSearchBar(
               controller: _searchController,
-              hintText: 'Name or mobile — long-press to multi-select',
+              hintText: 'Name or mobile — check boxes to start a Needl',
               onChanged: _onQueryChanged,
               onClear: () => _onQueryChanged(''),
             ),
@@ -613,7 +629,7 @@ class _StartDmPageState extends State<StartDmPage> {
                                         _userSubtitle(user),
                                         Text(
                                           selected
-                                              ? 'Selected for group DM'
+                                              ? 'Selected for Needl'
                                               : 'Tap profile · Message needs approval if new',
                                           style: Theme.of(context)
                                               .textTheme

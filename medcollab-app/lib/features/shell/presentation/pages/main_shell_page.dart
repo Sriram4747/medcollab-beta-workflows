@@ -8,6 +8,7 @@ import 'package:medcollab_app/features/messages_hub/presentation/pages/messages_
 import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:medcollab_app/features/notifications/presentation/pages/notifications_page.dart';
 import 'package:medcollab_app/features/profile/presentation/pages/profile_page.dart';
+import 'package:medcollab_app/core/router/shell_tab_history.dart';
 import 'package:medcollab_app/features/shell/presentation/cubit/nav_badges_cubit.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_nav_bar.dart';
 
@@ -28,6 +29,7 @@ class _MainShellPageState extends State<MainShellPage> {
   @override
   void initState() {
     super.initState();
+    ShellTabHistory.bind(widget.navigationShell);
     final deps = AppDependencies.instance;
     if (deps.socketClient.isConnected) {
       deps.socketClient.syncSpaceRooms();
@@ -40,7 +42,14 @@ class _MainShellPageState extends State<MainShellPage> {
     });
   }
 
+  @override
+  void didUpdateWidget(covariant MainShellPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    ShellTabHistory.bind(widget.navigationShell);
+  }
+
   void _onTap(int index) {
+    ShellTabHistory.visit(index);
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,

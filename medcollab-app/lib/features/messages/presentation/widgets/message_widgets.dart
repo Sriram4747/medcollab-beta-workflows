@@ -68,11 +68,126 @@ class MessageComposer extends StatelessWidget {
                 },
               ),
             ListTile(
-              leading: const Icon(Icons.attach_file_outlined),
+              leading: const Icon(Icons.insert_drive_file_outlined),
               title: const Text('Document / PDF'),
               onTap: () {
                 Navigator.pop(ctx);
                 onPickDocument?.call();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _insertAtCursor(String text) {
+    final value = controller.value;
+    final selection = value.selection;
+    final start = selection.start >= 0 ? selection.start : value.text.length;
+    final end = selection.end >= 0 ? selection.end : value.text.length;
+    final next = value.text.replaceRange(start, end, text);
+    controller.value = value.copyWith(
+      text: next,
+      selection: TextSelection.collapsed(offset: start + text.length),
+    );
+  }
+
+  void _showEmojiPicker(BuildContext context) {
+    const emojis = [
+      '👍', '🙏', '✅', '❌', '⚠️', '🚨',
+      '💉', '🩺', '💊', '🏥', '📋', '📝',
+      '😊', '😂', '😮', '😢', '🔥', '💯',
+      '👀', '🤝', '⏰', '📌', '➡️', '⬅️',
+    ];
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Quick emoji',
+                style: Theme.of(ctx).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final emoji in emojis)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        _insertAtCursor(emoji);
+                        focusNode?.requestFocus();
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Center(
+                          child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showShortcuts(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.alternate_email),
+              title: const Text('@ Mention someone'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _insertAtCursor('@');
+                focusNode?.requestFocus();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.priority_high),
+              title: const Text('Urgent note'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _insertAtCursor('Urgent: ');
+                focusNode?.requestFocus();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.assignment_turned_in_outlined),
+              title: const Text('Handoff note'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _insertAtCursor('Handoff — patient / bed / pending: ');
+                focusNode?.requestFocus();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.check_circle_outline),
+              title: const Text('Acknowledged'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _insertAtCursor('Acknowledged ✅');
+                focusNode?.requestFocus();
               },
             ),
           ],
@@ -99,79 +214,92 @@ class MessageComposer extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (canAttach)
+                IconButton(
+                  tooltip: 'Attach',
+                  onPressed: isBusy ? null : () => _showAttachMenu(context),
+                  icon: const Icon(Icons.add_circle_outline),
+                  color: AppColors.tealDark,
+                ),
               Expanded(
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  minLines: 1,
-                  maxLines: 5,
-                  textCapitalization: TextCapitalization.sentences,
-                  enabled: !isBusy,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textPrimary,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceInput,
+                    borderRadius: BorderRadius.circular(22),
                   ),
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: AppTextStyles.body.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                    filled: true,
-                    fillColor: AppColors.surfaceInput,
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide(
-                        color: AppColors.tealPrimary,
-                        width: 1.5,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          minLines: 1,
+                          maxLines: 5,
+                          textCapitalization: TextCapitalization.sentences,
+                          enabled: !isBusy,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.newline,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: hintText,
+                            hintStyle: AppTextStyles.body.copyWith(
+                              color: AppColors.textMuted,
+                            ),
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.fromLTRB(
+                              14,
+                              12,
+                              4,
+                              12,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                      IconButton(
+                        tooltip: 'Emoji',
+                        onPressed:
+                            isBusy ? null : () => _showEmojiPicker(context),
+                        icon: const Icon(Icons.emoji_emotions_outlined, size: 22),
+                        color: AppColors.textSecondary,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      IconButton(
+                        tooltip: 'Mention',
+                        onPressed: isBusy
+                            ? null
+                            : () {
+                                _insertAtCursor('@');
+                                focusNode?.requestFocus();
+                              },
+                        icon: const Icon(Icons.alternate_email, size: 20),
+                        color: AppColors.textSecondary,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      IconButton(
+                        tooltip: 'Shortcuts',
+                        onPressed:
+                            isBusy ? null : () => _showShortcuts(context),
+                        icon: const Icon(Icons.bolt_outlined, size: 20),
+                        color: AppColors.textSecondary,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              if (canAttach) ...[
-                const SizedBox(width: 6),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 1),
-                  child: Material(
-                    color: AppColors.surfaceInput,
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      onTap: isBusy ? null : () => _showAttachMenu(context),
-                      child: const SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Icon(
-                          Icons.attach_file_rounded,
-                          size: 20,
-                          color: AppColors.tealDark,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(width: 6),
+              const SizedBox(width: 4),
               Padding(
-                padding: const EdgeInsets.only(bottom: 1),
+                padding: const EdgeInsets.only(bottom: 2),
                 child: Material(
                   color: isBusy
                       ? AppColors.navyPrimary.withValues(alpha: 0.5)
@@ -1101,9 +1229,16 @@ class _MessageBody extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      message.localOnly ? 'Uploading…' : 'Tap to play',
+                      message.deliveryState == MessageDeliveryState.failed
+                          ? 'Failed — tap attach to retry'
+                          : message.localOnly
+                              ? 'Uploading…'
+                              : 'Tap to play',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: message.deliveryState ==
+                                    MessageDeliveryState.failed
+                                ? AppColors.statusError
+                                : AppColors.textSecondary,
                           ),
                     ),
                   ],

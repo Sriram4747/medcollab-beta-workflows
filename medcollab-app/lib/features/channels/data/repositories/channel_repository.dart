@@ -46,12 +46,38 @@ class ChannelRepository extends BaseRepository {
     );
   }
 
-  /// `POST /api/channels/dm/group`
+  /// `POST /api/channels/dm/group` (falls back to `/group-dm`)
   Future<ChannelModel> createGroupDm(List<String> userIds) {
+    return execute(() async {
+      try {
+        return await apiClient.post(
+          ApiEndpoints.createGroupDm,
+          data: {'userIds': userIds},
+          parser: (json) => parseNested(json, 'channel', ChannelModel.fromJson),
+        );
+      } on NotFoundException {
+        return apiClient.post(
+          ApiEndpoints.createGroupDmAlias,
+          data: {'userIds': userIds},
+          parser: (json) => parseNested(json, 'channel', ChannelModel.fromJson),
+        );
+      }
+    });
+  }
+
+  /// `POST /api/channels/:id/expand`
+  Future<ChannelModel> expandDm({
+    required String channelId,
+    required List<String> userIds,
+    required String history, // all | today | none
+  }) {
     return execute(
       () => apiClient.post(
-        ApiEndpoints.createGroupDm,
-        data: {'userIds': userIds},
+        ApiEndpoints.expandDm(channelId),
+        data: {
+          'userIds': userIds,
+          'history': history,
+        },
         parser: (json) => parseNested(json, 'channel', ChannelModel.fromJson),
       ),
     );

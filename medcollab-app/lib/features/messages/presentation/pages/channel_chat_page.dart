@@ -28,6 +28,7 @@ import 'package:medcollab_app/features/messages/presentation/widgets/message_wid
 import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
 import 'package:medcollab_app/features/media/data/services/document_open_service.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/needl_manage_sheets.dart';
 import 'package:medcollab_app/features/messages/presentation/widgets/forward_message_sheet.dart';
 import 'package:medcollab_app/shared/presentation/widgets/chat_network_image.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
@@ -638,6 +639,28 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                   color: AppColors.surfaceCard,
                   onSelected: (value) async {
                     switch (value) {
+                      case 'rename':
+                        await showRenameNeedlDialog(
+                          context,
+                          channelId: widget.channelId,
+                          currentName: title,
+                        );
+                        await _loadChannelContext();
+                        return;
+                      case 'add_people':
+                        await showAddNeedlPeopleSheet(
+                          context,
+                          channel: channel ??
+                              ChannelModel(
+                                id: widget.channelId,
+                                name: title,
+                                type: ChannelType.direct,
+                              ),
+                          existingMembers: _spaceMembers.isNotEmpty
+                              ? _spaceMembers
+                              : (channel?.members ?? const []),
+                        );
+                        return;
                       case 'peer':
                         await _showDmPeerCard(context, channel);
                         return;
@@ -660,8 +683,26 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                   },
                   itemBuilder: (ctx) {
                     if (_isDm) {
-                      return const [
-                        PopupMenuItem(
+                      return [
+                        const PopupMenuItem(
+                          value: 'rename',
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(Icons.edit_outlined),
+                            title: Text('Rename Needl'),
+                            dense: true,
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'add_people',
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(Icons.person_add_alt_1_outlined),
+                            title: Text('Add people'),
+                            dense: true,
+                          ),
+                        ),
+                        const PopupMenuItem(
                           value: 'peer',
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
@@ -670,7 +711,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             dense: true,
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'search',
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
@@ -679,7 +720,7 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             dense: true,
                           ),
                         ),
-                        PopupMenuItem(
+                        const PopupMenuItem(
                           value: 'info',
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,

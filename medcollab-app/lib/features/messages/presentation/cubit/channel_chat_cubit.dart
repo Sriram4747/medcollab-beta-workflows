@@ -220,8 +220,8 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     String? caption,
   }) async {
     if (state.isSending) return;
-    if (bytes.length > 25 * 1024 * 1024) {
-      emit(state.copyWith(error: 'That file is over 25 MB'));
+    if (bytes.length > 50 * 1024 * 1024) {
+      emit(state.copyWith(error: 'That file is over 50 MB'));
       return;
     }
 
@@ -414,8 +414,9 @@ class ChannelChatCubit extends Cubit<ChannelChatState> {
     final updated = List<MessageModel>.from(state.messages);
     updated[index] = updated[index].copyWith(
       deliveryState: MessageDeliveryState.failed,
+      localOnly: true,
     );
-    emit(state.copyWith(messages: updated));
+    emit(state.copyWith(messages: updated, isUploading: false, isSending: false));
   }
 
   void _replaceLocalMessage(String tempId, MessageModel message) {
