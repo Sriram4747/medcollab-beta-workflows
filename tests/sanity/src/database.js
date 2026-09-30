@@ -7,6 +7,7 @@ let OTP;
 let Message;
 let Notification;
 let Handoff;
+let SupportTicket;
 
 export async function connectDatabase() {
   const backendDirectory = process.env.SANITY_BACKEND_DIR;
@@ -19,6 +20,7 @@ export async function connectDatabase() {
   Message = backendRequire(join(backendDirectory, 'src/features/messages/message.model.js'));
   Notification = backendRequire(join(backendDirectory, 'src/features/notifications/notification.model.js'));
   Handoff = backendRequire(join(backendDirectory, 'src/features/handoffs/handoff.model.js'));
+  ({ SupportTicket } = backendRequire(join(backendDirectory, 'src/features/support/support.controller.js')));
   await mongoose.connect(uri, { serverSelectionTimeoutMS: 10_000 });
 }
 
@@ -44,4 +46,8 @@ export async function notificationFor(userId, referenceId) {
 
 export async function handoffById(id) {
   return Handoff.findById(id).lean();
+}
+
+export async function supportTicketById(id) {
+  return SupportTicket.findById(id).lean();
 }
