@@ -303,7 +303,7 @@ Implement `vocle-sanity.yml`, exact upstream SHA detection, artifact-backed base
 
 Implement bounded HTTP/socket clients, direct read-only MongoDB checks, MSG91-only interception, five synthetic identities, and authentication/profile, space, channel, and core messaging scenarios.
 
-**Implementation status (2026-09-30):** the bounded local-only HTTP helper and an exact-endpoint MSG91 preload are in place. The preload captures server-generated OTPs only in the private sanity inbox and returns a fixed widget-provider response for an opaque test token; it does not replace application controllers, services, models, or middleware. Fixture provisioning and live scenario execution remain pending.
+**Implementation status (2026-09-30):** the bounded local-only HTTP helper, exact-endpoint MSG91 preload, direct read-only Mongo helper, and seven authentication/profile scenario implementations are in place. The preload captures server-generated OTPs only in the private sanity inbox and returns a fixed widget-provider response for an opaque test token; it does not replace application controllers, services, models, or middleware. These scenarios are implemented but deliberately not run until the complete suite is ready; fixtures and the remaining journey modules are pending.
 
 ### Phase 4 — Collaboration journeys
 
