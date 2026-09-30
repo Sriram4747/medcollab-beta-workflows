@@ -141,7 +141,7 @@ jobs:
             [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-sanity-mongodb)" = healthy ] && break
             sleep 1
           done
-          [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-sanity-mongodb)" = healthy
+          [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-sanity-mongodb)" = healthy ]
           docker run --detach --rm --name vocle-sanity-backend --network container:vocle-sanity-mongodb \
             --read-only --tmpfs /tmp \
             --mount "type=bind,source=$PWD/target,target=/workspace,readonly" \
