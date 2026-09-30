@@ -152,7 +152,7 @@ jobs:
             -e JWT_SECRET="$SANITY_JWT_SECRET" -e JWT_REFRESH_SECRET="$SANITY_REFRESH_SECRET" \
             -e OTP_BYPASS=false -e MSG91_AUTH_KEY=dummy-msg91-key -e MSG91_TEMPLATE_ID=dummy-template \
             -e ALLOWED_ORIGINS=http://127.0.0.1:5000 -e API_BASE_URL=http://127.0.0.1:5000 \
-            -e SANITY_BACKEND_DIR=/workspace/medcollab-backend -e SANITY_PROVIDER_INBOX=/output/msg91-inbox.ndjson \
+            -e SANITY_BACKEND_DIR=/workspace/medcollab-backend -e SANITY_PROVIDER_INBOX=/output \
             -e NODE_OPTIONS=--require=/harness/tests/sanity/provider-preload.cjs \
             node:22 node src/server.js
           docker run --rm --network container:vocle-sanity-mongodb \
@@ -160,7 +160,7 @@ jobs:
             --mount "type=bind,source=$PWD/target,target=/target,readonly" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
             -e SANITY_OUTPUT_DIR=/output -e SANITY_BACKEND_DIR=/target/medcollab-backend \
-            -e SANITY_DATABASE_URI=mongodb://127.0.0.1:27017/vocle_sanity \
+            -e SANITY_DATABASE_URI=mongodb://127.0.0.1:27017/vocle_sanity -e SANITY_PROVIDER_INBOX=/output \
             -e SANITY_UPSTREAM_SHA="${{ needs.detect.outputs.upstream_sha }}" \
             -e SANITY_HARNESS_SHA="$(git -C harness rev-parse HEAD)" \
             node:22 node /harness/tests/sanity/src/runner.js --live

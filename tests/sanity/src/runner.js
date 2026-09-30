@@ -22,7 +22,8 @@ async function main() {
 const modules = ['live-runner.js', 'authentication-scenarios.js', 'spaces-and-channels-scenarios.js', 'messaging-scenarios.js', 'message-requests-and-conversations-scenarios.js', 'handoff-scenarios.js', 'media-scenarios.js', 'notification-scenarios.js', 'realtime-availability-scenarios.js', 'search-scenarios.js', 'support-scenarios.js'];
 const execute = (file) => new Promise((resolveRun) => {
   const child = spawn(process.execPath, [resolve(here, file)], { stdio: 'inherit', env: process.env });
-  child.on('exit', (code) => resolveRun({ file, code: code ?? 1 }));
+  const timer = setTimeout(() => child.kill('SIGTERM'), 90_000);
+  child.on('exit', (code, signal) => { clearTimeout(timer); resolveRun({ file, code: code ?? 1, timedOut: signal === 'SIGTERM' }); });
   child.on('error', () => resolveRun({ file, code: 1 }));
 });
 
