@@ -16,10 +16,11 @@ async function eventuallyNotification(label, userId, referenceId) {
   }
   throw new Error(`${label} was not persisted within 5 seconds (request state was persisted).`);
 }
-async function scenario(id, action) {
+async function scenario(id, action, prerequisite = true) {
   const startedAt = Date.now();
+  if (!prerequisite) { results.push({ id, status: 'blocked', durationMs: 0, error: 'Required request, conversation, or message fixture was not created.' }); return; }
   try { await action(); results.push({ id, status: 'passed', durationMs: Date.now() - startedAt }); }
-  catch (error) { results.push({ id, status: 'failed', durationMs: Date.now() - startedAt, error: error.message }); throw error; }
+  catch (error) { results.push({ id, status: 'failed', durationMs: Date.now() - startedAt, error: error.message }); console.error(`${id}: ${error.stack || error.message}`); }
 }
 async function send(channelId, token, text) {
   return expectSuccess(await request(`/api/channels/${channelId}/messages`, {
@@ -75,7 +76,7 @@ async function run() {
       assert(expectSuccess(fromList, 'sender DM list').channels.some((channel) => channel._id === dm._id), 'Accepted DM missing for sender.');
       assert(expectSuccess(toList, 'recipient DM list').channels.some((channel) => channel._id === dm._id), 'Accepted DM missing for recipient.');
       assert(notification?.metadata?.channelId?.toString() === dm._id, 'Acceptance notification was not persisted for sender.');
-    });
+    }, Boolean(acceptedRequest));
 
     await scenario('message-requests-03', async () => {
       const declined = expectSuccess(await request('/api/message-requests', {
@@ -93,7 +94,7 @@ async function run() {
         request('/api/channels/dm', { method: 'POST', token: people.D.token, body: { userId: people.A.userId } }),
       ]);
       assert(expectSuccess(fromA, 'reopen sender DM').channel._id === dm._id && expectSuccess(fromD, 'reopen recipient DM').channel._id === dm._id, 'Accepted DM did not reopen to one stable ID.');
-    });
+    }, Boolean(dm));
 
     await scenario('direct-and-group-conversations-02', async () => {
       dmMessage = await send(dm._id, people.A.token, marker('dm-message'));
@@ -103,7 +104,7 @@ async function run() {
       assert(expectSuccess(detail, 'DM detail').channel.peer?._id === people.A.userId, 'DM peer details were incorrect.');
       assert(expectSuccess(messages, 'DM messages').messages.some((message) => message._id === dmMessage._id), 'DM message was not readable.');
       assert(expectSuccess(sidebar, 'DM sidebar').channels.find((channel) => channel._id === dm._id)?.lastMessage?.text === marker('dm-message'), 'DM last-message preview was incorrect.');
-    });
+    }, Boolean(dm));
 
     await scenario('direct-and-group-conversations-03', async () => {
       await request(`/api/channels/${dm._id}/messages/read`, { method: 'POST', token: people.D.token, body: { messageIds: [dmMessage._id] } });
@@ -115,7 +116,7 @@ async function run() {
       const privateRead = await messageById(privateMessage._id);
       assert((read.readBy || []).filter((entry) => entry.userId.toString() === people.D.userId).length === 1, 'DM read receipt was not deduplicated.');
       assert(!(privateRead.readBy || []).some((entry) => entry.userId.toString() === people.D.userId), 'Read receipt was added despite disabled preference.');
-    });
+    }, Boolean(dm && dmMessage));
 
     await scenario('direct-and-group-conversations-04', async () => {
       const notes = expectSuccess(await request('/api/channels/dm', { method: 'POST', token: people.A.token, body: { userId: people.A.userId } }), 'open self notes').channel;
@@ -138,14 +139,16 @@ async function run() {
       assert(none.members.length === 3 && expectSuccess(noneMessages, 'no-history results').messages.length === 0, 'No-history expansion copied messages.');
       assert(all.members.length === 3 && expectSuccess(allMessages, 'all-history results').messages.some((message) => message.content.text === marker('expansion-source')), 'All-history expansion did not copy source content.');
       assert(expectSuccess(sourceMessages, 'source history').messages.some((message) => message._id === sourceMessage._id), 'Expansion changed source conversation history.');
-    });
+    }, Boolean(dm));
   } finally {
     await closeDatabase();
     const output = resolve(process.env.SANITY_OUTPUT_DIR || 'output');
     await mkdir(output, { recursive: true });
     await writeFile(resolve(output, 'message-requests-and-conversations-results.json'), `${JSON.stringify({ expected: 8, results }, null, 2)}\n`);
   }
-  console.log('Message-request and conversation scenarios passed: 8/8.');
+  const passed = results.filter((result) => result.status === 'passed').length;
+  console.log(`Message-request and conversation scenarios passed: ${passed}/8.`);
+  if (passed !== 8) process.exitCode = 1;
 }
 
 run().catch(async (error) => { console.error(error.stack || error.message); await closeDatabase(); process.exitCode = 1; });
