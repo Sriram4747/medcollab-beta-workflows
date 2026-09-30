@@ -144,17 +144,26 @@ jobs:
           docker run --detach --rm --name vocle-sanity-backend --network container:vocle-sanity-mongodb \
             --read-only --tmpfs /tmp \
             --mount "type=bind,source=$PWD/target,target=/workspace,readonly" \
+            --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-uploads,target=/workspace/medcollab-backend/uploads" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
             --workdir /workspace/medcollab-backend \
             -e NODE_ENV=test -e PORT=5000 -e MONGODB_URI=mongodb://127.0.0.1:27017/vocle_sanity \
             -e JWT_SECRET="$SANITY_JWT_SECRET" -e JWT_REFRESH_SECRET="$SANITY_REFRESH_SECRET" \
             -e OTP_BYPASS=false -e MSG91_AUTH_KEY=dummy-msg91-key -e MSG91_TEMPLATE_ID=dummy-template \
             -e ALLOWED_ORIGINS=http://127.0.0.1:5000 -e API_BASE_URL=http://127.0.0.1:5000 \
+            -e SANITY_BACKEND_DIR=/workspace/medcollab-backend -e SANITY_PROVIDER_INBOX=/output/msg91-inbox.ndjson \
+            -e NODE_OPTIONS=--require=/harness/tests/sanity/provider-preload.cjs \
             node:22 node src/server.js
           docker run --rm --network container:vocle-sanity-mongodb \
             --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
+            --mount "type=bind,source=$PWD/target,target=/target,readonly" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
-            -e SANITY_OUTPUT_DIR=/output node:22 node /harness/tests/sanity/src/live-runner.js
+            -e SANITY_OUTPUT_DIR=/output -e SANITY_BACKEND_DIR=/target/medcollab-backend \
+            -e SANITY_DATABASE_URI=mongodb://127.0.0.1:27017/vocle_sanity \
+            -e SANITY_UPSTREAM_SHA="${{ needs.detect.outputs.upstream_sha }}" \
+            -e SANITY_HARNESS_SHA="$(git -C harness rev-parse HEAD)" \
+            node:22 node /harness/tests/sanity/src/runner.js --live
           docker logs vocle-sanity-backend > "$RUNNER_TEMP/vocle-backend.log" 2>&1
 
       - name: Verify target remained unchanged
@@ -175,10 +184,6 @@ jobs:
           if-no-files-found: warn
           retention-days: 90
 
-      - name: Prevent incomplete harness from becoming success evidence
-        run: |
-          echo 'Phase 2 validates provenance and the harness contract only; live scenario execution is not implemented yet.'
-          exit 1
 
   summary:
     name: Summary

@@ -299,6 +299,8 @@ Implement `vocle-sanity.yml`, exact upstream SHA detection, artifact-backed base
 
 **Execution hold (2026-09-30):** the daily trigger is temporarily removed while implementation is incomplete. Do not manually dispatch the workflow until the full 48-scenario suite, its success-manifest gate, and final environment validation are ready. Re-enable `17 2 * * *` only as part of Phase 5 rollout.
 
+**Manual-run policy (2026-09-30):** retain `workflow_dispatch` only. Each dispatch resolves and fetches the latest upstream `master` tip into an isolated, credential-free target checkout, then tests that exact detached SHA. It does not merge, commit, or push upstream code into this fork.
+
 ### Phase 3 — Test driver, provider substitute, and core fixtures
 
 Implement bounded HTTP/socket clients, direct read-only MongoDB checks, MSG91-only interception, five synthetic identities, and authentication/profile, space, channel, and core messaging scenarios.
