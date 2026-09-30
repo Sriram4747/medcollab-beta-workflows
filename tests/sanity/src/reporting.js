@@ -44,7 +44,27 @@ const coverage = {
 export async function writeExecutionReports({ outputDirectory, scenarioGroups, results, metadata = {} }) {
   await mkdir(outputDirectory, { recursive: true });
   const byId = new Map(results.map((result) => [result.id, result]));
-  const all = scenarioGroups.flatMap((group) => group.scenarios.map((scenario) => ({ ...scenario, ...(byId.get(scenario.id) || { status: 'blocked', error: 'No result was produced by the scenario module.' }) })));
+  const moduleForGroup = {
+    'authentication-and-profiles': 'authentication-scenarios.js',
+    'spaces-and-invitations': 'spaces-and-channels-scenarios.js',
+    channels: 'spaces-and-channels-scenarios.js',
+    'messaging-and-needl': 'messaging-scenarios.js',
+    'message-requests': 'message-requests-and-conversations-scenarios.js',
+    'direct-and-group-conversations': 'message-requests-and-conversations-scenarios.js',
+    handoffs: 'handoff-scenarios.js', media: 'media-scenarios.js', notifications: 'notification-scenarios.js',
+    'realtime-and-availability': 'realtime-availability-scenarios.js', search: 'search-scenarios.js',
+    support: 'support-scenarios.js', startup: 'live-runner.js',
+  };
+  const all = scenarioGroups.flatMap((group) => group.scenarios.map((scenario) => {
+    const recorded = byId.get(scenario.id);
+    if (recorded) return { ...scenario, ...recorded };
+    const moduleName = moduleForGroup[group.id];
+    const relatedGroups = scenarioGroups.filter((item) => moduleForGroup[item.id] === moduleName);
+    const failed = relatedGroups.flatMap((item) => item.scenarios).map((item) => byId.get(item.id)).find((item) => item?.status === 'failed');
+    const outcome = metadata.modules?.find((item) => item.file === moduleName);
+    const reason = failed ? `Not executed: ${moduleName} stopped after ${failed.id} failed.` : outcome ? `Not executed: ${moduleName} exited with code ${outcome.code}${outcome.timedOut ? ' after its deadline' : ''}.` : `Not executed: ${moduleName} produced no result.`;
+    return { ...scenario, status: 'blocked', error: reason };
+  }));
   const passed = all.filter((scenario) => scenario.status === 'passed').length;
   const failed = all.filter((scenario) => scenario.status === 'failed').length;
   const blocked = all.filter((scenario) => scenario.status === 'blocked').length;

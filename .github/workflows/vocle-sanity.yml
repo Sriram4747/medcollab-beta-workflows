@@ -20,7 +20,7 @@ concurrency:
 jobs:
   detect:
     name: Detect
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       upstream_sha: ${{ steps.upstream.outputs.sha }}
       suite_fingerprint: ${{ steps.fingerprint.outputs.value }}
@@ -75,7 +75,7 @@ jobs:
     name: Sanity
     needs: detect
     if: needs.detect.outputs.needs_run == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     outputs:
       report_ready: ${{ steps.report.outputs.ready }}
@@ -227,7 +227,7 @@ jobs:
     name: Summary
     if: always()
     needs: [detect, sanity]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Write workflow summary
         shell: bash
