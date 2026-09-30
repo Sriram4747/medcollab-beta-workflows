@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('node:assert/strict');
+
 // Phase 1 auth/session cases. OTP lifecycle cases deliberately target a
 // separately supervised, OTP_BYPASS=false loopback backend. The raw OTP and
 // fabricated widget token values remain inside this process and are never
