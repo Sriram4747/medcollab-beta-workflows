@@ -1,0 +1,201 @@
+name: Vocle Functional Sanity
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Force a full sanity run even when verified evidence matches the upstream tip.
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: vocle-sanity-upstream-master
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    name: Detect
+    runs-on: ubuntu-latest
+    outputs:
+      upstream_sha: ${{ steps.upstream.outputs.sha }}
+      suite_fingerprint: ${{ steps.fingerprint.outputs.value }}
+      needs_run: ${{ steps.decision.outputs.needs_run }}
+      reason: ${{ steps.decision.outputs.reason }}
+      baseline_url: ${{ steps.decision.outputs.baseline_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - id: upstream
+        name: Resolve exact upstream master SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t refs < <(git ls-remote --exit-code https://github.com/mathiharan29/medcollab-beta.git refs/heads/master)
+          test "${#refs[@]}" -eq 1
+          sha="${refs[0]%%$'\t'*}"
+          [[ "$sha" =~ ^[a-f0-9]{40}$ ]]
+          printf 'sha=%s\n' "$sha" >> "$GITHUB_OUTPUT"
+
+      - id: fingerprint
+        name: Calculate harness fingerprint
+        run: echo "value=$(node tests/sanity/scripts/fingerprint.mjs)" >> "$GITHUB_OUTPUT"
+
+      - id: decision
+        name: Find verified successful baseline
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SUITE_FINGERPRINT: ${{ steps.fingerprint.outputs.value }}
+          EXPECTED_SCENARIOS: '48'
+          UPSTREAM_SHA: ${{ steps.upstream.outputs.sha }}
+          FORCE: ${{ inputs.force || 'false' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          baseline="$(node tests/sanity/scripts/find-baseline.mjs)"
+          baseline_sha="$(node -e 'const value = JSON.parse(process.argv[1]); process.stdout.write(value.upstreamSha || "")' "$baseline")"
+          baseline_url="$(node -e 'const value = JSON.parse(process.argv[1]); process.stdout.write(value.runUrl || "")' "$baseline")"
+          if [ "$FORCE" = true ]; then reason='manual force run'; needs_run=true
+          elif [ "$baseline_sha" = "$UPSTREAM_SHA" ]; then reason='verified success evidence matches upstream SHA'; needs_run=false
+          else reason='successful baseline unavailable or differs; retesting'; needs_run=true
+          fi
+          printf 'needs_run=%s\nreason=%s\nbaseline_url=%s\n' "$needs_run" "$reason" "$baseline_url" >> "$GITHUB_OUTPUT"
+
+  sanity:
+    name: Sanity
+    needs: detect
+    if: needs.detect.outputs.needs_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out fork harness
+        uses: actions/checkout@v4
+        with:
+          path: harness
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: harness/tests/sanity/package-lock.json
+
+      - name: Fetch captured upstream target without credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'harness_sha=%s\n' "$(git -C harness rev-parse HEAD)" > "$RUNNER_TEMP/vocle-provenance.txt"
+          git init target
+          git -C target remote add upstream https://github.com/mathiharan29/medcollab-beta.git
+          git -C target fetch --depth=1 upstream "${{ needs.detect.outputs.upstream_sha }}"
+          git -C target checkout --detach FETCH_HEAD
+          bash harness/tests/sanity/scripts/verify-target.sh target "${{ needs.detect.outputs.upstream_sha }}" | tee -a "$RUNNER_TEMP/vocle-provenance.txt"
+
+      - name: Validate Phase 1 harness contract
+        working-directory: harness/tests/sanity
+        run: |
+          npm ci
+          npm test
+
+      - name: Prepare isolated runtime images and target dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e target/medcollab-backend/.env
+          docker pull mongo:7
+          docker pull node:22
+          docker run --rm --network none \
+            --mount "type=bind,source=$PWD/target,target=/workspace" \
+            --workdir /workspace/medcollab-backend node:22 npm ci
+          mkdir -p "$RUNNER_TEMP/vocle-sanity-uploads" "$RUNNER_TEMP/vocle-sanity-output"
+
+      - name: Run isolated startup scenario
+        shell: bash
+        env:
+          SANITY_JWT_SECRET: sanity-access-secret-000000000000000000000000000000000000000000000000000000000001
+          SANITY_REFRESH_SECRET: sanity-refresh-secret-000000000000000000000000000000000000000000000000000000000002
+        run: |
+          set -euo pipefail
+          cleanup() {
+            docker rm --force vocle-sanity-backend vocle-sanity-mongodb 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          docker run --detach --rm --name vocle-sanity-mongodb --network none \
+            --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'" \
+            --health-interval 5s --health-timeout 3s --health-retries 12 mongo:7
+          for attempt in {1..30}; do
+            [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-sanity-mongodb)" = healthy ] && break
+            sleep 1
+          done
+          [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-sanity-mongodb)" = healthy
+          docker run --detach --rm --name vocle-sanity-backend --network container:vocle-sanity-mongodb \
+            --read-only --tmpfs /tmp \
+            --mount "type=bind,source=$PWD/target,target=/workspace,readonly" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-uploads,target=/workspace/medcollab-backend/uploads" \
+            --workdir /workspace/medcollab-backend \
+            -e NODE_ENV=test -e PORT=5000 -e MONGODB_URI=mongodb://127.0.0.1:27017/vocle_sanity \
+            -e JWT_SECRET="$SANITY_JWT_SECRET" -e JWT_REFRESH_SECRET="$SANITY_REFRESH_SECRET" \
+            -e OTP_BYPASS=false -e MSG91_AUTH_KEY=dummy-msg91-key -e MSG91_TEMPLATE_ID=dummy-template \
+            -e ALLOWED_ORIGINS=http://127.0.0.1:5000 -e API_BASE_URL=http://127.0.0.1:5000 \
+            node:22 node src/server.js
+          docker run --rm --network container:vocle-sanity-mongodb \
+            --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
+            -e SANITY_OUTPUT_DIR=/output node:22 node /harness/tests/sanity/src/live-runner.js
+          docker logs vocle-sanity-backend > "$RUNNER_TEMP/vocle-backend.log" 2>&1
+
+      - name: Verify target remained unchanged
+        if: always()
+        shell: bash
+        run: bash harness/tests/sanity/scripts/verify-target.sh target "${{ needs.detect.outputs.upstream_sha }}" >> "$RUNNER_TEMP/vocle-provenance.txt"
+
+      - name: Upload incomplete-phase diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vocle-sanity-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            harness/tests/sanity/output/
+            ${{ runner.temp }}/vocle-sanity-output/
+            ${{ runner.temp }}/vocle-provenance.txt
+            ${{ runner.temp }}/vocle-backend.log
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Prevent incomplete harness from becoming success evidence
+        run: |
+          echo 'Phase 2 validates provenance and the harness contract only; live scenario execution is not implemented yet.'
+          exit 1
+
+  summary:
+    name: Summary
+    if: always()
+    needs: [detect, sanity]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write workflow summary
+        shell: bash
+        run: |
+          {
+            echo '## Vocle functional sanity'
+            echo
+            echo "- Upstream SHA: \`${{ needs.detect.outputs.upstream_sha }}\`"
+            echo "- Suite fingerprint: \`${{ needs.detect.outputs.suite_fingerprint }}\`"
+            echo "- Detection reason: ${{ needs.detect.outputs.reason }}"
+            echo "- Prior verified evidence: ${{ needs.detect.outputs.baseline_url || 'none' }}"
+            if [ "${{ needs.detect.outputs.needs_run }}" != true ]; then echo '- Result: **SKIP**';
+            elif [ "${{ needs.sanity.result }}" = success ]; then echo '- Result: **PASS**';
+            else echo '- Result: **ERROR** — incomplete or failed sanity execution; no success manifest was published.'; fi
+          } >> "$GITHUB_STEP_SUMMARY"
