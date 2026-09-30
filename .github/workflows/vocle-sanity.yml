@@ -121,6 +121,7 @@ jobs:
           docker run --rm \
             --mount "type=bind,source=$PWD/target,target=/workspace" \
             --workdir /workspace/medcollab-backend node:22 npm ci
+          mkdir -p target/medcollab-backend/uploads
           mkdir -p "$RUNNER_TEMP/vocle-sanity-uploads" "$RUNNER_TEMP/vocle-sanity-output"
 
       - name: Run isolated startup scenario
