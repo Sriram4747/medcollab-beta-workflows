@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -32,10 +32,14 @@ while (page <= 10) {
     const directory = mkdtempSync(join(tmpdir(), 'vocle-sanity-baseline-'));
     try {
       const archive = join(directory, 'artifact.zip');
-      execFileSync('gh', ['api', `/repos/${repository}/actions/artifacts/${artifact.id}/zip`, '--output', archive], { stdio: 'ignore', env: { ...process.env, GH_TOKEN: process.env.GITHUB_TOKEN } });
+      const response = await fetch(`https://api.github.com/repos/${repository}/actions/artifacts/${artifact.id}/zip`, {
+        headers: { Accept: 'application/vnd.github+json', Authorization: `Bearer ${process.env.GITHUB_TOKEN || ''}`, 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+      if (!response.ok) throw new Error(`GitHub artifact download returned ${response.status}.`);
+      writeFileSync(archive, Buffer.from(await response.arrayBuffer()));
       const manifestText = execFileSync('unzip', ['-p', archive, 'success-manifest.json'], { encoding: 'utf8' });
       const manifest = JSON.parse(manifestText);
-      if (manifest.schemaVersion !== 1 || manifest.result !== 'PASS' || manifest.suiteFingerprint !== fingerprint || manifest.expectedScenarioCount !== expected || manifest.passedScenarioCount !== expected || !/^[a-f0-9]{40}$/.test(manifest.upstreamSha || '')) continue;
+      if (manifest.schemaVersion !== 1 || manifest.result !== 'PASS' || manifest.upstreamRepository !== 'mathiharan29/medcollab-beta' || manifest.upstreamRef !== 'refs/heads/master' || manifest.runId !== run.id || manifest.attempt !== attempt || !/^[a-f0-9]{40}$/.test(manifest.harnessSha || '') || manifest.suiteFingerprint !== fingerprint || manifest.expectedScenarioCount !== expected || manifest.passedScenarioCount !== expected || !/^[a-f0-9]{40}$/.test(manifest.upstreamSha || '')) continue;
       output({ baseline: 'verified', upstreamSha: manifest.upstreamSha, runId: run.id, runUrl: run.html_url });
       process.exit(0);
     } finally {

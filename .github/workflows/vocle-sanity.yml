@@ -77,6 +77,8 @@ jobs:
     if: needs.detect.outputs.needs_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      report_ready: ${{ steps.report.outputs.ready }}
     steps:
       - name: Check out fork harness
         uses: actions/checkout@v4
@@ -174,6 +176,22 @@ jobs:
         shell: bash
         run: bash harness/tests/sanity/scripts/verify-target.sh target "${{ needs.detect.outputs.upstream_sha }}" >> "$RUNNER_TEMP/vocle-provenance.txt"
 
+      - id: report
+        name: Publish case-by-case job summary
+        if: always()
+        shell: bash
+        run: |
+          report="$RUNNER_TEMP/vocle-sanity-output/sanity-report.json"
+          markdown="$RUNNER_TEMP/vocle-sanity-output/sanity-report.md"
+          if [ -s "$report" ] && [ -s "$markdown" ] && jq -e '.expectedScenarioCount == 48 and (.result == "passed" or .result == "failed")' "$report" >/dev/null; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+            cat "$markdown" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo '## Vocle functional sanity' >> "$GITHUB_STEP_SUMMARY"
+            echo 'No complete case report was produced; see the step logs and diagnostics artifact.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Upload sanity reports and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -184,6 +202,24 @@ jobs:
             ${{ runner.temp }}/vocle-provenance.txt
             ${{ runner.temp }}/vocle-backend.log
           if-no-files-found: warn
+          retention-days: 90
+
+      - name: Create verified success manifest
+        if: success()
+        env:
+          SANITY_OUTPUT_DIR: ${{ runner.temp }}/vocle-sanity-output
+          SANITY_UPSTREAM_SHA: ${{ needs.detect.outputs.upstream_sha }}
+          SANITY_HARNESS_SHA: ${{ github.sha }}
+          SUITE_FINGERPRINT: ${{ needs.detect.outputs.suite_fingerprint }}
+        run: node harness/tests/sanity/scripts/write-success-manifest.mjs
+
+      - name: Upload verified success evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vocle-sanity-success-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/vocle-sanity-output/success-manifest.json
+          if-no-files-found: error
           retention-days: 90
 
 
@@ -205,5 +241,6 @@ jobs:
             echo "- Prior verified evidence: ${{ needs.detect.outputs.baseline_url || 'none' }}"
             if [ "${{ needs.detect.outputs.needs_run }}" != true ]; then echo '- Result: **SKIP**';
             elif [ "${{ needs.sanity.result }}" = success ]; then echo '- Result: **PASS**';
-            else echo '- Result: **ERROR** — incomplete or failed sanity execution; no success manifest was published.'; fi
+            elif [ "${{ needs.sanity.outputs.report_ready }}" = true ]; then echo '- Result: **FAIL** — named sanity cases failed; see the Sanity job summary and diagnostics artifact.';
+            else echo '- Result: **ERROR** — incomplete sanity execution; see step logs and diagnostics artifact.'; fi
           } >> "$GITHUB_STEP_SUMMARY"

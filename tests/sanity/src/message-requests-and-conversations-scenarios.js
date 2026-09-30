@@ -7,6 +7,15 @@ import { expectSuccess, request } from './http.js';
 const results = [];
 const assert = (value, message) => { if (!value) throw new Error(message); };
 const marker = (name) => `sanity-conversation-${name}`;
+async function eventuallyNotification(label, userId, referenceId) {
+  const deadline = Date.now() + 5_000;
+  while (Date.now() < deadline) {
+    const notification = await notificationFor(userId, referenceId);
+    if (notification) return notification;
+    await new Promise((resolvePromise) => setTimeout(resolvePromise, 100));
+  }
+  throw new Error(`${label} was not persisted within 5 seconds (request state was persisted).`);
+}
 async function scenario(id, action) {
   const startedAt = Date.now();
   try { await action(); results.push({ id, status: 'passed', durationMs: Date.now() - startedAt }); }
@@ -47,7 +56,7 @@ async function run() {
         request('/api/message-requests?direction=received', { token: people.D.token }),
         request('/api/message-requests/pending-count', { token: people.D.token }),
       ]);
-      const notification = await notificationFor(people.D.userId, acceptedRequest.id);
+      const notification = await eventuallyNotification('Recipient message-request notification', people.D.userId, acceptedRequest.id);
       assert(duplicate.request.id === acceptedRequest.id, 'Duplicate request was not stable.');
       assert(expectSuccess(sent, 'sent requests').requests.some((item) => item.id === acceptedRequest.id), 'Sent request was missing.');
       assert(expectSuccess(received, 'received requests').requests.some((item) => item.id === acceptedRequest.id), 'Received request was missing.');
@@ -61,7 +70,7 @@ async function run() {
       const [fromList, toList] = await Promise.all([
         request('/api/channels/dm', { token: people.A.token }), request('/api/channels/dm', { token: people.D.token }),
       ]);
-      const notification = await notificationFor(people.A.userId, acceptedRequest.id);
+      const notification = await eventuallyNotification('Sender request-acceptance notification', people.A.userId, acceptedRequest.id);
       assert(accepted.request.status === 'accepted' && dm?.peer?._id === people.A.userId, 'Accepted request did not create the expected DM.');
       assert(expectSuccess(fromList, 'sender DM list').channels.some((channel) => channel._id === dm._id), 'Accepted DM missing for sender.');
       assert(expectSuccess(toList, 'recipient DM list').channels.some((channel) => channel._id === dm._id), 'Accepted DM missing for recipient.');
