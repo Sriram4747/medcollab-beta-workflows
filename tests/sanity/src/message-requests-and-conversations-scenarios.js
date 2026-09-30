@@ -139,4 +139,4 @@ async function run() {
   console.log('Message-request and conversation scenarios passed: 8/8.');
 }
 
-run().catch((error) => { console.error(error.stack || error.message); process.exitCode = 1; });
+run().catch(async (error) => { console.error(error.stack || error.message); await closeDatabase(); process.exitCode = 1; });

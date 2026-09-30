@@ -118,4 +118,4 @@ async function run() {
   console.log('Messaging scenarios passed: 7/7.');
 }
 
-run().catch((error) => { console.error(error.stack || error.message); process.exitCode = 1; });
+run().catch(async (error) => { console.error(error.stack || error.message); await closeDatabase(); process.exitCode = 1; });

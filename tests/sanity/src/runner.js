@@ -7,7 +7,7 @@ import { expectedScenarioCount, scenarioGroups, scenarios, validateScenarioRegis
 import { writeExecutionReports, writePlannedReports } from './reporting.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const outputDirectory = resolve(here, '..', 'output');
+const outputDirectory = resolve(process.env.SANITY_OUTPUT_DIR || resolve(here, '..', 'output'));
 
 async function main() {
   const failures = [...validateStaticConfig(), ...validateScenarioRegistry()];
@@ -21,10 +21,13 @@ async function main() {
 
 const modules = ['live-runner.js', 'authentication-scenarios.js', 'spaces-and-channels-scenarios.js', 'messaging-scenarios.js', 'message-requests-and-conversations-scenarios.js', 'handoff-scenarios.js', 'media-scenarios.js', 'notification-scenarios.js', 'realtime-availability-scenarios.js', 'search-scenarios.js', 'support-scenarios.js'];
 const execute = (file) => new Promise((resolveRun) => {
+  console.log(`Starting sanity module: ${file}`);
+  const startedAt = Date.now();
   const child = spawn(process.execPath, [resolve(here, file)], { stdio: 'inherit', env: process.env });
-  const timer = setTimeout(() => child.kill('SIGTERM'), 90_000);
-  child.on('exit', (code, signal) => { clearTimeout(timer); resolveRun({ file, code: code ?? 1, timedOut: signal === 'SIGTERM' }); });
-  child.on('error', () => resolveRun({ file, code: 1 }));
+  let timedOut = false;
+  const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, 60_000);
+  child.on('exit', (code, signal) => { clearTimeout(timer); const outcome = { file, code: code ?? 1, timedOut, signal, durationMs: Date.now() - startedAt }; console.log(`Finished sanity module: ${JSON.stringify(outcome)}`); resolveRun(outcome); });
+  child.on('error', (error) => { clearTimeout(timer); const outcome = { file, code: 1, error: error.message, durationMs: Date.now() - startedAt }; console.log(`Failed sanity module: ${JSON.stringify(outcome)}`); resolveRun(outcome); });
 });
 
 async function runLive() {

@@ -120,7 +120,7 @@ jobs:
             --mount "type=bind,source=$PWD/target,target=/workspace" \
             --workdir /workspace/medcollab-backend node:22 npm ci
           mkdir -p target/medcollab-backend/uploads
-          mkdir -p "$RUNNER_TEMP/vocle-sanity-uploads" "$RUNNER_TEMP/vocle-sanity-output"
+          mkdir -p "$RUNNER_TEMP/vocle-sanity-uploads" "$RUNNER_TEMP/vocle-sanity-output" "$RUNNER_TEMP/vocle-sanity-inbox" "$RUNNER_TEMP/vocle-sanity-fixtures"
 
       - name: Run isolated startup scenario
         shell: bash
@@ -130,6 +130,7 @@ jobs:
         run: |
           set -euo pipefail
           cleanup() {
+            docker logs vocle-sanity-backend > "$RUNNER_TEMP/vocle-backend.log" 2>&1 || true
             docker rm --force vocle-sanity-backend vocle-sanity-mongodb 2>/dev/null || true
           }
           trap cleanup EXIT
@@ -147,37 +148,38 @@ jobs:
             --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-uploads,target=/workspace/medcollab-backend/uploads" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-inbox,target=/inbox" \
             --workdir /workspace/medcollab-backend \
             -e NODE_ENV=test -e PORT=5000 -e MONGODB_URI=mongodb://127.0.0.1:27017/vocle_sanity \
             -e JWT_SECRET="$SANITY_JWT_SECRET" -e JWT_REFRESH_SECRET="$SANITY_REFRESH_SECRET" \
             -e OTP_BYPASS=false -e MSG91_AUTH_KEY=dummy-msg91-key -e MSG91_TEMPLATE_ID=dummy-template \
             -e ALLOWED_ORIGINS=http://127.0.0.1:5000 -e API_BASE_URL=http://127.0.0.1:5000 \
-            -e SANITY_BACKEND_DIR=/workspace/medcollab-backend -e SANITY_PROVIDER_INBOX=/output \
+            -e SANITY_BACKEND_DIR=/workspace/medcollab-backend -e SANITY_PROVIDER_INBOX=/inbox \
             -e NODE_OPTIONS=--require=/harness/tests/sanity/provider-preload.cjs \
             node:22 node src/server.js
           docker run --rm --network container:vocle-sanity-mongodb \
             --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
             --mount "type=bind,source=$PWD/target,target=/target,readonly" \
             --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-output,target=/output" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-inbox,target=/inbox,readonly" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-sanity-fixtures,target=/fixtures" \
             -e SANITY_OUTPUT_DIR=/output -e SANITY_BACKEND_DIR=/target/medcollab-backend \
-            -e SANITY_DATABASE_URI=mongodb://127.0.0.1:27017/vocle_sanity -e SANITY_PROVIDER_INBOX=/output \
+            -e SANITY_DATABASE_URI=mongodb://127.0.0.1:27017/vocle_sanity -e SANITY_PROVIDER_INBOX=/inbox -e SANITY_FIXTURE_DIR=/fixtures \
             -e SANITY_UPSTREAM_SHA="${{ needs.detect.outputs.upstream_sha }}" \
             -e SANITY_HARNESS_SHA="$(git -C harness rev-parse HEAD)" \
             node:22 node /harness/tests/sanity/src/runner.js --live
-          docker logs vocle-sanity-backend > "$RUNNER_TEMP/vocle-backend.log" 2>&1
 
       - name: Verify target remained unchanged
         if: always()
         shell: bash
         run: bash harness/tests/sanity/scripts/verify-target.sh target "${{ needs.detect.outputs.upstream_sha }}" >> "$RUNNER_TEMP/vocle-provenance.txt"
 
-      - name: Upload incomplete-phase diagnostics
+      - name: Upload sanity reports and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: vocle-sanity-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            harness/tests/sanity/output/
             ${{ runner.temp }}/vocle-sanity-output/
             ${{ runner.temp }}/vocle-provenance.txt
             ${{ runner.temp }}/vocle-backend.log

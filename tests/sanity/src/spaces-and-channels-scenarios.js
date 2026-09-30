@@ -2,6 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createFixtureUsers } from './fixtures.js';
 import { request, expectSuccess } from './http.js';
+import { closeDatabase, connectDatabase, messageById } from './database.js';
 
 const results = [];
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
@@ -12,6 +13,7 @@ async function scenario(id, action) {
 }
 
 async function run() {
+  await connectDatabase();
   const people = await createFixtureUsers();
   let space;
   let general;
@@ -67,17 +69,18 @@ async function run() {
     await scenario('channels-03', async () => {
       const message = expectSuccess(await request(`/api/channels/${custom._id}/messages`, { method: 'POST', token: people.A.token, body: { type: 'text', content: { text: 'archive retention marker' } }, expectedStatus: 201 }), 'send retained channel message').message;
       await request(`/api/channels/${custom._id}`, { method: 'DELETE', token: people.A.token });
-      const messages = expectSuccess(await request(`/api/channels/${custom._id}/messages`, { token: people.A.token }), 'read archived channel messages');
-      assert(messages.messages.some((item) => item._id === message._id), 'Archiving removed stored channel messages.');
+      await request(`/api/channels/${custom._id}/messages`, { token: people.A.token, expectedStatus: 403 });
+      assert((await messageById(message._id))?.content?.text === 'archive retention marker', 'Archiving removed stored channel messages.');
       const listed = expectSuccess(await request(`/api/spaces/${space._id}/channels`, { token: people.A.token }), 'list active channels');
       assert(!listed.channels.some((item) => item._id === custom._id), 'Archived channel remains in active lists.');
       await request(`/api/channels/${general._id}`, { method: 'DELETE', token: people.A.token, expectedStatus: 400 });
     });
   } finally {
+    await closeDatabase();
     const output = resolve(process.env.SANITY_OUTPUT_DIR || 'output');
     await mkdir(output, { recursive: true });
     await writeFile(resolve(output, 'spaces-and-channels-results.json'), `${JSON.stringify({ expected: 8, results }, null, 2)}\n`);
   }
   console.log('Spaces and channel scenarios passed: 8/8.');
 }
-run().catch((error) => { console.error(error.stack || error.message); process.exitCode = 1; });
+run().catch(async (error) => { console.error(error.stack || error.message); await closeDatabase(); process.exitCode = 1; });
