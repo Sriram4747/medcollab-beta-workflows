@@ -297,9 +297,13 @@ Implement `vocle-sanity.yml`, exact upstream SHA detection, artifact-backed base
 
 **Implementation status (2026-09-30):** detection, fingerprinting, baseline-manifest validation, separate target checkout, and target provenance verification are implemented. The workflow deliberately prevents a Phase 1-only harness from publishing a success manifest. Docker runtime isolation, readiness/cleanup, and the live startup assertion remain pending the Phase 3 driver.
 
+**Execution hold (2026-09-30):** the daily trigger is temporarily removed while implementation is incomplete. Do not manually dispatch the workflow until the full 48-scenario suite, its success-manifest gate, and final environment validation are ready. Re-enable `17 2 * * *` only as part of Phase 5 rollout.
+
 ### Phase 3 — Test driver, provider substitute, and core fixtures
 
 Implement bounded HTTP/socket clients, direct read-only MongoDB checks, MSG91-only interception, five synthetic identities, and authentication/profile, space, channel, and core messaging scenarios.
+
+**Implementation status (2026-09-30):** the bounded local-only HTTP helper and an exact-endpoint MSG91 preload are in place. The preload captures server-generated OTPs only in the private sanity inbox and returns a fixed widget-provider response for an opaque test token; it does not replace application controllers, services, models, or middleware. Fixture provisioning and live scenario execution remain pending.
 
 ### Phase 4 — Collaboration journeys
 
