@@ -122,7 +122,7 @@ module.exports = ({ add, authPhones }) => {
       if (typeof token !== 'string') return false;
       const me = await ctx.supervisedHttp('model-otp', 'GET', '/api/users/me', undefined, `Bearer ${token}`);
       const user = await ctx.models.User.findOne({ phone: primaryPhone }).lean();
-      ctx.evidence = { protectedControl: me.status === 200, matchingFixtureIdentity: me.data?.data?.user?.phone === primaryPhone, storedOtpRemoved: (await ctx.models.OTP.countDocuments({ phone: primaryPhone })) === 0 };
+      ctx.evidence = { protectedControl: me.status === 200, matchingFixtureIdentity: me.data?.data?.user?._id === String(user?._id), storedOtpRemoved: (await ctx.models.OTP.countDocuments({ phone: primaryPhone })) === 0 };
       return !!user?.isVerified && ctx.evidence.protectedControl && ctx.evidence.matchingFixtureIdentity && ctx.evidence.storedOtpRemoved;
     },
   });
@@ -187,7 +187,8 @@ module.exports = ({ add, authPhones }) => {
     check: async (body, ctx) => {
       const token = body?.data?.accessToken;
       const me = typeof token === 'string' ? await ctx.supervisedHttp('model-otp-extra', 'GET', '/api/users/me', undefined, `Bearer ${token}`) : null;
-      ctx.evidence = { existingAccount: body?.data?.isNewUser === false, protectedControl: me?.status === 200, matchingFixtureIdentity: me?.data?.data?.user?.phone === primaryPhone };
+      const user = await ctx.models.User.findOne({ phone: primaryPhone }).lean();
+      ctx.evidence = { existingAccount: body?.data?.isNewUser === false, protectedControl: me?.status === 200, matchingFixtureIdentity: me?.data?.data?.user?._id === String(user?._id) };
       return ctx.evidence.existingAccount && ctx.evidence.protectedControl && ctx.evidence.matchingFixtureIdentity && (await ctx.models.User.countDocuments({ phone: primaryPhone })) === 1;
     },
   });
