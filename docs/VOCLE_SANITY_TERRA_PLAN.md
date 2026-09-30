@@ -309,7 +309,7 @@ Implement bounded HTTP/socket clients, direct read-only MongoDB checks, MSG91-on
 
 Implement message requests, direct/group conversations, handoffs, media metadata/local storage, notifications, realtime/availability, search, and support scenarios.
 
-**Implementation status (2026-09-30):** the three message-request scenarios and five direct/group-conversation scenarios are implemented, including acceptance-gated DM reopening, database checks for notifications and read receipts, and upstream `master` conversation expansion with `none` and `all` history. The remaining handoff, media, notification, availability, search, and support modules are pending. No live suite has been run under this phase.
+**Implementation status (2026-09-30):** the three message-request scenarios, five direct/group-conversation scenarios, five handoff scenarios, three media scenarios, and three notification scenarios are implemented. They include acceptance-gated DM reopening, database checks for notifications/read receipts/handoff state, local upload byte checks, and upstream `master` conversation expansion with `none` and `all` history. Handoff submission deliberately asserts inbox/history/notification/event state but does not assert a system chat card, because the inspected upstream controller does not call that helper. The remaining availability, search, and support modules are pending. No live suite has been run under this phase.
 
 ### Phase 5 — Evidence hardening and rollout
 
