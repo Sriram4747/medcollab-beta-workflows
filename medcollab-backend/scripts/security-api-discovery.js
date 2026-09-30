@@ -5,8 +5,14 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const { spawn } = require('node:child_process');
 const BASE = 'http://127.0.0.1:5000';
 const URI = 'mongodb://127.0.0.1:27017/vocle_ci';
+const AUTH_SUPERVISOR_PORT = 5101;
+const AUTH_SUPERVISOR_BASE = `http://127.0.0.1:${AUTH_SUPERVISOR_PORT}`;
+// Reserved solely for authentication lifecycle cases. They are intentionally
+// separate from the deterministic A-I fixtures, and reset before every case.
+const AUTH_TEST_PHONES = ['+15559990001', '+15559990002', '+15559990003'];
 const source = (name) => `src/features/${name}/${name === 'spaces' ? 'space' : name === 'messages' ? 'message' : name === 'handoffs' ? 'handoff' : 'channel'}.controller.js`;
 // Fixed, valid 24-character ObjectIds reserved solely for this disposable
 // discovery world. Keeping them explicit prevents an accidental formatting
@@ -254,6 +260,7 @@ require('./security/suites/extended-api')({ add, ids });
 require('./security/suites/media')({ add, ids });
 require('./security/suites/realtime')({ add, ids });
 require('./security/suites/phase0-repairs')({ add, ids });
+require('./security/suites/auth-session')({ add, authPhones: AUTH_TEST_PHONES });
 
 let mongoose, models, users;
 let fixtureUserBaseline;
@@ -261,6 +268,8 @@ const tokens = {};
 const results = [];
 let fatal = null;
 let stage = 'safety preflight';
+let authSupervisor = null;
+let authSupervisorBatch = null;
 function safety() {
   assert.equal(process.env.NODE_ENV, 'test', 'Requires NODE_ENV=test');
   assert.equal(process.env.API_BASE_URL, BASE, 'Requires exact local API URL');
@@ -289,7 +298,9 @@ async function reset() {
   // Exact scratch IDs plus resources created by fixture actors.
   // The fixture users exist only in the disposable local vocle_ci database.
   const fixtureUserIds = Object.values(users).map((user) => user._id);
-  await models.OTP.deleteMany({ phone: { $in: Object.values(users).map(user => user.phone) } });
+  const controlledPhones = [...Object.values(users).map(user => user.phone), ...AUTH_TEST_PHONES];
+  await models.OTP.deleteMany({ phone: { $in: controlledPhones } });
+  await models.User.deleteMany({ phone: { $in: AUTH_TEST_PHONES } });
   for (const [actor, user] of Object.entries(users)) {
     if (!fixtureUserBaseline?.[actor]) continue;
     await models.User.findByIdAndUpdate(user._id, fixtureUserBaseline[actor], { runValidators: true });
@@ -346,9 +357,9 @@ async function snapshot() {
   const fixtureUserIds = Object.values(users).map((user) => user._id);
   for (const [name, model] of Object.entries(models)) {
     const query = name === 'User'
-      ? { _id: { $in: fixtureUserIds } }
+      ? { $or: [{ _id: { $in: fixtureUserIds } }, { phone: { $in: AUTH_TEST_PHONES } }] }
       : name === 'OTP'
-        ? { phone: { $in: Object.values(users).map(user => user.phone) } }
+        ? { phone: { $in: [...Object.values(users).map(user => user.phone), ...AUTH_TEST_PHONES] } }
       : name === 'Space'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { createdBy: { $in: fixtureUserIds } }] }
       : name === 'Channel'
@@ -393,7 +404,7 @@ async function verifyResetState() {
   const fixtureUserIds = Object.values(users).map(user => user._id);
   const [usersCount, otps, spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
     models.User.countDocuments({ _id: { $in: fixtureUserIds } }),
-    models.OTP.countDocuments({ phone: { $in: Object.values(users).map(user => user.phone) } }),
+    models.OTP.countDocuments({ phone: { $in: [...Object.values(users).map(user => user.phone), ...AUTH_TEST_PHONES] } }),
     models.Space.countDocuments({ createdBy: { $in: fixtureUserIds } }),
     models.Channel.countDocuments({ $or: [
       { _id: { $in: Object.values(ids) } },
@@ -423,11 +434,78 @@ async function verifyResetState() {
     'Fixture reset did not restore the exact controlled baseline',
   );
 }
+function supervisorEnvironment(batch) {
+  assert.ok(['model-otp', 'widget-dummy', 'credential-free'].includes(batch), 'Unknown auth supervisor batch');
+  const environment = {
+    ...process.env,
+    NODE_ENV: 'test',
+    PORT: String(AUTH_SUPERVISOR_PORT),
+    API_BASE_URL: AUTH_SUPERVISOR_BASE,
+    MONGODB_URI: URI,
+    JWT_SECRET: 'ci-test-only-jwt-secret-not-for-production-0000000000000001',
+    JWT_REFRESH_SECRET: 'ci-test-only-refresh-secret-not-for-production-000000000002',
+    OTP_BYPASS: 'false',
+    CLOUDINARY_CLOUD_NAME: '', CLOUDINARY_API_KEY: '', CLOUDINARY_API_SECRET: '',
+    MSG91_AUTH_KEY: batch === 'widget-dummy' ? 'ci-widget-key-not-a-provider-secret' : '',
+    MSG91_TEMPLATE_ID: '', FIREBASE_PROJECT_ID: '', FIREBASE_CLIENT_EMAIL: '', FIREBASE_PRIVATE_KEY: '',
+  };
+  return environment;
+}
+async function stopAuthSupervisor() {
+  if (!authSupervisor) return;
+  const child = authSupervisor;
+  authSupervisor = null;
+  authSupervisorBatch = null;
+  if (child.exitCode !== null || child.signalCode) return;
+  child.kill('SIGTERM');
+  await Promise.race([
+    new Promise(resolve => child.once('exit', resolve)),
+    wait(10000),
+  ]);
+  if (child.exitCode === null && !child.signalCode) child.kill('SIGKILL');
+}
+async function ensureAuthSupervisor(batch) {
+  if (authSupervisor && authSupervisorBatch === batch && authSupervisor.exitCode === null) return;
+  await stopAuthSupervisor();
+  stage = `start OTP_BYPASS=false auth supervisor (${batch})`;
+  const child = spawn(process.execPath, ['src/server.js'], {
+    cwd: path.resolve(__dirname, '..'), env: supervisorEnvironment(batch), stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  let output = '';
+  const retain = (chunk) => { output = (output + chunk.toString()).slice(-4000); };
+  child.stdout.on('data', retain); child.stderr.on('data', retain);
+  authSupervisor = child;
+  authSupervisorBatch = batch;
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    if (child.exitCode !== null) throw new Error(`Auth supervisor exited before readiness (${output.replace(/\s+/g, ' ').slice(-500)})`);
+    try {
+      const response = await fetch(`${AUTH_SUPERVISOR_BASE}/health`, { signal: AbortSignal.timeout(1000) });
+      const data = await response.json();
+      if (response.status === 200 && data?.database === 'connected' && data?.environment === 'test' && data?.firebase === false && data?.cloudinary === false) return;
+    } catch { /* retry only on verified loopback */ }
+    await wait(200);
+  }
+  throw new Error(`Auth supervisor did not become healthy (${output.replace(/\s+/g, ' ').slice(-500)})`);
+}
+async function supervisedHttp(batch, method, endpoint, body, header) {
+  await ensureAuthSupervisor(batch);
+  assert.ok(endpoint.startsWith('/api/') || endpoint === '/health');
+  const url = new URL(endpoint, AUTH_SUPERVISOR_BASE);
+  assert.equal(url.origin, AUTH_SUPERVISOR_BASE, 'Auth supervisor requests must remain loopback-only');
+  const headers = { 'Content-Type': 'application/json' };
+  if (header) headers.Authorization = header;
+  const response = await fetch(url, { method, headers, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(10000) });
+  const text = await response.text();
+  let data;
+  try { data = JSON.parse(text); } catch { data = null; }
+  return { status: response.status, data };
+}
 function actorLabel(actor) {
   return { A: 'User A (space owner/admin)', B: 'User B (normal space member)', C: 'User C (authenticated outsider)', D: 'User D (same-institution medical peer)', E: 'User E (unrelated controlled identity)', F: 'User F (unrelated controlled identity)', G: 'User G (unrelated controlled identity)', H: 'User H (unrelated controlled identity)', anonymous: 'Anonymous caller (unauthenticated)' }[actor];
 }
 function securityArea(category) {
   if (category === 'authentication-negative') return 'Authentication';
+  if (category.startsWith('auth-')) return 'Authentication and Session Lifecycle';
   if (category === 'foreign-resource') return 'Resource Isolation / IDOR';
   if (category === 'identity-permutation') return 'Authorization / Ownership';
   if (category === 'replay') return 'Authorization / Workflow Integrity';
@@ -534,7 +612,7 @@ async function execute(c) {
   // preventing an old callback from mutating newly recreated fixed IDs.
   await settledSnapshot();
   await verifyResetState();
-  const ctx = { http, models, users, ids, tokens, evidence: {}, cleanup: [] };
+  const ctx = { http, supervisedHttp, models, users, ids, tokens, evidence: {}, cleanup: [] };
   try {
   if (typeof c.prepare === 'function') await c.prepare(ctx);
   if (c.prepare === 'acknowledge') {
@@ -566,7 +644,7 @@ async function execute(c) {
   const deniedResponseDataAbsent = !denial || r.data?.data == null;
   const semantic = !c.check || (r.data !== null && await c.check(r.data, ctx, r));
   const passed = c.statuses.includes(r.status) && !!r.data && r.data.success === !denial &&
-    semantic && deniedResponseDataAbsent && (!denial || unchanged);
+    semantic && deniedResponseDataAbsent && (!denial || c.denialMayChangeState || unchanged);
   const validation = /schema|boundary|required|enum|object-id/.test(c.category);
   const classification = passed ? 'confirmed expected behavior' : c.failureClassification ||
     (validation ? 'validation weakness/hardening opportunity' :
@@ -577,7 +655,7 @@ async function execute(c) {
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: realtime
       ? { httpStatus: 'not applicable', invariant: 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
-      : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial, semanticCheck: !!c.check },
+      : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial && !c.denialMayChangeState, semanticCheck: !!c.check },
     actual: realtime
       ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!ctx.evidence.invariantHeld, authenticatedControl: ctx.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
       : { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
@@ -751,6 +829,6 @@ if (process.argv.includes('--list')) {
     console.error(fatal);
     process.exitCode = 1;
   }).finally(async () => {
-    try { report(); } finally { if (mongoose) await mongoose.disconnect(); }
+    try { await stopAuthSupervisor(); report(); } finally { if (mongoose) await mongoose.disconnect(); }
   });
 }
