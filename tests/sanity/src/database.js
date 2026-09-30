@@ -4,6 +4,8 @@ import { join } from 'node:path';
 let mongoose;
 let User;
 let OTP;
+let Message;
+let Notification;
 
 export async function connectDatabase() {
   const backendDirectory = process.env.SANITY_BACKEND_DIR;
@@ -13,6 +15,8 @@ export async function connectDatabase() {
   mongoose = backendRequire('mongoose');
   User = backendRequire(join(backendDirectory, 'src/features/users/user.model.js'));
   OTP = backendRequire(join(backendDirectory, 'src/features/auth/otp.model.js'));
+  Message = backendRequire(join(backendDirectory, 'src/features/messages/message.model.js'));
+  Notification = backendRequire(join(backendDirectory, 'src/features/notifications/notification.model.js'));
   await mongoose.connect(uri, { serverSelectionTimeoutMS: 10_000 });
 }
 
@@ -26,4 +30,12 @@ export async function userByPhone(phone) {
 
 export async function newestOtp(phone) {
   return OTP.findOne({ phone }).sort({ createdAt: -1 }).lean();
+}
+
+export async function messageById(id) {
+  return Message.findById(id).lean();
+}
+
+export async function notificationFor(userId, referenceId) {
+  return Notification.findOne({ userId, referenceId }).sort({ createdAt: -1 }).lean();
 }

@@ -10,5 +10,8 @@
   "scripts": {
     "test": "node src/runner.js --self-check",
     "self-check": "node src/runner.js --self-check"
+  },
+  "dependencies": {
+    "socket.io-client": "4.8.3"
   }
 }

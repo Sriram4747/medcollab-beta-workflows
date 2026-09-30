@@ -295,7 +295,7 @@ Documentation writing and committing remain pending because this session is in *
 
 Implement `vocle-sanity.yml`, exact upstream SHA detection, artifact-backed baseline validation, target/harness separation, Docker network isolation, readiness/cleanup, and the startup scenario.
 
-**Implementation status (2026-09-30):** detection, fingerprinting, baseline-manifest validation, separate target checkout, and target provenance verification are implemented. The workflow deliberately prevents a Phase 1-only harness from publishing a success manifest. Docker runtime isolation, readiness/cleanup, and the live startup assertion remain pending the Phase 3 driver.
+**Implementation status (2026-09-30):** detection, fingerprinting, baseline-manifest validation, separate target checkout, target provenance verification, Docker runtime isolation, readiness/cleanup, and the live startup assertion are implemented. The workflow deliberately prevents an incomplete harness from publishing a success manifest.
 
 **Execution hold (2026-09-30):** the daily trigger is temporarily removed while implementation is incomplete. Do not manually dispatch the workflow until the full 48-scenario suite, its success-manifest gate, and final environment validation are ready. Re-enable `17 2 * * *` only as part of Phase 5 rollout.
 
@@ -303,11 +303,13 @@ Implement `vocle-sanity.yml`, exact upstream SHA detection, artifact-backed base
 
 Implement bounded HTTP/socket clients, direct read-only MongoDB checks, MSG91-only interception, five synthetic identities, and authentication/profile, space, channel, and core messaging scenarios.
 
-**Implementation status (2026-09-30):** the bounded local-only HTTP helper, exact-endpoint MSG91 preload, direct read-only Mongo helper, reusable five-user API fixture factory, seven authentication/profile scenarios, five space/invitation scenarios, and three channel scenarios are in place. The preload captures server-generated OTPs only in the private sanity inbox and returns a fixed widget-provider response for an opaque test token; it does not replace application controllers, services, models, or middleware. These scenarios are implemented but deliberately not run until the complete suite is ready; messaging requires the pending socket-client layer, and the remaining journey modules are pending.
+**Implementation status (2026-09-30):** the bounded local-only HTTP helper, Socket.IO client helper, exact-endpoint MSG91 preload, direct read-only Mongo helper, reusable five-user API fixture factory, seven authentication/profile scenarios, five space/invitation scenarios, three channel scenarios, and seven messaging/Needl scenarios are in place. The preload captures server-generated OTPs only in the private sanity inbox and returns a fixed widget-provider response for an opaque test token; it does not replace application controllers, services, models, or middleware. These scenarios are implemented but deliberately not run until the complete suite is ready.
 
 ### Phase 4 — Collaboration journeys
 
 Implement message requests, direct/group conversations, handoffs, media metadata/local storage, notifications, realtime/availability, search, and support scenarios.
+
+**Implementation status (2026-09-30):** the three message-request scenarios and five direct/group-conversation scenarios are implemented, including acceptance-gated DM reopening, database checks for notifications and read receipts, and upstream `master` conversation expansion with `none` and `all` history. The remaining handoff, media, notification, availability, search, and support modules are pending. No live suite has been run under this phase.
 
 ### Phase 5 — Evidence hardening and rollout
 
