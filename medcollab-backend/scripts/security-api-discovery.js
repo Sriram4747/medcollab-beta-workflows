@@ -435,7 +435,7 @@ async function verifyResetState() {
   );
 }
 function supervisorEnvironment(batch) {
-  assert.ok(['model-otp', 'widget-dummy', 'credential-free'].includes(batch), 'Unknown auth supervisor batch');
+  assert.ok(['model-otp', 'model-otp-extra', 'widget-dummy', 'credential-free', 'bypass-otp-limiter'].includes(batch), 'Unknown auth supervisor batch');
   const environment = {
     ...process.env,
     NODE_ENV: 'test',
@@ -444,7 +444,7 @@ function supervisorEnvironment(batch) {
     MONGODB_URI: URI,
     JWT_SECRET: 'ci-test-only-jwt-secret-not-for-production-0000000000000001',
     JWT_REFRESH_SECRET: 'ci-test-only-refresh-secret-not-for-production-000000000002',
-    OTP_BYPASS: 'false',
+    OTP_BYPASS: batch === 'bypass-otp-limiter' ? 'true' : 'false',
     CLOUDINARY_CLOUD_NAME: '', CLOUDINARY_API_KEY: '', CLOUDINARY_API_SECRET: '',
     MSG91_AUTH_KEY: batch === 'widget-dummy' ? 'ci-widget-key-not-a-provider-secret' : '',
     MSG91_TEMPLATE_ID: '', FIREBASE_PROJECT_ID: '', FIREBASE_CLIENT_EMAIL: '', FIREBASE_PRIVATE_KEY: '',
