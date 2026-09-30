@@ -116,7 +116,9 @@ jobs:
           test ! -e target/medcollab-backend/.env
           docker pull mongo:7
           docker pull node:22
-          docker run --rm --network none \
+          # Dependency preparation occurs before application processes start.
+          # Runtime containers below use network none/shared loopback only.
+          docker run --rm \
             --mount "type=bind,source=$PWD/target,target=/workspace" \
             --workdir /workspace/medcollab-backend node:22 npm ci
           mkdir -p "$RUNNER_TEMP/vocle-sanity-uploads" "$RUNNER_TEMP/vocle-sanity-output"
