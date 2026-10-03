@@ -261,6 +261,9 @@ require('./security/suites/media')({ add, ids });
 require('./security/suites/realtime')({ add, ids });
 require('./security/suites/phase0-repairs')({ add, ids });
 require('./security/suites/auth-session')({ add, authPhones: AUTH_TEST_PHONES });
+require('./security/suites/users-profiles')({ add, ids });
+require('./security/suites/space-lifecycle')({ add, ids });
+require('./security/suites/consent-handoffs')({ add, ids });
 
 let mongoose, models, users;
 let fixtureUserBaseline;
@@ -355,6 +358,8 @@ function handoffBody() {
 async function snapshot() {
   const state = {};
   const fixtureUserIds = Object.values(users).map((user) => user._id);
+  const ownedSpaces = await models.Space.find({ createdBy: { $in: fixtureUserIds } }).select('_id').lean();
+  const trackedSpaceIds = [...new Set([ids.space, ids.otherSpace, ...ownedSpaces.map(space => String(space._id))])];
   for (const [name, model] of Object.entries(models)) {
     const query = name === 'User'
       ? { $or: [{ _id: { $in: fixtureUserIds } }, { phone: { $in: AUTH_TEST_PHONES } }] }
@@ -363,14 +368,14 @@ async function snapshot() {
       : name === 'Space'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { createdBy: { $in: fixtureUserIds } }] }
       : name === 'Channel'
-      ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { type: 'direct', createdBy: { $in: fixtureUserIds } }] }
+      ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: trackedSpaceIds } }, { type: 'direct', createdBy: { $in: fixtureUserIds } }] }
       : name === 'Message'
-        ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }, { senderId: { $in: fixtureUserIds }, spaceId: null }] }
+        ? { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: trackedSpaceIds } }, { senderId: { $in: fixtureUserIds }, spaceId: null }] }
         : name === 'MessageRequest'
           ? { $or: [{ _id: { $in: Object.values(ids) } }, { fromUserId: { $in: fixtureUserIds } }, { toUserId: { $in: fixtureUserIds } }] }
           : name === 'Notification'
             ? { $or: [{ userId: { $in: fixtureUserIds } }, { actorId: { $in: fixtureUserIds } }, { referenceId: { $in: Object.values(ids) } }] }
-            : { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: [ids.space, ids.otherSpace] } }] };
+            : { $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: trackedSpaceIds } }] };
     const records = await model.find(query).sort({ _id: 1 }).lean();
     // lastSeenAt is intentionally volatile and unrelated to an API action's
     // ownership result. Everything else on synthetic users remains tracked.
