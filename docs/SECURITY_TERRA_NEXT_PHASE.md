@@ -1,3 +1,13 @@
+# Current phase status — 2026-10-04
+
+Phase 0, Phase 1, Phase 2, Phase 3 and bounded HTTP Phase 4 are complete. Hosted [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), source `f559332b82783b7fee4341434e15c49ec25dc728`, completed **626/626 executed, 566 passes, 60 observations; healthy infrastructure**, exact routes **70/77**. All original 386 and subsequent appended VOCLE positions/outcomes remain intact. Read [progress](SECURITY_AUTOMATION_PROGRESS.md), [current findings](SECURITY_FINDINGS_2026-10-04.md), [current coverage](SECURITY_TEST_COVERAGE.md), [batch details](SECURITY_PHASES_2_3_2026-10-03.md), and preserved raw/reviewed evidence before continuing.
+
+Remaining work includes three developer-tool routes with separately supervised enabled and disabled-configuration guards; four platform operations and deep-link escaping; realtime recovery, stale space rooms, established-token expiry/deactivation, cache invalidation and crash isolation. Provider integrations remain intentionally disabled. Approval/owner-transfer APIs do not exist in the inventory and must not be invented. No application vulnerability remediation is authorized in this discovery work.
+
+Preserve all **626** VOCLE positions. Continue using the existing workflow, real loopback Express/Mongoose backend and disposable local vocle_ci MongoDB, synthetic identities, selective cleanup, identity/canary/persistence evidence and non-gating security observations. Review consent/audit policy questions with developers before inventing expectations. The detailed original roadmap below remains historical; Phase 0/1 start instructions and the 352-case/46-route baseline are superseded. Fork origin/master only; upstream remains read-only.
+
+---
+
 # Terra next security phase
 
 Baseline: source `91d237294625288bd7f304871a4df3a9ea50fcdd`, [run 36228675577](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36228675577), 352 executed / 312 passed / 40 observations. Read AGENTS.md and [reviewed findings](SECURITY_FINDINGS_2026-09-26.md) first. **Implement tests and reporting only. Do not patch application vulnerabilities.**

@@ -1,3 +1,15 @@
+# Current coverage — 2026-10-04
+
+Hosted [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), source `f559332b82783b7fee4341434e15c49ec25dc728`, executed **626/626 cases, 566 passes, 60 observations; infrastructure healthy**. The [exact generated map](security-evidence/37144805902/security-api-coverage-report.md) exercises **70/77 HTTP method/path operations (90.9%)**. The original 386 IDs/expectations/results remain intact (348 passes, 38 observations).
+
+Current breadth includes all five auth/session operations (Phase 1), all eight user operations, all ten space operations, group DM, all handoff operations including notes/reassign, reactions, all three support writes and the prior route baseline. Phase 2 adds 75 cases; Phase 3 adds 118; bounded HTTP Phase 4 adds 47. Module labels distinguish group, direct/private and lifecycle contexts on shared route patterns.
+
+Seven explicit operations remain uncovered: POST /api/dev/seed-conversation, /api/dev/seed-handoff, /api/dev/seed-notifications, and GET /, /api, /join/:code, /health. Health is exercised during boot/preflight but is intentionally not credited as a discovery testcase. Socket.IO, static media and implicit HEAD/OPTIONS remain outside this HTTP denominator. Provider behavior and realtime recovery/token/cache/crash supervision remain deferred.
+
+Route hits count observations as exercised and establish only the listed contexts, not complete authorization/branch/feature assurance. Read [reviewed findings](SECURITY_FINDINGS_2026-10-04.md), [reviewed JSON](security-evidence/37144805902/reviewed-observations.json) and [progress](SECURITY_AUTOMATION_PROGRESS.md). All counts and pending-execution statements below are historical and superseded by the current generated map.
+
+---
+
 # Current route coverage — reviewed 2026-09-26
 
 [Run 36228675577](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/36228675577) at source `91d237294625288bd7f304871a4df3a9ea50fcdd`: **352/352 executed, 312 passed, 40 observations; 46/77 explicit HTTP method/path operations exercised (59.7%), 31 uncovered**. See the [retained generated inventory](security-evidence/36228675577/security-api-coverage-report.md) for every route, [reviewed findings](SECURITY_FINDINGS_2026-09-26.md) for all 40 dispositions, and [Terra plan](SECURITY_TERRA_NEXT_PHASE.md) for the exact uncovered list and implementation sequence.

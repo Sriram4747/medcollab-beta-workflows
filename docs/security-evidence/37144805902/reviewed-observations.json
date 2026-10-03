@@ -1,0 +1,2031 @@
+{
+  "runId": 37144805902,
+  "executedSource": "f559332b82783b7fee4341434e15c49ec25dc728",
+  "rawResultsSha256": "82ad1a6ccb33cc70c0ce1e4ec105c2cb31e20f9c141909f99d808ffa452cf676",
+  "classificationCounts": {
+    "confirmed security defect": 35,
+    "validation/hardening issue": 8,
+    "retained baseline ambiguity": 2,
+    "unresolved/manual-confirmation required": 1,
+    "hardening / field policy": 1,
+    "hardening / inference policy": 1,
+    "hardening / identity lifecycle": 4,
+    "consent policy review": 2,
+    "lifecycle policy review": 2,
+    "hardening / archive policy": 1,
+    "hardening / input handling": 3
+  },
+  "newClassificationCounts": {
+    "hardening / field policy": 1,
+    "hardening / inference policy": 1,
+    "confirmed security defect": 8,
+    "hardening / identity lifecycle": 4,
+    "consent policy review": 2,
+    "lifecycle policy review": 2,
+    "hardening / archive policy": 1,
+    "hardening / input handling": 3
+  },
+  "observations": [
+    {
+      "caseId": "VOCLE-094",
+      "name": "cross-channel reply by A",
+      "module": "Baseline group, space, and handoff security",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.controller.js",
+        "src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-098",
+      "name": "cross-channel reply by B",
+      "module": "Baseline group, space, and handoff security",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.controller.js",
+        "src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-099",
+      "name": "handoff foreign channelId",
+      "module": "Baseline group, space, and handoff security",
+      "classification": "confirmed security defect",
+      "rootCause": "S2",
+      "review": "Handoff persists channelId without checking its space or caller access; downstream delivery not established.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/handoffs/handoff.controller.js:createHandoff"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-110",
+      "name": "message text number PUT",
+      "module": "Baseline group, space, and handoff security",
+      "classification": "validation/hardening issue",
+      "rootCause": "H1",
+      "review": "PUT text trim coerces number/object before String persistence; sender and channel checks remain. POST strict-type cases now pass.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/middleware/validate.js:validateSendMessage",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.model.js:content.text"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-112",
+      "name": "message text object PUT",
+      "module": "Baseline group, space, and handoff security",
+      "classification": "validation/hardening issue",
+      "rootCause": "H1",
+      "review": "PUT text trim coerces number/object before String persistence; sender and channel checks remain. POST strict-type cases now pass.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/middleware/validate.js:validateSendMessage",
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.model.js:content.text"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-159",
+      "name": "read direct-message member metadata",
+      "module": "Direct Messages",
+      "classification": "confirmed security defect",
+      "rootCause": "S3",
+      "review": "getChannelMembers returns channel member metadata without caller membership authorization. Exact response identity capture is a follow-up.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "returnedMemberIds": [
+          "6ac14b3c93f495cc2e0769bd",
+          "6ac14b3c93f495cc2e0769c6"
+        ],
+        "returnedMemberFields": [
+          "_id",
+          "availability",
+          "avatarUrl",
+          "name",
+          "role",
+          "speciality"
+        ]
+      },
+      "sources": [
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/features/channels/channel.controller.js:getChannelMembers"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-171",
+      "name": "self DM creates caller-only self notes",
+      "module": "Direct Messages",
+      "classification": "retained baseline ambiguity",
+      "rootCause": "BASELINE_SEMANTICS",
+      "review": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
+      "limits": "Requires separate source/fixture review; do not count as a new vulnerability or silently convert to pass.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-193",
+      "name": "foreign direct-message ID reply",
+      "module": "Direct Messages",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-197",
+      "name": "foreign direct-message ID reply",
+      "module": "Direct Messages",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/channels/channel.routes.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-267",
+      "name": "handoff draft inbox privacy ?type=received&status=draft",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-268",
+      "name": "handoff draft direct receiver privacy",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "returnedHandoffId": "7ec000000000000000000008",
+        "returnedHandoffFields": [
+          "__v",
+          "_id",
+          "acknowledgedAt",
+          "acknowledgementNote",
+          "assignmentHistory",
+          "channelId",
+          "createdAt",
+          "fromUserId",
+          "patients",
+          "shiftDate",
+          "shiftSummary",
+          "shiftType",
+          "spaceId",
+          "status",
+          "submittedAt",
+          "toUserId",
+          "updatedAt",
+          "writeBackNotes"
+        ]
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-270",
+      "name": "search draft handoff privacy",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-271",
+      "name": "search draft handoff privacy",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S4",
+      "review": "Draft status/participant restriction absent in explicit received filter, receiver detail and member-space search. Ordinary receiver/member can read draft.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "draftDisclosed": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-272",
+      "name": "private group excluded member read ",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S5",
+      "review": "Private channel detail checks space membership but omits private member/admin guard.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "returnedChannelId": "7ec000000000000000000003",
+        "returnedChannelFields": [
+          "__v",
+          "_id",
+          "createdAt",
+          "createdBy",
+          "description",
+          "directKey",
+          "isArchived",
+          "isPrivate",
+          "members",
+          "name",
+          "onlyAdminsCanPost",
+          "pinnedMessages",
+          "position",
+          "spaceId",
+          "type",
+          "updatedAt"
+        ]
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-273",
+      "name": "private group excluded member read /members",
+      "module": "Extended API",
+      "classification": "confirmed security defect",
+      "rootCause": "S3",
+      "review": "getChannelMembers returns channel member metadata without caller membership authorization. Exact response identity capture is a follow-up.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "returnedMemberIds": [
+          "6ac14b3c93f495cc2e0769bd"
+        ],
+        "returnedMemberFields": [
+          "_id",
+          "availability",
+          "avatarUrl",
+          "name",
+          "role",
+          "speciality"
+        ]
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-275",
+      "name": "direct body foreign thread binding 7ec000000000000000000007",
+      "module": "Cross-module",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "foreignBindingPersisted": true,
+        "foreignParentReplyCount": 1
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-276",
+      "name": "direct body foreign thread binding 7ec00000000000000000000e",
+      "module": "Cross-module",
+      "classification": "confirmed security defect",
+      "rootCause": "S1",
+      "review": "Foreign thread accepted without parent/channel authorization; persisted foreign binding and parent counter independently proven by 275/276.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "foreignBindingPersisted": true,
+        "foreignParentReplyCount": 1
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-301",
+      "name": "upload rejects wrong field",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-302",
+      "name": "upload rejects multiple files",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-303",
+      "name": "upload rejects forbidden MIME",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-304",
+      "name": "upload rejects octet forbidden suffix",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H2",
+      "review": "Multer/filter rejects malformed upload before storage, but error handler leaves these errors at 500. Zero files added; backend healthy.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "filesAdded": 0,
+        "uploadStatus": 500
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-306",
+      "name": "upload rejects empty bytes",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H3",
+      "review": "Allowed caller MIME reaches raw local buffer storage despite empty/mismatched content. One file added; active content/client execution untested.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-307",
+      "name": "upload rejects inert MIME extension mismatch",
+      "module": "Media",
+      "classification": "validation/hardening issue",
+      "rootCause": "H3",
+      "review": "Allowed caller MIME reaches raw local buffer storage despite empty/mismatched content. One file added; active content/client execution untested.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-313",
+      "name": "media canonical owner containment single",
+      "module": "Media",
+      "classification": "confirmed security defect",
+      "rootCause": "S6",
+      "review": "Decoded owner substring passes before path normalization; exact synthetic foreign file is deleted. No outside-upload or Cloudinary exploit executed.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200,
+        "foreignFileSurvived": false
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-314",
+      "name": "media canonical owner containment double",
+      "module": "Media",
+      "classification": "confirmed security defect",
+      "rootCause": "S6",
+      "review": "Decoded owner substring passes before path normalization; exact synthetic foreign file is deleted. No outside-upload or Cloudinary exploit executed.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200,
+        "foreignFileSurvived": false
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-323",
+      "name": "local upload to authorized message integration",
+      "module": "Media",
+      "classification": "unresolved/manual-confirmation required",
+      "rootCause": "U1",
+      "review": "Local upload succeeds but HTTP loopback media URL fails HTTPS requirement before Cloudinary host check. Functional integration contract needs local mobile/Reqable confirmation; no authorization bypass.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 400,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "filesAdded": 1,
+        "uploadStatus": 200
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-339",
+      "name": "socket unauthorized typing_start foreign space",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-340",
+      "name": "socket unauthorized typing_stop foreign space",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-342",
+      "name": "socket unauthorized typing_start foreign DM",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-343",
+      "name": "socket unauthorized typing_stop foreign DM",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-345",
+      "name": "socket unauthorized typing_start private group",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-346",
+      "name": "socket unauthorized typing_stop private group",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S7",
+      "review": "Typing handler does not authorize channel. Attacker-attributed packets arrive after denied join/read; authorized delivery control passes.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 2,
+        "serverAttributedAttacker": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-347",
+      "name": "private REST message personal-room audience",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S8",
+      "review": "sendMessage uses all space members for private-message personal-room recipients; exact full canary arrives at excluded B.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "fullCanaryDisclosed": true,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-348",
+      "name": "membership revocation stale channel room before sync",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S9",
+      "review": "Member removal does not evict channel rooms and sync only adds rooms; removed B receives edits despite fresh REST denial.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-349",
+      "name": "membership revocation stale channel room after sync",
+      "module": "Realtime",
+      "classification": "confirmed security defect",
+      "rootCause": "S9",
+      "review": "Member removal does not evict channel rooms and sync only adds rooms; removed B receives edits despite fresh REST denial.",
+      "limits": "Existing baseline root/disposition preserved; this run re-executes the original case without changing its expectation.",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actualStatus": null,
+      "healthStatus": 200,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "quietWindowMs": 1500,
+        "unauthorizedEvents": 1,
+        "authorizedControl": true,
+        "invariantHeld": false
+      },
+      "sources": [
+        "src/socket/index.js",
+        "src/socket/handlers/message.handler.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-355",
+      "name": "opted-out declined replay target denies request before lifecycle handling",
+      "module": "Phase 0 Repair Controls",
+      "classification": "retained baseline ambiguity",
+      "rootCause": "BASELINE_SEMANTICS",
+      "review": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
+      "limits": "Requires separate source/fixture review; do not count as a new vulnerability or silently convert to pass.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 403,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/message-requests/messageRequest.routes.js",
+        "src/features/message-requests/messageRequest.controller.js",
+        "src/utils/knownUsers.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-356",
+      "name": "MSG91 widget fabricated signature cannot issue a session",
+      "module": "Phase 1 Authentication and Session Lifecycle",
+      "classification": "confirmed security defect",
+      "rootCause": "AUTH_WIDGET",
+      "review": "The Phase 1 dummy-key/outbound-disabled widget cases still issue sessions from fabricated unsigned/expired token shapes. Source locally decodes phone without signature verification.",
+      "limits": "Synthetic local identity only; no live provider behavior or production session is claimed.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/auth/auth.routes.js",
+        "src/features/auth/auth.controller.js",
+        "src/services/otp.service.js",
+        "src/features/auth/otp.model.js",
+        "src/middleware/auth.js",
+        "src/middleware/rateLimiter.js",
+        "src/services/msg91Widget.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-357",
+      "name": "MSG91 widget expired fabricated token cannot issue a session",
+      "module": "Phase 1 Authentication and Session Lifecycle",
+      "classification": "confirmed security defect",
+      "rootCause": "AUTH_WIDGET",
+      "review": "The Phase 1 dummy-key/outbound-disabled widget cases still issue sessions from fabricated unsigned/expired token shapes. Source locally decodes phone without signature verification.",
+      "limits": "Synthetic local identity only; no live provider behavior or production session is claimed.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {},
+      "sources": [
+        "src/features/auth/auth.routes.js",
+        "src/features/auth/auth.controller.js",
+        "src/services/otp.service.js",
+        "src/features/auth/otp.model.js",
+        "src/middleware/auth.js",
+        "src/middleware/rateLimiter.js",
+        "src/services/msg91Widget.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-398",
+      "name": "public profile preference and activity field policy review",
+      "module": "Phase 2 Users and Profiles",
+      "classification": "hardening / field policy",
+      "rootCause": "PUBLIC_PROFILE",
+      "review": "toPublicProfile exposes notification preference keys and lastSeenAt to authenticated foreign-profile reads. Credential/phone minimization controls pass.",
+      "limits": "Public profile reads are supported. Product must decide whether these preferences/activity fields are intended public metadata.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Policy review: foreign public profiles should minimize notification preferences and activity timestamps; authenticated foreign profile reads themselves remain supported."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "returnedFields": [
+          "_id",
+          "availability",
+          "avatarUrl",
+          "bio",
+          "institution",
+          "isOnboarded",
+          "isVerified",
+          "lastSeenAt",
+          "name",
+          "notifications",
+          "role",
+          "speciality"
+        ],
+        "identityMatched": true,
+        "preferenceFieldsExposed": [
+          "allowMessageRequestsFromAnyone",
+          "emergencyAlerts",
+          "handoffs",
+          "mentions",
+          "newMessages",
+          "quietHoursEnd",
+          "quietHoursStart",
+          "readReceiptsEnabled"
+        ]
+      },
+      "sources": [
+        "src/features/users/user.routes.js",
+        "src/features/users/user.controller.js",
+        "src/features/users/user.model.js",
+        "src/utils/knownUsers.js",
+        "src/middleware/validate.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-421",
+      "name": "search foreign space membership inference policy",
+      "module": "Phase 2 Users and Profiles",
+      "classification": "hardening / inference policy",
+      "rootCause": "SEARCH_SPACE_FILTER",
+      "review": "Search intersects known users with caller-selected foreign space members despite a successful foreign-space detail denial control.",
+      "limits": "Only a known fixture identity is inferred; no arbitrary users, full member list or private messages are disclosed by this case.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Policy review: a caller denied foreign space detail should not infer that space membership from a known-user search filter."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "returnedIds": [
+          "6ac14b3c93f495cc2e0769cd"
+        ]
+      },
+      "sources": [
+        "src/features/users/user.routes.js",
+        "src/features/users/user.controller.js",
+        "src/features/users/user.model.js",
+        "src/utils/knownUsers.js",
+        "src/middleware/validate.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-429",
+      "name": "Needl excluded same-space member preview confidentiality",
+      "module": "Phase 2 Users and Profiles",
+      "classification": "confirmed security defect",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "review": "A same-space caller excluded from the private channel receives its root ID and matching private preview through Needl, despite 403 on message reads and an authorized owner canary. getNeedl selects all channels in active member spaces without private access filtering.",
+      "limits": "Executed synthetic preview disclosure; no full thread/media download or provider access claimed.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Needl must expose the synthetic root/preview only while the caller has access to its active channel and undeleted message. Successful member and private message-read denial controls are required."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "authorizedCanary": true,
+        "privateMessageReadDenied": true,
+        "privateRootReturned": true,
+        "previewMatched": true
+      },
+      "sources": [
+        "src/features/users/user.routes.js",
+        "src/features/users/user.controller.js",
+        "src/features/users/user.model.js",
+        "src/utils/knownUsers.js",
+        "src/middleware/validate.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-434",
+      "name": "Needl removed private-channel member preview confidentiality",
+      "module": "Phase 2 Users and Profiles",
+      "classification": "confirmed security defect",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "review": "A same-space caller excluded from the private channel receives its root ID and matching private preview through Needl, despite 403 on message reads and an authorized owner canary. getNeedl selects all channels in active member spaces without private access filtering.",
+      "limits": "Executed synthetic preview disclosure; no full thread/media download or provider access claimed.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Needl must expose the synthetic root/preview only while the caller has access to its active channel and undeleted message. Successful member and private message-read denial controls are required."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "authorizedCanary": true,
+        "privateMessageReadDenied": true,
+        "privateRootReturned": true,
+        "previewMatched": true
+      },
+      "sources": [
+        "src/features/users/user.routes.js",
+        "src/features/users/user.controller.js",
+        "src/features/users/user.model.js",
+        "src/utils/knownUsers.js",
+        "src/middleware/validate.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-503",
+      "name": "leave Needl excludes former private root",
+      "module": "Phase 3 Space Lifecycle",
+      "classification": "confirmed security defect",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "review": "After actual leave/removal, a retained private channel.members entry lets Needl return the former space private root even though REST message reads deny 403. The owner Needl canary remains visible.",
+      "limits": "The expanded follow-up adds explicit denial/control/persistence evidence. This is REST preview revocation, separate from previously recorded stale socket rooms.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "A former space member must not receive a private root preview through retained channel.members after REST space membership is revoked."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "postRevocationMessageReadDenied": true,
+        "ownerNeedlCanaryObserved": true,
+        "revokedPrivateRootReturned": true
+      },
+      "sources": [
+        "src/features/spaces/space.routes.js",
+        "src/features/spaces/space.controller.js",
+        "src/features/spaces/space.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-509",
+      "name": "remove Needl excludes former private root",
+      "module": "Phase 3 Space Lifecycle",
+      "classification": "confirmed security defect",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "review": "After actual leave/removal, a retained private channel.members entry lets Needl return the former space private root even though REST message reads deny 403. The owner Needl canary remains visible.",
+      "limits": "The expanded follow-up adds explicit denial/control/persistence evidence. This is REST preview revocation, separate from previously recorded stale socket rooms.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "A former space member must not receive a private root preview through retained channel.members after REST space membership is revoked."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "postRevocationMessageReadDenied": true,
+        "ownerNeedlCanaryObserved": true,
+        "revokedPrivateRootReturned": true
+      },
+      "sources": [
+        "src/features/spaces/space.routes.js",
+        "src/features/spaces/space.controller.js",
+        "src/features/spaces/space.model.js",
+        "src/utils/channelAccess.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-527",
+      "name": "group DM inactive opted-in target should be unavailable",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "hardening / identity lifecycle",
+      "rootCause": "GROUP_TARGET_STATE",
+      "review": "Group DM creation accepts and persists an opted-in inactive or incomplete target. createGroupDM selects only target ID/name and never checks isActive/isOnboarded.",
+      "limits": "This does not authenticate an inactive user. Severity depends on unavailable-account and invitation policy; classify as lifecycle validation until broader impact is established.",
+      "expected": {
+        "statuses": [
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "returnedGroupId": "6ac14c8f5fa4dd2d9d92d0ac",
+        "unavailableTargetPersisted": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-528",
+      "name": "group DM incomplete opted-in target should be unavailable",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "hardening / identity lifecycle",
+      "rootCause": "GROUP_TARGET_STATE",
+      "review": "Group DM creation accepts and persists an opted-in inactive or incomplete target. createGroupDM selects only target ID/name and never checks isActive/isOnboarded.",
+      "limits": "This does not authenticate an inactive user. Severity depends on unavailable-account and invitation policy; classify as lifecycle validation until broader impact is established.",
+      "expected": {
+        "statuses": [
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "returnedGroupId": "6ac14c905fa4dd2d9d92d0ad",
+        "unavailableTargetPersisted": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-529",
+      "name": "group DM request-eligible unaccepted peer messaging consent policy",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "consent policy review",
+      "rootCause": "GROUP_CONSENT",
+      "review": "Request eligibility permits a group with pending/unaccepted peers; group message send/read succeeds and canMessageUser subsequently treats group membership as eligible for a one-to-one DM while the request remains pending.",
+      "limits": "Source explicitly allows request-eligible group peers. Product must settle group invitation vs one-to-one acceptance policy before labeling a vulnerability.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Consent policy review: request eligibility without acceptance should not automatically grant full group message access; current source permits group creation and this is recorded for product review."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "unacceptedGroupSendStatus": 201,
+        "unacceptedGroupReadStatus": 200,
+        "pendingRequestUnchanged": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-530",
+      "name": "group membership promotes unaccepted pair to one-to-one DM policy",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "consent policy review",
+      "rootCause": "GROUP_CONSENT",
+      "review": "Request eligibility permits a group with pending/unaccepted peers; group message send/read succeeds and canMessageUser subsequently treats group membership as eligible for a one-to-one DM while the request remains pending.",
+      "limits": "Source explicitly allows request-eligible group peers. Product must settle group invitation vs one-to-one acceptance policy before labeling a vulnerability.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false,
+        "semanticInvariant": "Consent policy review: adding a pending peer to a group should not itself replace one-to-one acceptance. The original pending request must remain unaccepted."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "pendingRequestBefore": "pending"
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-572",
+      "name": "handoff reassign inactive member should be unavailable",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "hardening / identity lifecycle",
+      "rootCause": "HANDOFF_TARGET_STATE",
+      "review": "Reassignment persists an inactive same-space member as assignee, writes history and creates a notification. Controller checks space membership, not active User state.",
+      "limits": "No inactive authentication or successful receipt is claimed; availability/clinical handoff integrity requires product review.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "inactiveAssigneePersisted": true,
+        "assignmentHistoryCount": 1,
+        "inactiveRecipientNotified": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-574",
+      "name": "removed handoff participant notes lifecycle policy",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "lifecycle policy review",
+      "rootCause": "REMOVED_HANDOFF_PARTY",
+      "review": "A removed participant may still add notes or reassign because the controller authorizes current participant IDs without current space membership.",
+      "limits": "Source supports this behavior; audit continuity may be intentional. No independent admin/outsider write is allowed in the tested matrix.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Lifecycle policy review: removed participants retain source-authorized handoff writes despite REST space revocation. This supported behavior requires an explicit audit/continuity policy decision."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "removedPartyWriteAccepted": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-575",
+      "name": "removed handoff participant reassign lifecycle policy",
+      "module": "Phase 3 Consent and Handoffs",
+      "classification": "lifecycle policy review",
+      "rootCause": "REMOVED_HANDOFF_PARTY",
+      "review": "A removed participant may still add notes or reassign because the controller authorizes current participant IDs without current space membership.",
+      "limits": "Source supports this behavior; audit continuity may be intentional. No independent admin/outsider write is allowed in the tested matrix.",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Lifecycle policy review: removed participants retain source-authorized handoff writes despite REST space revocation. This supported behavior requires an explicit audit/continuity policy decision."
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "removedPartyWriteAccepted": true
+      },
+      "sources": [
+        "src/features/channels/channel.controller.js:createGroupDM",
+        "src/utils/knownUsers.js",
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/services/notification.service.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-594",
+      "name": "private pin excluded same-space peer denied",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "confirmed security defect",
+      "rootCause": "N2_PRIVATE_PIN",
+      "review": "An excluded ordinary same-space member pins/unpins a private message. Handlers check space membership but omit isPrivate/channel membership; independent owner pin persistence and unpin controls pass.",
+      "limits": "Private-message mutation demonstrated. The unpin case has a persisted authorized canary; no full content disclosure is claimed by pin tests.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-595",
+      "name": "private unpin excluded same-space peer denied",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "confirmed security defect",
+      "rootCause": "N2_PRIVATE_PIN",
+      "review": "An excluded ordinary same-space member pins/unpins a private message. Handlers check space membership but omit isPrivate/channel membership; independent owner pin persistence and unpin controls pass.",
+      "limits": "Private-message mutation demonstrated. The unpin case has a persisted authorized canary; no full content disclosure is claimed by pin tests.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {
+        "authorizedPinPersisted": true
+      },
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-599",
+      "name": "archived channel pin policy",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "hardening / archive policy",
+      "rootCause": "ARCHIVED_PIN",
+      "review": "Pinning mutates an archived channel even though archived message/reaction reads/writes are denied by the shared access helper.",
+      "limits": "Current pin handler omits archive guard; archive mutation policy needs explicit agreement.",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 200,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-603",
+      "name": "mention notification foreign outsider recipient boundary",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "confirmed security defect",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "review": "Explicit mentions create notifications with matching message-preview canaries for a foreign outsider or excluded private member. Authorized recipient controls execute first. notifyMention filters sender/viewers but never channel/space access.",
+      "limits": "Persistent inbox preview disclosure through actual HTTP/DB behavior; no FCM delivery is enabled or claimed.",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "authorizedMentionRecipientObserved": true,
+        "mentionRecipients": [
+          "6ac14b3c93f495cc2e0769cd"
+        ],
+        "mentionPreviewMatched": true
+      },
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-604",
+      "name": "mention notification private excluded member recipient boundary",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "confirmed security defect",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "review": "Explicit mentions create notifications with matching message-preview canaries for a foreign outsider or excluded private member. Authorized recipient controls execute first. notifyMention filters sender/viewers but never channel/space access.",
+      "limits": "Persistent inbox preview disclosure through actual HTTP/DB behavior; no FCM delivery is enabled or claimed.",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "authorizedMentionRecipientObserved": true,
+        "mentionRecipients": [
+          "6ac14b3c93f495cc2e0769c6"
+        ],
+        "mentionPreviewMatched": true
+      },
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-605",
+      "name": "mention notification inactive identity recipient boundary",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "hardening / identity lifecycle",
+      "rootCause": "INACTIVE_MENTION",
+      "review": "A mention writes a preview notification for an inactive target because recipient active state is not checked.",
+      "limits": "Inactive target cannot authenticate under protect. This case proves stored data, not delivery or readable disclosure to an active unauthorized user.",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actualStatus": 201,
+      "healthStatus": null,
+      "stateUnchanged": false,
+      "semanticCheckPassed": false,
+      "evidence": {
+        "authorizedMentionRecipientObserved": true,
+        "mentionRecipients": [
+          "6ac14b3c93f495cc2e0769dd"
+        ],
+        "mentionPreviewMatched": true
+      },
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-611",
+      "name": "support bug non-string title",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "hardening / input handling",
+      "rootCause": "SUPPORT_TYPE",
+      "review": "An object title reaches optional .trim() in each support controller, producing HTTP 500 rather than a 400 validation denial. Service remains healthy and no synthetic ticket is created.",
+      "limits": "Controlled malformed input, no crash, production traffic or authorization bypass.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-618",
+      "name": "support feature non-string title",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "hardening / input handling",
+      "rootCause": "SUPPORT_TYPE",
+      "review": "An object title reaches optional .trim() in each support controller, producing HTTP 500 rather than a 400 validation denial. Service remains healthy and no synthetic ticket is created.",
+      "limits": "Controlled malformed input, no crash, production traffic or authorization bypass.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    },
+    {
+      "caseId": "VOCLE-625",
+      "name": "support feedback non-string title",
+      "module": "Phase 4 Bounded HTTP",
+      "classification": "hardening / input handling",
+      "rootCause": "SUPPORT_TYPE",
+      "review": "An object title reaches optional .trim() in each support controller, producing HTTP 500 rather than a 400 validation denial. Service remains healthy and no synthetic ticket is created.",
+      "limits": "Controlled malformed input, no crash, production traffic or authorization bypass.",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actualStatus": 500,
+      "healthStatus": null,
+      "stateUnchanged": true,
+      "semanticCheckPassed": true,
+      "evidence": {},
+      "sources": [
+        "src/features/messages/message.routes.js",
+        "src/features/messages/message.controller.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.controller.js",
+        "src/utils/channelAccess.js",
+        "src/services/notification.service.js",
+        "src/features/support/support.controller.js"
+      ],
+      "traceDocument": "../../SECURITY_FINDINGS_2026-10-04.md"
+    }
+  ]
+}
