@@ -264,6 +264,7 @@ require('./security/suites/auth-session')({ add, authPhones: AUTH_TEST_PHONES })
 require('./security/suites/users-profiles')({ add, ids });
 require('./security/suites/space-lifecycle')({ add, ids });
 require('./security/suites/consent-handoffs')({ add, ids });
+require('./security/suites/bounded-http')({ add, ids });
 
 let mongoose, models, users;
 let fixtureUserBaseline;
@@ -319,11 +320,12 @@ async function reset() {
     { actorId: { $in: fixtureUserIds } },
     { referenceId: { $in: Object.values(ids) } },
   ] });
+  await models.SupportTicket.deleteMany({ userId: { $in: fixtureUserIds } });
   await models.Channel.deleteMany({ $or: [
     { type: 'direct', createdBy: { $in: fixtureUserIds } },
     { spaceId: { $in: fixtureSpaceIds } },
   ] });
-  for (const model of Object.values(models).filter(m => ![models.User, models.Space, models.Channel, models.Message, models.MessageRequest, models.Notification].includes(m))) {
+  for (const model of Object.values(models).filter(m => ![models.User, models.Space, models.Channel, models.Message, models.MessageRequest, models.Notification, models.SupportTicket].includes(m))) {
     await model.deleteMany({ $or: [{ _id: { $in: Object.values(ids) } }, { spaceId: { $in: fixtureSpaceIds } }] });
   }
   await models.Space.deleteMany({ createdBy: { $in: fixtureUserIds } });
@@ -365,6 +367,8 @@ async function snapshot() {
       ? { $or: [{ _id: { $in: fixtureUserIds } }, { phone: { $in: AUTH_TEST_PHONES } }] }
       : name === 'OTP'
         ? { phone: { $in: [...Object.values(users).map(user => user.phone), ...AUTH_TEST_PHONES] } }
+      : name === 'SupportTicket'
+        ? { userId: { $in: fixtureUserIds } }
       : name === 'Space'
       ? { $or: [{ _id: { $in: Object.values(ids) } }, { createdBy: { $in: fixtureUserIds } }] }
       : name === 'Channel'
@@ -407,7 +411,7 @@ async function settledSnapshot() {
 }
 async function verifyResetState() {
   const fixtureUserIds = Object.values(users).map(user => user._id);
-  const [usersCount, otps, spaces, channels, messages, handoffs, requests, notifications] = await Promise.all([
+  const [usersCount, otps, spaces, channels, messages, handoffs, requests, notifications, supportTickets] = await Promise.all([
     models.User.countDocuments({ _id: { $in: fixtureUserIds } }),
     models.OTP.countDocuments({ phone: { $in: [...Object.values(users).map(user => user.phone), ...AUTH_TEST_PHONES] } }),
     models.Space.countDocuments({ createdBy: { $in: fixtureUserIds } }),
@@ -432,10 +436,11 @@ async function verifyResetState() {
       { actorId: { $in: fixtureUserIds } },
       { referenceId: { $in: Object.values(ids) } },
     ] }),
+    models.SupportTicket.countDocuments({ userId: { $in: fixtureUserIds } }),
   ]);
   assert.deepEqual(
-    { usersCount, otps, spaces, channels, messages, handoffs, requests, notifications },
-    { usersCount: 9, otps: 0, spaces: 2, channels: 5, messages: 6, handoffs: 1, requests: 4, notifications: 0 },
+    { usersCount, otps, spaces, channels, messages, handoffs, requests, notifications, supportTickets },
+    { usersCount: 9, otps: 0, spaces: 2, channels: 5, messages: 6, handoffs: 1, requests: 4, notifications: 0, supportTickets: 0 },
     'Fixture reset did not restore the exact controlled baseline',
   );
 }
@@ -588,6 +593,7 @@ function whatItChecks(c) {
   return 'Checks the endpoint’s current authentication, authorization, and input-handling contract for this controlled request.';
 }
 function expectedBehaviour(c) {
+  if (c.securityInvariant) return `HTTP ${c.statuses.join(' or ')} with the following semantic invariant: ${c.securityInvariant}`;
   if (c.method === 'SOCKET') return 'The named realtime invariant must hold with an authenticated delivery control; backend health is checked separately. No HTTP status is assigned to a socket event.';
   const statuses = c.statuses.join(' or ');
   if (c.actor === 'anonymous' || c.category === 'authentication-negative') return `The API should reject the request with HTTP ${statuses} because no valid authenticated session is presented.`;
@@ -660,7 +666,7 @@ async function execute(c) {
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: realtime
       ? { httpStatus: 'not applicable', invariant: 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
-      : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial && !c.denialMayChangeState, semanticCheck: !!c.check },
+      : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial && !c.denialMayChangeState, semanticCheck: !!c.check, semanticInvariant: c.securityInvariant },
     actual: realtime
       ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!ctx.evidence.invariantHeld, authenticatedControl: ctx.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
       : { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
@@ -794,6 +800,7 @@ async function main() {
   models = Object.fromEntries(['User', 'Space', 'Channel', 'Message', 'Handoff', 'Notification'].map(n => [n, require(`../src/features/${n === 'Handoff' ? 'handoffs' : n.toLowerCase() + 's'}/${n.toLowerCase()}.model`)]));
   models.OTP = require('../src/features/auth/otp.model');
   models.MessageRequest = require('../src/features/message-requests/messageRequest.model');
+  models.SupportTicket = require('../src/features/support/support.controller').SupportTicket;
   await mongoose.connect(URI, { serverSelectionTimeoutMS: 10000 });
   users = {};
   for (const [i, actor] of ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].entries()) {

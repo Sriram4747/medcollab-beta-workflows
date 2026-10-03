@@ -51,6 +51,13 @@ jobs:
       - name: Install backend dependencies
         run: npm ci
 
+      - name: Validate security syntax and append-only manifest
+        run: |
+          for file in scripts/security-api-discovery.js scripts/security-api-coverage-report.js scripts/security-manifest-check.js scripts/security/suites/*.js; do
+            node --check "$file"
+          done
+          node scripts/security-manifest-check.js
+
       - name: Start backend
         run: |
           npm start > "$RUNNER_TEMP/vocle-backend.log" 2>&1 &

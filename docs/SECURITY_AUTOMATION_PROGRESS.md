@@ -1,3 +1,14 @@
+# Current security expansion — 2026-10-04
+
+Phase 2 and Phase 3 completed in hosted [run 37144068281](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144068281), source `afd22893cc581509f4775b112b4cc6d5fc4e7b17`: **579/579 executed, 528 passed, 51 observations; infrastructure healthy**. All original 386 cases retain 348 passes / 38 observations and their IDs/expectations. Added 75 user/profile cases, 53 space lifecycle cases and 65 consent/handoff cases. The four raw reports are preserved in `docs/security-evidence/37144068281/`. Artifact `11281003418`, archive SHA-256 `588e40a9bb98a2904c2ef3cfba44876a6d1feb068e79aee47bafe87d81d4843a`.
+
+Exact HTTP operations exercised: **66/77 (85.7%)**, including all seven new user operations, five space operations, group DM, notes and reassignment, plus the five Phase 1 auth/session operations. Route hits remain partial security coverage, and observations count as exercised.
+
+Thirteen new observations: four Needl confidentiality/revocation cases, two group-DM unavailable-target cases, one inactive handoff-assignee case, two public-profile/search hardening questions, two consent questions and two removed-party handoff lifecycle questions. No application vulnerability was fixed. The first hosted expansion required no startup, fixture, authentication or execution repair. Follow-up evidence adds post-revocation authorized/denied canaries and independent persistence checks for unavailable identities without changing their secure expectations or IDs.
+
+The bounded Phase 4 batch now appends 47 cases (VOCLE-580–626): reactions, private pin/unpin, quote binding, mention notification audience and local support attribution/validation. SupportTicket snapshots/reset are restricted to synthetic user IDs; static syntax/append-only manifest checks are added to the existing workflow. **626 planned; Phase 4 hosted execution pending.** Read [batch details](SECURITY_PHASES_2_3_2026-10-03.md). Developer tools, platform/deep-link pages, socket recovery/cache/expiry/crash supervision and provider delivery remain deferred. Only origin/master is written; unrelated Flutter/Android edits are preserved.
+
+---
 # Current security analysis — 2026-09-28
 
 ## Phase 1 authentication/session coverage complete
@@ -96,3 +107,4 @@ new pass/observation totals until the hardened suite completes in isolated CI.
 - Infrastructure/auth/fixture/transport errors block; discovery observations currently do not. Do not weaken assertions, silently convert observations to passes or change application code. Application remediation is separate.
 - Existing snapshots do not prove completed asynchronous effects, media state, all user/notification changes or socket delivery. Add precise checks for those new phases and settle effects before fixture reset.
 - This workstation's previous baseline had no Docker/mongod/mongosh; use existing isolated Actions when execution is required, never in-memory substitutes. This batch performed only local manifest/report/evidence checks.
+

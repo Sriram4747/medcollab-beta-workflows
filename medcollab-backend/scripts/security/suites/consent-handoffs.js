@@ -46,8 +46,16 @@ module.exports = ({ add, ids }) => {
     prepare: ctx => ctx.models.User.updateOne({ _id: ctx.users.I._id }, {
       isActive: state !== 'inactive', isOnboarded: state !== 'incomplete', 'notifications.allowMessageRequestsFromAnyone': true,
     }),
+    check: async (body, ctx, response) => {
+      if (response.status >= 400) return true;
+      const channel = body.data?.channel?._id && await ctx.models.Channel.findById(body.data.channel._id).lean();
+      ctx.evidence.returnedGroupId = body.data?.channel?._id || null;
+      ctx.evidence.unavailableTargetPersisted = !!channel?.members.some(id => oid(id) === oid(ctx.users.I));
+      return !ctx.evidence.unavailableTargetPersisted;
+    },
   });
   test('group DM request-eligible unaccepted peer messaging consent policy', 'F', group, [200], { userIds: [':E', ':H'] }, {
+    securityInvariant: 'Consent policy review: request eligibility without acceptance should not automatically grant full group message access; current source permits group creation and this is recorded for product review.',
     failureClassification: 'consent policy review / request eligibility opens group message access without acceptance',
     prepare: async ctx => {
       await ctx.models.User.updateOne({ _id: ctx.users.E._id }, { 'notifications.allowMessageRequestsFromAnyone': true });
@@ -63,6 +71,7 @@ module.exports = ({ add, ids }) => {
     },
   });
   test('group membership promotes unaccepted pair to one-to-one DM policy', 'F', '/api/channels/dm', [403], { userId: ':E' }, {
+    securityInvariant: 'Consent policy review: adding a pending peer to a group should not itself replace one-to-one acceptance. The original pending request must remain unaccepted.',
     failureClassification: 'consent policy review / group-derived one-to-one DM eligibility',
     prepare: async ctx => {
       await ctx.models.User.updateOne({ _id: ctx.users.E._id }, { 'notifications.allowMessageRequestsFromAnyone': true });
@@ -114,6 +123,14 @@ module.exports = ({ add, ids }) => {
   for (const [label, body, status] of [['missing target', {}, 400], ['malformed target', { toUserId: 'bad' }, 400], ['absent target', { toUserId: ids.absentUser }, 400], ['foreign target', { toUserId: ':C' }, 400], ['current assignee replay', { toUserId: ':B' }, 400], ['note above max', { toUserId: ':D', note: 'x'.repeat(501) }, 400]]) test(`handoff reassign ${label}`, 'A', `${handoff}/reassign`, [status], body, { prepare: setupHandoff(), category: 'handoff-reassign-schema-boundary' });
   test('handoff reassign inactive member should be unavailable', 'A', `${handoff}/reassign`, [400], { toUserId: ':I' }, {
     prepare: async ctx => { await member(ctx, 'I'); }, failureClassification: 'likely security finding / inactive handoff assignee accepted',
+    check: async (_body, ctx, response) => {
+      if (response.status >= 400) return true;
+      const record = await ctx.models.Handoff.findById(ids.handoff).lean();
+      ctx.evidence.inactiveAssigneePersisted = oid(record.toUserId) === oid(ctx.users.I);
+      ctx.evidence.assignmentHistoryCount = record.assignmentHistory.length;
+      ctx.evidence.inactiveRecipientNotified = !!(await ctx.models.Notification.exists({ referenceId: ids.handoff, userId: ctx.users.I._id }));
+      return !ctx.evidence.inactiveAssigneePersisted;
+    },
   });
   test('handoff reassignment replay preserves one history and revokes former assignee writes', 'B', `${handoff}/reassign`, [403], { toUserId: ':A' }, {
     prepare: async ctx => {
@@ -126,6 +143,7 @@ module.exports = ({ add, ids }) => {
     },
   });
   for (const action of ['notes', 'reassign']) test(`removed handoff participant ${action} lifecycle policy`, 'B', `${handoff}/${action}`, [200], action === 'notes' ? { text: 'Synthetic removed-party audit note' } : { toUserId: ':D', note: 'Synthetic transfer' }, {
+    securityInvariant: 'Lifecycle policy review: removed participants retain source-authorized handoff writes despite REST space revocation. This supported behavior requires an explicit audit/continuity policy decision.',
     prepare: async ctx => {
       await setupHandoff()(ctx);
       assert.equal((await ctx.http('A', 'DELETE', `/api/spaces/${ids.space}/members/${oid(ctx.users.B)}`)).status, 200, 'Removed participant prerequisite failed');

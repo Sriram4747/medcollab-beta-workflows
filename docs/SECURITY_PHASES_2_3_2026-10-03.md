@@ -1,6 +1,6 @@
 # Phase 2 and 3 security expansion — 2026-10-03
 
-Implementation pending hosted execution. The verified baseline remains run 36664384991: 386 executed, 348 passes, 38 observations. No new measured result is claimed yet.
+Hosted Phase 2/3 run 37144068281 executed all 579 cases: 528 passes, 51 observations, infrastructure healthy. Source afd22893cc581509f4775b112b4cc6d5fc4e7b17. The original 386 remain 348 passes and 38 observations. The bounded Phase 4 batch appends 47 cases (VOCLE-580–626) after this healthy run; its hosted execution is pending.
 
 | Batch | Module | Added cases | IDs |
 | --- | --- | ---: | --- |
@@ -17,3 +17,4 @@ Phase 3 traverses the five missing space operations, group DM, notes and reassig
 The runner extends settled snapshots to all spaces created by synthetic fixture users and their default channels/messages/handoffs. Selective reset already removes those owned resources, synthetic DMs, notifications, OTPs and restores User fields. No real user, production API/database, SMS, FCM or Cloudinary integration is used. Returned Railway join links are inert metadata and never followed. Model changes only establish preconditions; case actions use actual HTTP routes and real Mongoose persistence.
 
 Hosted execution, reviewed observations, final coverage, evidence hashes and corrections will be appended after the run. Phase 4 remains conditional on healthy Phase 2/3 execution; provider integrations, socket recovery/token-cache/crash supervision and nonexistent approval/owner-transfer APIs remain deferred.
+

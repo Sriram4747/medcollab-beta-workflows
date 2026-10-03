@@ -28,6 +28,7 @@ module.exports = ({ add, ids }) => {
   for (const [label, id, status] of [['malformed', 'bad-id', 400], ['absent', ids.absentUser, 404]]) test(`public profile ${label} ID`, 'A', 'GET', `${base}/${id}`, [status]);
   test('public profile anonymous denial', 'anonymous', 'GET', `${base}/:B`, [401]);
   test('public profile preference and activity field policy review', 'A', 'GET', `${base}/:E`, [200], undefined, {
+    securityInvariant: 'Policy review: foreign public profiles should minimize notification preferences and activity timestamps; authenticated foreign profile reads themselves remain supported.',
     failureClassification: 'hardening / public profile field policy requires review',
     check: (body, ctx) => {
       safeProfile(body, ctx, 'E');
@@ -90,6 +91,7 @@ module.exports = ({ add, ids }) => {
   });
   test('search space intersection', 'A', 'GET', `${base}/search?q=Vocle&spaceId=${ids.space}`, [200], undefined, { check: searchCheck(['B']) });
   test('search foreign space membership inference policy', 'A', 'GET', `${base}/search?q=Vocle&spaceId=${ids.otherSpace}`, [200], undefined, {
+    securityInvariant: 'Policy review: a caller denied foreign space detail should not infer that space membership from a known-user search filter.',
     failureClassification: 'hardening / known-user foreign-space membership inference policy',
     prepare: async ctx => assert.equal((await ctx.http('A', 'GET', `/api/spaces/${ids.otherSpace}`)).status, 403, 'Foreign space denial control failed'),
     check: (body, ctx) => { searchCheck([])(body, ctx); return (body.data?.users || []).length === 0; },
@@ -115,6 +117,7 @@ module.exports = ({ add, ids }) => {
     ['removed private-channel member', 'B', true, 'private-revoke'],
   ]) test(`Needl ${label} preview confidentiality`, actor, 'GET', `${base}/me/needl`, [200], undefined, {
     category: 'needl-private-authorization', failureClassification: 'likely security finding / Needl private preview confidentiality',
+    securityInvariant: 'Needl must expose the synthetic root/preview only while the caller has access to its active channel and undeleted message. Successful member and private message-read denial controls are required.',
     prepare: async ctx => {
       await seedNeedl(ctx);
       if (change === 'archive') await ctx.models.Channel.updateOne({ _id: ids.channel }, { isArchived: true });

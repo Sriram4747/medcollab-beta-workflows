@@ -92,10 +92,19 @@ module.exports = ({ add, ids }) => {
       await ctx.models.User.updateOne({ _id: ctx.users.A._id }, { institution: 'Independent A fixture' });
       const response = await ctx.http(lifecycle === 'leave' ? 'B' : 'A', lifecycle === 'leave' ? 'POST' : 'DELETE', lifecycle === 'leave' ? `${space}/leave` : `${space}/members/${oid(ctx.users.B)}`, {});
       assert.equal(response.status, 200, 'REST membership revocation prerequisite failed');
+      assert.equal((await ctx.http('B', 'GET', `/api/channels/${ids.channel}/messages`)).status, 403, 'Post-revocation private message denial control failed');
+      const owner = await ctx.http('A', 'GET', '/api/users/me/needl');
+      assert.ok(owner.status === 200 && owner.data?.data?.threads?.some(thread => thread.rootMessageId === ids.messageA), 'Post-revocation Needl owner canary missing');
+      ctx.evidence.postRevocationMessageReadDenied = true;
+      ctx.evidence.ownerNeedlCanaryObserved = true;
     };
     for (const endpoint of [space, `${space}/channels`, `/api/channels/${ids.channel}/messages`]) test(`${lifecycle} immediate REST revocation ${endpoint}`, 'B', 'GET', endpoint, [403], undefined, { prepare });
     test(`${lifecycle} list excludes former space and private references`, 'B', 'GET', base, [200], undefined, { prepare, check: body => !body.data?.spaces?.some(value => oid(value) === ids.space) });
-    test(`${lifecycle} Needl excludes former private root`, 'B', 'GET', '/api/users/me/needl', [200], undefined, { prepare, check: body => !body.data?.threads?.some(thread => thread.rootMessageId === ids.messageA) });
+    test(`${lifecycle} Needl excludes former private root`, 'B', 'GET', '/api/users/me/needl', [200], undefined, {
+      prepare, failureClassification: 'likely security finding / Needl space revocation bypass via retained channel member IDs',
+      securityInvariant: 'A former space member must not receive a private root preview through retained channel.members after REST space membership is revoked.',
+      check: (body, ctx) => { ctx.evidence.revokedPrivateRootReturned = !!body.data?.threads?.some(thread => thread.rootMessageId === ids.messageA); return !ctx.evidence.revokedPrivateRootReturned; },
+    });
     test(`${lifecycle} search excludes former peer with unrelated canary`, 'B', 'GET', '/api/users/search?q=Vocle', [200], undefined, {
       prepare, check: (body, ctx) => !body.data?.users?.some(user => oid(user) === oid(ctx.users.A)) && body.data?.users?.some(user => oid(user) === oid(ctx.users.D)),
     });
