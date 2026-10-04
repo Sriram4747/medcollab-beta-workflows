@@ -575,7 +575,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-693",
@@ -590,7 +590,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-694",
@@ -605,7 +605,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-695",
@@ -620,7 +620,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-696",
@@ -892,7 +892,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-714",
@@ -907,7 +907,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-715",
@@ -922,7 +922,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-716",
@@ -937,7 +937,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-717",
@@ -952,7 +952,7 @@
       "module": "Local Media Storage Lifecycle",
       "legacy": false,
       "hasSemanticCheck": true,
-      "hasPreparation": false
+      "hasPreparation": true
     },
     {
       "caseId": "VOCLE-718",

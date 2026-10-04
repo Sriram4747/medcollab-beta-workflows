@@ -5,17 +5,16 @@ const assert = require('node:assert/strict');
 const { createHash } = require('node:crypto');
 const { BASE, contained } = require('./guard');
 const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jWZkAAAAASUVORK5CYII=', 'base64');
-// Authored one-page, inert PDF with valid xref offsets, and tiny MP4 container fixture.
+// Authored one-page, inert PDF with valid xref offsets, and versioned black MP4.
 const pdfObjects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [3 0 R] /Count 1 >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 10 10] /Resources << >> >>'];
 let pdfText = '%PDF-1.4\n', offsets = [0];
 pdfObjects.forEach((body, i) => { offsets.push(Buffer.byteLength(pdfText)); pdfText += `${i + 1} 0 obj\n${body}\nendobj\n`; });
 const xref = Buffer.byteLength(pdfText); pdfText += `xref\n0 4\n0000000000 65535 f \n${offsets.slice(1).map(n => `${String(n).padStart(10, '0')} 00000 n \n`).join('')}trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
 const pdf = Buffer.from(pdfText);
-// Hosted execution requires the authored one-frame black MP4. The tiny container
-// fallback is used only for the offline controller smoke before authoring it.
 const videoPath = path.join(__dirname, 'fixtures/canary.mp4');
-const video = fs.existsSync(videoPath) ? fs.readFileSync(videoPath) : Buffer.from('000000186674797069736f6d0000020069736f6d69736f32000000086d646174', 'hex');
+const video = fs.readFileSync(videoPath);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+assert.equal(hash(video), 'd52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7', 'Synthetic MP4 fixture changed');
 const file = id => contained(path.resolve('uploads'), path.resolve('uploads', id));
 function files() {
   const root = path.resolve('uploads');

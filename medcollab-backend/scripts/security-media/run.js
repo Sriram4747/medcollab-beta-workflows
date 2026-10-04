@@ -67,7 +67,7 @@ async function main() {
       const jwt = require('jsonwebtoken'); tokens.I = jwt.sign({ userId: String(users.I._id) }, guard.JWT, { expiresIn: '1h' });
       const c = { mode: test.mode, users, models, ids: fixtures.ids, tokens, http: api, evidence: {}, cleanup: [],
         expiredHeader: 'Bearer ' + jwt.sign({ userId: String(users.A._id) }, guard.JWT, { expiresIn: -60 }),
-        invalidHeader: 'Bearer malformed-canary', state: async () => (await rpc('state')).state, fault: value => rpc('fault', value) };
+        invalidHeader: `Bearer ${tokens.A.slice(0, -8)}AAAAAAAA`, state: async () => (await rpc('state')).state, fault: value => rpc('fault', value) };
       const health = await api('anonymous', 'GET', '/health'); assert.equal(health.status, 200); assert.equal(health.data.database, 'connected'); assert.equal(health.data.firebase, false); assert.equal(health.data.cloudinary, test.mode === 'contract');
       let cleanupDone = false;
       try {
