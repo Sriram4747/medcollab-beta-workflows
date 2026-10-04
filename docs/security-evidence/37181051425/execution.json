@@ -1,0 +1,81 @@
+{
+  "runId": 37181051425,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425",
+  "executedSource": "dca95d019fddf792adae7fcd4c21b5bc649c2b30",
+  "artifactId": 11295208808,
+  "archiveSha256": "5a5baa36a4ec54cc4a1076cd371aac2e1a72d41d09183c4d8ef0f3efd132df40",
+  "hostedJob": {
+    "name": "offline-media",
+    "conclusion": "success",
+    "successfulSteps": 13,
+    "caseStepStartedAt": "2026-10-04T05:51:33Z",
+    "caseStepCompletedAt": "2026-10-04T05:53:38Z",
+    "artifactUpload": "success",
+    "disposableMongoStop": "success"
+  },
+  "artifactName": "vocle-offline-media-security",
+  "archiveDigestVerified": true,
+  "conclusion": "success",
+  "reportSha256": {
+    "results.json": "9c126d4a273e8fe1cd88cb28c7118280597a85b0f396a010c3aebbf048e79a47",
+    "summary.md": "fb01cac0f751dfa8f027abb2e34ebebcb71407300ba6ef2a9ddca8171cdf6185",
+    "security-test-report.md": "1db6785446c54968cb363080db2fe3a1a2be08c1f3f97c1f7004eef0dc2c0fa6",
+    "manifest.json": "8214a4c52aa44f30d87f013215f07c5b5397e489b77c786fa3a1b73bee255065",
+    "reviewed-observations.json": "22035071b0a515a6587b12579dfc50188ae2c6f6b89f77501c59949da3b38b4e"
+  },
+  "planned": 97,
+  "executed": 97,
+  "passed": 62,
+  "observations": 35,
+  "infrastructureFailure": null,
+  "moduleBreakdown": {
+    "Media": {
+      "executed": 31,
+      "passed": 22,
+      "observations": 9
+    },
+    "Cross-module": {
+      "executed": 6,
+      "passed": 6,
+      "observations": 0
+    },
+    "Local Media Storage Lifecycle": {
+      "executed": 26,
+      "passed": 13,
+      "observations": 13
+    },
+    "Offline Cloudinary SDK Contract": {
+      "executed": 34,
+      "passed": 21,
+      "observations": 13
+    }
+  },
+  "original37": {
+    "outcomeChanges": [],
+    "expectedStatusesUnchanged": true
+  },
+  "original691ManifestSha256": "5895e987f820cb0378903c44468101d94c13df82a37480328e64363b557df2ac",
+  "newCases": {
+    "local": 26,
+    "contract": 34
+  },
+  "combinedCatalog": 751,
+  "baselineNotRerun": true,
+  "applicationSourceChanged": false,
+  "sourceFingerprint": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "externalProviderRequests": 0,
+  "isolation": {
+    "interfaces": [
+      "lo"
+    ],
+    "externalRoutes": 0
+  },
+  "parentNetwork": {
+    "blocked": 0,
+    "allowedLoopback": 204
+  },
+  "perCaseSafetyAndCleanupVerified": 97,
+  "syntheticFixtureSha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+  "upstreamWritten": false,
+  "stage3Implemented": false
+}

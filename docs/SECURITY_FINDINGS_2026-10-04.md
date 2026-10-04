@@ -1,4 +1,14 @@
-# Media/storage design review — 2026-10-04
+# Executed offline media/storage findings — 2026-10-04
+
+Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97, 62 passes, 35 observations; infrastructure healthy**. Nine existing media observations retain their prior dispositions; 26 new observations consist of **one confirmed local S6 avatar variant, three exact call-contract defects, 22 hardening/compatibility/lifecycle/policy observations**. Read [expected/actual findings with source paths](SECURITY_MEDIA_OFFLINE_2026-10-04.md), [all reviewed cases](security-evidence/37181051425/reviewed-observations.json) and [execution/hashes](security-evidence/37181051425/execution.json).
+
+S6/704 deletes the exact synthetic foreign avatar via canonical traversal. 724–725 verify valid octet-PDF/video bytes are sent as image. 736 verifies deletion dispatches image/raw and never video. Shared handoff folder/403 deletion (721/740 and local705), omitted overwrite/invalidation, inherited context function, foreign namespace SDK dispatch, partial-failure orphans, video-message rejection, untrusted references/metadata and stale lifecycle references remain scoped observations. **739 demonstrates application namespace validation, not actual Cloudinary cross-user deletion**; the reviewed hardening label narrows its raw automatic label. Provider responses/assets are simulated. Retention/sharing cases require policy, not automatic vulnerability claims.
+
+No application fix, new active gate, Cloudinary account, credentials or request. General691 was not rerun; its historical 80 dispositions and gate registry remain intact. Combined catalog751 does not imply 751 fresh execution. Stage 3 remains deferred, including real decoding/ID normalization/deletion/delivery/permissions/CDN verification.
+
+---
+
+# Historical media/storage design review — 2026-10-04
 
 See [Cloudinary integration, threat analysis and scenario design](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md), especially its existing-findings disposition table. S6/VOCLE-313–314 proves cross-user deletion of synthetic **local** files, not a Cloudinary exploit. H2/301–304 is backend error mapping; H3/306–307 is local byte-validation hardening; U1/323 remains the local upload→message contract mismatch. These outcomes are retained, with no remediation or strict gate activation.
 

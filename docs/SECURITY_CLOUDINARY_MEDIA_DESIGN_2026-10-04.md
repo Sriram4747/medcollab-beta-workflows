@@ -1,5 +1,23 @@
 # Cloudinary and media/storage security phase — 2026-10-04
 
+## Stages 1 and 2 execution addendum
+
+The inspection-only text below is retained as the original design, now superseded for implementation status by [the offline execution report](SECURITY_MEDIA_OFFLINE_2026-10-04.md). Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97, 62 passes/35 observations, healthy infrastructure**. Existing37 outcomes unchanged; appended Local26 + SDK34 bring catalog751. Generic691/77 HTTP baseline not rerun. Stages1+2 execute real app HTTP/models/filesystem and replace SDK before imports, with test-only configuration predicate override, no credentials. Docker network-none plus per-process guards, forbidden configuration and SDK identity/cache assertions enforce zero provider traffic. Evidence/hashes retained; no application fixes. Stage3 has not been implemented or connected.
+
+Observed contract consequences refine the future architecture:
+
+1. **Independent cleanup is mandatory**, using exact actual returned public ID, resource type and delivery type rather than the app's delete endpoint. App dispatch misses video and rejects shared handoff ownership. Upload success followed by URL-builder failure emits no compensation. Capture upload result before subsequent app failure and let the broker clean orphan candidates and confirm provider deletion separately.
+2. Octet-PDF/video request **image** despite valid bytes. Future integration must record that incorrect intent and independently inspect real acceptance/rejection/resource type; provider decoding must not be presumed from the double. Malformed/empty inputs must remain inert and bounded; no hostile active content is needed.
+3. PDF currently uploads raw, builds raw attachment delivery then builds an image page1 preview using the same ID. Offline tests capture those calls only; Stage3 needs actual retrieval and decoder/asset-type evidence. Successful URL construction cannot be the preview oracle.
+4. Video upload selects video but `validateSendMessage` rejects `type=video`. Do not use upload→video message as a healthy positive control until application compatibility is separately resolved; current behavior remains an observation. Successful simulated image upload→message is bounded application evidence.
+5. Namespace substring checks dispatch a foreign-root ID containing the caller segment. The double does not normalize provider paths and no actual foreign asset was deleted. Future tests require preverified owned synthetic namespaces and an independent broker; no assumption that provider IDs follow filesystem normalization. Omitted overwrite/invalidate and actual effective delivery/account policy require real provider verification.
+
+The live guard/broker/attestation design below remains required, not implemented. Never reuse the offline predicate override/double as an attested live environment. Use versioned inert fixtures and a separately authorized non-production environment only in the future phase. Production configuration remains unknown.
+
+---
+
+## Original inspection/design snapshot
+
 Status: inspection and design only. No new tests, application fixes, workflow changes, provider connections, credentials or resources were created. This is the implementation handoff for the next chat. Follow [AGENTS.md](../AGENTS.md); work only in `Sriram4747/medcollab-beta-workflows`, push documentation only to `origin/master`, and keep upstream read-only.
 
 Reviewed checkout: `821f4c4fe7e8d7043db5b4234ecd94f09b06fa5c`. Verified execution remains [run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations, healthy infrastructure; 77/77 discovered HTTP operations exercised**. This document adds no coverage or security assurance to those counts. General API discovery is mature and is not the next phase.

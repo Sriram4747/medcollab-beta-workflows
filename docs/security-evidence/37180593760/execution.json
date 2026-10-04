@@ -1,0 +1,72 @@
+{
+  "runId": 37180593760,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37180593760",
+  "executedSource": "6c26aadeb0bb98e21e84a3a72ccc04072ba8df87",
+  "artifactId": 11294579362,
+  "archiveSha256": "197f9a6e2e156e5d199c3bd15ea7e65db4d140ed0bccac675f0ef646baeee0cc",
+  "artifactName": "vocle-offline-media-security",
+  "archiveDigestVerified": true,
+  "conclusion": "success",
+  "reportSha256": {
+    "results.json": "06e6b6b6f4cad33285f47a55fd83942ca19bd8a9d2ee5b7e42952492ed6cab53",
+    "summary.md": "fb01cac0f751dfa8f027abb2e34ebebcb71407300ba6ef2a9ddca8171cdf6185",
+    "security-test-report.md": "402a5ec6a1371719fec9b64babd14cd8ec2543fab427870918d172f77fa0a961",
+    "manifest.json": "f4fa5d2f3a01a1ecbe386d41779feb709cb73dd0f002d6fd65bee8f30aba034e",
+    "reviewed-observations.json": "337ebd5c00e9375aa4c931b8a7a5f0fb49677f0450602ba752b106087cd0cfb5"
+  },
+  "planned": 97,
+  "executed": 97,
+  "passed": 62,
+  "observations": 35,
+  "infrastructureFailure": null,
+  "moduleBreakdown": {
+    "Media": {
+      "executed": 31,
+      "passed": 22,
+      "observations": 9
+    },
+    "Cross-module": {
+      "executed": 6,
+      "passed": 6,
+      "observations": 0
+    },
+    "Local Media Storage Lifecycle": {
+      "executed": 26,
+      "passed": 13,
+      "observations": 13
+    },
+    "Offline Cloudinary SDK Contract": {
+      "executed": 34,
+      "passed": 21,
+      "observations": 13
+    }
+  },
+  "original37": {
+    "outcomeChanges": [],
+    "expectedStatusesUnchanged": true
+  },
+  "original691ManifestSha256": "5895e987f820cb0378903c44468101d94c13df82a37480328e64363b557df2ac",
+  "newCases": {
+    "local": 26,
+    "contract": 34
+  },
+  "combinedCatalog": 751,
+  "baselineNotRerun": true,
+  "applicationSourceChanged": false,
+  "sourceFingerprint": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "externalProviderRequests": 0,
+  "isolation": {
+    "interfaces": [
+      "lo"
+    ],
+    "externalRoutes": 0
+  },
+  "parentNetwork": {
+    "blocked": 0,
+    "allowedLoopback": 204
+  },
+  "perCaseSafetyAndCleanupVerified": 97,
+  "syntheticFixtureSha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+  "upstreamWritten": false,
+  "stage3Implemented": false
+}

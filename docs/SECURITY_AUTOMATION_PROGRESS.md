@@ -1,4 +1,14 @@
-# Next phase: Cloudinary and media/storage design — 2026-10-04
+# Current phase: offline media/storage and SDK contracts — 2026-10-04
+
+Stages 1 and 2 complete in hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97 executed, 62 passes, 35 observations; healthy infrastructure**. Dedicated suite selects 37 existing media/cross-module cases and appends **26 local cases (692–717)** plus **34 offline SDK contracts (718–751)**. Existing 37 expectations/status/outcomes match baseline. Combined catalog **751**; the general 691-case suite was not rerun and its 611/80, 77/77 HTTP evidence remains historical. New 60: **34 passes / 26 observations**. Historical baseline plus new cases: 645/106, explicitly not a single 751-case fresh run.
+
+Read [implementation, reviewed findings, limits and Stage 3 handoff](SECURITY_MEDIA_OFFLINE_2026-10-04.md), [final raw evidence](security-evidence/37181051425/results.json), [reviewed observations](security-evidence/37181051425/reviewed-observations.json) and [execution/hash metadata](security-evidence/37181051425/execution.json). Both healthy runs and the initial pre-case FFmpeg failure are documented; original historical evidence is retained. Avatar traversal confirms an existing local S6 variant. Octet-PDF/video request image, deletion never dispatches video, handoff uploads fail owner deletion, and reference/lifecycle/metadata gaps are recorded. No application fix or strict gate activation.
+
+Zero real Cloudinary account/credentials/requests: SDK replaced before app imports, exact calls recorded, predicate override confined to harness; hosted Docker network-none, loopback-only guards and credential rejection. All 97 safety/cleanup records and identical source fingerprints verified. Stage 3 remains unimplemented. Next separately authorized integration must independently clean returned image/raw/video/handoff assets and verify real decoding, IDs, PDF previews, delivery/cache/account policy. Upstream, production and unrelated Flutter/Android changes untouched.
+
+---
+
+# Previous phase: Cloudinary and media/storage design — 2026-10-04
 
 Inspection/design complete in [the implementation handoff](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md). Next implement the offline media safety/SDK-contract harness and focused local lifecycle cases; do not repeat generic API discovery or request provider credentials yet. The plan separates local boundary evidence, simulated SDK call contracts, dedicated non-production provider behavior and configuration attestations, with scenario oracles, future gate eligibility, production isolation and failure cleanup.
 

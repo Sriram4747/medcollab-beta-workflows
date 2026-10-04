@@ -1,4 +1,14 @@
-# Media/provider coverage boundary — design update 2026-10-04
+# Current offline media coverage — 2026-10-04
+
+Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425) at `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97 selected cases executed, 62 passes / 35 observations, healthy infrastructure**. Existing Media31 + Cross-module6 retain 28 passes/nine observations. Appended Local26 (692–717): 13/13; SDK34 (718–751): 21/13. **751 registered cases**; preserved general baseline691 (611/80 and 77/77 HTTP operations) was not rerun. Historical union is 645 passes/106 observations, not a fresh all-catalog run.
+
+See [bounded coverage/details](SECURITY_MEDIA_OFFLINE_2026-10-04.md), [frozen dedicated manifest](security-evidence/37181051425/manifest.json), [raw per-case evidence](security-evidence/37181051425/results.json), [review](security-evidence/37181051425/reviewed-observations.json) and [execution hashes](security-evidence/37181051425/execution.json). New coverage includes identity denials, avatar/canonical ownership, names/types/octet metadata, handoff/reference lifecycle, URL/metadata sinks, exact SDK byte/options/transform/deletion contracts and failure compensation. All intended cases ran, zero infrastructure failures. General route discovery remains the prior 77/77, with no new comprehensive-security claim.
+
+SDK calls/results are simulated. No real storage, deletion, decoding, CDN delivery/cache, presets, account policy or production settings verified. Stage 3 intentionally deferred. No application remediation or strict gates; old planned media rows below remain historical beyond the exact implemented manifest.
+
+---
+
+# Historical media/provider design boundary — 2026-10-04
 
 The [Cloudinary and media/storage handoff](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md) is a **plan, not executed coverage**. The current Media module has **31 cases / 22 passes / nine observations** (VOCLE-295–323, 330–331); adjacent cross-module media cases VOCLE-324–329 all pass. All are included in the unchanged 691-case baseline. They establish local multipart/disk behavior, bounded reference/destination authorization and URL-string validation. They do not establish real Cloudinary upload, decoding, ownership, access settings, transformations, overwrite, deletion or CDN behavior.
 

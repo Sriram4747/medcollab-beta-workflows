@@ -1,0 +1,6555 @@
+{
+  "planned": 97,
+  "executed": 97,
+  "passed": 62,
+  "unexpected": 35,
+  "notExecuted": 0,
+  "combinedCatalogCount": 751,
+  "baselineCount": 691,
+  "infrastructureFailure": null,
+  "isolation": {
+    "interfaces": [
+      "lo"
+    ],
+    "externalRoutes": 0
+  },
+  "parentNetwork": {
+    "blocked": 0,
+    "allowedLoopback": 204
+  },
+  "sourceBefore": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "sourceAfter": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "moduleBreakdown": {
+    "Media": {
+      "executed": 31,
+      "passed": 22,
+      "observations": 9
+    },
+    "Cross-module": {
+      "executed": 6,
+      "passed": 6,
+      "observations": 0
+    },
+    "Local Media Storage Lifecycle": {
+      "executed": 26,
+      "passed": 13,
+      "observations": 13
+    },
+    "Offline Cloudinary SDK Contract": {
+      "executed": 34,
+      "passed": 21,
+      "observations": 13
+    }
+  },
+  "results": [
+    {
+      "caseId": "VOCLE-295",
+      "name": "local upload context message",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092533359-1c5c4a798298.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-296",
+      "name": "local upload context avatar",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092534453-b5b97f1c95c6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-297",
+      "name": "local upload context handoff",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/handoffs/1791092535614-5b68f3e2e017.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-298",
+      "name": "local upload context unknown",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092536684-be15acfd0c12.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-299",
+      "name": "upload rejects anonymous",
+      "actor": "anonymous",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 401
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-300",
+      "name": "upload rejects missing file",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 400
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-301",
+      "name": "upload rejects wrong field",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-302",
+      "name": "upload rejects multiple files",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-303",
+      "name": "upload rejects forbidden MIME",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-304",
+      "name": "upload rejects octet forbidden suffix",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-305",
+      "name": "upload rejects oversized",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 400
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-306",
+      "name": "upload rejects empty bytes",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000002/1791092545310-e1aa123fdd0a.png",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-307",
+      "name": "upload rejects inert MIME extension mismatch",
+      "actor": "B",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000002/1791092546364-103a44960570.html",
+            "sha256": "8182ffff1a3fbfefc99b0b1afc127f9588de5bc006729bbf6fe562c0060bb274",
+            "bytes": 21
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-308",
+      "name": "media deletion ownership A",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092547260-52eab11b4e0c.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092547260-52eab11b4e0c.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-309",
+      "name": "media deletion ownership B",
+      "actor": "B",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092548310-763dc97839cd.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092548310-763dc97839cd.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092548310-763dc97839cd.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-310",
+      "name": "media deletion ownership C",
+      "actor": "C",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092549387-53fdaa09dcdb.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092549387-53fdaa09dcdb.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092549387-53fdaa09dcdb.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-311",
+      "name": "media deletion ownership anonymous",
+      "actor": "anonymous",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092550436-9f9135b52302.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092550436-9f9135b52302.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092550436-9f9135b52302.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-312",
+      "name": "media deletion replay",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092551521-efc38af1fcbb.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 404,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-313",
+      "name": "media canonical owner containment single",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F..%2F7ed000000000000000000003%2F1791092552588-c8e44bc262b3.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092552584-676e6fd0990f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791092552588-c8e44bc262b3.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092552584-676e6fd0990f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-314",
+      "name": "media canonical owner containment double",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%252Fmessages%252F7ed000000000000000000001%252F..%252F7ed000000000000000000003%252F1791092553691-f6976159f9e3.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092553687-d21731b67a8f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791092553691-f6976159f9e3.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092553687-d21731b67a8f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-315",
+      "name": "anonymous static media and owner revocation",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092554734-22fedb00d258.png",
+      "method": "DELETE",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "publicStaticControl": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092554734-22fedb00d258.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-316",
+      "name": "message media URL trusted HTTPS",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-317",
+      "name": "message media URL foreign host",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-318",
+      "name": "message media URL host suffix lookalike",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-319",
+      "name": "message media URL invalid URL",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-320",
+      "name": "message media URL protocol relative",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-321",
+      "name": "message media URL FTP trusted host",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-322",
+      "name": "message media URL HTTP trusted host",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": false,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {},
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-323",
+      "name": "local upload to authorized message integration",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092563196-843c6220bec6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092563196-843c6220bec6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "application observation requiring review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-324",
+      "name": "uploaded media does not grant foreign channel access 7ec000000000000000000004",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000004/messages",
+      "method": "POST",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092564252-6728e939e8a6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092564252-6728e939e8a6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-325",
+      "name": "uploaded media does not grant foreign channel access 7ec00000000000000000000a",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec00000000000000000000a/messages",
+      "method": "POST",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092565372-c3d52df4ff9c.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092565372-c3d52df4ff9c.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-326",
+      "name": "handoff attachment sender ownership A",
+      "actor": "A",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "PUT",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092566428-ffd79bea6ee6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092566428-ffd79bea6ee6.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-327",
+      "name": "handoff attachment sender ownership B",
+      "actor": "B",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "PUT",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092567530-ef04ddd58673.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092567530-ef04ddd58673.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-328",
+      "name": "handoff attachment sender ownership C",
+      "actor": "C",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "PUT",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092568583-4728d8f22237.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092568583-4728d8f22237.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-329",
+      "name": "handoff attachment sender ownership anonymous",
+      "actor": "anonymous",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "PUT",
+      "module": "Cross-module",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092569649-a1fdad307706.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092569649-a1fdad307706.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-330",
+      "name": "local PDF bytes retained application/pdf",
+      "actor": "C",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791092570866-9bb47a9c90cd.pdf",
+            "sha256": "8a9fb9e9d9953a95081bf1b9dd6697b0629bcf35f63623d808f8e2f96e1d76f5",
+            "bytes": 141
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-331",
+      "name": "local PDF bytes retained application/octet-stream",
+      "actor": "C",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Media",
+      "mode": "local",
+      "legacy": true,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791092571915-e62d8b78cd05.pdf",
+            "sha256": "8a9fb9e9d9953a95081bf1b9dd6697b0629bcf35f63623d808f8e2f96e1d76f5",
+            "bytes": 141
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-692",
+      "name": "upload current identity denial inactive",
+      "actor": "I",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 401
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-693",
+      "name": "upload current identity denial unonboarded",
+      "actor": "U",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 403
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-694",
+      "name": "upload current identity denial expired",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 401
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-695",
+      "name": "upload current identity denial invalid signature",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          401
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 401,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 401
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-696",
+      "name": "duplicate local names preserve independent bytes",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "independentIds": true
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092577201-e35cc4f240de.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092577205-a3ac9ab09d09.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-697",
+      "name": "original filename cannot choose local output path",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092578257-bcea6b8e51fd.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-698",
+      "name": "upload validates malformed JPEG bytes",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092579338-656a6721bfb2.jpg",
+            "sha256": "d06f85b1a7bb837c2a4ffc10bd6b871d5faf84e9c98fec953d806f8ab80211d4",
+            "bytes": 21
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-699",
+      "name": "upload validates unsupported SVG",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-700",
+      "name": "upload validates unsupported MKV",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-701",
+      "name": "octet video metadata follows supported extension",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "returnedFormat": null,
+          "exactBytes": true
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092582472-79c31c4f50f8.mp4",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-702",
+      "name": "avatar deletion owner boundary A",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Favatars%2F7ed000000000000000000001%2F1791092583348-1cd30853d066.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092583348-1cd30853d066.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-703",
+      "name": "avatar deletion owner boundary C",
+      "actor": "C",
+      "endpoint": "/api/media/medcollab%2Favatars%2F7ed000000000000000000001%2F1791092584407-cff9e89fd8bc.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092584407-cff9e89fd8bc.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092584407-cff9e89fd8bc.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-704",
+      "name": "avatar canonical foreign owner file survives",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Favatars%2F7ed000000000000000000001%2F..%2F7ed000000000000000000003%2F1791092585449-d2aea45aa428.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092585445-140a974fd0bf.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000003/1791092585449-d2aea45aa428.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092585445-140a974fd0bf.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "confirmed security defect",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-705",
+      "name": "shared handoff upload supports owner deletion",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fhandoffs%2F1791092586528-2f49c58799ad.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "fileSurvived": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/handoffs/1791092586528-2f49c58799ad.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/handoffs/1791092586528-2f49c58799ad.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "lifecycle/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-706",
+      "name": "avatar replacement retention characterization",
+      "actor": "A",
+      "endpoint": "/api/users/me",
+      "method": "PUT",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "previousFileRetained": true,
+          "newFileRetained": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092587572-5640d02fc933.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092587581-7dbbd03bad54.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092587572-5640d02fc933.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092587581-7dbbd03bad54.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js",
+        "src/features/users/user.controller.js:updateMe"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-707",
+      "name": "foreign uploaded avatar reference characterization",
+      "actor": "A",
+      "endpoint": "/api/users/me",
+      "method": "PUT",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "foreignUrlPersisted": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000003/1791092588685-fd78ede91c94.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000003/1791092588685-fd78ede91c94.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-708",
+      "name": "failed profile update retains old reference and upload",
+      "actor": "A",
+      "endpoint": "/api/users/me",
+      "method": "PUT",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "unlinkedUploadRetained": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092589727-07b5b1e8a10a.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092589737-ea5212b6c30d.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092589727-07b5b1e8a10a.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791092589737-ea5212b6c30d.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-709",
+      "name": "draft deletion orphan lifecycle",
+      "actor": "A",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "draftRemoved": true,
+          "orphanFileRetained": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092590810-8bd4b2627d2d.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092590810-8bd4b2627d2d.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "retention-policy review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-710",
+      "name": "explicit file deletion reference consistency",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092591869-7f4722c50acc.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "referenceRetained": true,
+          "fileRemoved": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092591869-7f4722c50acc.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": false,
+      "classification": "lifecycle-policy review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-711",
+      "name": "duplicate references survive forbidden foreign deletion",
+      "actor": "C",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2F1791092592912-bf5b270dedb0.png",
+      "method": "DELETE",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092592912-bf5b270dedb0.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092592912-bf5b270dedb0.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-712",
+      "name": "upload survives rejected foreign destination send",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000004/messages",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "unlinkedUploadRetained": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092593971-9d36c289b7f9.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791092593971-9d36c289b7f9.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/media/media.routes.js",
+        "src/features/media/media.controller.js",
+        "src/utils/localMediaStorage.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-713",
+      "name": "handoff rejects untrusted attachment URL",
+      "actor": "A",
+      "endpoint": "/api/handoffs/7ec000000000000000000008",
+      "method": "PUT",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "foreignUrlPersisted": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/handoffs/handoff.controller.js:updateHandoff",
+        "src/features/handoffs/handoff.model.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-714",
+      "name": "message media validates alternate cloud provenance",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "messagesPersisted": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/messages/message.controller.js:sendMessage",
+        "src/features/messages/message.model.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-715",
+      "name": "message media validates untrusted thumbnail",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "messagesPersisted": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/messages/message.controller.js:sendMessage",
+        "src/features/messages/message.model.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-716",
+      "name": "message media validates negative size and dimensions",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "messagesPersisted": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/features/messages/message.controller.js:sendMessage",
+        "src/features/messages/message.model.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-717",
+      "name": "message media validates missing image media URL",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Local Media Storage Lifecycle",
+      "mode": "local",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "messagesPersisted": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/features/messages/message.controller.js:sendMessage",
+        "src/features/messages/message.model.js"
+      ],
+      "passed": false,
+      "classification": "validation/hardening issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-718",
+      "name": "SDK authenticated message folder",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-719",
+      "name": "SDK authenticated avatar folder",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/avatars/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-720",
+      "name": "SDK authenticated unknown folder",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-721",
+      "name": "SDK shared handoff has caller ownership namespace",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/handoffs",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/handoffs/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/handoffs/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-722",
+      "name": "SDK resource type PDF",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "raw"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "raw",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "raw",
+              "flags": "attachment:synthetic.pdf",
+              "secure": true
+            }
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "image",
+              "format": "webp",
+              "width": 400,
+              "height": 300,
+              "crop": "fill",
+              "page": 1
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "resourceType": "raw",
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+            "bytes": 344
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-723",
+      "name": "SDK resource type video",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "video"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-724",
+      "name": "SDK resource type octet PDF",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "image"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+            "bytes": 344
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-725",
+      "name": "SDK resource type octet video",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "image"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-726",
+      "name": "SDK filename metadata sanitized and bounded",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-727",
+      "name": "SDK explicit overwrite prevention",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-728",
+      "name": "SDK caller options cannot select identity or transformation",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-729",
+      "name": "SDK image thumbnail exact requested transform",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-730",
+      "name": "SDK video thumbnail exact requested transform",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-731",
+      "name": "SDK PDF raw attachment and preview call capture",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "raw",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic report"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "raw",
+              "flags": "attachment:synthetic_report.pdf",
+              "secure": true
+            }
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "image",
+              "format": "webp",
+              "width": 400,
+              "height": 300,
+              "crop": "fill",
+              "page": 1
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "resourceType": "raw",
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+            "bytes": 344
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-732",
+      "name": "SDK PDF preview builder failure is contained",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "raw",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "raw",
+              "flags": "attachment:synthetic.pdf",
+              "secure": true
+            }
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "image",
+              "format": "webp",
+              "width": 400,
+              "height": 300,
+              "crop": "fill",
+              "page": 1
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "resourceType": "raw",
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+            "bytes": 344
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-733",
+      "name": "SDK prototype-like context denied before upload",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "[function]",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-734",
+      "name": "SDK owner image delete operation",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyTypes": [
+            "image"
+          ],
+          "simulatedAssetRetained": false
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-735",
+      "name": "SDK owner raw delete operation",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1.pdf",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyTypes": [
+            "image",
+            "raw"
+          ],
+          "simulatedAssetRetained": false
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "raw",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "raw",
+              "flags": "attachment:synthetic.pdf",
+              "secure": true
+            }
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "image",
+              "format": "webp",
+              "width": 400,
+              "height": 300,
+              "crop": "fill",
+              "page": 1
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "image"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1.pdf",
+            "options": {
+              "resource_type": "raw"
+            }
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-736",
+      "name": "SDK owner video delete operation",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 404,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyTypes": [
+            "image",
+            "raw"
+          ],
+          "simulatedAssetRetained": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "raw"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-737",
+      "name": "SDK deletion requests CDN invalidation",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-738",
+      "name": "SDK foreign owner rejected without destroy",
+      "actor": "C",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-739",
+      "name": "SDK delete rejects namespace containing embedded owner",
+      "actor": "A",
+      "endpoint": "/api/media/foreign-root%2Fmessages%2F7ed000000000000000000001%2Funregistered-canary",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 404,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyDispatches": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "foreign-root/messages/7ed000000000000000000001/unregistered-canary",
+            "options": {
+              "resource_type": "image"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "foreign-root/messages/7ed000000000000000000001/unregistered-canary",
+            "options": {
+              "resource_type": "raw"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "application namespace authorization defect",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-740",
+      "name": "SDK owner handoff deletion reaches exact asset",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fhandoffs%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/handoffs",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/handoffs/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/handoffs/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-741",
+      "name": "SDK duplicate original names request unique identity",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-2",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-2",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-742",
+      "name": "SDK upload callback failure preserves database",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          500
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-743",
+      "name": "SDK success then URL failure compensates upload",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          500
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 500,
+          "simulatedOrphanCount": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "partial-failure lifecycle hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-744",
+      "name": "SDK destroy callback failure preserves asset and reference",
+      "actor": "A",
+      "endpoint": "/api/media/medcollab%2Fmessages%2F7ed000000000000000000001%2Fcanary-1",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          500
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-745",
+      "name": "SDK uploaded image to authorized message persists reference",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js",
+        "src/features/messages/message.controller.js:sendMessage"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-746",
+      "name": "SDK video upload to message compatibility",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js",
+        "src/middleware/validate.js:validateSendMessage"
+      ],
+      "passed": false,
+      "classification": "media compatibility issue",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-747",
+      "name": "SDK message soft-delete storage lifecycle",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages/6ac1e797df70a9fe65081495",
+      "method": "DELETE",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "messageBlanked": true,
+          "simulatedAssetRetained": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js",
+        "src/features/messages/message.controller.js:deleteMessage",
+        "src/features/messages/message.model.js:pre-save"
+      ],
+      "passed": false,
+      "classification": "retention-policy review",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-748",
+      "name": "SDK avatar replacement call lifecycle characterization",
+      "actor": "A",
+      "endpoint": "/api/users/me",
+      "method": "PUT",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "previousSimulatedAssetRetained": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/avatars/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/avatars/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-2",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "publicId": "medcollab/avatars/7ed000000000000000000001/canary-2",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-749",
+      "name": "SDK foreign-space uploaded reference characterization",
+      "actor": "A",
+      "endpoint": "/api/channels/7ec000000000000000000003/messages",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 200,
+          "foreignAssetUrlPersisted": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000003",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000003/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000003/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-750",
+      "name": "SDK empty upload denied before stream invocation",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": false,
+      "classification": "Cloudinary call-contract hardening",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    },
+    {
+      "caseId": "VOCLE-751",
+      "name": "SDK oversized upload denied before stream invocation",
+      "actor": "A",
+      "endpoint": "/api/media/upload",
+      "method": "POST",
+      "module": "Offline Cloudinary SDK Contract",
+      "mode": "contract",
+      "legacy": false,
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 400
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "sources": [
+        "src/config/cloudinary.js",
+        "src/features/media/media.controller.js",
+        "src/features/media/media.routes.js"
+      ],
+      "passed": true,
+      "classification": "confirmed expected behavior",
+      "cleanup": {
+        "filesRemoved": true,
+        "backendStopped": true,
+        "simulatedStateDiscarded": true
+      }
+    }
+  ]
+}

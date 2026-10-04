@@ -1,0 +1,19 @@
+{
+  "runId": 37180497917,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37180497917",
+  "executedSource": "68f217c607cc801b7559c426f5c53d9ae68050e6",
+  "conclusion": "failure",
+  "caseExecutionStarted": false,
+  "executed": 0,
+  "artifactCredited": false,
+  "successfulChecks": ["syntax", "frozen manifests", "offline safety self-test"],
+  "failure": {
+    "step": "Author tiny inert MP4 fixture if not already versioned",
+    "message": "ffmpeg: command not found",
+    "exitCode": 127
+  },
+  "repairedBy": "6c26aadeb0bb98e21e84a3a72ccc04072ba8df87",
+  "dependencyRemovedBy": "dca95d019fddf792adae7fcd4c21b5bc649c2b30",
+  "applicationFailure": false,
+  "externalProviderRequests": 0
+}
