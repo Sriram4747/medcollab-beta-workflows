@@ -1,3 +1,11 @@
+# Media/storage design review — 2026-10-04
+
+See [Cloudinary integration, threat analysis and scenario design](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md), especially its existing-findings disposition table. S6/VOCLE-313–314 proves cross-user deletion of synthetic **local** files, not a Cloudinary exploit. H2/301–304 is backend error mapping; H3/306–307 is local byte-validation hardening; U1/323 remains the local upload→message contract mismatch. These outcomes are retained, with no remediation or strict gate activation.
+
+Source inspection additionally identifies no video destroy path, shared handoff uploads without normal deletion ownership, URL-only records without asset provenance, and absent explicit overwrite prevention/CDN invalidation/lifecycle reconciliation. These are **source-derived gaps**, not newly executed provider findings. Actual production presets, permissions, delivery policies and folder settings remain unknown. The documentation-only design phase leaves all 691 results and 80 observation dispositions unchanged and accesses no production service.
+
+---
+
 # Current reviewed findings — defensive expansion 2026-10-04
 
 [run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.

@@ -1,3 +1,11 @@
+# Media/provider coverage boundary — design update 2026-10-04
+
+The [Cloudinary and media/storage handoff](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md) is a **plan, not executed coverage**. The current Media module has **31 cases / 22 passes / nine observations** (VOCLE-295–323, 330–331); adjacent cross-module media cases VOCLE-324–329 all pass. All are included in the unchanged 691-case baseline. They establish local multipart/disk behavior, bounded reference/destination authorization and URL-string validation. They do not establish real Cloudinary upload, decoding, ownership, access settings, transformations, overwrite, deletion or CDN behavior.
+
+No external provider connection or new suite execution occurred in this phase. The separate proposed local/contract/configuration lanes require no provider credentials; the live lane stays disabled until independent non-production identity binding, guarded egress and exact-resource cleanup are implemented and verified. Generic HTTP discovery remains 77/77; no broad API phase is repeated.
+
+---
+
 # Current coverage — defensive expansion 2026-10-04
 
 [run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.

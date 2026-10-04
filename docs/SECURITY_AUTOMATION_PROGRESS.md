@@ -1,3 +1,11 @@
+# Next phase: Cloudinary and media/storage design — 2026-10-04
+
+Inspection/design complete in [the implementation handoff](SECURITY_CLOUDINARY_MEDIA_DESIGN_2026-10-04.md). Next implement the offline media safety/SDK-contract harness and focused local lifecycle cases; do not repeat generic API discovery or request provider credentials yet. The plan separates local boundary evidence, simulated SDK call contracts, dedicated non-production provider behavior and configuration attestations, with scenario oracles, future gate eligibility, production isolation and failure cleanup.
+
+Verified baseline remains **691/691 executed, 611 passes, 80 observations, healthy infrastructure; 77/77 HTTP operations exercised**. Existing Media module: **31 cases, 22 passes, nine observations**, plus six passing adjacent cross-module cases. Production Cloudinary remains disabled/untouched by security testing. This documentation-only phase adds no executed cases and fixes no application vulnerability. Actual production Cloudinary configuration remains unknown. Preserve the historical evidence below and unrelated Flutter/Android worktree changes.
+
+---
+
 # Current defensive regression expansion — 2026-10-04
 
 [run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.
