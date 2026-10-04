@@ -1,3 +1,11 @@
+# Current realtime execution — 2026-10-04
+
+[run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493) at source `e89f8848fee4c21f3de91e31469ae61837f13bd8` executed 32 new lifecycle socket cases and six cross-module socket chains alongside the unchanged 21-case baseline. See [expansion details](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md) for actual controls, outcomes, confirmed replay/revocation/crash evidence and deferrals.
+
+Recovery now has explicit recovered=true, missing recovered identity and post-revocation packet replay evidence; it is no longer wholly source-only. Async malformed cases show logged rejection plus continued child health/delivery, while synchronous malformed leave/typing cases show exit code 1. The broader historical manifest below still includes unimplemented variants: richer metadata, future recovered handler/duplicate behavior and long-duration/multi-instance checks are not credited as executed.
+
+---
+
 > Current evidence: [run 36228675577 review](SECURITY_FINDINGS_2026-09-26.md), 352 executed / 312 passed / 40 observations; [next-phase plan](SECURITY_TERRA_NEXT_PHASE.md). Earlier execution totals below are historical. Manifest items beyond implemented cases remain planned, not executed.
 
 > Execution update, 2026-09-26: The focused subset documented in [the expansion report](SECURITY_EXPANSION_2026-09-26.md) has now run in real isolated CI, run 36225164443. The broader original plan below is retained; unimplemented variants are not credited as executed. See the report for exact cases, confirmed roots and explicit deferrals.

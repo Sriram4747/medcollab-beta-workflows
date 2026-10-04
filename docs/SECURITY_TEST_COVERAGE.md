@@ -1,3 +1,15 @@
+# Current coverage — defensive expansion 2026-10-04
+
+[run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.
+
+Added **65 cases (VOCLE-627–691)**: 22 developer/platform HTTP, 32 realtime lifecycle, six cross-module lifecycle and five optional auth hardening cases. All previous 626 IDs/expectations/results remain intact (566 passes, 60 observations); the 626 manifest is pinned. See [expansion details](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md), [actual route map](security-evidence/37175207493/security-api-coverage-report.md), [reviewed observations](security-evidence/37175207493/reviewed-observations.json) and [execution/hashes](security-evidence/37175207493/execution.json).
+
+**77/77 exact HTTP operations exercised, none intentionally uncovered.** Developer routes have production-disabled and enabled-auth guards plus caller binding checks; public root/API/health have field/security-header checks; deep links have canonicalization and injection-context checks. The notification seed success case remains a 400 application observation due to missing generated reference fields. Counts include observations as exercised and do not imply complete branch/security assurance.
+
+Realtime now contains 21 preserved baseline cases plus 32 lifecycle cases, with six additional cross-module socket scenarios. Optional authentication hardening adds five cases. Socket/static media/implicit HEAD/OPTIONS remain outside the 77-operation denominator. Read expansion details for exact cases and excluded provider/deployment/long-duration coverage.
+
+---
+
 # Current coverage — 2026-10-04
 
 Hosted [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), source `f559332b82783b7fee4341434e15c49ec25dc728`, executed **626/626 cases, 566 passes, 60 observations; infrastructure healthy**. The [exact generated map](security-evidence/37144805902/security-api-coverage-report.md) exercises **70/77 HTTP method/path operations (90.9%)**. The original 386 IDs/expectations/results remain intact (348 passes, 38 observations).

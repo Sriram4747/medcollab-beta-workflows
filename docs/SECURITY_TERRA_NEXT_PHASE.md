@@ -1,3 +1,17 @@
+# Current continuation state — 2026-10-04
+
+[run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.
+
+Added **65 cases (VOCLE-627–691)**: 22 developer/platform HTTP, 32 realtime lifecycle, six cross-module lifecycle and five optional auth hardening cases. All previous 626 IDs/expectations/results remain intact (566 passes, 60 observations); the 626 manifest is pinned. See [expansion details](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md), [actual route map](security-evidence/37175207493/security-api-coverage-report.md), [reviewed observations](security-evidence/37175207493/reviewed-observations.json) and [execution/hashes](security-evidence/37175207493/execution.json).
+
+The previously remaining meaningful HTTP, bounded realtime/recovery/cache/crash, session lifecycle, six prioritized cross-module invariants and documented optional authentication cases are implemented and hosted. **Do not restart or duplicate these completed phases. Preserve all 691 positions.**
+
+51 confirmed-case gate candidates and 29 excluded observations are mapped in [the registry](SECURITY_REGRESSION_GATES.md); zero strict gates are active. No application vulnerability was fixed. Six new confirmed roots cover established deactivation, revoked presence, stale DM typing cache, null synchronous handler crashes, recovery replay and concurrent OTP consumption. Existing stale channel-room and mention-preview findings gain realtime/cross-module evidence. Mid-session expiry remains policy; async null rejections and developer notification reference omissions remain hardening/reliability.
+
+Next authorized defensive work should use the expansion's explicit deferrals: richer socket availability metadata, recovered future-handler readiness/duplicate semantics, long-duration TTL/recovery and multi-instance behavior. Providers and production services remain excluded. No full production boot or nonexistent approval/owner-transfer APIs are claimed. Application source fixes, policy decisions and strict gate activation are separate developer tasks. Follow AGENTS.md; origin/master only and upstream read-only.
+
+---
+
 # Current phase status — 2026-10-04
 
 Phase 0, Phase 1, Phase 2, Phase 3 and bounded HTTP Phase 4 are complete. Hosted [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), source `f559332b82783b7fee4341434e15c49ec25dc728`, completed **626/626 executed, 566 passes, 60 observations; healthy infrastructure**, exact routes **70/77**. All original 386 and subsequent appended VOCLE positions/outcomes remain intact. Read [progress](SECURITY_AUTOMATION_PROGRESS.md), [current findings](SECURITY_FINDINGS_2026-10-04.md), [current coverage](SECURITY_TEST_COVERAGE.md), [batch details](SECURITY_PHASES_2_3_2026-10-03.md), and preserved raw/reviewed evidence before continuing.

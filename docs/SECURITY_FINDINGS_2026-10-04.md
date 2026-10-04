@@ -1,3 +1,15 @@
+# Current reviewed findings — defensive expansion 2026-10-04
+
+[run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.
+
+Added **65 cases (VOCLE-627–691)**: 22 developer/platform HTTP, 32 realtime lifecycle, six cross-module lifecycle and five optional auth hardening cases. All previous 626 IDs/expectations/results remain intact (566 passes, 60 observations); the 626 manifest is pinned. See [expansion details](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md), [actual route map](security-evidence/37175207493/security-api-coverage-report.md), [reviewed observations](security-evidence/37175207493/reviewed-observations.json) and [execution/hashes](security-evidence/37175207493/execution.json).
+
+51 confirmed-case gate candidates and 29 excluded observations are mapped in [the registry](SECURITY_REGRESSION_GATES.md); zero strict gates are active. No application vulnerability was fixed. Six new confirmed roots cover established deactivation, revoked presence, stale DM typing cache, null synchronous handler crashes, recovery replay and concurrent OTP consumption. Existing stale channel-room and mention-preview findings gain realtime/cross-module evidence. Mid-session expiry remains policy; async null rejections and developer notification reference omissions remain hardening/reliability.
+
+New observations: 1 hardening / developer helper contract; 1 session expiry policy review; 16 confirmed security defect; 2 hardening / socket input handling. Read [the detailed new observation table](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md) and [current reviewed JSON](security-evidence/37175207493/reviewed-observations.json). All 60 previous dispositions are retained without redoing their analysis. Null socket HTTP status is intentional; confirmed packet findings require positive controls and matched events, and crash findings require explicit exit code evidence. Current findings are non-gating; do not change them to PASS to obtain a green workflow.
+
+---
+
 # Security expansion findings — 2026-10-04
 
 Final reviewed evidence: [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), source `f559332b82783b7fee4341434e15c49ec25dc728`: **626/626 executed, 566 passes, 60 observations, infrastructure healthy**. The four [raw reports](security-evidence/37144805902/summary.md), [reviewed JSON](security-evidence/37144805902/reviewed-observations.json), [coverage](security-evidence/37144805902/security-api-coverage-report.md) and [execution/hash metadata](security-evidence/37144805902/execution.json) are retained. Artifact `11281218939`, archive SHA-256 `98f03261eba5528433f088747d3252975bd7dc812db141a19f7d56c6bd12cbe0`.

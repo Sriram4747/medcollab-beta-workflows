@@ -1,0 +1,38 @@
+{
+  "runId": 37174533620,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37174533620",
+  "executedSource": "24364d03155add089dca5cdbe1fbabdc37a05d9a",
+  "artifactId": 11292728763,
+  "artifactName": "vocle-security-discovery",
+  "archiveSha256": "d9cabd8682eb28340683e62d7ecb6fe971601b850f2341c731a4b8fecaac655d",
+  "reportSha256": {
+    "results.json": "2803e30975a87ae4f7f88d18fe34a3289b17471ea31df241d5926882d59b51b9",
+    "summary.md": "229768940a7824be1cd5702ca62d41b8e2b73a6c7d0ed9e9ef9abaf862808c82",
+    "security-test-report.md": "a384fb6a9dcc8624f11521c862117364bf6a36927affafc22e6590d6fa4e6cf8",
+    "security-api-coverage-report.md": "2b91ec18f59dc1f5154f498ff90b28ff4a3ceacc7f12205f6b13c83538fdff23"
+  },
+  "planned": 691,
+  "executed": 691,
+  "passed": 610,
+  "observations": 81,
+  "infrastructureFailure": null,
+  "original626": {
+    "outcomeChanges": [],
+    "manifestSha256": "930cbf247fe79457b21bcbe35ce6eec2da91813e99765efcc92b4fa39a5e4d1b"
+  },
+  "newCases": {
+    "platformHttp": 22,
+    "realtimeLifecycle": 32,
+    "crossModule": 6,
+    "authHardening": 5
+  },
+  "applicationSourceChanged": false,
+  "upstreamWritten": false,
+  "archiveDigestVerified": true,
+  "conclusion": "success",
+  "httpRoutes": {
+    "discovered": 77,
+    "exercised": 77
+  },
+  "total691ManifestSha256": "5895e987f820cb0378903c44468101d94c13df82a37480328e64363b557df2ac"
+}

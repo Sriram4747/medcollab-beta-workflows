@@ -1,6 +1,6 @@
 # Security regression gate registry
 
-Evidence run: 37144805902. **35 confirmed-case candidates; 25 observations excluded; zero active gates.**
+Evidence run: 37175207493. **51 confirmed-case candidates; 29 observations excluded; zero active gates.**
 
 This is a requirement registry, not an active gating configuration. The discovery runner still records application differences as observations. No application fix is known in the executed source. Existing policy, hardening and ambiguous cases cannot become blocking automatically.
 
@@ -70,5 +70,25 @@ The JSON registry maps every observed testcase to requirement, current status, f
 | VOCLE-611 | SUPPORT_TYPE | excluded | observed / unresolved review |
 | VOCLE-618 | SUPPORT_TYPE | excluded | observed / unresolved review |
 | VOCLE-625 | SUPPORT_TYPE | excluded | observed / unresolved review |
+| VOCLE-641 | DEV_NOTIFICATION_REFERENCES | excluded | observed / unresolved review |
+| VOCLE-653 | SOCKET_EXPIRY_POLICY | excluded | observed / unresolved review |
+| VOCLE-654 | R1_ACTIVE_SOCKET | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-655 | R1_ACTIVE_SOCKET | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-659 | R2_SPACE_PRESENCE | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-660 | R2_SPACE_PRESENCE | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-662 | S9 | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-663 | R3_TYPING_CACHE | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-672 | SOCKET_ASYNC_PAYLOAD | excluded | observed / unresolved review |
+| VOCLE-673 | R4_SOCKET_CRASH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-674 | R4_SOCKET_CRASH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-675 | R4_SOCKET_CRASH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-676 | SOCKET_ASYNC_PAYLOAD | excluded | observed / unresolved review |
+| VOCLE-678 | R5_RECOVERY_AUTH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-679 | R5_RECOVERY_AUTH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-680 | R5_RECOVERY_AUTH | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-681 | S9 | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-685 | N3_MENTION_AUDIENCE | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-686 | N3_MENTION_AUDIENCE | yes, after fix/assertion audit | observed / unfixed |
+| VOCLE-687 | A1_OTP_CONSUMPTION | yes, after fix/assertion audit | observed / unfixed |
 
 Machine-readable details: [SECURITY_REGRESSION_GATES.json](SECURITY_REGRESSION_GATES.json).

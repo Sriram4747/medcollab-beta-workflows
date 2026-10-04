@@ -1,3 +1,15 @@
+# Current defensive regression expansion — 2026-10-04
+
+[run 37175207493](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37175207493), executed source `e89f8848fee4c21f3de91e31469ae61837f13bd8`: **691/691 executed, 611 passes, 80 observations; infrastructure healthy.** Exact HTTP operations exercised: **77/77 (100%)**. These are bounded route contexts, not complete security assurance.
+
+Added **65 cases (VOCLE-627–691)**: 22 developer/platform HTTP, 32 realtime lifecycle, six cross-module lifecycle and five optional auth hardening cases. All previous 626 IDs/expectations/results remain intact (566 passes, 60 observations); the 626 manifest is pinned. See [expansion details](SECURITY_DEFENSIVE_REGRESSION_2026-10-04.md), [actual route map](security-evidence/37175207493/security-api-coverage-report.md), [reviewed observations](security-evidence/37175207493/reviewed-observations.json) and [execution/hashes](security-evidence/37175207493/execution.json).
+
+51 confirmed-case gate candidates and 29 excluded observations are mapped in [the registry](SECURITY_REGRESSION_GATES.md); zero strict gates are active. No application vulnerability was fixed. Six new confirmed roots cover established deactivation, revoked presence, stale DM typing cache, null synchronous handler crashes, recovery replay and concurrent OTP consumption. Existing stale channel-room and mention-preview findings gain realtime/cross-module evidence. Mid-session expiry remains policy; async null rejections and developer notification reference omissions remain hardening/reliability.
+
+The remaining seven explicit HTTP operations now have meaningful coverage; none is intentionally uncovered. All 691 cases executed with healthy infrastructure. First expansion run 37174533620 is retained (610/81); the final run repairs the typing_stop name-field assumption, strengthens personal-room cache controls and records native platform response contracts accurately. Remaining provider/deployment, long-duration/adapter/load, richer socket metadata and recovery-listener/duplicate semantics are explicitly deferred. Application fixes and strict gate activation remain separate work. Only origin/master was written; upstream and application source were untouched.
+
+---
+
 # Current security expansion — 2026-10-04
 
 Phase 2, Phase 3 and the bounded HTTP part of Phase 4 completed in hosted [run 37144805902](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37144805902), executed source `f559332b82783b7fee4341434e15c49ec25dc728`: **626/626 executed, 566 passed, 60 observations; infrastructure healthy**. Added **240 append-only cases**: 75 user/profile, 53 space lifecycle, 65 consent/handoff and 47 bounded HTTP. All original 386 retain 348 passes / 38 observations and their IDs/expectations; all 579 previous pass/observation outcomes match the first expansion run.

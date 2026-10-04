@@ -16,7 +16,7 @@ const requirements = {
   S7: 'Typing emission requires live authorization to the referenced channel or DM.',
   S8: 'Private message body fanout may target only the authorized private-channel audience.',
   S9: 'Membership revocation must remove future protected channel delivery from existing sockets.',
-  AUTH_WIDGET: 'Widget verification must verify trusted signature, issuer/audience and expiry before issuing an application session.',
+  AUTH_WIDGET: 'Widget identity must be authenticated by a trusted verifier and obey token validity/expiry; decoding an unsigned fabricated token cannot establish identity.',
   N1_NEEDL_ACCESS: 'Needl previews must apply live space and private-channel access, including membership revocation.',
   N2_PRIVATE_PIN: 'Private-channel pin/unpin requires private-channel access in addition to any post-role rule.',
   N3_MENTION_AUDIENCE: 'Mentions cannot disclose message previews to unauthorized recipients via inbox or socket notifications.',
@@ -25,7 +25,7 @@ const requirements = {
   R3_TYPING_CACHE: 'Cached DM typing recipients must exclude removed participants even after they leave the channel room.',
   R4_SOCKET_CRASH: 'Malformed authenticated socket payloads cannot terminate the backend process.',
   R5_RECOVERY_AUTH: 'Transport recovery must revalidate authorization before restoring protected rooms or replaying packets.',
-  A1_OTP_CONSUMPTION: 'A stored OTP must issue at most one usable session across concurrent valid verifications.',
+  A1_OTP_CONSUMPTION: 'One stored OTP must authorize at most one successful verification request; concurrent additional requests cannot return usable application credentials.',
 };
 const confirmed = 'confirmed security defect';
 const entries = review.observations.map(item => {
