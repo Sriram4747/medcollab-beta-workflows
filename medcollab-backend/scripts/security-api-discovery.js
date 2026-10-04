@@ -265,6 +265,10 @@ require('./security/suites/users-profiles')({ add, ids });
 require('./security/suites/space-lifecycle')({ add, ids });
 require('./security/suites/consent-handoffs')({ add, ids });
 require('./security/suites/bounded-http')({ add, ids });
+require('./security/suites/platform-http')({ add, ids });
+require('./security/suites/realtime-lifecycle')({ add, ids });
+require('./security/suites/lifecycle-chains')({ add, ids });
+require('./security/suites/auth-hardening')({ add, authPhones: AUTH_TEST_PHONES });
 
 let mongoose, models, users;
 let fixtureUserBaseline;

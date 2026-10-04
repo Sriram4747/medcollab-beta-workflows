@@ -9,7 +9,7 @@ permissions:
 jobs:
   boot-backend:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: medcollab-backend
@@ -53,7 +53,7 @@ jobs:
 
       - name: Validate security syntax and append-only manifest
         run: |
-          for file in scripts/security-api-discovery.js scripts/security-api-coverage-report.js scripts/security-manifest-check.js scripts/security/suites/*.js; do
+          for file in scripts/security-api-discovery.js scripts/security-api-coverage-report.js scripts/security-manifest-check.js scripts/security-regression-registry.js scripts/security/*.js scripts/security/suites/*.js; do
             node --check "$file"
           done
           node scripts/security-manifest-check.js
