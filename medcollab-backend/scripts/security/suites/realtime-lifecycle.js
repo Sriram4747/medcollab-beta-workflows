@@ -98,8 +98,11 @@ module.exports = ({ add, ids }) => {
   reg('cached DM typing recipients respect participant removal', 'Typing personal-room recipient caches must not deliver to a removed DM participant after channel leave.', async c => {
     const p = await supervise(c); const opts = { base: p.base };
     const a = await connect(c, 'A', opts); const b = await connect(c, 'B', opts); const control = await connect(c, 'A', opts);
-    await join(a, ids.dmAB); await join(b, ids.dmAB); await join(control, ids.dmAB);
+    await join(a, ids.dmAB); await join(control, ids.dmAB);
     const warm = once(b, 'user_typing', x => x.channelId === ids.dmAB); a.emit('typing_start', { channelId: ids.dmAB }); await warm;
+    // B has not joined the channel yet: this control proves the personal-room
+    // recipient lookup completed and warmed its cache before revocation.
+    c.evidence.personalRoomCacheControl = true; await join(b, ids.dmAB);
     b.emit('leave_channel', { channelId: ids.dmAB }); const barrier = once(b, 'sync_space_rooms'); b.emit('sync_space_rooms'); await barrier;
     await c.models.Channel.updateOne({ _id: ids.dmAB }, { $pull: { members: c.users.B._id } });
     assert.equal((await p.http('B', 'GET', `/api/channels/${ids.dmAB}/messages`)).status, 403);
@@ -127,7 +130,9 @@ module.exports = ({ add, ids }) => {
     const a = await connect(c, 'A'); const b = await connect(c, 'B'); await join(a, ids.channel); await join(b, ids.channel);
     const response = once(b, event === 'typing_start' ? 'user_typing' : 'user_stopped_typing', p => p.channelId === ids.channel);
     a.emit(event, { channelId: ids.channel, userId: oid(c.users.C), userName: 'Forged caller', spaceId: ids.otherSpace }); const p = await response;
-    c.evidence.authorizedControl = true; c.evidence.serverIdentityRetained = p.userId === oid(c.users.A) && p.userName === c.users.A.name; return c.evidence.serverIdentityRetained;
+    c.evidence.authorizedControl = true; c.evidence.returnedIdentityFields = Object.keys(p).sort();
+    c.evidence.serverIdentityRetained = p.userId === oid(c.users.A) && (event === 'typing_start' ? p.userName === c.users.A.name : p.userName === undefined);
+    return c.evidence.serverIdentityRetained;
   });
   reg('availability identity forgery cannot modify peer', 'Availability writes must bind the authenticated subject even with forged caller/space identity fields.', async c => {
     const a = await connect(c, 'A'); const b = await connect(c, 'B'); const before = (await c.models.User.findById(c.users.B._id)).availability.status;

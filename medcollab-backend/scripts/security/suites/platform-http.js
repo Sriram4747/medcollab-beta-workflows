@@ -35,6 +35,7 @@ module.exports = ({ add, ids }) => {
           c.evidence.boundCaller = oid(h?.fromUserId) === oid(c.users.A) && oid(h?.toUserId) === oid(c.users.A);
           return c.evidence.boundCaller && oid(h?.spaceId) === ids.space && oid(h?.channelId) === ids.channel && h.status === 'draft';
         }
+        c.evidence.responseValidationFields = (body.errors || []).map(x => x.field).sort();
         const n = await c.models.Notification.find({ userId: { $in: Object.values(c.users).map(u => u._id) } }).lean();
         c.evidence.notificationRecipients = n.map(x => oid(x.userId));
         return body.data?.count === 3 && n.length === 3 && n.every(x => oid(x.userId) === oid(c.users.A));
@@ -52,7 +53,7 @@ module.exports = ({ add, ids }) => {
     // Platform endpoints do not use the API envelope. Preserve actual status and
     // contract evidence; normalize only the harness envelope, never the result.
     c.evidence.envelopeNormalization = 'platform JSON/HTML, actual HTTP status retained';
-    return { status: r.status, data: { success: r.status < 400 } };
+    return { status: r.status, nativeResponseKind: c.evidence.contentType?.includes('application/json') ? 'json' : 'html', data: { success: r.status < 400 } };
   }
   for (const [endpoint, fields] of [ ['/', ['api', 'health', 'name', 'status']], ['/api', ['endpoints', 'name', 'status', 'version']], ['/health', ['analytics', 'cloudinary', 'database', 'environment', 'firebase', 'status', 'timestamp', 'uptime']] ]) add(`public platform metadata allowlist ${endpoint}`, 'anonymous', 'GET', endpoint, [200], undefined, {
     module: 'Developer and Platform HTTP', category: 'platform-data-minimization', sources: ['src/app.js'],

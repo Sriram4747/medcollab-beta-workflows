@@ -597,7 +597,7 @@ function whatItChecks(c) {
   return 'Checks the endpoint’s current authentication, authorization, and input-handling contract for this controlled request.';
 }
 function expectedBehaviour(c) {
-  if (c.securityInvariant) return `HTTP ${c.statuses.join(' or ')} with the following semantic invariant: ${c.securityInvariant}`;
+  if (c.securityInvariant) return c.method === 'SOCKET' ? `Realtime invariant: ${c.securityInvariant} HTTP status is not applicable.` : `HTTP ${c.statuses.join(' or ')} with the following semantic invariant: ${c.securityInvariant}`;
   if (c.method === 'SOCKET') return 'The named realtime invariant must hold with an authenticated delivery control; backend health is checked separately. No HTTP status is assigned to a socket event.';
   const statuses = c.statuses.join(' or ');
   if (c.actor === 'anonymous' || c.category === 'authentication-negative') return `The API should reject the request with HTTP ${statuses} because no valid authenticated session is presented.`;
@@ -669,11 +669,11 @@ async function execute(c) {
   const realtime = c.method === 'SOCKET';
   const result = { caseId: `VOCLE-${String(results.length + 1).padStart(3, '0')}`, name: c.name, actor: c.actor, endpoint, method: c.method, module: c.module, context: c.context, mutationCategory: c.category,
     expected: realtime
-      ? { httpStatus: 'not applicable', invariant: 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
+      ? { httpStatus: 'not applicable', invariant: c.securityInvariant || 'named socket authorization invariant holds', authenticatedControl: 'required', eventEvidence: 'required' }
       : { statuses: c.statuses, successfulEnvelope: !denial, deniedWritesMustPreserveState: denial && !c.denialMayChangeState, semanticCheck: !!c.check, semanticInvariant: c.securityInvariant },
     actual: realtime
       ? { status: null, httpStatus: 'not applicable', healthStatus: r.status, invariant: !!ctx.evidence.invariantHeld, authenticatedControl: ctx.evidence.authorizedControl ?? null, eventEvidence: ctx.evidence, stateUnchanged: unchanged, semanticCheckPassed: !!semantic }
-      : { status: r.status, success: r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: !!r.data, evidence: ctx.evidence },
+      : { status: r.status, success: r.nativeResponseKind ? null : r.data?.success ?? null, stateUnchanged: unchanged, deniedResponseDataAbsent, semanticCheckPassed: !!semantic, jsonResponse: r.nativeResponseKind ? r.nativeResponseKind === 'json' : !!r.data, ...(r.nativeResponseKind ? { nativeResponseKind: r.nativeResponseKind } : {}), evidence: ctx.evidence },
     sources: c.sources, passed, classification, manualConfirmationWorthwhile: !passed,
     report: { securityArea: securityArea(c.category), module: c.module, whatItChecks: whatItChecks(c), testSetup: setupFor(c), actionPerformed: actionPerformed(c, endpoint), mutation: mutationDescription(c), expectedSecurityBehaviour: expectedBehaviour(c) } };
   results.push(result);
