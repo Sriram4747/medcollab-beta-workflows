@@ -31,6 +31,12 @@ async function main() {
     process.chdir(scratch);
     mongoose = require('mongoose'); await mongoose.connect(guard.URI, { serverSelectionTimeoutMS: 10000 });
     assert.equal(mongoose.connection.name, 'vocle_ci');
+    // Expiry tests must not race the TTL background monitor. This disposable
+    // server disables only physical sweeping; actual TTL indexes and application
+    // expiry checks remain real. Never apply this option to a deployed database.
+    const ttl = await mongoose.connection.db.admin().command({ getParameter: 1, ttlMonitorEnabled: 1 });
+    assert.equal(ttl.ttlMonitorEnabled, false, 'Disposable TTL sweep must be paused');
+    isolation.ttlMonitorEnabled = ttl.ttlMonitorEnabled;
     const models = fixtures.models();
     for (const model of Object.values(models)) { assert.equal(await model.countDocuments(), 0, 'Disposable database is not empty'); await model.init(); }
     child = fork(path.resolve(__dirname, '../security-media/server.js'), [], { cwd: scratch, env: { NODE_ENV: 'test', MONGODB_URI: guard.URI, API_BASE_URL: guard.BASE, PORT: '5000', JWT_SECRET: guard.JWT, JWT_REFRESH_SECRET: 'ci-test-only-refresh-secret-not-for-production-000000000002', OTP_BYPASS: 'false', VOCLE_MEDIA_MODE: 'local' }, stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });

@@ -22,7 +22,10 @@ add('Strict schemas discard unknown top-level and nested fields', 'Unknown field
   const m = await c.make('Message', { channelId: c.ch._id, senderId: c.A._id, content: { text: 'synthetic', unexpected: 'unknown' } });
   const h = await c.make('Handoff', { ...c.handoff(), patients: [{ bedNumber: 'CI', clinicalAlias: 'Synthetic', patientName: 'unknown', attachments: [{ url: 'https://example.invalid/synthetic', unknown: true }] }] });
   const u = await c.models.User.collection.findOne({ _id: c.A._id });
-  return out(checks.every(Boolean) && !u.notifications.unknown && !u.availability.unknown && !m.content.toObject().unexpected && !h.patients[0].toObject().patientName && !h.patients[0].attachments[0].toObject().unknown, { modelsChecked: checks.length, nestedUnknownPersisted: false });
+  const rawM = await c.models.Message.collection.findOne({ _id: m._id });
+  const rawH = await c.models.Handoff.collection.findOne({ _id: h._id });
+  const nestedUnknownPersisted = !!(u.notifications.unknown || u.availability.unknown || rawM.content.unexpected || rawH.patients[0].patientName || rawH.patients[0].attachments[0].unknown);
+  return out(checks.every(Boolean) && !nestedUnknownPersisted, { modelsChecked: checks.length, topLevelUnknownPersisted: !checks.every(Boolean), nestedUnknownPersisted });
 });
 add('Profile allowlist preserves identity and security flags', 'Profile update cannot change phone, active/verified flags, device tokens or operator updates', 'HTTP', ['src/features/users/user.controller.js'], async c => {
   const r = await c.api('A', 'PUT', '/api/users/me', { bio: 'allowed canary', phone: c.B.phone, isActive: false, isVerified: false, fcmTokens: ['injected'], $set: { isActive: false }, unknown: true });
@@ -182,9 +185,14 @@ add('Inactive space blocks protected channel read', 'Policy candidate: inactive 
 add('Missing resource references are rejected at model boundary', 'Defense in depth: required ObjectId refs must point to existing related resources', 'model-hardening', [msg, handoff, notification], async c => {
   const absent = c.id();
   assert.equal(await c.models.Channel.exists({ _id: absent }), null);
-  const m = await c.make('Message', { channelId: absent, senderId: c.A._id, content: { text: 'synthetic orphan' } });
-  const h = await c.make('Handoff', { ...c.handoff(), channelId: absent });
-  return out(false, { orphanMessagePersisted: !!await c.models.Message.exists({ _id: m._id }), orphanHandoffPersisted: !!await c.models.Handoff.exists({ _id: h._id }), scope: 'model writes only; refs are not foreign keys' });
+  const probes = await Promise.allSettled([
+    c.make('Message', { channelId: absent, senderId: c.A._id, content: { text: 'synthetic orphan' } }),
+    c.make('Handoff', { ...c.handoff(), channelId: absent }),
+  ]);
+  for (const p of probes) if (p.status === 'rejected') assert.ok(['ValidationError', 'MongoServerError'].includes(p.reason.name), 'Unexpected reference probe failure');
+  const persisted = [];
+  for (const [i, p] of probes.entries()) persisted.push(p.status === 'fulfilled' && !!await c.models[i ? 'Handoff' : 'Message'].exists({ _id: p.value._id }));
+  return out(!persisted.some(Boolean), { orphanMessagePersisted: persisted[0], orphanHandoffPersisted: persisted[1], scope: 'model writes only; refs are not foreign keys' });
 });
 add('Routed acknowledgement rejects oversized note and preserves state', 'Route-level validation compensates for update validators omitted in controller', 'HTTP', ['src/features/handoffs/handoff.routes.js', 'src/features/handoffs/handoff.controller.js'], async c => {
   const h = await c.make('Handoff', { ...c.handoff(), status: 'submitted' });

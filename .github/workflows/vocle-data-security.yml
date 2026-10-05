@@ -37,7 +37,8 @@ jobs:
           docker pull node:22
           docker run --detach --rm --name vocle-data-mongo --network none \
             --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'" \
-            --health-interval 2s --health-timeout 3s --health-retries 20 mongo:7
+            --health-interval 2s --health-timeout 3s --health-retries 20 \
+            mongo:7 --setParameter ttlMonitorEnabled=false
           for attempt in {1..30}; do
             if [ "$(docker inspect --format='{{.State.Health.Status}}' vocle-data-mongo)" = healthy ]; then exit 0; fi
             sleep 2
