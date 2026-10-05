@@ -1,10 +1,18 @@
+# Real-provider findings addendum — 2026-10-05
+
+[Final run 37355451614](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37355451614): 34/34,25 passes/nine observations, healthy; 13/13 recorded origins absent in finally/post-job cleanup. [Reviewed exact expected/actual cases](security-evidence/37355451614/reviewed-observations.json), [full provider findings/controls/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Existing video deletion736→762, octet MIME dispatch724/725→782/783 and handoff deletion740→784 are confirmed without duplicate roots. **770/771 newly confirm app PDF delivery contracts captured by offline731:** named raw attachment400 with plain attachment200 control; raw→image preview404 with image-PDF WebP200 control. These are app/provider URL compatibility failures; no account-wide raw/PDF restriction inferred.
+
+765/773/776 characterize cached video/raw/image bytes available200 immediately after origins disappear; eventual invalidation/private-delivery policy remains unverified. No new provider-defect or production-configuration root claimed. First run781 filename-dot observation was a harness false positive; exact namespace/segments pass in final run and history remains unchanged. No vulnerability fix/strict gate or generic-suite rerun. Approved synthetic-only TEST cloud, independent positive allowlisting, no production/upstream access.
+
+---
+
 # Executed offline media/storage findings — 2026-10-04
 
 Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97, 62 passes, 35 observations; infrastructure healthy**. Nine existing media observations retain their prior dispositions; 26 new observations consist of **one confirmed local S6 avatar variant, three exact call-contract defects, 22 hardening/compatibility/lifecycle/policy observations**. Read [expected/actual findings with source paths](SECURITY_MEDIA_OFFLINE_2026-10-04.md), [all reviewed cases](security-evidence/37181051425/reviewed-observations.json) and [execution/hashes](security-evidence/37181051425/execution.json).
 
 S6/704 deletes the exact synthetic foreign avatar via canonical traversal. 724–725 verify valid octet-PDF/video bytes are sent as image. 736 verifies deletion dispatches image/raw and never video. Shared handoff folder/403 deletion (721/740 and local705), omitted overwrite/invalidation, inherited context function, foreign namespace SDK dispatch, partial-failure orphans, video-message rejection, untrusted references/metadata and stale lifecycle references remain scoped observations. **739 demonstrates application namespace validation, not actual Cloudinary cross-user deletion**; the reviewed hardening label narrows its raw automatic label. Provider responses/assets are simulated. Retention/sharing cases require policy, not automatic vulnerability claims.
 
-No application fix, new active gate, Cloudinary account, credentials or request. General691 was not rerun; its historical 80 dispositions and gate registry remain intact. Combined catalog751 does not imply 751 fresh execution. Stage 3 remains deferred, including real decoding/ID normalization/deletion/delivery/permissions/CDN verification.
+No application fix, new active gate, Cloudinary account, credentials or request. General 691 was not rerun; its historical 80 dispositions and gate registry remain intact. Combined catalog 751 does not imply 751 fresh execution. Stage 3 remains deferred, including real decoding/ID normalization/deletion/delivery/permissions/CDN verification.
 
 ---
 

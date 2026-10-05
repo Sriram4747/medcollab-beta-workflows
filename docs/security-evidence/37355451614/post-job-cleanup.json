@@ -1,0 +1,86 @@
+{
+  "attempted": true,
+  "resources": [
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/op-001/file_yhnfzg",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-2/medcollab/messages/7ec000000000000000000001/synthetic_neyy9s",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-3/medcollab/messages/7ec000000000000000000001/synthetic_uvmeh2",
+      "resourceType": "video",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-4/medcollab/messages/7ec000000000000000000001/synthetic_vcxsxb",
+      "resourceType": "raw",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/op-005/file_xbkkxv",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/duplicate-names/synthetic-duplicate_dr30al",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/duplicate-names/synthetic-duplicate_pg5krd",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/overwrite/synthetic",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/type-separation/synthetic",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/type-separation/synthetic",
+      "resourceType": "raw",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-13/medcollab/messages/7ec000000000000000000001/.._._lac4ep",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-14/medcollab/messages/7ec000000000000000000001/synthetic_fcaja6",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    },
+    {
+      "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/app-16/medcollab/handoffs/synthetic_wyjajw",
+      "resourceType": "image",
+      "destroyResult": "not found",
+      "originAbsent": true
+    }
+  ],
+  "pendingUnresolved": 0,
+  "proven": true,
+  "broadDeletionUsed": false
+}

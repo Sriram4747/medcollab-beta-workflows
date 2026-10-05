@@ -1,0 +1,265 @@
+{
+  "runId": "37355451614",
+  "source": "a3432300d3827bb0f5eca1a1a2033ec48929707b",
+  "rawCounts": {
+    "registered": 34,
+    "executed": 34,
+    "pass": 25,
+    "observations": 9,
+    "infrastructureFailures": 0
+  },
+  "observations": [
+    {
+      "caseId": "VOCLE-762",
+      "expected": "Owner deletion should remove video; preserve existing VOCLE-736 finding if retained",
+      "actual": {
+        "status": 404,
+        "videoRetained": true,
+        "dispatch": [
+          "image",
+          "raw"
+        ]
+      },
+      "rawClassification": "existing application deletion defect",
+      "relatedCases": [
+        "VOCLE-736"
+      ],
+      "reviewedDisposition": "confirmed existing application defect",
+      "review": "App returns404, dispatches image/raw and video remains; independent video delete returnsok and origin disappears. Existing VOCLE-736; no duplicate root.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-765",
+      "expected": "Fresh original delivery should stop; report CDN persistence separately from origin absence",
+      "actual": {
+        "status": 200,
+        "contentType": "video/mp4",
+        "bytes": 1509,
+        "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+        "redirected": false,
+        "appInvalidateOmitted": true,
+        "independentTestDeletionInvalidate": false
+      },
+      "rawClassification": "provider CDN/cache behavior",
+      "relatedCases": [],
+      "reviewedDisposition": "provider CDN/cache behavior",
+      "review": "Video origin absent but original URL returns200 exact MP4 after non-invalidating test destroy. Not proof of failed provider origin deletion or eventual invalidation.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-770",
+      "expected": "Controller attachment URL returns exact PDF bytes where account allows delivery",
+      "actual": {
+        "status": 400,
+        "contentType": "application/json",
+        "bytes": 330,
+        "sha256": "a284cfdfe92fe6a17a22698a6b6abc061d29105315226445ec0d162dd03075b3",
+        "redirected": false,
+        "plainAttachmentControl": {
+          "status": 200,
+          "contentType": "application/octet-stream",
+          "bytes": 344,
+          "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+          "redirected": false
+        },
+        "plainAttachmentSupported": true
+      },
+      "rawClassification": "application raw attachment URL/provider compatibility",
+      "relatedCases": [],
+      "reviewedDisposition": "confirmed application/provider raw attachment URL compatibility defect",
+      "review": "Application named attachment returns400 while exact original and plain attachment controls both return200 exact PDF bytes. No account-wide raw-delivery denial inferred.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ],
+      "relatedOfflineCases": [
+        "VOCLE-731"
+      ]
+    },
+    {
+      "caseId": "VOCLE-771",
+      "expected": "Measure actual image preview; URL construction alone cannot establish support",
+      "actual": {
+        "status": 404,
+        "contentType": "application/json",
+        "bytes": 460,
+        "sha256": "9332f7e445a5d1aa8b6dade693868786e9b2b6531054faea166a065c3d304f48",
+        "redirected": false,
+        "uploadedResourceType": "raw",
+        "previewResourceType": "image",
+        "previewSupported": false,
+        "imagePDFControl": {
+          "identity": {
+            "publicId": "medcollab/security-test/37355451614-1-6cbcb743-59eb-479d-a845-44f54b92f095/op-005/file_xbkkxv",
+            "resourceType": "image",
+            "deliveryType": "upload",
+            "format": "pdf",
+            "bytes": 344,
+            "width": 10,
+            "height": 10,
+            "secureURLApproved": true
+          },
+          "metadata": {
+            "exists": true,
+            "identityMatched": true,
+            "bytes": 344,
+            "format": "pdf"
+          },
+          "preview": {
+            "status": 200,
+            "contentType": "image/webp",
+            "bytes": 38,
+            "sha256": "a1e2f6dbda847380d13af6bd388778fe2d5c2a3b127c38a3924cbe31e1dd8de2",
+            "redirected": false
+          },
+          "previewSupported": true
+        }
+      },
+      "rawClassification": "application raw/image preview compatibility or account configuration",
+      "relatedCases": [],
+      "reviewedDisposition": "confirmed application raw/image PDF preview contract defect",
+      "review": "Raw public ID preview returns404 while exact synthetic PDF stored as image/pdf previews200 WebP. This account supports the bounded decoder; raw/image identity mismatch remains in the app.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ],
+      "relatedOfflineCases": [
+        "VOCLE-731"
+      ]
+    },
+    {
+      "caseId": "VOCLE-773",
+      "expected": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence",
+      "actual": {
+        "exists": false,
+        "delivery": {
+          "status": 200,
+          "contentType": "application/octet-stream",
+          "bytes": 344,
+          "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+          "redirected": false
+        },
+        "originAbsenceIndependentOfCDN": true
+      },
+      "rawClassification": "provider CDN/cache behavior",
+      "relatedCases": [],
+      "reviewedDisposition": "provider CDN/cache behavior",
+      "review": "Raw origin absent but original CDN URL still returns200 exact PDF bytes.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-776",
+      "expected": "Image exact lookup absent, repeated destroy not found; measure original delivery separately",
+      "actual": {
+        "exists": false,
+        "result": "not found",
+        "delivery": {
+          "status": 200,
+          "contentType": "image/png",
+          "bytes": 70,
+          "sha256": "abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f",
+          "redirected": false
+        },
+        "originAbsenceIndependentOfCDN": true
+      },
+      "rawClassification": "provider CDN/cache behavior",
+      "relatedCases": [],
+      "reviewedDisposition": "provider CDN/cache behavior",
+      "review": "Image origin absent and repeated destroy notfound, while original CDN URL still returns200 exact PNG.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-782",
+      "expected": "Octet-PDF should select raw; actual image intent remains VOCLE-724 observation",
+      "actual": {
+        "requestedType": "image",
+        "expectedType": "raw",
+        "appStatus": 200,
+        "providerAccepted": true,
+        "storedType": "image",
+        "providerRejectionStatus": null
+      },
+      "rawClassification": "existing application MIME-only dispatch defect",
+      "relatedCases": [
+        "VOCLE-724"
+      ],
+      "reviewedDisposition": "confirmed existing MIME-only dispatch defect",
+      "review": "Octet-PDF requests/stores image instead of raw and app returns200; existing VOCLE-724.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-783",
+      "expected": "Octet-MP4 should select video; actual image intent remains VOCLE-725 observation",
+      "actual": {
+        "requestedType": "image",
+        "expectedType": "video",
+        "appStatus": 500,
+        "providerAccepted": false,
+        "storedType": null,
+        "providerRejectionStatus": 400
+      },
+      "rawClassification": "existing application MIME-only dispatch defect",
+      "relatedCases": [
+        "VOCLE-725"
+      ],
+      "reviewedDisposition": "confirmed existing MIME-only dispatch defect",
+      "review": "Octet-MP4 requests image; provider rejects400 and app returns500; no resource created. Existing VOCLE-725.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-784",
+      "expected": "Uploader should remove handoff asset; existing VOCLE-740 observation if forbidden",
+      "actual": {
+        "status": 403,
+        "retained": true,
+        "originalFolder": "medcollab/handoffs"
+      },
+      "rawClassification": "existing application handoff lifecycle limitation",
+      "relatedCases": [
+        "VOCLE-740"
+      ],
+      "reviewedDisposition": "confirmed existing handoff lifecycle limitation",
+      "review": "Shared handoff folder cannot satisfy owner deletion; app403 retains asset. Independent scoped janitor removes it. Existing VOCLE-740.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js",
+        "medcollab-backend/scripts/security-cloudinary/cases.js",
+        "medcollab-backend/scripts/security-cloudinary/broker.js"
+      ]
+    }
+  ]
+}

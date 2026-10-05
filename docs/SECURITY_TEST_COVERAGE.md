@@ -1,8 +1,16 @@
-# Current real-provider catalog — 2026-10-05
+# Current real-provider coverage — 2026-10-05
+
+Hosted [run 37355451614](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37355451614), source `a3432300d3827bb0f5eca1a1a2033ec48929707b`: **34/34 executed, 25 passes/nine observations; infrastructure healthy**. **VOCLE-752–785**, combined catalog 785. Real signed image/video/raw uploads, exact identities/metadata, secure retrieval, PNG/video/PDF-image transformations, correct typed destruction/replay/absence, namespace/duplicate/type separation, byte-proven overwrite prevention/replacement and 13/13 scoped finally/post-job cleanup. Positive TEST cloud allowlist enforced; no production access. [Evidence hashes](security-evidence/37355451614/execution.json), [exact findings/limitations](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md).
+
+Six app compatibility/lifecycle observations and three CDN/cache observations remain; none remediated. Raw named attachment400 and app raw→image preview404 have successful independent PDF controls. Original CDN bytes remain200 after origin deletion; eventual cache purge/private delivery and Console roles/settings/backup-retention are unverified. Controller/provider lane only: no new auth/database/HTTP inventory credit. General 691 and offline 97 retain their historical evidence. First real run 37354536880 remains34/34, 24/10; its781 naming false positive is corrected in final 25/9, raw history preserved.
+
+---
+
+# Historical blocked real-provider catalog — 2026-10-05
 
 **Enablement blocked:** independent `CLOUDINARY_TEST_CLOUD_NAME` repository variable is absent, confirmed after pushing. No integration workflow dispatched, no hosted run, zero provider executions/pass/observations or Cloudinary requests. [Blocked metadata](security-evidence/cloudinary-blocked-2026-10-05/execution.json). All live behaviors remain unverified; historical counts below unchanged.
 
-**34 real-Cloudinary cases registered, VOCLE-752–785**, combined catalog785, separately manual workflow. **Zero live executions/pass/observations credited yet**; independent positive allowlist is missing; hosted evidence blocked. Image/video/raw upload, identity, delivery, bounded transforms, delete/absence/replay, naming/overwrite/type separation and independent cleanup implemented. [Exact scope/guards/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Local offline checks pass but are not provider coverage. Historical general691/offline97 outcomes unchanged; no new HTTP inventory credit or app remediation.
+**34 real-Cloudinary cases registered, VOCLE-752–785**, combined catalog 785, separately manual workflow. **Zero live executions/pass/observations credited yet**; independent positive allowlist is missing; hosted evidence blocked. Image/video/raw upload, identity, delivery, bounded transforms, delete/absence/replay, naming/overwrite/type separation and independent cleanup implemented. [Exact scope/guards/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Local offline checks pass but are not provider coverage. Historical general 691/offline 97 outcomes unchanged; no new HTTP inventory credit or app remediation.
 
 ---
 
