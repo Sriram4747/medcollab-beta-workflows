@@ -14,7 +14,8 @@ module.exports = ({ add, ids }) => {
     toUserId: ctx.users[to]._id,
   });
   const noDm = (ctx, from, to) => ctx.models.Channel.countDocuments({
-    type: 'direct', members: { $all: [ctx.users[from]._id, ctx.users[to]._id], $size: 2 },
+    // A pre-existing archived E/G fixture is not an opened conversation.
+    type: 'direct', isArchived: false, members: { $all: [ctx.users[from]._id, ctx.users[to]._id], $size: 2 },
   });
   for (const [label, from, to, existingFrom, existingTo, expectedId, expectedActionPairCount] of [
     ['pending replay target', 'E', 'F', 'E', 'F', ids.requestPending, 1],

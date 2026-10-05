@@ -106,14 +106,15 @@ module.exports = function registerDirectMessageCases({ add, ids }) {
     check: async (body, ctx) => {
       const channel = body.data?.channel;
       const persisted = channel?._id && await ctx.models.Channel.findById(channel._id).lean();
-      const callerOnly = persisted && persisted.type === 'direct' && persisted.isSelfNotes === true && !persisted.spaceId &&
+      // isSelfNotes is derived by enrichDM for the response, not a schema field.
+      const callerOnly = channel?.isSelfNotes === true && persisted && persisted.type === 'direct' && !persisted.spaceId &&
         String(persisted.createdBy) === String(ctx.users.E._id) && (persisted.members || []).length === 1 &&
         String(persisted.members[0]) === String(ctx.users.E._id);
       if (!callerOnly) return false;
       const replay = await ctx.http('E', 'POST', '/api/channels/dm', { userId: String(ctx.users.E._id) });
       const outsider = await ctx.http('D', 'GET', `/api/channels/${channel._id}`);
       return replay.status === 200 && replay.data?.data?.channel?._id === channel._id && outsider.status === 403 &&
-        await ctx.models.Channel.countDocuments({ type: 'direct', isSelfNotes: true, members: { $all: [ctx.users.E._id], $size: 1 } }) === 1;
+        await ctx.models.Channel.countDocuments({ type: 'direct', isArchived: false, members: { $all: [ctx.users.E._id], $size: 1 } }) === 1;
     },
   });
   addDm('inactive DM target is not eligible through relationships', 'A', 'POST', '/api/channels/dm', [403], { userId: ':I' }, { category: 'direct-inactive-target' });
