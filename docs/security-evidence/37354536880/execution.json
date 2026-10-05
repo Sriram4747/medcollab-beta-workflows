@@ -1,0 +1,64 @@
+{
+  "runId": "37354536880",
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37354536880",
+  "executedSource": "73aa4db9f965cbaf460a35d861745ff058e9d361",
+  "conclusion": "success",
+  "allJobStepsSucceeded": true,
+  "counts": {
+    "registered": 34,
+    "executed": 34,
+    "pass": 24,
+    "observations": 10,
+    "infrastructureFailures": 0
+  },
+  "artifact": {
+    "id": "11363648476",
+    "name": "vocle-real-cloudinary-security",
+    "archiveSHA256": "d476d97866e056ccf68af1f7d969f17a19dca138772098da2bc5ef56d3d0784e"
+  },
+  "rawReportSHA256": {
+    "safety.json": "4365719af9157cfa7130ad7825b5382fe6a18313550187838c8f53cddfe964b4",
+    "resources.json": "60cb2d191001dc291579757ea35febbff9e4636c73368dbb300b85f24af95dfa",
+    "cleanup.json": "e4a480099dfe674950edf7558398fa84468e39c94aa468b4562fc8d66c83c45c",
+    "post-job-cleanup.json": "5c3a9443ed53129ed81b4b24871bbef76758d5ce948962dbfac027bfb19c1a50",
+    "results.json": "5761aeb60ae0f77a3874fe25cc17c38d6100867d9308198c4a655e02f1c6677f",
+    "manifest.json": "4ada66df211e1d3427594d7dfd0faa9ea48ecaaaaec66268cff4ddb854a0dda3",
+    "summary.md": "ca0b446962c2cf383ebce59b0a78ca564cc6b1100b8f71847f4154453b9194e8",
+    "security-test-report.md": "06b8e44370dd7d31b1cb0d639f807873e8a01f13e6a310a7f9dc8a2e0d4267d9"
+  },
+  "safety": {
+    "positiveAllowlistMatched": true,
+    "approvedTestCloudOnly": true,
+    "network": {
+      "apiRequests": 64,
+      "deliveryRequests": 11,
+      "blocked": 0,
+      "approvedCloudOnly": true
+    },
+    "syntheticFixturesOnly": true,
+    "appSourceUnchanged": true,
+    "appSourceSHA256": "b6b374cdce73bb8da5a0e72e0f6b844990c52ba4f256f193cc01becce561ae5c"
+  },
+  "namespace": "medcollab/security-test/37354536880-1-0c039b49-5d11-44bf-9ac5-1a8a2ac17c6c",
+  "uploadIntents": 15,
+  "resources": 12,
+  "resourceCountsByType": {
+    "image": 9,
+    "video": 1,
+    "raw": 2
+  },
+  "cleanupFinallyProven": true,
+  "cleanupPostJobProven": true,
+  "unresolvedIntents": 0,
+  "secretValuesRequested": false,
+  "productionCloudinaryAccess": false,
+  "upstreamWritten": false,
+  "genericSuiteRerun": false,
+  "applicationSourceChanged": false,
+  "limitations": [
+    "Controller/provider lane; authentication/database/multipart coverage remains historical",
+    "CDN content may outlive origin deletion; eventual cache invalidation not proven",
+    "Test-account role/backup/retention/Console settings not attested",
+    "Forced runner loss requires exact-manifest review; no remote janitor guarantee"
+  ]
+}

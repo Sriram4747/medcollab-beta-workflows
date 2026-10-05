@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('node:fs'); const path = require('node:path'); const { Writable } = require('node:stream');
 const { createHash } = require('node:crypto'); const { requireSafe, namespace, installNetwork } = require('./guard');
-const { png, pdf, video, hash } = require('./fixtures');
+const { png, alternatePNG, pdf, video, hash } = require('./fixtures');
 const TYPES = ['image', 'video', 'raw'];
 class Broker {
   constructor(c) {
@@ -49,7 +49,7 @@ class Broker {
     return this.network.permit('api.cloudinary.com', 'POST', `/v1_1/${this.c.cloud}/${type}/${action}`, fn);
   }
   async upload(bytes, options, { folder, explicitId, lane = 'provider' } = {}) {
-    requireSafe([png, pdf, video].some(b => b.equals(bytes)), 'NON_SYNTHETIC_BYTES');
+    requireSafe([png, alternatePNG, pdf, video].some(b => b.equals(bytes)), 'NON_SYNTHETIC_BYTES');
     requireSafe(TYPES.includes(options.resource_type), 'RESOURCE_TYPE_DENIED');
     const seq = this.journal.intents.length + 1;
     folder ||= `${this.c.root}/op-${String(seq).padStart(3, '0')}`; namespace(this.c.root, folder);
@@ -77,6 +77,7 @@ class Broker {
     const r = { publicId: result.public_id, resourceType: result.resource_type, deliveryType: result.type, assetId: result.asset_id, version: result.version, folder, format: result.format || null, bytes: result.bytes, width: result.width || null, height: result.height || null, originalSHA256: hash(bytes), removed: false };
     const prior = this.journal.resources.find(a => a.publicId === r.publicId && a.resourceType === r.resourceType);
     if (prior) requireSafe(prior.assetId === r.assetId, 'OVERWRITE_IDENTITY_CHANGED');
+    if (prior && result.existing) r.originalSHA256 = prior.originalSHA256;
     intent.state = 'created'; intent.publicId = r.publicId;
     if (prior) Object.assign(prior, r); else this.journal.resources.push(r);
     this.save();
@@ -101,7 +102,7 @@ class Broker {
     const delivered = parts.slice(prefix).join('/');
     const suffixes = [r.publicId, `${r.publicId}.png`, `${r.publicId}.jpg`, `${r.publicId}.webp`, `${r.publicId}.mp4`, `${r.publicId}.pdf`];
     requireSafe(suffixes.includes(delivered), 'DELIVERY_UNREGISTERED_RESOURCE');
-    for (const segment of parts.slice(3, prefix)) requireSafe(/^v\d+$/.test(segment) || segment.split(',').every(t => /^(w_400|h_400|h_300|c_limit|c_fill|q_auto|pg_1|so_0|fl_attachment:synthetic[\w.()-]*)$/.test(t)), 'TRANSFORMATION_DENIED');
+    for (const segment of parts.slice(3, prefix)) requireSafe(/^v\d+$/.test(segment) || segment.split(',').every(t => /^(w_400|h_400|h_300|c_limit|c_fill|q_auto|pg_1|so_0|fl_attachment|fl_attachment:synthetic[\w.()-]*)$/.test(t)), 'TRANSFORMATION_DENIED');
     this.urls.set(value, { publicId: r.publicId, resourceType: r.resourceType, deliveredType: parts[1] }); return value;
   }
   url(id, options = {}) { const r = this.resource(id); return this.registerURL(this.buildURL(id, options), r); }

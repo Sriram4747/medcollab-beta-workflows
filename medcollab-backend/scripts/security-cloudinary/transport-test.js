@@ -30,10 +30,10 @@ function dispatch(opts, body) {
   if (parts[3] === 'destroy') { const key = type + ':' + fields.public_id; const exists = inventory.delete(key); return [200, { result: exists ? 'ok' : 'not found' }]; }
   assert.equal(parts[3], 'upload'); assert.ok(fields.signature && fields.api_key && fields.folder.startsWith(root + '/'));
   const publicId = fields.folder + '/' + (fields.public_id || 'file_' + (++sequence)); const key = type + ':' + publicId;
-  const prior = inventory.get(key); if (prior && fields.overwrite === 'false') return [200, { ...prior, existing: true }];
+  const prior = inventory.get(key); if (prior && ['false', '0'].includes(fields.overwrite)) return [200, { ...prior, existing: true }];
   const fileMatch = /name="file"; filename="file"\r\nContent-Type: application\/octet-stream\r\n\r\n([\s\S]*)\r\n--[^\r\n]+--\s*$/.exec(raw);
   assert.ok(fileMatch, 'Real SDK multipart file body missing');
-  const bytesBuffer = Buffer.from(fileMatch[1], 'latin1'); assert.ok([fixtures.png, fixtures.pdf, fixtures.video].some(b => b.equals(bytesBuffer)));
+  const bytesBuffer = Buffer.from(fileMatch[1], 'latin1'); assert.ok([fixtures.png, fixtures.alternatePNG, fixtures.pdf, fixtures.video].some(b => b.equals(bytesBuffer)));
   const r = { public_id: publicId, asset_id: prior?.asset_id || sha(key).slice(0, 32), version: ++sequence, resource_type: type, type: 'upload', format: type === 'image' ? 'png' : type === 'video' ? 'mp4' : undefined, bytes: bytesBuffer.length, width: 1, height: 1, secure_url: `https://res.cloudinary.com/${cloud}/${type}/upload/v${sequence}/${publicId}${type === 'image' ? '.png' : type === 'video' ? '.mp4' : ''}`, bytesBuffer };
   inventory.set(key, r); return [200, r];
 }
@@ -53,7 +53,7 @@ async function main() {
   const { Broker } = require('./broker'); const broker = new Broker({ out: directory, cloud, root, runId: '12345', attempt: '1', source: 'a'.repeat(40) });
   const c = context(broker);
   try {
-    for (let i = 0; i < manifest.count - 1; i++) { await execute(i, c); assert.equal(broker.infrastructureError, undefined); }
+    for (let i = 0; i < manifest.count - 1; i++) { const result = await execute(i, c); assert.equal(broker.infrastructureError, undefined); if ([26, 27, 29].includes(i)) assert.equal(result.pass, true, `Strengthened control ${i}: ${JSON.stringify(result.actual)}`); }
     const cleanup = await broker.cleanup(); assert.equal(cleanup.proven, true); assert.equal(inventory.size, 0); assert.equal(broker.network.telemetry.blocked, 0);
     assert.ok(wireRequests > 50); const names = fs.readdirSync(directory); assert.ok(names.includes('resources.json'));
     console.log(`Offline transport roundtrip passed: real controller/SDK serialization, ${wireRequests} intercepted requests, all recorded types cleaned; zero network I/O.`);
@@ -63,4 +63,4 @@ async function main() {
     fs.rmdirSync(directory);
   }
 }
-main().catch(e => { console.error(e.code || e.message || 'OFFLINE_TRANSPORT_TEST_FAILED'); process.exitCode = 1; });
+main().catch(e => { console.error(e.message || e.code || 'OFFLINE_TRANSPORT_TEST_FAILED'); process.exitCode = 1; });
