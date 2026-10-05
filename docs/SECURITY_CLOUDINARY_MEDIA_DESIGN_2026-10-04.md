@@ -1,5 +1,9 @@
 # Cloudinary and media/storage security phase — 2026-10-04
 
+## Real-provider implementation addendum — 2026-10-05
+
+[Current integration implementation](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md): 34 registered cases (752–785), manual workflow, independent positive expected-cloud binding before any provider request, synthetic run namespace, unchanged controller/real SDK, durable manifest and independent three-type cleanup. Local guards/wiring pass; no live evidence credited yet. Owner authorization uses existing repository secrets in a wholly separate account and independent cloud variable; original proposed marker/key-fingerprint/protected Environment provisioning is not claimed implemented. Roles/retention/settings remain unverified. Exact differences, enablement and cleanup limits are in the addendum; historical design/evidence below is preserved.
+
 ## Stages 1 and 2 execution addendum
 
 The inspection-only text below is retained as the original design, now superseded for implementation status by [the offline execution report](SECURITY_MEDIA_OFFLINE_2026-10-04.md). Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97, 62 passes/35 observations, healthy infrastructure**. Existing37 outcomes unchanged; appended Local26 + SDK34 bring catalog751. Generic691/77 HTTP baseline not rerun. Stages1+2 execute real app HTTP/models/filesystem and replace SDK before imports, with test-only configuration predicate override, no credentials. Docker network-none plus per-process guards, forbidden configuration and SDK identity/cache assertions enforce zero provider traffic. Evidence/hashes retained; no application fixes. Stage3 has not been implemented or connected.

@@ -1,0 +1,69 @@
+name: Vocle Real Cloudinary Security
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vocle-real-cloudinary-security
+  cancel-in-progress: false
+
+jobs:
+  real-cloudinary:
+    if: github.repository == 'Sriram4747/medcollab-beta-workflows' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: medcollab-backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail-closed safety configuration before provider or dependency operations
+        env: &test-environment
+          NODE_ENV: test
+          VOCLE_CLOUDINARY_LIVE: isolated-synthetic-only
+          CLOUDINARY_TEST_CLOUD_NAME: ${{ vars.CLOUDINARY_TEST_CLOUD_NAME }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        run: node scripts/security-cloudinary/guard.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: medcollab-backend/package-lock.json
+      - name: Install dependencies without provider credentials or lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Static checks and offline safety tests
+        run: |
+          for file in scripts/security-cloudinary/*.js; do node --check "$file"; done
+          node scripts/security-cloudinary/check.js
+          node scripts/security-cloudinary/self-test.js
+          node scripts/security-cloudinary/transport-test.js
+      - name: Execute bounded synthetic real-provider cases with finally cleanup
+        env: *test-environment
+        run: node scripts/security-cloudinary/run.js
+      - name: Independent post-job scoped cleanup and origin verification
+        if: always()
+        env: *test-environment
+        run: |
+          if [ -f "$RUNNER_TEMP/vocle-cloudinary-results/resources.json" ]; then
+            node scripts/security-cloudinary/run.js --cleanup-only
+          else
+            echo "No provider resource journal exists; no cleanup request permitted."
+          fi
+      - name: Verify sanitized artifact files
+        id: artifact-hygiene
+        if: always()
+        env: *test-environment
+        run: node scripts/security-cloudinary/check.js --artifacts
+      - name: Preserve sanitized provider evidence
+        if: always() && steps.artifact-hygiene.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: vocle-real-cloudinary-security
+          path: ${{ runner.temp }}/vocle-cloudinary-results/
+          if-no-files-found: error
+          retention-days: 14

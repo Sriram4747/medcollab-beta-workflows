@@ -1,4 +1,10 @@
-# Current offline media coverage — 2026-10-04
+# Current real-provider catalog — 2026-10-05
+
+**34 real-Cloudinary cases registered, VOCLE-752–785**, combined catalog785, separately manual workflow. **Zero live executions/pass/observations credited yet**; independent positive allowlist check/hosted evidence pending. Image/video/raw upload, identity, delivery, bounded transforms, delete/absence/replay, naming/overwrite/type separation and independent cleanup implemented. [Exact scope/guards/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Local offline checks pass but are not provider coverage. Historical general691/offline97 outcomes unchanged; no new HTTP inventory credit or app remediation.
+
+---
+
+# Previous offline media coverage — 2026-10-04
 
 Hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425) at `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97 selected cases executed, 62 passes / 35 observations, healthy infrastructure**. Existing Media31 + Cross-module6 retain 28 passes/nine observations. Appended Local26 (692–717): 13/13; SDK34 (718–751): 21/13. **751 registered cases**; preserved general baseline691 (611/80 and 77/77 HTTP operations) was not rerun. Historical union is 645 passes/106 observations, not a fresh all-catalog run.
 

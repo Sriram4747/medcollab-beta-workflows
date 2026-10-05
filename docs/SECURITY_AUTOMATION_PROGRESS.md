@@ -1,4 +1,10 @@
-# Current phase: offline media/storage and SDK contracts — 2026-10-04
+# Current phase: real Cloudinary harness — 2026-10-05
+
+Separately manual, fail-closed real-provider lane implemented: **34 registered cases, VOCLE-752–785; combined catalog785**. No live execution credited yet. Independent `CLOUDINARY_TEST_CLOUD_NAME` equality is mandatory before SDK/provider use; missing/mismatched config blocks. Synthetic run namespace, broker egress/identity checks, durable exact-resource manifest, finally plus post-job image/video/raw cleanup, origin verification and sanitized artifacts. Local syntax/frozen manifests, 49 offline safety checks and real-SDK/controller offline roundtrip (77 intercepted requests; zero I/O) pass. No general suite rerun/application fix. Read [implementation/safety/enablement](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Post-push allowlist check/hosted evidence pending; do not infer provider behavior from offline checks.
+
+---
+
+# Previous phase: offline media/storage and SDK contracts — 2026-10-04
 
 Stages 1 and 2 complete in hosted [run 37181051425](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37181051425), source `dca95d019fddf792adae7fcd4c21b5bc649c2b30`: **97/97 executed, 62 passes, 35 observations; healthy infrastructure**. Dedicated suite selects 37 existing media/cross-module cases and appends **26 local cases (692–717)** plus **34 offline SDK contracts (718–751)**. Existing 37 expectations/status/outcomes match baseline. Combined catalog **751**; the general 691-case suite was not rerun and its 611/80, 77/77 HTTP evidence remains historical. New 60: **34 passes / 26 observations**. Historical baseline plus new cases: 645/106, explicitly not a single 751-case fresh run.
 
