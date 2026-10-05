@@ -1,0 +1,29 @@
+{
+  "runId": 37359326520,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37359326520",
+  "executedSource": "15691c18149f93337f7b73a0835a952d29dc8d37",
+  "artifactId": 11365209121,
+  "artifactArchiveSha256": "866890ee9145e522bf74e52e098aaa3691a53a16a0a7a5bc04d6c6acd4d3bbbc",
+  "rawReportHashes": {
+    "results.json": "226c47721cedfc78f969a80aa25a901ae7d74b341f871c1da8624208bc6f7a5d",
+    "manifest.json": "d442113b1aeacbf9b6490fadf8882f9c962d54511961226c5f6154ce98c54c0b",
+    "summary.md": "f87b151654c5dd849f2fd7683002d3483325b9f1e39f1e9833f843a5a0444cce",
+    "reviewed-observations.json": "cc8804756bb9e8851aa4fc0eba8779829ea3caba4145813ab89e5083f69d949c"
+  },
+  "executed": 31,
+  "passed": 22,
+  "observations": 9,
+  "infrastructureHealthy": true,
+  "sourceBefore": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "sourceAfter": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "cleanupRecords": 31,
+  "residualDocuments": 0,
+  "allHostedStepsSucceeded": true,
+  "ttlMonitorEnabled": false,
+  "priorHealthyRunId": 37358018047,
+  "allPriorOutcomesMatch": true,
+  "localFullExecution": false,
+  "productionAccess": false,
+  "upstreamWrites": false,
+  "unrelatedAppChangesIncluded": false
+}

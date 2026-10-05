@@ -1,4 +1,16 @@
-# Current real-provider coverage — 2026-10-05
+# Current data-layer coverage and initial hardening closure — 2026-10-06
+
+[Hosted 37359326520](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37359326520): **31/31 focused data cases,22 passes/nine observations, healthy infrastructure**, source `15691c18149f93337f7b73a0835a952d29dc8d37`. Appended **786–816**, registered catalog816. [Exact source/property map, findings and limits](SECURITY_MONGODB_HARDENING_2026-10-06.md), [raw evidence/hashes](security-evidence/37359326520/execution.json), [frozen data manifest](../medcollab-backend/scripts/security-data/manifest.json).
+
+Nine actual models/inline schema reviewed; persisted strictness/nesting, HTTP allowlists/preferences/projections, real parser/operator handling, ObjectId denial, actual unique/partial/TTL indexes, OTP bcrypt/expiry/attempt/replacement/sequential consumption, message deletion/preview state, stale membership, account state, notification/support owner binding and device/handler validation verified. Scope distinguishes real HTTP from direct-model/index/handler probes. **One new confirmed deletion-integrity defect805; eight hardening/policy observations**. No raw-model credential fields were proven exposed by a route; no direct-model race/orphan was credited as an HTTP exploit.
+
+[Cloudinary review/account checklist](SECURITY_CLOUDINARY_HARDENING_2026-10-06.md) reconciles cached delivery with documented provider behavior; no new live run or worldwide eviction claim. [Registry](SECURITY_REGRESSION_GATES.md) has62 after-fix candidates / 62 excluded / zero active application gates; [release checklist](RELEASE_SECURITY_CHECKLIST.md) identifies the real current automation boundaries.
+
+General691, offline97 and real34 evidence remain historical, not a fresh816-case run. Historical77/77 HTTP operations remain bounded coverage. Atlas/network/TLS/roles/backups/production index parity require manual owner inspection. Mobile runtime, real Firebase/MSG91, global cache revocation and exhaustive concurrency/partial failures/adapters/load remain outside verified initial coverage. Production and application source untouched.
+
+---
+
+# Previous real-provider coverage — 2026-10-05
 
 Hosted [run 37355451614](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37355451614), source `a3432300d3827bb0f5eca1a1a2033ec48929707b`: **34/34 executed, 25 passes/nine observations; infrastructure healthy**. **VOCLE-752–785**, combined catalog 785. Real signed image/video/raw uploads, exact identities/metadata, secure retrieval, PNG/video/PDF-image transformations, correct typed destruction/replay/absence, namespace/duplicate/type separation, byte-proven overwrite prevention/replacement and 13/13 scoped finally/post-job cleanup. Positive TEST cloud allowlist enforced; no production access. [Evidence hashes](security-evidence/37355451614/execution.json), [exact findings/limitations](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md).
 

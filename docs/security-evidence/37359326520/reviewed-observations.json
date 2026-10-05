@@ -1,0 +1,189 @@
+{
+  "runId": 37359326520,
+  "executedSource": "15691c18149f93337f7b73a0835a952d29dc8d37",
+  "classificationCounts": {
+    "validation/hardening issue": 2,
+    "lifecycle/hardening issue": 2,
+    "retention-policy review": 2,
+    "confirmed security defect": 1,
+    "lifecycle-policy review": 2
+  },
+  "observations": [
+    {
+      "caseId": "VOCLE-790",
+      "name": "Default model reads/serialization hide sensitive fields",
+      "rootCause": "DATA_DEFAULT_PROJECTION",
+      "classification": "validation/hardening issue",
+      "scope": "model-hardening",
+      "expected": "Defense in depth: default model read and JSON omit device tokens and OTP hashes",
+      "actual": {
+        "userJSONTokensVisible": true,
+        "userLeanTokensVisible": true,
+        "otpJSONHashVisible": true
+      },
+      "review": "Default User JSON/lean includes fcmTokens and default OTP JSON includes otpHash. Public profile/populated response controls pass; no route credential disclosure was established. Defense-in-depth model projection/serialization review.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/users/user.model.js",
+        "medcollab-backend/src/features/auth/otp.model.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-797",
+      "name": "Pending request pair duplicates are constrained at data layer",
+      "rootCause": "DATA_REQUEST_UNIQUENESS",
+      "classification": "lifecycle/hardening issue",
+      "scope": "model-hardening",
+      "expected": "Defense in depth: duplicate active request pair cannot persist",
+      "actual": {
+        "successfulInserts": 2,
+        "pendingPairs": 2,
+        "scope": "direct model concurrency; HTTP race not claimed"
+      },
+      "review": "Two overlapping direct-model inserts persist two pending requests for the same pair; schema has nonunique pair indexes and controller does check-then-create. No HTTP race or cross-user consequence was executed.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/message-requests/messageRequest.model.js",
+        "medcollab-backend/src/features/message-requests/messageRequest.controller.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-803",
+      "name": "Expired notification excluded before asynchronous TTL cleanup",
+      "rootCause": "DATA_NOTIFICATION_EXPIRY",
+      "classification": "retention-policy review",
+      "scope": "HTTP-policy",
+      "expected": "Policy candidate: expired inbox item is not served or counted while awaiting TTL deletion",
+      "actual": {
+        "expiredVisible": true,
+        "unreadCount": 1,
+        "status": 200,
+        "defaultRetentionDays": 30
+      },
+      "review": "An expired inbox item still present before TTL cleanup returns200 and is included in unreadCount1. Default retention is30 days and TTL index exists. Decide whether expiresAt is a visibility boundary or physical cleanup only.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/notifications/notification.model.js",
+        "medcollab-backend/src/features/notifications/notification.controller.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-805",
+      "name": "Editing a deleted message cannot restore stored text",
+      "rootCause": "DATA_DELETED_EDIT",
+      "classification": "confirmed security defect",
+      "scope": "HTTP",
+      "expected": "Deleted message update is denied and placeholder content remains unchanged",
+      "actual": {
+        "liveEditStatus": 200,
+        "deletionStatus": 200,
+        "deletedEditStatus": 200,
+        "isDeleted": true,
+        "deletedAtSet": true,
+        "deletedTextRestored": true
+      },
+      "review": "Own live edit control200; real deletion200 blanks stored text. A later real PUT returns200 and restores synthetic text while isDeleted and deletedAt remain. editMessage lacks a deleted-state check; the save hook runs only when isDeleted changes. Confirmed deletion-integrity defect, not cross-user disclosure or restoration of old media.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/messages/message.model.js",
+        "medcollab-backend/src/features/messages/message.controller.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-806",
+      "name": "Deletion removes denormalized quote and channel text copies",
+      "rootCause": "DATA_PREVIEW_RETENTION",
+      "classification": "retention-policy review",
+      "scope": "model-policy",
+      "expected": "Policy candidate: delete scrubs copied previews as well as original content",
+      "actual": {
+        "quoteRetained": true,
+        "channelRetained": true,
+        "sourceIntent": "quote snapshot preservation is explicit; retention policy unresolved"
+      },
+      "review": "Real deletion blanks original content but quoted reply text and Channel.lastMessage text copies remain. Quote snapshot preservation is explicit in the schema comment; deletion/retention policy must resolve expectations before gating.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/messages/message.model.js",
+        "medcollab-backend/src/features/channels/channel.model.js",
+        "medcollab-backend/src/features/messages/message.controller.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-808",
+      "name": "Inactive space blocks protected channel read",
+      "rootCause": "DATA_INACTIVE_SPACE",
+      "classification": "lifecycle-policy review",
+      "scope": "HTTP-policy",
+      "expected": "Policy candidate: inactive space membership cannot authorize channel data",
+      "actual": {
+        "status": 200,
+        "returnedMessages": 2,
+        "deactivationOrigin": "model-seeded; no space deactivation endpoint exists"
+      },
+      "review": "A model-seeded inactive space still permits member message retrieval200 with two messages. resolveChannelAccess checks membership but not isActive; discovery filters inactive spaces. No caller-accessible deactivation endpoint or ordinary-user deactivation exploit is claimed.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/utils/channelAccess.js",
+        "medcollab-backend/src/features/spaces/space.model.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-809",
+      "name": "Missing resource references are rejected at model boundary",
+      "rootCause": "DATA_ORPHAN_REFS",
+      "classification": "lifecycle/hardening issue",
+      "scope": "model-hardening",
+      "expected": "Defense in depth: required ObjectId refs must point to existing related resources",
+      "actual": {
+        "orphanMessagePersisted": true,
+        "orphanHandoffPersisted": true,
+        "scope": "model writes only; refs are not foreign keys"
+      },
+      "review": "Direct Message and Handoff writes persist missing Channel references. Mongoose refs are typed ObjectIds, not foreign keys; this establishes a model constraint gap only. Existing controller foreign-resource defects remain separately tracked.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/messages/message.model.js",
+        "medcollab-backend/src/features/handoffs/handoff.model.js",
+        "medcollab-backend/src/features/notifications/notification.model.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-815",
+      "name": "Device token cannot remain bound to two accounts",
+      "rootCause": "DATA_DEVICE_TRANSFER",
+      "classification": "lifecycle-policy review",
+      "scope": "model-policy",
+      "expected": "Policy candidate: device token registration has a defined account-transfer boundary",
+      "actual": {
+        "accountsWithSameSyntheticToken": 2,
+        "scope": "model sequential registration; provider delivery not executed"
+      },
+      "review": "Sequential model registrations leave one synthetic device token on two accounts. No real device token, provider push or stolen-token exploit was used; define account-transfer and logout/rotation semantics.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/features/users/user.model.js",
+        "medcollab-backend/src/features/users/user.controller.js"
+      ]
+    },
+    {
+      "caseId": "VOCLE-816",
+      "name": "Socket availability write enforces schema note limit",
+      "rootCause": "DATA_UPDATE_VALIDATION",
+      "classification": "validation/hardening issue",
+      "scope": "handler",
+      "expected": "Socket update rejects oversized note without persisting invalid availability",
+      "actual": {
+        "persistedNoteLength": 101,
+        "emittedErrors": 0,
+        "transport": "direct real handler with synthetic socket; MongoDB is real"
+      },
+      "review": "Real socket presence handler/model writes a101-character note despite maxlength100 and emits no error. findByIdAndUpdate has no runValidators/note check. Direct synthetic handler boundary only; no network socket or security-impact claim.",
+      "applicationFixed": false,
+      "sources": [
+        "medcollab-backend/src/socket/handlers/presence.handler.js",
+        "medcollab-backend/src/features/users/user.model.js"
+      ]
+    }
+  ]
+}

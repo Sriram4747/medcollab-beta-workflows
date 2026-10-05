@@ -1,0 +1,37 @@
+# Vocle MongoDB/data security
+
+31/31 executed; 22 passes; 9 observations; infrastructure healthy.
+
+No production connections or provider calls. App observations do not block CI. Model/handler probes are labeled separately from real HTTP.
+
+- VOCLE-786: Strict schemas discard unknown top-level and nested fields — PASS (model)
+- VOCLE-787: Profile allowlist preserves identity and security flags — PASS (HTTP)
+- VOCLE-788: Nested preference updates merge siblings and strip unknown keys — PASS (HTTP)
+- VOCLE-789: Public profile and populated sender exclude phone/device credentials — PASS (HTTP)
+- VOCLE-790: Default model reads/serialization hide sensitive fields — OBSERVATION (model-hardening)
+- VOCLE-791: Operator-shaped body target cannot create a DM — PASS (HTTP)
+- VOCLE-792: Bracket query input cannot broaden notification ownership — PASS (HTTP)
+- VOCLE-793: Malformed ObjectId and cursor reject without writes — PASS (HTTP)
+- VOCLE-794: Concurrent phone insertion is constrained by actual unique index — PASS (database-index)
+- VOCLE-795: Concurrent invite insertion is constrained by actual unique index — PASS (database-index)
+- VOCLE-796: Canonical DM key serializes concurrent atomic upserts — PASS (database-index)
+- VOCLE-797: Pending request pair duplicates are constrained at data layer — OBSERVATION (model-hardening)
+- VOCLE-798: OTP creator persists bcrypt only and removes raw input — PASS (model)
+- VOCLE-799: Expired OTP denied before physical TTL deletion — PASS (model)
+- VOCLE-800: OTP attempt cap and sequential consumption preserve single use — PASS (model)
+- VOCLE-801: OTP replacement invalidates previous unconsumed record — PASS (model)
+- VOCLE-802: Actual OTP and notification TTL indexes match expiry field — PASS (database-index)
+- VOCLE-803: Expired notification excluded before asynchronous TTL cleanup — OBSERVATION (HTTP-policy)
+- VOCLE-804: Soft deletion blanks content and reactions on persisted message — PASS (model)
+- VOCLE-805: Editing a deleted message cannot restore stored text — OBSERVATION (HTTP)
+- VOCLE-806: Deletion removes denormalized quote and channel text copies — OBSERVATION (model-policy)
+- VOCLE-807: Stale private-channel membership cannot bypass removed space membership — PASS (HTTP)
+- VOCLE-808: Inactive space blocks protected channel read — OBSERVATION (HTTP-policy)
+- VOCLE-809: Missing resource references are rejected at model boundary — OBSERVATION (model-hardening)
+- VOCLE-810: Routed acknowledgement rejects oversized note and preserves state — PASS (HTTP)
+- VOCLE-811: Deactivated and deleted user records invalidate fresh HTTP credentials — PASS (HTTP)
+- VOCLE-812: Notification writes bind ID and owner and preserve foreign record — PASS (HTTP)
+- VOCLE-813: Support write derives identity and status from authenticated user — PASS (HTTP)
+- VOCLE-814: FCM instance method deduplicates and caps device tokens — PASS (model)
+- VOCLE-815: Device token cannot remain bound to two accounts — OBSERVATION (model-policy)
+- VOCLE-816: Socket availability write enforces schema note limit — OBSERVATION (handler)

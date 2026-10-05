@@ -1,3 +1,9 @@
+# Closure note — 2026-10-06
+
+The final [Cloudinary hardening review](SECURITY_CLOUDINARY_HARDENING_2026-10-06.md) reconciles the existing immediate-CDN evidence with provider documentation, lists account attestations and links after-fix gate candidates. No additional provider requests or live testcase executions were needed. The historical integration evidence below remains unchanged; origin cleanup is distinct from worldwide cache/backup erasure.
+
+---
+
 # Real Cloudinary integration security — 2026-10-05
 
 **Stages 3/4 bounded real-provider validation completed** in [run 37355451614](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37355451614), executed source `a3432300d3827bb0f5eca1a1a2033ec48929707b`: **34/34 executed, 25 passes, nine observations, healthy infrastructure**. Independent finally and post-job cleanup confirmed **13/13 exact resources absent**. New cases **VOCLE-752–785**, combined catalog 785. General 691/offline 97 suites were not rerun, replaced or rewritten. No application vulnerability fixed. Production and upstream untouched.

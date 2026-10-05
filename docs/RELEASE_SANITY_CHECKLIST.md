@@ -1,5 +1,7 @@
 # Vocle release sanity gate (developer)
 
+For the full security/configuration/account review, also complete [the release-security checklist](RELEASE_SECURITY_CHECKLIST.md). That checklist distinguishes current manual discovery workflows from activated regression gates and owner attestations.
+
 **Rule:** Do not generate the release APK or commit a release cut until this gate is green.
 
 **Build tonight:** `1.0.0+19` · chat Phases 1–3  

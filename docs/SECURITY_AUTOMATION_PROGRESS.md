@@ -1,4 +1,18 @@
-# Current phase: real Cloudinary integration validated — 2026-10-05
+# Current phase: initial hardening closure and remediation handoff — 2026-10-06
+
+Focused disposable MongoDB [run 37359326520](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37359326520), source `15691c18149f93337f7b73a0835a952d29dc8d37`: **31/31 executed,22 passes/nine observations, healthy infrastructure;31/31 exact synthetic cleanups, zero residue**. New **VOCLE-786–816**, combined registered catalog816. [Source review/findings/Atlas checklist](SECURITY_MONGODB_HARDENING_2026-10-06.md), [raw execution/hashes](security-evidence/37359326520/execution.json). App source fingerprint unchanged. No general691/offline97/live34 rerun or new HTTP coverage credit.
+
+One new confirmed deletion-integrity root: **VOCLE-805**, editing a deleted message repopulates persisted text while deletion flags remain. Eight other model/validation/retention/lifecycle observations remain non-gating; no new route credential leak, HTTP request race, foreign-key exploit or provider push is claimed. Actual strict persistence, mass assignment, projections, operator-shaped input, ObjectId handling, unique indexes, atomic DM upserts, OTP hashing/expiry/sequential lifecycle, TTL configuration, owner binding and live HTTP account state controls pass.
+
+[Final Cloudinary hardening](SECURITY_CLOUDINARY_HARDENING_2026-10-06.md) closes deterministic review without new provider requests: immediate cached delivery already byte-proven by37355451614 matches provider documentation. Global invalidation deadline, signed/derived cache configuration, access policy and backup erasure require owner attestation; no destructive/account tests or elevated credentials. Approved TEST allowlist/broker/janitor remain unchanged.
+
+[Consolidated registry](SECURITY_REGRESSION_GATES.md): **124 reviewed unique observed IDs;62 after-remediation candidates (53 security/nine functional-provider contracts),62 excluded;zero active application gates**. Every entry states requirement, actual behavior, expected secure behavior, fix/eligibility and evidence sources. [Practical release checklist](RELEASE_SECURITY_CHECKLIST.md) separates relevant-change automation, periodic/pre-release work and account controls; it accurately notes manual workflows, upstream-targeted functional sanity and absent dependency/strict application gating. Next: developer fixes and policy/account attestation, then audited focused rerun and explicit gate promotion. Do not restart completed discovery or automatically block all observations.
+
+Only origin/master written; no application fixes, production services/Atlas/Cloudinary/real users/upstream access or writes, and no unrelated Flutter/Android changes included. Remaining mobile/provider/deployment, long-duration/multi-instance/concurrency/partial-failure and policy limits are documented in the data review.
+
+---
+
+# Previous phase: real Cloudinary integration validated — 2026-10-05
 
 [Final run 37355451614](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37355451614), source `a3432300d3827bb0f5eca1a1a2033ec48929707b`: **34/34 executed, 25 passes/nine observations, healthy infrastructure**. New **VOCLE-752–785**, combined registered catalog 785. Approved separate TEST cloud only; positive independent variable match before SDK/provider operations; synthetic image/video/raw uploads and scoped exact cleanup. **13/13 recorded origins absent** in finally AND post-job cleanup, zero pending intents, secret hygiene/artifact upload passed. [Raw evidence/review/hashes](security-evidence/37355451614/execution.json), [full findings and limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md).
 

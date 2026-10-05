@@ -1,0 +1,936 @@
+{
+  "planned": 31,
+  "executed": 31,
+  "passed": 22,
+  "observations": 9,
+  "notExecuted": 0,
+  "combinedCatalogCount": 816,
+  "infrastructureFailure": null,
+  "sourceBefore": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "sourceAfter": "5b79b2a621d639303c5201cb43de5dc8ff0c8a3df19866912ff176374eb32df5",
+  "isolation": {
+    "interfaces": [
+      "lo"
+    ],
+    "externalRoutes": 0
+  },
+  "parentNetwork": {
+    "blocked": 0,
+    "allowedLoopback": 13
+  },
+  "provenance": {
+    "runId": "37358018047",
+    "source": "4f63b478a5aa4d6dbb70aaf6f0d5e4893b2b1891"
+  },
+  "results": [
+    {
+      "caseId": "VOCLE-786",
+      "name": "Strict schemas discard unknown top-level and nested fields",
+      "expected": "Unknown fields cannot persist through normal model writes",
+      "scope": "model",
+      "sources": [
+        "src/features/users/user.model.js",
+        "src/features/auth/otp.model.js",
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.model.js",
+        "src/features/spaces/space.model.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/notifications/notification.model.js",
+        "src/features/support/support.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "modelsChecked": 9,
+        "nestedUnknownPersisted": false
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-787",
+      "name": "Profile allowlist preserves identity and security flags",
+      "expected": "Profile update cannot change phone, active/verified flags, device tokens or operator updates",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/users/user.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "identityPreserved": true,
+        "flagsPreserved": true,
+        "injectedTokens": 0
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-788",
+      "name": "Nested preference updates merge siblings and strip unknown keys",
+      "expected": "Allowed toggle persists without unexpected keys or erasing sibling preferences",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/users/user.model.js",
+        "src/features/users/user.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "siblingPreserved": true,
+        "unknownPersisted": false
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-789",
+      "name": "Public profile and populated sender exclude phone/device credentials",
+      "expected": "Public responses omit phone and fcmTokens while retaining authorized profile data",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/users/user.model.js",
+        "src/features/messages/message.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "profileStatus": 200,
+        "messagesStatus": 200,
+        "senderProjected": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-790",
+      "name": "Default model reads/serialization hide sensitive fields",
+      "expected": "Defense in depth: default model read and JSON omit device tokens and OTP hashes",
+      "scope": "model-hardening",
+      "sources": [
+        "src/features/users/user.model.js",
+        "src/features/auth/otp.model.js"
+      ],
+      "passed": false,
+      "actual": {
+        "userJSONTokensVisible": true,
+        "userLeanTokensVisible": true,
+        "otpJSONHashVisible": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-791",
+      "name": "Operator-shaped body target cannot create a DM",
+      "expected": "Object-shaped identity input rejected without new channel or request",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/channels/channel.routes.js",
+        "src/middleware/validate.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 400,
+        "channelCountUnchanged": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-792",
+      "name": "Bracket query input cannot broaden notification ownership",
+      "expected": "Real Express query parsing preserves fixed owner filter and does not execute bracket operators",
+      "scope": "HTTP",
+      "sources": [
+        "src/app.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "count": 1,
+        "foreignRecords": 0
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-793",
+      "name": "Malformed ObjectId and cursor reject without writes",
+      "expected": "Invalid route ID/cursor returns controlled denial and leaves domain data unchanged",
+      "scope": "HTTP",
+      "sources": [
+        "src/middleware/validate.js",
+        "src/middleware/errorHandler.js"
+      ],
+      "passed": true,
+      "actual": {
+        "idStatus": 400,
+        "cursorStatus": 400,
+        "stateUnchanged": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-794",
+      "name": "Concurrent phone insertion is constrained by actual unique index",
+      "expected": "Exactly one insert succeeds and duplicate receives MongoDB 11000",
+      "scope": "database-index",
+      "sources": [
+        "src/features/users/user.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "successes": 1,
+        "duplicates": 1
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-795",
+      "name": "Concurrent invite insertion is constrained by actual unique index",
+      "expected": "Exactly one space can hold the same inviteCode",
+      "scope": "database-index",
+      "sources": [
+        "src/features/spaces/space.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "successes": 1,
+        "duplicateKeyErrors": 1
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-796",
+      "name": "Canonical DM key serializes concurrent atomic upserts",
+      "expected": "Canonical pair order and partial unique index produce one pair channel",
+      "scope": "database-index",
+      "sources": [
+        "src/features/channels/channel.model.js",
+        "src/features/channels/channel.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "successes": 2,
+        "pairChannels": 1,
+        "uniquePartialIndex": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-797",
+      "name": "Pending request pair duplicates are constrained at data layer",
+      "expected": "Defense in depth: duplicate active request pair cannot persist",
+      "scope": "model-hardening",
+      "sources": [
+        "src/features/message-requests/messageRequest.model.js",
+        "src/features/message-requests/messageRequest.controller.js"
+      ],
+      "passed": false,
+      "actual": {
+        "successfulInserts": 2,
+        "pendingPairs": 2,
+        "scope": "direct model concurrency; HTTP race not claimed"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-798",
+      "name": "OTP creator persists bcrypt only and removes raw input",
+      "expected": "Persisted hash matches synthetic code and raw OTP field is absent",
+      "scope": "model",
+      "sources": [
+        "src/features/auth/otp.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "bcryptMatches": true,
+        "rawCodeStored": false,
+        "cost10": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-799",
+      "name": "Expired OTP denied before physical TTL deletion",
+      "expected": "Verifier excludes an expired record still present in MongoDB",
+      "scope": "model",
+      "sources": [
+        "src/features/auth/otp.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "denied": true,
+        "recordPresentBeforeVerification": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-800",
+      "name": "OTP attempt cap and sequential consumption preserve single use",
+      "expected": "Third wrong attempt exhausts code; valid code deletes record and cannot replay",
+      "scope": "model",
+      "sources": [
+        "src/features/auth/otp.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "attemptCapDenial": true,
+        "firstAccepted": true,
+        "replayAccepted": false,
+        "consumedDeleted": true,
+        "concurrencyCoveredBy": "VOCLE-687 (historical)"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-801",
+      "name": "OTP replacement invalidates previous unconsumed record",
+      "expected": "New OTP marks old record used and only newest code verifies",
+      "scope": "model",
+      "sources": [
+        "src/features/auth/otp.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "previousMarkedUsed": true,
+        "oldDenied": true,
+        "newestAccepted": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-802",
+      "name": "Actual OTP and notification TTL indexes match expiry field",
+      "expected": "Both collections have expiresAt ascending TTL with expireAfterSeconds zero",
+      "scope": "database-index",
+      "sources": [
+        "src/features/auth/otp.model.js",
+        "src/features/notifications/notification.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "indexes": [
+          {
+            "model": "OTP",
+            "exists": true,
+            "expireAfterSeconds": 0
+          },
+          {
+            "model": "Notification",
+            "exists": true,
+            "expireAfterSeconds": 0
+          }
+        ],
+        "timingClaim": "TTL timing is not an authorization oracle"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-803",
+      "name": "Expired notification excluded before asynchronous TTL cleanup",
+      "expected": "Policy candidate: expired inbox item is not served or counted while awaiting TTL deletion",
+      "scope": "HTTP-policy",
+      "sources": [
+        "src/features/notifications/notification.model.js",
+        "src/features/notifications/notification.controller.js"
+      ],
+      "passed": false,
+      "actual": {
+        "expiredVisible": true,
+        "unreadCount": 1,
+        "status": 200,
+        "defaultRetentionDays": 30
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-804",
+      "name": "Soft deletion blanks content and reactions on persisted message",
+      "expected": "Save deletion hook blanks text/media and records deletion timestamp",
+      "scope": "model",
+      "sources": [
+        "src/features/messages/message.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "deletionFlag": true,
+        "deletedAtSet": true,
+        "mediaBlanked": true,
+        "reactions": 0
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-805",
+      "name": "Editing a deleted message cannot restore stored text",
+      "expected": "Deleted message update is denied and placeholder content remains unchanged",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/messages/message.model.js",
+        "src/features/messages/message.controller.js"
+      ],
+      "passed": false,
+      "actual": {
+        "liveEditStatus": 200,
+        "deletionStatus": 200,
+        "deletedEditStatus": 200,
+        "isDeleted": true,
+        "deletedAtSet": true,
+        "deletedTextRestored": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-806",
+      "name": "Deletion removes denormalized quote and channel text copies",
+      "expected": "Policy candidate: delete scrubs copied previews as well as original content",
+      "scope": "model-policy",
+      "sources": [
+        "src/features/messages/message.model.js",
+        "src/features/channels/channel.model.js",
+        "src/features/messages/message.controller.js"
+      ],
+      "passed": false,
+      "actual": {
+        "quoteRetained": true,
+        "channelRetained": true,
+        "sourceIntent": "quote snapshot preservation is explicit; retention policy unresolved"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-807",
+      "name": "Stale private-channel membership cannot bypass removed space membership",
+      "expected": "After owner removes member, REST message read denies despite stale channel array",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/spaces/space.controller.js",
+        "src/utils/channelAccess.js"
+      ],
+      "passed": true,
+      "actual": {
+        "previouslyAuthorized": true,
+        "staleChannelMember": true,
+        "readStatus": 403,
+        "payloadAbsent": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-808",
+      "name": "Inactive space blocks protected channel read",
+      "expected": "Policy candidate: inactive space membership cannot authorize channel data",
+      "scope": "HTTP-policy",
+      "sources": [
+        "src/utils/channelAccess.js",
+        "src/features/spaces/space.model.js"
+      ],
+      "passed": false,
+      "actual": {
+        "status": 200,
+        "returnedMessages": 2,
+        "deactivationOrigin": "model-seeded; no space deactivation endpoint exists"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-809",
+      "name": "Missing resource references are rejected at model boundary",
+      "expected": "Defense in depth: required ObjectId refs must point to existing related resources",
+      "scope": "model-hardening",
+      "sources": [
+        "src/features/messages/message.model.js",
+        "src/features/handoffs/handoff.model.js",
+        "src/features/notifications/notification.model.js"
+      ],
+      "passed": false,
+      "actual": {
+        "orphanMessagePersisted": true,
+        "orphanHandoffPersisted": true,
+        "scope": "model writes only; refs are not foreign keys"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-810",
+      "name": "Routed acknowledgement rejects oversized note and preserves state",
+      "expected": "Route-level validation compensates for update validators omitted in controller",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/handoffs/handoff.routes.js",
+        "src/features/handoffs/handoff.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 400,
+        "statePreserved": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-811",
+      "name": "Deactivated and deleted user records invalidate fresh HTTP credentials",
+      "expected": "HTTP authentication consults live user state rather than trusting JWT alone",
+      "scope": "HTTP",
+      "sources": [
+        "src/middleware/auth.js"
+      ],
+      "passed": true,
+      "actual": {
+        "inactiveStatus": 401,
+        "deletedStatus": 401,
+        "existingSocketEvidence": "VOCLE-654/655 (historical)"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-812",
+      "name": "Notification writes bind ID and owner and preserve foreign record",
+      "expected": "Foreign notification read/delete denied; own update succeeds",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/notifications/notification.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "foreignReadStatus": 404,
+        "foreignDeleteStatus": 404,
+        "ownReadStatus": 200,
+        "foreignStatePreserved": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-813",
+      "name": "Support write derives identity and status from authenticated user",
+      "expected": "Caller cannot mass assign support owner, phone or triage state",
+      "scope": "HTTP",
+      "sources": [
+        "src/features/support/support.controller.js"
+      ],
+      "passed": true,
+      "actual": {
+        "status": 201,
+        "ownerBound": true,
+        "phoneDerived": true,
+        "state": "open"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-814",
+      "name": "FCM instance method deduplicates and caps device tokens",
+      "expected": "Seven sequential registrations persist latest five distinct tokens",
+      "scope": "model",
+      "sources": [
+        "src/features/users/user.model.js"
+      ],
+      "passed": true,
+      "actual": {
+        "tokens": 5,
+        "distinct": 5,
+        "newestFirst": true
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-815",
+      "name": "Device token cannot remain bound to two accounts",
+      "expected": "Policy candidate: device token registration has a defined account-transfer boundary",
+      "scope": "model-policy",
+      "sources": [
+        "src/features/users/user.model.js",
+        "src/features/users/user.controller.js"
+      ],
+      "passed": false,
+      "actual": {
+        "accountsWithSameSyntheticToken": 2,
+        "scope": "model sequential registration; provider delivery not executed"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    },
+    {
+      "caseId": "VOCLE-816",
+      "name": "Socket availability write enforces schema note limit",
+      "expected": "Socket update rejects oversized note without persisting invalid availability",
+      "scope": "handler",
+      "sources": [
+        "src/socket/handlers/presence.handler.js",
+        "src/features/users/user.model.js"
+      ],
+      "passed": false,
+      "actual": {
+        "persistedNoteLength": 101,
+        "emittedErrors": 0,
+        "transport": "direct real handler with synthetic socket; MongoDB is real"
+      },
+      "safety": {
+        "sdkReplaced": true,
+        "realSdkLoaded": false,
+        "configurationPredicateOverride": false,
+        "network": {
+          "blocked": 0,
+          "allowedLoopback": 9
+        }
+      },
+      "cleanup": {
+        "exactSyntheticCleanup": true,
+        "residualDocuments": 0
+      }
+    }
+  ]
+}
