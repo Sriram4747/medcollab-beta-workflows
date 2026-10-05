@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
+import 'package:medcollab_app/core/presence/presence_cubit.dart';
 import 'package:medcollab_app/core/router/dm_navigation.dart';
 import 'package:medcollab_app/core/theme/app_colors.dart';
+import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/auth/data/models/user_model.dart';
+import 'package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:medcollab_app/features/messages/presentation/widgets/peer_profile_card.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
 
@@ -205,6 +210,114 @@ Future<void> showAddNeedlPeopleSheet(
             ),
           );
         },
+      );
+    },
+  );
+}
+
+/// Lists everyone in a Needl (group DM).
+Future<void> showNeedlMembersSheet(
+  BuildContext context, {
+  required List<UserModel> members,
+  required String title,
+}) async {
+  final selfId = context.read<AuthBloc>().state.user?.id ?? '';
+  final sorted = List<UserModel>.of(members)
+    ..sort((a, b) {
+      if (a.id == selfId) return -1;
+      if (b.id == selfId) return 1;
+      return a.displayName.toLowerCase().compareTo(b.displayName.toLowerCase());
+    });
+
+  await showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    backgroundColor: AppColors.surfaceCard,
+    builder: (sheetContext) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'People in this Needl',
+                      style: AppTextStyles.cardTitle.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '$title · ${sorted.length} people',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.sizeOf(sheetContext).height * 0.55,
+                child: ListView.separated(
+                  itemCount: sorted.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, index) {
+                    final user = sorted[index];
+                    final isSelf = user.id == selfId;
+                    final online = context
+                            .watch<PresenceCubit>()
+                            .state[user.id]
+                            ?.isOnline ??
+                        false;
+                    return ListTile(
+                      leading: AppAvatar(
+                        name: user.displayName,
+                        imageUrl: user.avatarUrl,
+                        showPresence: true,
+                        isOnline: online,
+                      ),
+                      title: Text(
+                        isSelf ? '${user.displayName} (you)' : user.displayName,
+                      ),
+                      subtitle: Text(
+                        [
+                          if (user.role.label.isNotEmpty) user.role.label,
+                          if (user.speciality?.isNotEmpty == true)
+                            user.speciality!,
+                        ].join(' · '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: isSelf
+                          ? null
+                          : () async {
+                              Navigator.pop(sheetContext);
+                              try {
+                                final fresh = await AppDependencies
+                                    .instance.memberRepository
+                                    .getUserById(user.id);
+                                if (!context.mounted) return;
+                                await showPeerProfileCard(context, user: fresh);
+                              } catch (_) {
+                                if (!context.mounted) return;
+                                await showPeerProfileCard(context, user: user);
+                              }
+                            },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     },
   );

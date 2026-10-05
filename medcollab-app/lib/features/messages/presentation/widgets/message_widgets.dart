@@ -26,7 +26,7 @@ class MessageComposer extends StatelessWidget {
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
-    this.hintText = 'Message… @ to mention',
+    this.hintText = 'Message…',
     this.isBusy = false,
     this.showTopBorder = true,
     super.key,
@@ -146,56 +146,6 @@ class MessageComposer extends StatelessWidget {
     );
   }
 
-  void _showShortcuts(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.alternate_email),
-              title: const Text('@ Mention someone'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _insertAtCursor('@');
-                focusNode?.requestFocus();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.priority_high),
-              title: const Text('Urgent note'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _insertAtCursor('Urgent: ');
-                focusNode?.requestFocus();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.assignment_turned_in_outlined),
-              title: const Text('Handoff note'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _insertAtCursor('Handoff — patient / bed / pending: ');
-                focusNode?.requestFocus();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.check_circle_outline),
-              title: const Text('Acknowledged'),
-              onTap: () {
-                Navigator.pop(ctx);
-                _insertAtCursor('Acknowledged ✅');
-                focusNode?.requestFocus();
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final canAttach = onPickGallery != null ||
@@ -214,7 +164,7 @@ class MessageComposer extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -222,14 +172,21 @@ class MessageComposer extends StatelessWidget {
                 IconButton(
                   tooltip: 'Attach',
                   onPressed: isBusy ? null : () => _showAttachMenu(context),
-                  icon: const Icon(Icons.add_circle_outline),
+                  icon: const Icon(Icons.add_circle_outline, size: 26),
                   color: AppColors.tealDark,
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                 ),
               Expanded(
                 child: Container(
+                  constraints: const BoxConstraints(minHeight: 44),
                   decoration: BoxDecoration(
                     color: AppColors.surfaceInput,
                     borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: AppColors.borderDefault,
+                      width: 0.5,
+                    ),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -239,25 +196,28 @@ class MessageComposer extends StatelessWidget {
                           controller: controller,
                           focusNode: focusNode,
                           minLines: 1,
-                          maxLines: 5,
+                          maxLines: 6,
                           textCapitalization: TextCapitalization.sentences,
                           enabled: !isBusy,
                           keyboardType: TextInputType.multiline,
                           textInputAction: TextInputAction.newline,
                           style: AppTextStyles.body.copyWith(
                             color: AppColors.textPrimary,
+                            fontSize: 15,
+                            height: 1.35,
                           ),
                           decoration: InputDecoration(
                             hintText: hintText,
                             hintStyle: AppTextStyles.body.copyWith(
                               color: AppColors.textMuted,
+                              fontSize: 15,
                             ),
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             isDense: true,
                             contentPadding: const EdgeInsets.fromLTRB(
-                              14,
+                              16,
                               12,
                               4,
                               12,
@@ -273,31 +233,11 @@ class MessageComposer extends StatelessWidget {
                         color: AppColors.textSecondary,
                         visualDensity: VisualDensity.compact,
                       ),
-                      IconButton(
-                        tooltip: 'Mention',
-                        onPressed: isBusy
-                            ? null
-                            : () {
-                                _insertAtCursor('@');
-                                focusNode?.requestFocus();
-                              },
-                        icon: const Icon(Icons.alternate_email, size: 20),
-                        color: AppColors.textSecondary,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      IconButton(
-                        tooltip: 'Shortcuts',
-                        onPressed:
-                            isBusy ? null : () => _showShortcuts(context),
-                        icon: const Icon(Icons.bolt_outlined, size: 20),
-                        color: AppColors.textSecondary,
-                        visualDensity: VisualDensity.compact,
-                      ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
               Padding(
                 padding: const EdgeInsets.only(bottom: 2),
                 child: Material(
@@ -309,11 +249,11 @@ class MessageComposer extends StatelessWidget {
                     customBorder: const CircleBorder(),
                     onTap: isBusy ? null : () => onSend(controller.text),
                     child: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 44,
+                      height: 44,
                       child: isBusy
                           ? const Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(12),
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color: Colors.white,
@@ -321,7 +261,7 @@ class MessageComposer extends StatelessWidget {
                             )
                           : const Icon(
                               Icons.send_rounded,
-                              size: 18,
+                              size: 20,
                               color: Colors.white,
                             ),
                     ),

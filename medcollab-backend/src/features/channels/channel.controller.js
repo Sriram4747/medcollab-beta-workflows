@@ -168,16 +168,50 @@ const archiveChannel = asyncHandler(async (req, res) => {
  */
 const enrichDM = (channel, currentUserId) => {
   const members = channel.members || [];
-  const peer = members.find(
+  const others = members.filter(
     (m) => (m._id || m).toString() !== currentUserId.toString()
   );
-  const peerName = peer?.name || peer?.displayTitle || 'Direct message';
-  const isSelfNotes = !peer && members.length === 1;
+  const peer = others[0] || null;
+  const isSelfNotes = members.length === 1;
+  const isNeedl = members.length > 2;
+
+  const memberLabel = (m) =>
+    [m?.displayTitle, m?.name].filter(Boolean).join(' ').trim() ||
+    m?.name ||
+    m?.displayTitle ||
+    '';
+
+  let name = channel.name && String(channel.name).trim();
+  if (!name || name.toLowerCase() === 'direct message' || name === 'channel') {
+    if (isSelfNotes) {
+      name = 'Notes to self';
+    } else if (isNeedl) {
+      name =
+        others
+          .map(memberLabel)
+          .filter(Boolean)
+          .slice(0, 4)
+          .join(', ') || 'Needl';
+    } else {
+      name = memberLabel(peer) || 'Direct message';
+    }
+  } else if (isNeedl) {
+    // After expanding a 1:1, stale titles sometimes equal one peer's name.
+    const otherNames = others.map(memberLabel).filter(Boolean);
+    if (
+      otherNames.length >= 2 &&
+      otherNames.some((n) => name === n)
+    ) {
+      name = otherNames.slice(0, 4).join(', ');
+    }
+  }
+
   return {
     ...channel,
     peer: peer || (isSelfNotes ? members[0] || null : null),
-    name: channel.name || (isSelfNotes ? 'Notes to self' : peerName),
+    name,
     isSelfNotes,
+    isNeedl,
   };
 };
 
@@ -340,21 +374,43 @@ const createGroupDM = asyncHandler(async (req, res) => {
 
   if (!channel) {
     const users = await User.find({ _id: { $in: uniqueOthers } })
-      .select('name')
+      .select('name displayTitle')
       .lean();
-    const defaultName = users
-      .map((u) => u.name)
-      .filter(Boolean)
-      .slice(0, 3)
-      .join(', ');
+    const defaultName =
+      users
+        .map(
+          (u) =>
+            [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+        )
+        .filter(Boolean)
+        .slice(0, 4)
+        .join(', ') || 'Needl';
 
     channel = await Channel.create({
       spaceId: null,
       type: CHANNEL_TYPES.DIRECT,
       members: objectIds,
       createdBy: req.user._id,
-      name: defaultName || null,
+      name: defaultName,
     });
+  } else {
+    const current = (channel.name || '').trim();
+    if (!current || current.toLowerCase() === 'direct message') {
+      const users = await User.find({ _id: { $in: uniqueOthers } })
+        .select('name displayTitle')
+        .lean();
+      channel.name =
+        users
+          .map(
+            (u) =>
+              [u.displayTitle, u.name].filter(Boolean).join(' ').trim() ||
+              u.name
+          )
+          .filter(Boolean)
+          .slice(0, 4)
+          .join(', ') || 'Needl';
+      await channel.save();
+    }
   }
 
   const populated = await Channel.findById(channel._id)
@@ -433,26 +489,28 @@ const expandDM = asyncHandler(async (req, res) => {
     isArchived: false,
   });
 
-  if (!channel) {
-    const users = await User.find({
-      _id: { $in: memberIds.filter((id) => id !== req.user._id.toString()) },
-    })
-      .select('name')
-      .lean();
-    const defaultName =
-      (source.name && String(source.name).trim()) ||
-      users
-        .map((u) => u.name)
-        .filter(Boolean)
-        .slice(0, 3)
-        .join(', ');
+  const usersForTitle = await User.find({
+    _id: { $in: memberIds.filter((id) => id !== req.user._id.toString()) },
+  })
+    .select('name displayTitle')
+    .lean();
+  const needlTitle =
+    usersForTitle
+      .map(
+        (u) =>
+          [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+      )
+      .filter(Boolean)
+      .slice(0, 4)
+      .join(', ') || 'Needl';
 
+  if (!channel) {
     channel = await Channel.create({
       spaceId: null,
       type: CHANNEL_TYPES.DIRECT,
       members: memberIds,
       createdBy: req.user._id,
-      name: defaultName || null,
+      name: needlTitle,
     });
 
     if (history !== 'none') {
@@ -495,6 +553,18 @@ const expandDM = asyncHandler(async (req, res) => {
           },
         });
       }
+    }
+  } else {
+    const current = (channel.name || '').trim();
+    const otherLabels = usersForTitle
+      .map(
+        (u) =>
+          [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+      )
+      .filter(Boolean);
+    if (!current || otherLabels.some((n) => current === n)) {
+      channel.name = needlTitle;
+      await channel.save();
     }
   }
 

@@ -61,27 +61,42 @@ class ChannelModel extends Equatable {
 
   bool get isDirect => type == ChannelType.direct;
 
-  /// 1:1 DM vs multi-person (Slack MPIM) vs notes-to-self.
-  bool get isGroupDm =>
-      isDirect && members.length > 2;
+  /// 1:1 DM vs multi-person Needl vs notes-to-self.
+  bool get isGroupDm => isDirect && members.length > 2;
 
   bool get isSelfNotes =>
       isDirect && members.length == 1;
 
   String get displayName {
     if (isDirect) {
+      if (isGroupDm) {
+        // Prefer a custom rename when it is not just one peer's name.
+        final stored = name.trim();
+        final otherNames = members
+            .map((m) => m.displayName.trim())
+            .where((n) => n.isNotEmpty)
+            .toList();
+        final joined = otherNames.take(4).join(', ');
+        final looksLikeSinglePeer =
+            otherNames.any((n) => stored == n) || stored.isEmpty;
+        if (stored.isNotEmpty &&
+            stored != 'channel' &&
+            stored.toLowerCase() != 'direct message' &&
+            !looksLikeSinglePeer) {
+          return stored;
+        }
+        if (joined.isNotEmpty) return joined;
+        if (stored.isNotEmpty &&
+            stored != 'channel' &&
+            stored.toLowerCase() != 'direct message') {
+          return stored;
+        }
+        return 'Needl';
+      }
       if (name.isNotEmpty &&
           name != 'channel' &&
           name.toLowerCase() != 'direct message') {
         return name;
-      }
-      if (isGroupDm) {
-        final others = members
-            .map((m) => m.displayName.trim())
-            .where((n) => n.isNotEmpty)
-            .take(3)
-            .join(', ');
-        return others.isNotEmpty ? others : 'Group DM';
       }
       if (peer != null && peer!.displayName.trim().isNotEmpty) {
         return peer!.displayName;

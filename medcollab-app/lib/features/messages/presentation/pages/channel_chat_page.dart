@@ -148,21 +148,28 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         if (mounted) {
           UserModel? peer = widget.channel?.peer;
           peer ??= members.where((m) => m.id != selfId).firstOrNull;
+          final isNeedl = members.length > 2 ||
+              (widget.channel?.isGroupDm ?? false) ||
+              (_resolvedChannel?.isGroupDm ?? false);
           setState(() {
             _mentionCandidates = members;
             _spaceMembers = members;
             if (peer != null) {
-              _resolvedChannel = (widget.channel ??
-                      _resolvedChannel ??
-                      ChannelModel(
-                        id: widget.channelId,
-                        name: peer.displayName,
-                        type: ChannelType.direct,
-                      ))
-                  .copyWith(
+              final base = widget.channel ??
+                  _resolvedChannel ??
+                  ChannelModel(
+                    id: widget.channelId,
+                    name: isNeedl ? '' : peer.displayName,
+                    type: ChannelType.direct,
+                    members: members,
+                  );
+              _resolvedChannel = base.copyWith(
                 peer: peer,
                 members: members,
-                name: peer.displayName,
+                // Never overwrite Needl multi-name title with first peer.
+                name: isNeedl
+                    ? (base.name.isNotEmpty ? base.name : base.displayName)
+                    : peer.displayName,
               );
             }
           });
@@ -203,14 +210,18 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
         UserModel? peer = fetched.peer;
         peer ??= fetched.members.where((m) => m.id != selfId).firstOrNull;
         peer ??= _spaceMembers.where((m) => m.id != selfId).firstOrNull;
+        final members = fetched.members.isNotEmpty
+            ? fetched.members
+            : _spaceMembers;
+        final isNeedl = members.length > 2 || fetched.isGroupDm;
         setState(() {
           _pinnedMessages = detail.pinnedMessages;
           _resolvedChannel = fetched.copyWith(
             peer: peer,
-            name: peer?.displayName ?? fetched.name,
-            members: fetched.members.isNotEmpty
-                ? fetched.members
-                : _spaceMembers,
+            members: members,
+            name: isNeedl
+                ? fetched.name
+                : (peer?.displayName ?? fetched.name),
           );
         });
       }
@@ -516,12 +527,17 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
           final peer = _dmPeer(channel, currentUserId);
           // Prefer peer name; avoid flashing "Channel" / bare "Direct message".
           final title = _chatTitle(channel, peer);
-          final subtitle = _isDm
-              ? _dmPresenceSubtitle(context, channel)
-              : (channel?.description.trim().isNotEmpty == true
-                  ? channel!.description
-                  : 'Tap for channel details');
-          final peerOnline = peer != null &&
+          final isNeedlChat = _isDm &&
+              (channel?.isGroupDm == true || _spaceMembers.length > 2);
+          final subtitle = isNeedlChat
+              ? '${(_spaceMembers.isNotEmpty ? _spaceMembers : channel?.members ?? const []).length} people · Tap for list'
+              : _isDm
+                  ? _dmPresenceSubtitle(context, channel)
+                  : (channel?.description.trim().isNotEmpty == true
+                      ? channel!.description
+                      : 'Tap for channel details');
+          final peerOnline = !isNeedlChat &&
+              peer != null &&
               (context.watch<PresenceCubit>().state[peer.id]?.isOnline ??
                   false);
           final showReadReceipts = _isDm &&
@@ -567,7 +583,17 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
               titleSpacing: 0,
               title: InkWell(
                 onTap: () {
-                  if (_isDm) {
+                  final isNeedl = channel?.isGroupDm == true ||
+                      _spaceMembers.length > 2;
+                  if (_isDm && isNeedl) {
+                    showNeedlMembersSheet(
+                      context,
+                      members: _spaceMembers.isNotEmpty
+                          ? _spaceMembers
+                          : (channel?.members ?? const []),
+                      title: title,
+                    );
+                  } else if (_isDm) {
                     _showDmPeerCard(context, channel);
                   } else {
                     _showChatInfo(context, channel, title);
@@ -587,10 +613,10 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                         ),
                       ),
                       child: AppAvatar(
-                        name: peer?.displayName ?? title,
-                        imageUrl: peer?.avatarUrl,
+                        name: title,
+                        imageUrl: isNeedlChat ? null : peer?.avatarUrl,
                         size: 36,
-                        showPresence: _isDm,
+                        showPresence: _isDm && !isNeedlChat,
                         isOnline: peerOnline,
                         backgroundColor: AppColors.tealPrimary,
                         foregroundColor: AppColors.navyPrimary,
@@ -664,6 +690,15 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                       case 'peer':
                         await _showDmPeerCard(context, channel);
                         return;
+                      case 'needl_members':
+                        showNeedlMembersSheet(
+                          context,
+                          members: _spaceMembers.isNotEmpty
+                              ? _spaceMembers
+                              : (channel?.members ?? const []),
+                          title: title,
+                        );
+                        return;
                       case 'members':
                         final spaceId = widget.spaceId;
                         if (spaceId != null && spaceId.isNotEmpty) {
@@ -683,16 +718,19 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                   },
                   itemBuilder: (ctx) {
                     if (_isDm) {
+                      final isNeedl = channel?.isGroupDm == true ||
+                          _spaceMembers.length > 2;
                       return [
-                        const PopupMenuItem(
-                          value: 'rename',
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(Icons.edit_outlined),
-                            title: Text('Rename Needl'),
-                            dense: true,
+                        if (isNeedl)
+                          const PopupMenuItem(
+                            value: 'rename',
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(Icons.edit_outlined),
+                              title: Text('Rename Needl'),
+                              dense: true,
+                            ),
                           ),
-                        ),
                         const PopupMenuItem(
                           value: 'add_people',
                           child: ListTile(
@@ -702,15 +740,26 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
                             dense: true,
                           ),
                         ),
-                        const PopupMenuItem(
-                          value: 'peer',
-                          child: ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Icon(Icons.person_outline),
-                            title: Text('View profile'),
-                            dense: true,
+                        if (isNeedl)
+                          const PopupMenuItem(
+                            value: 'needl_members',
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(Icons.people_outline),
+                              title: Text('People in this Needl'),
+                              dense: true,
+                            ),
+                          )
+                        else
+                          const PopupMenuItem(
+                            value: 'peer',
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(Icons.person_outline),
+                              title: Text('View profile'),
+                              dense: true,
+                            ),
                           ),
-                        ),
                         const PopupMenuItem(
                           value: 'search',
                           child: ListTile(
@@ -982,11 +1031,15 @@ class _ChannelChatPageState extends State<ChannelChatPage> {
 
   String _chatTitle(ChannelModel? channel, UserModel? peer) {
     if (_isDm) {
+      final resolved = channel ?? _resolvedChannel;
+      if (resolved != null && resolved.isGroupDm) {
+        return resolved.displayName;
+      }
       final peerName = peer?.displayName.trim() ?? '';
       if (peerName.isNotEmpty) return peerName;
       final fromChannel = channel?.peer?.displayName.trim() ?? '';
       if (fromChannel.isNotEmpty) return fromChannel;
-      final name = channel?.name.trim() ?? '';
+      final name = channel?.displayName.trim() ?? '';
       if (name.isNotEmpty &&
           name.toLowerCase() != 'channel' &&
           name.toLowerCase() != 'direct message' &&
