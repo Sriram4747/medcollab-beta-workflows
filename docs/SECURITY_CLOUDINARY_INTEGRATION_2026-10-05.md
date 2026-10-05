@@ -1,6 +1,6 @@
 # Real Cloudinary integration security — 2026-10-05
 
-Implementation ready; **no real-provider execution is credited yet**. Dedicated manual workflow: `.github/workflows/vocle-cloudinary-security.yml`. New frozen manifest: **34 cases, VOCLE-752–785**, appended after unchanged catalog751. Combined registered catalog: **785**. The original general691/offline97 suites were not rerun, replaced or rewritten; their historical evidence remains unchanged.
+Implementation pushed; **external execution blocked because `CLOUDINARY_TEST_CLOUD_NAME` is missing**. Dedicated registered manual workflow: `.github/workflows/vocle-cloudinary-security.yml`. New frozen manifest: **34 cases, VOCLE-752–785**, appended after unchanged catalog751. Combined registered catalog: **785**. The original general691/offline97 suites were not rerun, replaced or rewritten; their historical evidence remains unchanged.
 
 ## Safety boundary and enablement
 
@@ -50,6 +50,12 @@ Local verification: syntax/frozen manifests, workflow YAML/manual-trigger/allowl
 
 ## Execution status
 
-Awaiting post-push independent repository-variable check. No hosted run/provider behavior/findings/live cleanup proof credited yet. Actual evidence will be added only after safe hosted execution. No Cloudinary traffic occurred during implementation/local verification.
+After pushing source `14eb050e2a6af98569ea1b8fd34d75fdfabc03fc` to origin/master, GitHub's exact variable lookup returned 404; the repository variable list succeeded with **zero variables**. Secret-name metadata confirms the three required secrets exist; values were not requested. [Vocle Real Cloudinary Security](https://github.com/Sriram4747/medcollab-beta-workflows/actions/workflows/vocle-cloudinary-security.yml) is registered (workflow375677595). **No dispatch was issued**, as required by the positive-allowlist boundary.
+
+Latest hosted integration run ID/link: **none**. Live executed/pass/observation counts: **0/0/0**; this is an enablement blocker, not a provider outcome. Image/video/raw upload, retrieval, transformations, delete/disappearance, naming/overwrite/isolation and live cleanup remain **unverified**. No real-provider application/configuration findings claimed. No assets created, so no remote cleanup needed or attempted. **No Cloudinary access, including production, occurred**.
+
+Add the independent repository variable using the steps above, then continue hosted execution/evidence review and infrastructure repair. Effective test-account role/retention/strict-transform/Console settings remain explicit attestation limitations. [Sanitized blocked-execution metadata](security-evidence/cloudinary-blocked-2026-10-05/execution.json). Upstream and unrelated Flutter/Android changes were untouched.
+
+The integration PNG is newly authored with correct CRCs; the earlier offline-only PNG's invalid IDAT CRC and historical results are preserved. No offline fixture was upgraded or re-credited as decoder-valid provider evidence.
 
 Files: dedicated workflow; modular `scripts/security-cloudinary/{guard,broker,fixtures,cases,check,self-test,transport-test,run}.js` and frozen `manifest.json`; this report and continuity pointers. Backend application source and unrelated Flutter/Android changes remain untouched. Historical Stage1/2/general evidence is authoritative for its own scope.

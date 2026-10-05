@@ -1,6 +1,8 @@
 # Current real-provider catalog — 2026-10-05
 
-**34 real-Cloudinary cases registered, VOCLE-752–785**, combined catalog785, separately manual workflow. **Zero live executions/pass/observations credited yet**; independent positive allowlist check/hosted evidence pending. Image/video/raw upload, identity, delivery, bounded transforms, delete/absence/replay, naming/overwrite/type separation and independent cleanup implemented. [Exact scope/guards/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Local offline checks pass but are not provider coverage. Historical general691/offline97 outcomes unchanged; no new HTTP inventory credit or app remediation.
+**Enablement blocked:** independent `CLOUDINARY_TEST_CLOUD_NAME` repository variable is absent, confirmed after pushing. No integration workflow dispatched, no hosted run, zero provider executions/pass/observations or Cloudinary requests. [Blocked metadata](security-evidence/cloudinary-blocked-2026-10-05/execution.json). All live behaviors remain unverified; historical counts below unchanged.
+
+**34 real-Cloudinary cases registered, VOCLE-752–785**, combined catalog785, separately manual workflow. **Zero live executions/pass/observations credited yet**; independent positive allowlist is missing; hosted evidence blocked. Image/video/raw upload, identity, delivery, bounded transforms, delete/absence/replay, naming/overwrite/type separation and independent cleanup implemented. [Exact scope/guards/limits](SECURITY_CLOUDINARY_INTEGRATION_2026-10-05.md). Local offline checks pass but are not provider coverage. Historical general691/offline97 outcomes unchanged; no new HTTP inventory credit or app remediation.
 
 ---
 
