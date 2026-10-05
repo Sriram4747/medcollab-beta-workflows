@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Vocle Functional Sanity",
+  "workflowFile": "vocle-sanity.yml",
+  "runId": 37361869623,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361869623",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "testedApplicationSource": "4638682c0c930fcde3378d7e809612b6c0eab370",
+  "status": "completed",
+  "conclusion": "failure",
+  "createdAt": "2026-10-05T19:13:38Z",
+  "startedAt": "2026-10-05T19:13:38Z",
+  "completedAt": "2026-10-05T19:16:35Z",
+  "artifacts": [
+    {
+      "id": 11367496175,
+      "name": "vocle-sanity-diagnostics-37361869623-1",
+      "size": 16089,
+      "digest": "sha256:0c5a708755ded3ded6e10dd39bec3967603dcb1ae92460f4d2156daf4b59381c",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111938195468,
+      "name": "Detect",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:14:00Z",
+      "completedAt": "2026-10-05T19:14:07Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Resolve exact upstream master SHA",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Calculate harness fingerprint",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Find verified successful baseline",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 111938375572,
+      "name": "Sanity",
+      "status": "completed",
+      "conclusion": "failure",
+      "startedAt": "2026-10-05T19:14:29Z",
+      "completedAt": "2026-10-05T19:16:13Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out fork harness",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fetch captured upstream target without credentials",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate Phase 1 harness contract",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare isolated runtime images and target dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run isolated startup scenario",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Verify target remained unchanged",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish case-by-case job summary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Upload sanity reports and diagnostics",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Create verified success manifest",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Upload verified success evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Check out fork harness",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 111939222967,
+      "name": "Summary",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:16:31Z",
+      "completedAt": "2026-10-05T19:16:35Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Write workflow summary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "provenance.txt": "c51adb36a05a5b0a996f73baab049ee51ac115e400df9e76b03881950157e40f",
+    "sanitized-diagnostics.json": "cfdfe285cf72eecb274cf6fab4c4175cea971ab10eeb1d8c2c38a2790fa7b709",
+    "sanity-report.json": "201c68e64f10df466d4b787f90b109a943d6e25c6d780dd9a34b4225949aecb7",
+    "sanity-report.junit.xml": "e4af4cfaa75f89955735d4cfa50f31c7fa17b3268d6f41ee4c8bc7531e49ac4c",
+    "sanity-report.md": "e4164a0cc4f33b60c8ee184608ab6833afde69e6b9fd3c117da4d67e958e1547"
+  },
+  "purpose": "final validation",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

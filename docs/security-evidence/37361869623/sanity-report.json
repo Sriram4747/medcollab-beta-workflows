@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "result": "failed",
+  "createdAt": "2026-10-05T19:16:09.649Z",
+  "expectedScenarioCount": 48,
+  "passedScenarioCount": 42,
+  "failedScenarioCount": 2,
+  "blockedScenarioCount": 4,
+  "metadata": {
+    "upstreamSha": "4638682c0c930fcde3378d7e809612b6c0eab370",
+    "harnessSha": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+    "modules": [
+      {
+        "file": "live-runner.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 1133
+      },
+      {
+        "file": "authentication-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 1077
+      },
+      {
+        "file": "spaces-and-channels-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 1444
+      },
+      {
+        "file": "messaging-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 10456
+      },
+      {
+        "file": "message-requests-and-conversations-scenarios.js",
+        "code": 1,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 5625
+      },
+      {
+        "file": "handoff-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 10435
+      },
+      {
+        "file": "media-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 479
+      },
+      {
+        "file": "notification-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 10411
+      },
+      {
+        "file": "realtime-availability-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 10462
+      },
+      {
+        "file": "search-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 499
+      },
+      {
+        "file": "support-scenarios.js",
+        "code": 0,
+        "timedOut": false,
+        "signal": null,
+        "durationMs": 401
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "authentication-and-profiles-01",
+      "name": "otp-verification-creates-user-and-tokens",
+      "status": "passed",
+      "durationMs": 296
+    },
+    {
+      "id": "authentication-and-profiles-02",
+      "name": "returning-login-preserves-identity",
+      "status": "passed",
+      "durationMs": 180
+    },
+    {
+      "id": "authentication-and-profiles-03",
+      "name": "incorrect-otp-fails-then-correct-works",
+      "status": "passed",
+      "durationMs": 262
+    },
+    {
+      "id": "authentication-and-profiles-04",
+      "name": "consumed-otp-cannot-be-reused",
+      "status": "passed",
+      "durationMs": 5
+    },
+    {
+      "id": "authentication-and-profiles-05",
+      "name": "onboarding-and-profile-persist",
+      "status": "passed",
+      "durationMs": 19
+    },
+    {
+      "id": "authentication-and-profiles-06",
+      "name": "refresh-session-and-missing-refresh-fails",
+      "status": "passed",
+      "durationMs": 9
+    },
+    {
+      "id": "authentication-and-profiles-07",
+      "name": "device-deduplication-and-logout-removal",
+      "status": "passed",
+      "durationMs": 26
+    },
+    {
+      "id": "spaces-and-invitations-01",
+      "name": "space-creation-default-channels",
+      "status": "passed",
+      "durationMs": 15
+    },
+    {
+      "id": "spaces-and-invitations-02",
+      "name": "invitation-preview-join-and-membership",
+      "status": "passed",
+      "durationMs": 37
+    },
+    {
+      "id": "spaces-and-invitations-03",
+      "name": "duplicate-space-join-conflict",
+      "status": "passed",
+      "durationMs": 10
+    },
+    {
+      "id": "spaces-and-invitations-04",
+      "name": "rename-and-regenerate-invitation",
+      "status": "passed",
+      "durationMs": 18
+    },
+    {
+      "id": "spaces-and-invitations-05",
+      "name": "member-leave-owner-removal-and-owner-leave-rejection",
+      "status": "passed",
+      "durationMs": 34
+    },
+    {
+      "id": "channels-01",
+      "name": "public-channel-create-read-update-and-duplicate-rejection",
+      "status": "passed",
+      "durationMs": 26
+    },
+    {
+      "id": "channels-02",
+      "name": "private-channel-creator-access",
+      "status": "passed",
+      "durationMs": 14
+    },
+    {
+      "id": "channels-03",
+      "name": "archive-custom-channel-retains-messages-and-protects-defaults",
+      "status": "passed",
+      "durationMs": 47
+    },
+    {
+      "id": "messaging-and-needl-01",
+      "name": "text-message-sender-and-sidebar-preview",
+      "status": "passed",
+      "durationMs": 58
+    },
+    {
+      "id": "messaging-and-needl-02",
+      "name": "root-pagination-order-without-overlap",
+      "status": "passed",
+      "durationMs": 89
+    },
+    {
+      "id": "messaging-and-needl-03",
+      "name": "quoted-message-retains-metadata",
+      "status": "passed",
+      "durationMs": 19
+    },
+    {
+      "id": "messaging-and-needl-04",
+      "name": "thread-reply-needl-and-preview",
+      "status": "passed",
+      "durationMs": 57
+    },
+    {
+      "id": "messaging-and-needl-05",
+      "name": "edit-soft-delete-and-socket-events",
+      "status": "passed",
+      "durationMs": 61
+    },
+    {
+      "id": "messaging-and-needl-06",
+      "name": "reaction-and-pin-persistence",
+      "status": "passed",
+      "durationMs": 64
+    },
+    {
+      "id": "messaging-and-needl-07",
+      "name": "empty-text-rejection-and-emergency-priority",
+      "status": "passed",
+      "durationMs": 25
+    },
+    {
+      "id": "message-requests-01",
+      "name": "eligible-peer-request-lists-count-and-notification",
+      "status": "failed",
+      "durationMs": 5125,
+      "error": "Recipient message-request notification was not persisted within 5 seconds (request state was persisted)."
+    },
+    {
+      "id": "message-requests-02",
+      "name": "accept-request-dm-and-notification",
+      "status": "failed",
+      "durationMs": 15,
+      "error": "POST /api/message-requests/6ac3f7538cc6dc981b8cc9c9/accept expected 200, received 500: {\"success\":false,\"message\":\"Plan executor error during findAndModify :: caused by :: cannot infer query fields to set, path 'members' is matched twice\",\"errors\":[]}"
+    },
+    {
+      "id": "message-requests-03",
+      "name": "decline-request-and-terminal-transition-rejection",
+      "status": "passed",
+      "durationMs": 34
+    },
+    {
+      "id": "direct-and-group-conversations-01",
+      "name": "accepted-dm-reopens-to-same-id",
+      "status": "blocked",
+      "durationMs": 0,
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-02",
+      "name": "dm-message-peer-details-and-preview",
+      "status": "blocked",
+      "durationMs": 0,
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-03",
+      "name": "read-receipt-deduplication-and-preference",
+      "status": "blocked",
+      "durationMs": 0,
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-04",
+      "name": "notes-self-and-group-membership-rename",
+      "status": "passed",
+      "durationMs": 64
+    },
+    {
+      "id": "direct-and-group-conversations-05",
+      "name": "conversation-expansion-none-and-all",
+      "status": "blocked",
+      "durationMs": 0,
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "handoffs-01",
+      "name": "handoff-draft-create-edit-read",
+      "status": "passed",
+      "durationMs": 39
+    },
+    {
+      "id": "handoffs-02",
+      "name": "empty-draft-rejection-and-disposable-delete",
+      "status": "passed",
+      "durationMs": 24
+    },
+    {
+      "id": "handoffs-03",
+      "name": "submit-handoff-inbox-history-notification-event",
+      "status": "passed",
+      "durationMs": 45
+    },
+    {
+      "id": "handoffs-04",
+      "name": "acknowledge-handoff-and-duplicate-rejection",
+      "status": "passed",
+      "durationMs": 119
+    },
+    {
+      "id": "handoffs-05",
+      "name": "writeback-reassign-reset-and-new-assignee-acknowledge",
+      "status": "passed",
+      "durationMs": 44
+    },
+    {
+      "id": "media-01",
+      "name": "png-upload-download-delete",
+      "status": "passed",
+      "durationMs": 31
+    },
+    {
+      "id": "media-02",
+      "name": "pdf-upload-and-handoff-attachment",
+      "status": "passed",
+      "durationMs": 34
+    },
+    {
+      "id": "media-03",
+      "name": "inert-image-ecg-document-message-metadata",
+      "status": "passed",
+      "durationMs": 52
+    },
+    {
+      "id": "notifications-01",
+      "name": "ordinary-message-inbox-count-metadata-socket",
+      "status": "passed",
+      "durationMs": 36
+    },
+    {
+      "id": "notifications-02",
+      "name": "mention-and-emergency-notification-types",
+      "status": "passed",
+      "durationMs": 46
+    },
+    {
+      "id": "notifications-03",
+      "name": "notification-read-unread-channel-read-all-delete",
+      "status": "passed",
+      "durationMs": 56
+    },
+    {
+      "id": "realtime-and-availability-01",
+      "name": "socket-auth-join-message-reconnect",
+      "status": "passed",
+      "durationMs": 69
+    },
+    {
+      "id": "realtime-and-availability-02",
+      "name": "typing-start-stop-peer-delivery",
+      "status": "passed",
+      "durationMs": 2
+    },
+    {
+      "id": "realtime-and-availability-03",
+      "name": "availability-persistence-broadcast-room-sync-presence",
+      "status": "passed",
+      "durationMs": 28
+    },
+    {
+      "id": "search-01",
+      "name": "known-user-search-and-phone-lookup",
+      "status": "passed",
+      "durationMs": 22
+    },
+    {
+      "id": "search-02",
+      "name": "global-search-and-empty-query-result",
+      "status": "passed",
+      "durationMs": 54
+    },
+    {
+      "id": "support-01",
+      "name": "bug-report-persistence-and-required-title",
+      "status": "passed",
+      "durationMs": 62
+    },
+    {
+      "id": "startup-01",
+      "name": "health-connected-test-and-disabled-providers",
+      "status": "passed",
+      "durationMs": 0
+    }
+  ]
+}

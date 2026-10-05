@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Vocle Offline Media Security",
+  "workflowFile": "vocle-media-security.yml",
+  "runId": 37361859575,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361859575",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "testedApplicationSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:13:33Z",
+  "startedAt": "2026-10-05T19:13:33Z",
+  "completedAt": "2026-10-05T19:16:51Z",
+  "artifacts": [
+    {
+      "id": 11367401455,
+      "name": "vocle-offline-media-security",
+      "size": 18063,
+      "digest": "sha256:5a7a7472070d6f6f55ac05172d9ff7c2995aa9912af5a3572d85486d3bb5b554",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111938155703,
+      "name": "offline-media",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:13:53Z",
+      "completedAt": "2026-10-05T19:16:51Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install dependencies before isolated execution",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Syntax and frozen manifests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Offline isolation and SDK interception self-test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare network-none MongoDB and runner images",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Execute real backend and SDK contracts without external network",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve sanitized media evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop disposable MongoDB",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "manifest.json": "8214a4c52aa44f30d87f013215f07c5b5397e489b77c786fa3a1b73bee255065",
+    "results.json": "00051f824b975caeeb78d3f7e6fa4bfa549a524c0f7533e1b538123417623233",
+    "reviewed-observations.json": "8b00039d9cab9c8e75d1f690df8778cb002229493b5a84eda33cbb156d4dc23e",
+    "security-test-report.md": "1db6785446c54968cb363080db2fe3a1a2be08c1f3f97c1f7004eef0dc2c0fa6",
+    "summary.md": "fb01cac0f751dfa8f027abb2e34ebebcb71407300ba6ef2a9ddca8171cdf6185",
+    "synthetic-fixture.mp4": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+  },
+  "purpose": "final validation",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

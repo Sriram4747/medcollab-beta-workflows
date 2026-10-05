@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Secret Scan",
+  "workflowFile": "secrets-scan.yml",
+  "runId": 37361849823,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361849823",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "testedApplicationSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:13:28Z",
+  "startedAt": "2026-10-05T19:13:28Z",
+  "completedAt": "2026-10-05T19:13:46Z",
+  "artifacts": [
+    {
+      "id": 11367002472,
+      "name": "gitleaks-results.sarif",
+      "size": 435,
+      "digest": "sha256:65252f5b0cd3987ab4ff6e6a3e5ce6948f5eaed1cc5633e1270ace0cbd6b0fd8",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111938129995,
+      "name": "Scan for hardcoded secrets",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:13:40Z",
+      "completedAt": "2026-10-05T19:13:46Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run Gitleaks",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "work/medcollab-beta-workflows/medcollab-beta-workflows/results.sarif": "25b6c42cc4a9a22104b065248d10ae1e0b0cbab3f255a453c6efdd9f160dd4f0"
+  },
+  "purpose": "final validation",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

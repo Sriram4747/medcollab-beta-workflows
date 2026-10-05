@@ -64,7 +64,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-098",
@@ -91,7 +97,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-099",
@@ -118,7 +130,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-110",
@@ -145,7 +163,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-112",
@@ -172,7 +196,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-159",
@@ -199,7 +229,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-171",
@@ -209,9 +245,9 @@
       "securityRequirement": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
       "expectedSecureBehavior": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
       "requirementStatus": "proposed hardening/policy expectation; developer decision required",
-      "currentBehavior": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
-      "classification": "retained baseline ambiguity",
-      "currentStatus": "observed",
+      "currentBehavior": "Response-derived self-notes flag plus exact persisted caller-only ownership/replay/outsider controls pass. No application source change.",
+      "classification": "TEST/INFRASTRUCTURE ISSUE — resolved",
+      "currentStatus": "passed after test-harness repair",
       "evidenceRunId": 37175207493,
       "evidenceSources": [
         {
@@ -220,13 +256,19 @@
           "executedSource": "e89f8848fee4c21f3de91e31469ae61837f13bd8"
         }
       ],
-      "applicationFixStatus": "not established; separate developer or policy review required",
+      "applicationFixStatus": "not an application defect; testing-only repair cac620eef477addda94e6756e36f6aebecc374ab",
       "regressionCandidate": false,
       "candidateKind": null,
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "PASS",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-193",
@@ -253,7 +295,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-197",
@@ -280,7 +328,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-267",
@@ -307,7 +361,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-268",
@@ -334,7 +394,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-270",
@@ -361,7 +427,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-271",
@@ -388,7 +460,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-272",
@@ -415,7 +493,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-273",
@@ -442,7 +526,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-275",
@@ -469,7 +559,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-276",
@@ -496,7 +592,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-301",
@@ -528,7 +630,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-302",
@@ -560,7 +668,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-303",
@@ -592,7 +706,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-304",
@@ -624,7 +744,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-306",
@@ -656,7 +782,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-307",
@@ -688,7 +820,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-313",
@@ -720,7 +858,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-314",
@@ -752,7 +896,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-323",
@@ -784,7 +934,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-339",
@@ -811,7 +967,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-340",
@@ -838,7 +1000,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-342",
@@ -865,7 +1033,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-343",
@@ -892,7 +1066,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-345",
@@ -919,7 +1099,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-346",
@@ -946,7 +1132,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-347",
@@ -973,7 +1165,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-348",
@@ -1000,7 +1198,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-349",
@@ -1027,7 +1231,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-355",
@@ -1037,9 +1247,9 @@
       "securityRequirement": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
       "expectedSecureBehavior": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
       "requirementStatus": "proposed hardening/policy expectation; developer decision required",
-      "currentBehavior": "Original baseline semantic observation retained unchanged. HTTP status is expected, but the existing semantic assertion fails; no expectation or application change is made in this expansion.",
-      "classification": "retained baseline ambiguity",
-      "currentStatus": "observed",
+      "currentBehavior": "Opt-out403, error-only response, exact request counts, no active DM and unchanged complete snapshot pass; archived seeded fixture is not an opened conversation.",
+      "classification": "TEST/INFRASTRUCTURE ISSUE — resolved",
+      "currentStatus": "passed after test-harness repair",
       "evidenceRunId": 37175207493,
       "evidenceSources": [
         {
@@ -1048,13 +1258,19 @@
           "executedSource": "e89f8848fee4c21f3de91e31469ae61837f13bd8"
         }
       ],
-      "applicationFixStatus": "not established; separate developer or policy review required",
+      "applicationFixStatus": "not an application defect; testing-only repair cac620eef477addda94e6756e36f6aebecc374ab",
       "regressionCandidate": false,
       "candidateKind": null,
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "PASS",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-356",
@@ -1081,7 +1297,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-357",
@@ -1108,7 +1330,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-398",
@@ -1135,7 +1363,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-421",
@@ -1162,7 +1396,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-429",
@@ -1189,7 +1429,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-434",
@@ -1216,7 +1462,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-503",
@@ -1243,7 +1495,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-509",
@@ -1270,7 +1528,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-527",
@@ -1297,7 +1561,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-528",
@@ -1324,7 +1594,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-529",
@@ -1351,7 +1627,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-530",
@@ -1378,7 +1660,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-572",
@@ -1405,7 +1693,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-574",
@@ -1432,7 +1726,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-575",
@@ -1459,7 +1759,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-594",
@@ -1486,7 +1792,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-595",
@@ -1513,7 +1825,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-599",
@@ -1540,7 +1858,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-603",
@@ -1567,7 +1891,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-604",
@@ -1594,7 +1924,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-605",
@@ -1621,7 +1957,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-611",
@@ -1648,7 +1990,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-618",
@@ -1675,7 +2023,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-625",
@@ -1702,7 +2056,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-641",
@@ -1729,7 +2089,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-653",
@@ -1756,7 +2122,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-654",
@@ -1783,7 +2155,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-655",
@@ -1810,7 +2188,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-659",
@@ -1837,7 +2221,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-660",
@@ -1864,7 +2254,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-662",
@@ -1891,7 +2287,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-663",
@@ -1918,7 +2320,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-672",
@@ -1945,7 +2353,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-673",
@@ -1972,7 +2386,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-674",
@@ -1999,7 +2419,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-675",
@@ -2026,7 +2452,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-676",
@@ -2053,7 +2485,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-678",
@@ -2080,7 +2518,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-679",
@@ -2107,7 +2551,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-680",
@@ -2134,7 +2584,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-681",
@@ -2161,7 +2617,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-685",
@@ -2188,7 +2650,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-686",
@@ -2215,7 +2683,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-687",
@@ -2242,7 +2716,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37362263669,
+        "executedSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37362263669/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-698",
@@ -2269,7 +2749,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-699",
@@ -2296,7 +2782,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-700",
@@ -2323,7 +2815,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-701",
@@ -2350,7 +2848,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-704",
@@ -2377,7 +2881,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-705",
@@ -2404,7 +2914,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-709",
@@ -2431,7 +2947,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-710",
@@ -2458,7 +2980,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-713",
@@ -2485,7 +3013,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-714",
@@ -2512,7 +3046,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-715",
@@ -2539,7 +3079,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-716",
@@ -2566,7 +3112,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-717",
@@ -2593,7 +3145,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-721",
@@ -2620,7 +3178,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-724",
@@ -2647,7 +3211,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-725",
@@ -2674,7 +3244,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-727",
@@ -2701,7 +3277,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-733",
@@ -2728,7 +3310,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-736",
@@ -2755,7 +3343,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-737",
@@ -2782,7 +3376,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-739",
@@ -2809,7 +3409,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-740",
@@ -2836,7 +3442,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-743",
@@ -2863,7 +3475,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-746",
@@ -2890,7 +3508,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-747",
@@ -2917,7 +3541,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-750",
@@ -2944,7 +3574,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361859575,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361859575/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-762",
@@ -2973,7 +3609,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-765",
@@ -3000,7 +3642,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-770",
@@ -3027,7 +3675,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-771",
@@ -3054,7 +3708,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-773",
@@ -3064,9 +3724,9 @@
       "securityRequirement": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence",
       "expectedSecureBehavior": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence",
       "requirementStatus": "proposed hardening/policy expectation; developer decision required",
-      "currentBehavior": "Raw origin absent but original CDN URL still returns200 exact PDF bytes.",
+      "currentBehavior": "Current TEST probe returns404 after independent origin absence; historical probe returned200 exact cached bytes. Unchanged application source, variable cache propagation; global/derived/client cache and backup erasure unverified.",
       "classification": "provider CDN/cache behavior",
-      "currentStatus": "observed",
+      "currentStatus": "passed current bounded cache characterization; historical observation retained",
       "evidenceRunId": "37355451614",
       "evidenceSources": [
         {
@@ -3075,13 +3735,19 @@
           "executedSource": null
         }
       ],
-      "applicationFixStatus": "not established; separate developer or policy review required",
+      "applicationFixStatus": "no application fix; policy/account verification remains open",
       "regressionCandidate": false,
       "candidateKind": null,
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "PASS",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-776",
@@ -3091,9 +3757,9 @@
       "securityRequirement": "Image exact lookup absent, repeated destroy not found; measure original delivery separately",
       "expectedSecureBehavior": "Image exact lookup absent, repeated destroy not found; measure original delivery separately",
       "requirementStatus": "proposed hardening/policy expectation; developer decision required",
-      "currentBehavior": "Image origin absent and repeated destroy notfound, while original CDN URL still returns200 exact PNG.",
+      "currentBehavior": "Current TEST probe returns404 after independent origin absence; historical probe returned200 exact cached bytes. Unchanged application source, variable cache propagation; global/derived/client cache and backup erasure unverified.",
       "classification": "provider CDN/cache behavior",
-      "currentStatus": "observed",
+      "currentStatus": "passed current bounded cache characterization; historical observation retained",
       "evidenceRunId": "37355451614",
       "evidenceSources": [
         {
@@ -3102,13 +3768,19 @@
           "executedSource": null
         }
       ],
-      "applicationFixStatus": "not established; separate developer or policy review required",
+      "applicationFixStatus": "no application fix; policy/account verification remains open",
       "regressionCandidate": false,
       "candidateKind": null,
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "PASS",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-782",
@@ -3137,7 +3809,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-783",
@@ -3166,7 +3844,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-784",
@@ -3195,7 +3879,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361873736,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361873736/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-790",
@@ -3227,7 +3917,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-797",
@@ -3259,7 +3955,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-803",
@@ -3291,7 +3993,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-805",
@@ -3323,7 +4031,13 @@
       "blocking": false,
       "blockingEligibility": "only after developer remediation and secure assertion audit",
       "activation": "After an identified application fix lands, audit status/state/semantic assertions against this requirement, verify a healthy isolated run with positive and denial controls, then explicitly enable a versioned strict gate for this requirement.",
-      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review."
+      "assertionMigration": "Preserve historical evidence and frozen manifests. Some legacy callbacks capture disclosure on unexpected success and need a separately versioned secure assertion after the fix; do not gate them unchanged without review.",
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-806",
@@ -3355,7 +4069,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-808",
@@ -3387,7 +4107,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-809",
@@ -3419,7 +4145,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-815",
@@ -3451,7 +4183,13 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     },
     {
       "testcaseId": "VOCLE-816",
@@ -3483,7 +4221,31 @@
       "blocking": false,
       "blockingEligibility": "excluded pending explicit policy/hardening resolution",
       "activation": "Excluded from strict gates pending resolution; no automatic activation from classification or a passing run.",
-      "assertionMigration": null
+      "assertionMigration": null,
+      "latestValidation": {
+        "runId": 37361864154,
+        "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+        "result": "OBSERVATION",
+        "reviewSource": "docs/security-evidence/37361864154/reviewed-observations.json"
+      }
     }
-  ]
+  ],
+  "latestFinalValidation": {
+    "dateIndia": "2026-10-06",
+    "primaryReport": "docs/VOCLE_DEVELOPER_REMEDIATION_REPORT.md",
+    "generalRunId": 37362263669,
+    "mediaRunId": 37361859575,
+    "cloudinaryRunId": 37361873736,
+    "dataRunId": 37361864154,
+    "sanityRunId": 37361869623,
+    "uniqueCurrentlyObservedIds": 120,
+    "confirmedRootGroups": 24,
+    "likelyRootGroups": 3,
+    "hardeningRootGroups": 18,
+    "policyRootGroups": 13,
+    "blockingEnabled": false,
+    "applicationFixesPerformed": false,
+    "statusReconciliation": "124 historical entries retained. VOCLE-171/355 pass after test-harness repair; VOCLE-773/776 pass bounded variable cache probes, not application remediation. Candidates remain62, excluded62; zero active application gates.",
+    "regenerationNote": "The existing historical review generator reproduces historical observations; preserve this final-validation status overlay or consume the final execution/review evidence when regenerating."
+  }
 }

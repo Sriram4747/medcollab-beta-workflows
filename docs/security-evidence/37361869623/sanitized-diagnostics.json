@@ -1,0 +1,9 @@
+{
+  "source": "4638682c0c930fcde3378d7e809612b6c0eab370",
+  "rawBackendLogsRetainedInRepository": false,
+  "selectedDiagnostic": "Notification validation failed: referenceType MessageRequest is not an allowed enum value.",
+  "requestAcceptanceDiagnostic": "MongoDB findAndModify cannot infer query fields to set: path members is matched twice.",
+  "onlySyntheticRuntime": true,
+  "providerCredentialsRetained": false,
+  "upstreamTrackedSourceUnchanged": true
+}

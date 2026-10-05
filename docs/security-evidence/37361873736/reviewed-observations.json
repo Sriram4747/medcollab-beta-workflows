@@ -1,0 +1,254 @@
+{
+  "runId": 37361873736,
+  "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "rawResultsSha256": "04d9514982cecb111b9df1a618deb89eef72d883944618749ae505b2245a204f",
+  "observations": [
+    {
+      "caseId": "VOCLE-762",
+      "name": "Application owner video deletion limitation",
+      "rootCause": "media-video-delete",
+      "reportIssueId": "VR-MEDIA-VIDEO-DELETE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": "Owner deletion should remove video; preserve existing VOCLE-736 finding if retained",
+      "actual": {
+        "status": 404,
+        "videoRetained": true,
+        "dispatch": [
+          "image",
+          "raw"
+        ]
+      },
+      "scope": "video",
+      "review": "deleteFile tries image then raw and never video. A stored video remains while the controller reports404.",
+      "impactLimit": "Offline call intent and real TEST video retention reproduce; independent typed deletion succeeds, so provider deletion support is established.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-765",
+      "name": "Video post-delete delivery behavior",
+      "rootCause": "media-invalidation-intent",
+      "reportIssueId": "VR-MEDIA-INVALIDATION-INTENT",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": "Fresh original delivery should stop; report CDN persistence separately from origin absence",
+      "actual": {
+        "status": 200,
+        "contentType": "video/mp4",
+        "bytes": 1509,
+        "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+        "redirected": false,
+        "appInvalidateOmitted": true,
+        "independentTestDeletionInvalidate": false
+      },
+      "scope": "video",
+      "review": "Application destroy omits invalidate:true. Cached video bytes remain200 after exact origin absence; raw/image delivery changed to404 in the fresh run with unchanged source.",
+      "impactLimit": "Conditional confidentiality/deletion policy; CI proves bounded origin/cache observations, not global revocation.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/config/cloudinary.js:cloudinary"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-770",
+      "name": "Application raw PDF attachment delivery",
+      "rootCause": "CLOUDINARY_PDF_ATTACHMENT",
+      "reportIssueId": "VR-CLOUDINARY-PDF-ATTACHMENT",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": "Controller attachment URL returns exact PDF bytes where account allows delivery",
+      "actual": {
+        "status": 400,
+        "contentType": "application/json",
+        "bytes": 402,
+        "sha256": "a43a8f06b89c0ba9a39b4779a1219c1f5459c7bd671742fc9fb8cf4edc7d2496",
+        "redirected": false,
+        "plainAttachmentControl": {
+          "status": 200,
+          "contentType": "application/octet-stream",
+          "bytes": 344,
+          "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+          "redirected": false
+        },
+        "plainAttachmentSupported": true
+      },
+      "scope": "raw",
+      "review": "The PDF branch builds flags attachment:<filename including extension> for a raw resource. Exact generated URL returns400 while direct raw/plain attachment controls return200. Precise provider flag/escaping correction requires developer investigation.",
+      "impactLimit": "Fresh real TEST URL400 and successful exact-byte controls confirm a broken application download contract.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-771",
+      "name": "Application raw PDF image preview compatibility",
+      "rootCause": "CLOUDINARY_PDF_PREVIEW",
+      "reportIssueId": "VR-CLOUDINARY-PDF-PREVIEW",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": "Measure actual image preview; URL construction alone cannot establish support",
+      "actual": {
+        "status": 404,
+        "contentType": "application/json",
+        "bytes": 460,
+        "sha256": "498350fff1a54241b5f4300964bebc9da7402a904bbcdcaff6a479f23d53e47e",
+        "redirected": false,
+        "uploadedResourceType": "raw",
+        "previewResourceType": "image",
+        "previewSupported": false,
+        "imagePDFControl": {
+          "identity": {
+            "publicId": "medcollab/security-test/37361873736-1-5ed8f7a2-5f9b-457e-b356-33c00655c089/op-005/file_bvbgto",
+            "resourceType": "image",
+            "deliveryType": "upload",
+            "format": "pdf",
+            "bytes": 344,
+            "width": 10,
+            "height": 10,
+            "secureURLApproved": true
+          },
+          "metadata": {
+            "exists": true,
+            "identityMatched": true,
+            "bytes": 344,
+            "format": "pdf"
+          },
+          "preview": {
+            "status": 200,
+            "contentType": "image/webp",
+            "bytes": 38,
+            "sha256": "a1e2f6dbda847380d13af6bd388778fe2d5c2a3b127c38a3924cbe31e1dd8de2",
+            "redirected": false
+          },
+          "previewSupported": true
+        }
+      },
+      "scope": "raw",
+      "review": "The controller uploads raw, then constructs an image-resource preview for that raw ID. URL construction does not create a corresponding image/pdf resource. Raw preview404 contrasts with correctly typed image/pdf WebP200 control.",
+      "impactLimit": "The account can preview the synthetic PDF when stored as image/pdf; the application raw-to-image reference fails.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-782",
+      "name": "Application octet-PDF provider dispatch",
+      "rootCause": "media-octet-resource-type",
+      "reportIssueId": "VR-MEDIA-OCTET-RESOURCE-TYPE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": "Octet-PDF should select raw; actual image intent remains VOCLE-724 observation",
+      "actual": {
+        "requestedType": "image",
+        "expectedType": "raw",
+        "appStatus": 200,
+        "providerAccepted": true,
+        "storedType": "image",
+        "providerRejectionStatus": null
+      },
+      "scope": "raw",
+      "review": "The router admits supported octet-stream suffixes, but the controller chooses raw/video/image solely from MIME. Accepted octet-PDF/MP4 therefore defaults to image.",
+      "impactLimit": "Octet-PDF is stored image/pdf instead of raw; octet-MP4 receives provider400 and application500 with no asset. The cause is application dispatch, not a provider outage.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-783",
+      "name": "Application octet-MP4 provider dispatch",
+      "rootCause": "media-octet-resource-type",
+      "reportIssueId": "VR-MEDIA-OCTET-RESOURCE-TYPE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": "Octet-MP4 should select video; actual image intent remains VOCLE-725 observation",
+      "actual": {
+        "requestedType": "image",
+        "expectedType": "video",
+        "appStatus": 500,
+        "providerAccepted": false,
+        "storedType": null,
+        "providerRejectionStatus": 400
+      },
+      "scope": "video",
+      "review": "The router admits supported octet-stream suffixes, but the controller chooses raw/video/image solely from MIME. Accepted octet-PDF/MP4 therefore defaults to image.",
+      "impactLimit": "Octet-PDF is stored image/pdf instead of raw; octet-MP4 receives provider400 and application500 with no asset. The cause is application dispatch, not a provider outage.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-784",
+      "name": "Application shared handoff deletion limitation",
+      "rootCause": "media-shared-handoff",
+      "reportIssueId": "VR-MEDIA-SHARED-HANDOFF",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": "Uploader should remove handoff asset; existing VOCLE-740 observation if forbidden",
+      "actual": {
+        "status": 403,
+        "retained": true,
+        "originalFolder": "medcollab/handoffs"
+      },
+      "scope": "image",
+      "review": "Handoff uploads use shared medcollab/handoffs folders; deletion recognizes only messages/<caller> or avatars/<caller>. Uploader deletion403 retains the asset in local/offline/real TEST evidence.",
+      "impactLimit": "Confirmed lifecycle limitation; whether immediate uploader delete should be permitted requires product policy before declaring a security defect.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    }
+  ],
+  "comparison": {
+    "previousRunId": "37355451614",
+    "changedPassObservationOutcomes": [
+      {
+        "caseId": "VOCLE-773",
+        "previousPassed": false,
+        "currentPassed": true,
+        "actual": {
+          "exists": false,
+          "delivery": {
+            "status": 404,
+            "contentType": "application/json",
+            "bytes": 429,
+            "sha256": "e567e0d36af98609750860608fd47ee9109815b641bc53c58e95783488ce318c",
+            "redirected": false
+          },
+          "originAbsenceIndependentOfCDN": true
+        },
+        "disposition": "Variable provider cache delivery; unchanged application source; not a fix or global revocation proof."
+      },
+      {
+        "caseId": "VOCLE-776",
+        "previousPassed": false,
+        "currentPassed": true,
+        "actual": {
+          "exists": false,
+          "result": "not found",
+          "delivery": {
+            "status": 404,
+            "contentType": "application/json",
+            "bytes": 444,
+            "sha256": "a0008f97dba8f9d4bf9bd643efbc8780510593ea4a901b944be5f8229a5d25da",
+            "redirected": false
+          },
+          "originAbsenceIndependentOfCDN": true
+        },
+        "disposition": "Variable provider cache delivery; unchanged application source; not a fix or global revocation proof."
+      }
+    ]
+  },
+  "applicationFixesPerformed": false
+}

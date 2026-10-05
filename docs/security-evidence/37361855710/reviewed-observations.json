@@ -1,0 +1,3154 @@
+{
+  "runId": 37361855710,
+  "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "rawResultsSha256": "8725dd7b963a88767f429d5aed319bd445e8e82604707a89b4b498210f482524",
+  "observations": [
+    {
+      "caseId": "VOCLE-094",
+      "name": "cross-channel reply by A",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Baseline group, space, and handoff security",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-098",
+      "name": "cross-channel reply by B",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Baseline group, space, and handoff security",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-099",
+      "name": "handoff foreign channelId",
+      "rootCause": "S2",
+      "reportIssueId": "VR-S2",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Baseline group, space, and handoff security",
+      "review": "createHandoff validates sender/recipient membership in the supplied space, but persists channelId without loading the channel and checking its space/access. Independent ObjectId refs provide no relational check.",
+      "impactLimit": "Invalid cross-space association is demonstrated; foreign-channel delivery is not. The system-message helper is defined but is not called by the observed submit/acknowledge paths.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:createHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:channelId",
+        "medcollab-backend/src/middleware/validate.js:validateCreateHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-110",
+      "name": "message text number PUT",
+      "rootCause": "H1",
+      "reportIssueId": "VR-H1",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Baseline group, space, and handoff security",
+      "review": "trim runs before type validation on the edit route; numbers/objects become strings. POST already has strict string checks.",
+      "impactLimit": "Input consistency and client/error clarity; no ownership bypass.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.routes.js:body('content.text')",
+        "medcollab-backend/src/features/messages/message.controller.js:editMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-112",
+      "name": "message text object PUT",
+      "rootCause": "H1",
+      "reportIssueId": "VR-H1",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Baseline group, space, and handoff security",
+      "review": "trim runs before type validation on the edit route; numbers/objects become strings. POST already has strict string checks.",
+      "impactLimit": "Input consistency and client/error clarity; no ownership bypass.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.routes.js:body('content.text')",
+        "medcollab-backend/src/features/messages/message.controller.js:editMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-159",
+      "name": "read direct-message member metadata",
+      "rootCause": "S3",
+      "reportIssueId": "VR-S3",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedMemberIds": [
+            "6ac3f720d1d8be318052c18f",
+            "6ac3f720d1d8be318052c198"
+          ],
+          "returnedMemberFields": [
+            "_id",
+            "availability",
+            "avatarUrl",
+            "name",
+            "role",
+            "speciality"
+          ]
+        }
+      },
+      "scope": "Direct Messages",
+      "review": "These handlers implement separate incomplete authorization: detail and pins check space membership without the private-channel boundary, while member listing has no resource-access check. Existing message routes use a stronger shared access helper.",
+      "impactLimit": "Outsider DM member metadata and excluded private-channel detail/member metadata are returned, and an excluded ordinary member mutates private pins. Exact fields/canaries in retained results bound the claim; arbitrary full pinned-body disclosure is not separately claimed.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelById",
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelMembers",
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-171",
+      "name": "self DM creates caller-only self notes",
+      "rootCause": "BASELINE_SEMANTICS",
+      "reportIssueId": "VR-INFRA-01",
+      "classification": "TEST/INFRASTRUCTURE ISSUE",
+      "severity": "INFORMATIONAL",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Direct Messages",
+      "review": "Resolved by cac620eef477addda94e6756e36f6aebecc374ab and confirmed in37362263669; not an application defect.",
+      "impactLimit": "No application defect.",
+      "sources": [],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-193",
+      "name": "foreign direct-message ID reply",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Direct Messages",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-197",
+      "name": "foreign direct-message ID reply",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Direct Messages",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-267",
+      "name": "handoff draft inbox privacy ?type=received&status=draft",
+      "rootCause": "S4",
+      "reportIssueId": "VR-S4",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "draftDisclosed": true
+        }
+      },
+      "scope": "Extended API",
+      "review": "An explicit received draft filter survives getMyHandoffs. Detail treats receiver status-independent as a participant; search selects handoffs from member spaces without sender/draft/participant visibility constraints. Constants and submit comments establish draft privacy.",
+      "impactLimit": "Matching synthetic draft canaries and detail responses confirm pre-submission disclosure. Attachment download and production clinical content were not tested.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getMyHandoffs",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getHandoffById",
+        "medcollab-backend/src/features/search/search.controller.js:globalSearch",
+        "medcollab-backend/src/constants/index.js:DRAFT"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-268",
+      "name": "handoff draft direct receiver privacy",
+      "rootCause": "S4",
+      "reportIssueId": "VR-S4",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedHandoffId": "7ec000000000000000000008",
+          "returnedHandoffFields": [
+            "__v",
+            "_id",
+            "acknowledgedAt",
+            "acknowledgementNote",
+            "assignmentHistory",
+            "channelId",
+            "createdAt",
+            "fromUserId",
+            "patients",
+            "shiftDate",
+            "shiftSummary",
+            "shiftType",
+            "spaceId",
+            "status",
+            "submittedAt",
+            "toUserId",
+            "updatedAt",
+            "writeBackNotes"
+          ]
+        }
+      },
+      "scope": "Extended API",
+      "review": "An explicit received draft filter survives getMyHandoffs. Detail treats receiver status-independent as a participant; search selects handoffs from member spaces without sender/draft/participant visibility constraints. Constants and submit comments establish draft privacy.",
+      "impactLimit": "Matching synthetic draft canaries and detail responses confirm pre-submission disclosure. Attachment download and production clinical content were not tested.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getMyHandoffs",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getHandoffById",
+        "medcollab-backend/src/features/search/search.controller.js:globalSearch",
+        "medcollab-backend/src/constants/index.js:DRAFT"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-270",
+      "name": "search draft handoff privacy",
+      "rootCause": "S4",
+      "reportIssueId": "VR-S4",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "draftDisclosed": true
+        }
+      },
+      "scope": "Extended API",
+      "review": "An explicit received draft filter survives getMyHandoffs. Detail treats receiver status-independent as a participant; search selects handoffs from member spaces without sender/draft/participant visibility constraints. Constants and submit comments establish draft privacy.",
+      "impactLimit": "Matching synthetic draft canaries and detail responses confirm pre-submission disclosure. Attachment download and production clinical content were not tested.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getMyHandoffs",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getHandoffById",
+        "medcollab-backend/src/features/search/search.controller.js:globalSearch",
+        "medcollab-backend/src/constants/index.js:DRAFT"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-271",
+      "name": "search draft handoff privacy",
+      "rootCause": "S4",
+      "reportIssueId": "VR-S4",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "draftDisclosed": true
+        }
+      },
+      "scope": "Extended API",
+      "review": "An explicit received draft filter survives getMyHandoffs. Detail treats receiver status-independent as a participant; search selects handoffs from member spaces without sender/draft/participant visibility constraints. Constants and submit comments establish draft privacy.",
+      "impactLimit": "Matching synthetic draft canaries and detail responses confirm pre-submission disclosure. Attachment download and production clinical content were not tested.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getMyHandoffs",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:getHandoffById",
+        "medcollab-backend/src/features/search/search.controller.js:globalSearch",
+        "medcollab-backend/src/constants/index.js:DRAFT"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-272",
+      "name": "private group excluded member read ",
+      "rootCause": "S5",
+      "reportIssueId": "VR-S3",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedChannelId": "7ec000000000000000000003",
+          "returnedChannelFields": [
+            "__v",
+            "_id",
+            "createdAt",
+            "createdBy",
+            "description",
+            "directKey",
+            "isArchived",
+            "isPrivate",
+            "members",
+            "name",
+            "onlyAdminsCanPost",
+            "pinnedMessages",
+            "position",
+            "spaceId",
+            "type",
+            "updatedAt"
+          ]
+        }
+      },
+      "scope": "Extended API",
+      "review": "These handlers implement separate incomplete authorization: detail and pins check space membership without the private-channel boundary, while member listing has no resource-access check. Existing message routes use a stronger shared access helper.",
+      "impactLimit": "Outsider DM member metadata and excluded private-channel detail/member metadata are returned, and an excluded ordinary member mutates private pins. Exact fields/canaries in retained results bound the claim; arbitrary full pinned-body disclosure is not separately claimed.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelById",
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelMembers",
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-273",
+      "name": "private group excluded member read /members",
+      "rootCause": "S3",
+      "reportIssueId": "VR-S3",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedMemberIds": [
+            "6ac3f720d1d8be318052c18f"
+          ],
+          "returnedMemberFields": [
+            "_id",
+            "availability",
+            "avatarUrl",
+            "name",
+            "role",
+            "speciality"
+          ]
+        }
+      },
+      "scope": "Extended API",
+      "review": "These handlers implement separate incomplete authorization: detail and pins check space membership without the private-channel boundary, while member listing has no resource-access check. Existing message routes use a stronger shared access helper.",
+      "impactLimit": "Outsider DM member metadata and excluded private-channel detail/member metadata are returned, and an excluded ordinary member mutates private pins. Exact fields/canaries in retained results bound the claim; arbitrary full pinned-body disclosure is not separately claimed.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelById",
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelMembers",
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-275",
+      "name": "direct body foreign thread binding 7ec000000000000000000007",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "foreignBindingPersisted": true,
+          "foreignParentReplyCount": 1
+        }
+      },
+      "scope": "Cross-module",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-276",
+      "name": "direct body foreign thread binding 7ec00000000000000000000e",
+      "rootCause": "S1",
+      "reportIssueId": "VR-S1",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "foreignBindingPersisted": true,
+          "foreignParentReplyCount": 1
+        }
+      },
+      "scope": "Cross-module",
+      "review": "replyToThread assigns URL id to body.threadId; sendMessage authorizes only the destination channel, persists that threadId and asynchronously updates the foreign parent by ID. Mongoose refs do not enforce channel containment. getThread also queries children by threadId without a channel predicate.",
+      "impactLimit": "Cross-context persisted child binding and foreign reply bookkeeping are proven. Additional mixed-thread disclosure is a source-supported investigation lead, not a separately executed disclosure.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/messages/message.controller.js:replyToThread",
+        "medcollab-backend/src/features/messages/message.controller.js:getThread",
+        "medcollab-backend/src/utils/channelAccess.js:assertMessageInChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-301",
+      "name": "upload rejects wrong field",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        }
+      },
+      "scope": "Media",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-302",
+      "name": "upload rejects multiple files",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        }
+      },
+      "scope": "Media",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-303",
+      "name": "upload rejects forbidden MIME",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        }
+      },
+      "scope": "Media",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-304",
+      "name": "upload rejects octet forbidden suffix",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        }
+      },
+      "scope": "Media",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-306",
+      "name": "upload rejects empty bytes",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        }
+      },
+      "scope": "Media",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-307",
+      "name": "upload rejects inert MIME extension mismatch",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        }
+      },
+      "scope": "Media",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-313",
+      "name": "media canonical owner containment single",
+      "rootCause": "S6",
+      "reportIssueId": "VR-S6",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        }
+      },
+      "scope": "Media",
+      "review": "Express decoding plus decodeURIComponent and substring owner matching occur before path.join normalizes dot segments. A path containing the caller ownership substring can normalize to a different user file.",
+      "impactLimit": "Exact synthetic foreign message/avatar files are deleted after independently verified existence. Outside-upload arbitrary filesystem deletion and real Cloudinary cross-user destruction are not demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:deleteLocalUpload",
+        "medcollab-backend/src/features/media/media.routes.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-314",
+      "name": "media canonical owner containment double",
+      "rootCause": "S6",
+      "reportIssueId": "VR-S6",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        }
+      },
+      "scope": "Media",
+      "review": "Express decoding plus decodeURIComponent and substring owner matching occur before path.join normalizes dot segments. A path containing the caller ownership substring can normalize to a different user file.",
+      "impactLimit": "Exact synthetic foreign message/avatar files are deleted after independently verified existence. Outside-upload arbitrary filesystem deletion and real Cloudinary cross-user destruction are not demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:deleteLocalUpload",
+        "medcollab-backend/src/features/media/media.routes.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-323",
+      "name": "local upload to authorized message integration",
+      "rootCause": "U1",
+      "reportIssueId": "VR-U1",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        }
+      },
+      "scope": "Media",
+      "review": "Local fallback returns a loopback HTTP URL while sendMessage requires HTTPS and a Cloudinary host. Upload succeeds but an authorized attachment gets400. Intended local beta/mobile contract remains unclear.",
+      "impactLimit": "Likely functional integration mismatch. No authorization bypass or released mobile reproduction is established.",
+      "sources": [
+        "medcollab-backend/src/utils/localMediaStorage.js:getApiBaseUrl",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-339",
+      "name": "socket unauthorized typing_start foreign space",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 1,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": true,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-340",
+      "name": "socket unauthorized typing_stop foreign space",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 1,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": true,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-342",
+      "name": "socket unauthorized typing_start foreign DM",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 2,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": true,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-343",
+      "name": "socket unauthorized typing_stop foreign DM",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 2,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": true,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-345",
+      "name": "socket unauthorized typing_start private group",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 2,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-346",
+      "name": "socket unauthorized typing_stop private group",
+      "rootCause": "S7",
+      "reportIssueId": "VR-S7",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 2,
+          "serverAttributedAttacker": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "The join handler checks canAccessChannel; typing handlers do not. They broadcast to caller-selected channel rooms and personal peer rooms even when attacker join/read is denied.",
+      "impactLimit": "Unauthorized attacker-attributed typing reaches foreign-space, private-channel and DM viewers. Identity spoofing is not demonstrated; the server ignores a forged userId.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-347",
+      "name": "private REST message personal-room audience",
+      "rootCause": "S8",
+      "reportIssueId": "VR-S8",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 1,
+          "fullCanaryDisclosed": true,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "sendMessage derives group recipients from space.members without intersecting private-channel permissions; emitNewMessage sends the full persisted payload to each personal room.",
+      "impactLimit": "An excluded private member receives the exact new-message ID and full synthetic canary despite a REST403 control. External push impact is source-derived only.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/socket/index.js:emitNewMessage",
+        "medcollab-backend/src/services/notification.service.js:notifyNewMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-348",
+      "name": "membership revocation stale channel room before sync",
+      "rootCause": "S9",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 1,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-349",
+      "name": "membership revocation stale channel room after sync",
+      "rootCause": "S9",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "named socket authorization invariant holds",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "quietWindowMs": 1500,
+          "unauthorizedEvents": 1,
+          "authorizedControl": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-355",
+      "name": "opted-out declined replay target denies request before lifecycle handling",
+      "rootCause": "BASELINE_SEMANTICS",
+      "reportIssueId": "VR-INFRA-01",
+      "classification": "TEST/INFRASTRUCTURE ISSUE",
+      "severity": "INFORMATIONAL",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 0 Repair Controls",
+      "review": "Resolved by cac620eef477addda94e6756e36f6aebecc374ab and confirmed in37362263669; not an application defect.",
+      "impactLimit": "No application defect.",
+      "sources": [],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-356",
+      "name": "MSG91 widget fabricated signature cannot issue a session",
+      "rootCause": "AUTH_WIDGET",
+      "reportIssueId": "VR-AUTH-WIDGET",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 1 Authentication and Session Lifecycle",
+      "review": "The widget service decodes a phone from a JWT-shaped token and returns success before its provider verification branch. A nonempty key is checked, but signature, issuer, audience and expiry are not checked on this fast path. The controller subsequently issues application credentials.",
+      "impactLimit": "Unauthenticated identity impersonation is demonstrated against synthetic accounts with a dummy key and outbound traffic disabled. A configured deployed route could permit account takeover; deployment exposure and real-account compromise were not tested.",
+      "sources": [
+        "medcollab-backend/src/services/msg91Widget.service.js:verifyWidgetAccessToken",
+        "medcollab-backend/src/features/auth/auth.controller.js:verifyMsg91Token",
+        "medcollab-backend/src/features/auth/auth.routes.js:verify-msg91-token"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-357",
+      "name": "MSG91 widget expired fabricated token cannot issue a session",
+      "rootCause": "AUTH_WIDGET",
+      "reportIssueId": "VR-AUTH-WIDGET",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 1 Authentication and Session Lifecycle",
+      "review": "The widget service decodes a phone from a JWT-shaped token and returns success before its provider verification branch. A nonempty key is checked, but signature, issuer, audience and expiry are not checked on this fast path. The controller subsequently issues application credentials.",
+      "impactLimit": "Unauthenticated identity impersonation is demonstrated against synthetic accounts with a dummy key and outbound traffic disabled. A configured deployed route could permit account takeover; deployment exposure and real-account compromise were not tested.",
+      "sources": [
+        "medcollab-backend/src/services/msg91Widget.service.js:verifyWidgetAccessToken",
+        "medcollab-backend/src/features/auth/auth.controller.js:verifyMsg91Token",
+        "medcollab-backend/src/features/auth/auth.routes.js:verify-msg91-token"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-398",
+      "name": "public profile preference and activity field policy review",
+      "rootCause": "PUBLIC_PROFILE",
+      "reportIssueId": "VR-PUBLIC-PROFILE",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Policy review: foreign public profiles should minimize notification preferences and activity timestamps; authenticated foreign profile reads themselves remain supported."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedFields": [
+            "_id",
+            "availability",
+            "avatarUrl",
+            "bio",
+            "institution",
+            "isOnboarded",
+            "isVerified",
+            "lastSeenAt",
+            "name",
+            "notifications",
+            "role",
+            "speciality"
+          ],
+          "identityMatched": true,
+          "preferenceFieldsExposed": [
+            "allowMessageRequestsFromAnyone",
+            "emergencyAlerts",
+            "handoffs",
+            "mentions",
+            "newMessages",
+            "quietHoursEnd",
+            "quietHoursStart",
+            "readReceiptsEnabled"
+          ]
+        }
+      },
+      "scope": "Phase 2 Users and Profiles",
+      "review": "toPublicProfile includes notifications and lastSeenAt in authenticated foreign-profile responses; phone/device minimization controls pass.",
+      "impactLimit": "Metadata privacy policy; sensitivity determines severity.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.model.js:toPublicProfile",
+        "medcollab-backend/src/features/users/user.controller.js:getUserById"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-421",
+      "name": "search foreign space membership inference policy",
+      "rootCause": "SEARCH_SPACE_FILTER",
+      "reportIssueId": "VR-SEARCH-SPACE-FILTER",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Policy review: a caller denied foreign space detail should not infer that space membership from a known-user search filter."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedIds": [
+            "6ac3f720d1d8be318052c19e"
+          ]
+        }
+      },
+      "scope": "Phase 2 Users and Profiles",
+      "review": "Search loads arbitrary space members and intersects them with known IDs without caller space membership. A returned known user allows limited membership inference despite foreign-space detail403.",
+      "impactLimit": "Limited organizational membership metadata; policy-dependent.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.controller.js:searchUsers"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-429",
+      "name": "Needl excluded same-space member preview confidentiality",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "reportIssueId": "VR-N1-NEEDL-ACCESS",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Needl must expose the synthetic root/preview only while the caller has access to its active channel and undeleted message. Successful member and private message-read denial controls are required."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedCanary": true,
+          "privateMessageReadDenied": true,
+          "privateRootReturned": true,
+          "previewMatched": true
+        }
+      },
+      "scope": "Phase 2 Users and Profiles",
+      "review": "getNeedl ORs all channels in active member spaces with any channel containing the caller. The first branch ignores privacy; the second trusts retained membership after space removal.",
+      "impactLimit": "Exact root IDs and matching private previews survive exclusion/real leave/removal with independent message-read403 controls. Full thread/attachment download is not separately demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.controller.js:getNeedl",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-434",
+      "name": "Needl removed private-channel member preview confidentiality",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "reportIssueId": "VR-N1-NEEDL-ACCESS",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Needl must expose the synthetic root/preview only while the caller has access to its active channel and undeleted message. Successful member and private message-read denial controls are required."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedCanary": true,
+          "privateMessageReadDenied": true,
+          "privateRootReturned": true,
+          "previewMatched": true
+        }
+      },
+      "scope": "Phase 2 Users and Profiles",
+      "review": "getNeedl ORs all channels in active member spaces with any channel containing the caller. The first branch ignores privacy; the second trusts retained membership after space removal.",
+      "impactLimit": "Exact root IDs and matching private previews survive exclusion/real leave/removal with independent message-read403 controls. Full thread/attachment download is not separately demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.controller.js:getNeedl",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-503",
+      "name": "leave Needl excludes former private root",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "reportIssueId": "VR-N1-NEEDL-ACCESS",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "A former space member must not receive a private root preview through retained channel.members after REST space membership is revoked."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "postRevocationMessageReadDenied": true,
+          "ownerNeedlCanaryObserved": true,
+          "revokedPrivateRootReturned": true
+        }
+      },
+      "scope": "Phase 3 Space Lifecycle",
+      "review": "getNeedl ORs all channels in active member spaces with any channel containing the caller. The first branch ignores privacy; the second trusts retained membership after space removal.",
+      "impactLimit": "Exact root IDs and matching private previews survive exclusion/real leave/removal with independent message-read403 controls. Full thread/attachment download is not separately demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.controller.js:getNeedl",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-509",
+      "name": "remove Needl excludes former private root",
+      "rootCause": "N1_NEEDL_ACCESS",
+      "reportIssueId": "VR-N1-NEEDL-ACCESS",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "A former space member must not receive a private root preview through retained channel.members after REST space membership is revoked."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "postRevocationMessageReadDenied": true,
+          "ownerNeedlCanaryObserved": true,
+          "revokedPrivateRootReturned": true
+        }
+      },
+      "scope": "Phase 3 Space Lifecycle",
+      "review": "getNeedl ORs all channels in active member spaces with any channel containing the caller. The first branch ignores privacy; the second trusts retained membership after space removal.",
+      "impactLimit": "Exact root IDs and matching private previews survive exclusion/real leave/removal with independent message-read403 controls. Full thread/attachment download is not separately demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/users/user.controller.js:getNeedl",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-527",
+      "name": "group DM inactive opted-in target should be unavailable",
+      "rootCause": "GROUP_TARGET_STATE",
+      "reportIssueId": "VR-GROUP-TARGET-STATE",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedGroupId": "6ac3f88b9807c41c7085d2de",
+          "unavailableTargetPersisted": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Group target lookup selects only ID/name; handoff reassignment checks Space membership without active/onboarded User eligibility. They persist inactive/incomplete recipients.",
+      "impactLimit": "Data integrity/availability concern; intended treatment of historical/inactive staff requires developer review.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:createGroupDM",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:reassignHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-528",
+      "name": "group DM incomplete opted-in target should be unavailable",
+      "rootCause": "GROUP_TARGET_STATE",
+      "reportIssueId": "VR-GROUP-TARGET-STATE",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          404
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "returnedGroupId": "6ac3f88c9807c41c7085d2df",
+          "unavailableTargetPersisted": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Group target lookup selects only ID/name; handoff reassignment checks Space membership without active/onboarded User eligibility. They persist inactive/incomplete recipients.",
+      "impactLimit": "Data integrity/availability concern; intended treatment of historical/inactive staff requires developer review.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:createGroupDM",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:reassignHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-529",
+      "name": "group DM request-eligible unaccepted peer messaging consent policy",
+      "rootCause": "GROUP_CONSENT",
+      "reportIssueId": "VR-GROUP-CONSENT",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Consent policy review: request eligibility without acceptance should not automatically grant full group message access; current source permits group creation and this is recorded for product review."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "unacceptedGroupSendStatus": 201,
+          "unacceptedGroupReadStatus": 200,
+          "pendingRequestUnchanged": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Group creation explicitly accepts request eligibility, then shared direct-channel membership authorizes a one-to-one DM while the original request remains pending.",
+      "impactLimit": "Potential consent/privacy bypass only if group-mediated consent is not intended; do not relabel source-supported policy as a proven vulnerability.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:createGroupDM",
+        "medcollab-backend/src/utils/knownUsers.js:canMessageUser",
+        "medcollab-backend/src/utils/knownUsers.js:canRequestMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-530",
+      "name": "group membership promotes unaccepted pair to one-to-one DM policy",
+      "rootCause": "GROUP_CONSENT",
+      "reportIssueId": "VR-GROUP-CONSENT",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false,
+        "semanticInvariant": "Consent policy review: adding a pending peer to a group should not itself replace one-to-one acceptance. The original pending request must remain unaccepted."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "pendingRequestBefore": "pending"
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Group creation explicitly accepts request eligibility, then shared direct-channel membership authorizes a one-to-one DM while the original request remains pending.",
+      "impactLimit": "Potential consent/privacy bypass only if group-mediated consent is not intended; do not relabel source-supported policy as a proven vulnerability.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:createGroupDM",
+        "medcollab-backend/src/utils/knownUsers.js:canMessageUser",
+        "medcollab-backend/src/utils/knownUsers.js:canRequestMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-572",
+      "name": "handoff reassign inactive member should be unavailable",
+      "rootCause": "HANDOFF_TARGET_STATE",
+      "reportIssueId": "VR-GROUP-TARGET-STATE",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "inactiveAssigneePersisted": true,
+          "assignmentHistoryCount": 1,
+          "inactiveRecipientNotified": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Group target lookup selects only ID/name; handoff reassignment checks Space membership without active/onboarded User eligibility. They persist inactive/incomplete recipients.",
+      "impactLimit": "Data integrity/availability concern; intended treatment of historical/inactive staff requires developer review.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:createGroupDM",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:reassignHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-574",
+      "name": "removed handoff participant notes lifecycle policy",
+      "rootCause": "REMOVED_HANDOFF_PARTY",
+      "reportIssueId": "VR-REMOVED-HANDOFF-PARTY",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Lifecycle policy review: removed participants retain source-authorized handoff writes despite REST space revocation. This supported behavior requires an explicit audit/continuity policy decision."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "removedPartyWriteAccepted": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Handlers authorize current sender/assignee IDs without current space membership. Synthetic removed parties write despite space-read revocation.",
+      "impactLimit": "Operational lifecycle authority with policy-dependent security implications.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:addHandoffNote",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:reassignHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-575",
+      "name": "removed handoff participant reassign lifecycle policy",
+      "rootCause": "REMOVED_HANDOFF_PARTY",
+      "reportIssueId": "VR-REMOVED-HANDOFF-PARTY",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Lifecycle policy review: removed participants retain source-authorized handoff writes despite REST space revocation. This supported behavior requires an explicit audit/continuity policy decision."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "removedPartyWriteAccepted": true
+        }
+      },
+      "scope": "Phase 3 Consent and Handoffs",
+      "review": "Handlers authorize current sender/assignee IDs without current space membership. Synthetic removed parties write despite space-read revocation.",
+      "impactLimit": "Operational lifecycle authority with policy-dependent security implications.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:addHandoffNote",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:reassignHandoff"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-594",
+      "name": "private pin excluded same-space peer denied",
+      "rootCause": "N2_PRIVATE_PIN",
+      "reportIssueId": "VR-S3",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "These handlers implement separate incomplete authorization: detail and pins check space membership without the private-channel boundary, while member listing has no resource-access check. Existing message routes use a stronger shared access helper.",
+      "impactLimit": "Outsider DM member metadata and excluded private-channel detail/member metadata are returned, and an excluded ordinary member mutates private pins. Exact fields/canaries in retained results bound the claim; arbitrary full pinned-body disclosure is not separately claimed.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelById",
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelMembers",
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-595",
+      "name": "private unpin excluded same-space peer denied",
+      "rootCause": "N2_PRIVATE_PIN",
+      "reportIssueId": "VR-S3",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedPinPersisted": true
+        }
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "These handlers implement separate incomplete authorization: detail and pins check space membership without the private-channel boundary, while member listing has no resource-access check. Existing message routes use a stronger shared access helper.",
+      "impactLimit": "Outsider DM member metadata and excluded private-channel detail/member metadata are returned, and an excluded ordinary member mutates private pins. Exact fields/canaries in retained results bound the claim; arbitrary full pinned-body disclosure is not separately claimed.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelById",
+        "medcollab-backend/src/features/channels/channel.controller.js:getChannelMembers",
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-599",
+      "name": "archived channel pin policy",
+      "rootCause": "ARCHIVED_PIN",
+      "reportIssueId": "VR-ARCHIVED-PIN",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          403
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": false,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "Pin handlers omit the archive guard used by messages/reactions and mutate an archived channel.",
+      "impactLimit": "Archive consistency; no new outsider disclosure established.",
+      "sources": [
+        "medcollab-backend/src/features/channels/channel.controller.js:pinMessage",
+        "medcollab-backend/src/features/channels/channel.controller.js:unpinMessage",
+        "medcollab-backend/src/utils/channelAccess.js:canAccessChannel"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-603",
+      "name": "mention notification foreign outsider recipient boundary",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "reportIssueId": "VR-N3-MENTION-AUDIENCE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedMentionRecipientObserved": true,
+          "mentionRecipients": [
+            "6ac3f720d1d8be318052c19e"
+          ],
+          "mentionPreviewMatched": true
+        }
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "notifyMention filters only sender and current viewers. Caller-supplied recipient IDs are not intersected with channel/space permissions before notification persistence and personal-room emission.",
+      "impactLimit": "Matching preview canaries are stored for foreign/private-excluded users and delivered over local sockets. Real Firebase/provider push was disabled.",
+      "sources": [
+        "medcollab-backend/src/services/notification.service.js:notifyMention",
+        "medcollab-backend/src/services/notification.service.js:sendNotification",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-604",
+      "name": "mention notification private excluded member recipient boundary",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "reportIssueId": "VR-N3-MENTION-AUDIENCE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedMentionRecipientObserved": true,
+          "mentionRecipients": [
+            "6ac3f720d1d8be318052c198"
+          ],
+          "mentionPreviewMatched": true
+        }
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "notifyMention filters only sender and current viewers. Caller-supplied recipient IDs are not intersected with channel/space permissions before notification persistence and personal-room emission.",
+      "impactLimit": "Matching preview canaries are stored for foreign/private-excluded users and delivered over local sockets. Real Firebase/provider push was disabled.",
+      "sources": [
+        "medcollab-backend/src/services/notification.service.js:notifyMention",
+        "medcollab-backend/src/services/notification.service.js:sendNotification",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-605",
+      "name": "mention notification inactive identity recipient boundary",
+      "rootCause": "INACTIVE_MENTION",
+      "reportIssueId": "VR-INACTIVE-MENTION",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "authorizedMentionRecipientObserved": true,
+          "mentionRecipients": [
+            "6ac3f720d1d8be318052c1af"
+          ],
+          "mentionPreviewMatched": true
+        }
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "Recipient active state is not checked before notification persistence; the inactive fixture receives a preview record but cannot authenticate.",
+      "impactLimit": "Inactive data lifecycle, not demonstrated readable disclosure.",
+      "sources": [
+        "medcollab-backend/src/services/notification.service.js:notifyMention",
+        "medcollab-backend/src/services/notification.service.js:sendNotification"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-611",
+      "name": "support bug non-string title",
+      "rootCause": "SUPPORT_TYPE",
+      "reportIssueId": "VR-SUPPORT-TYPE",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "Optional .trim() is called on object titles before checking string type. Each controller returns500; state and service remain healthy.",
+      "impactLimit": "Error contract/reliability; no persistence or ownership bypass.",
+      "sources": [
+        "medcollab-backend/src/features/support/support.controller.js:createBug",
+        "medcollab-backend/src/features/support/support.controller.js:createFeature",
+        "medcollab-backend/src/features/support/support.controller.js:createFeedback"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-618",
+      "name": "support feature non-string title",
+      "rootCause": "SUPPORT_TYPE",
+      "reportIssueId": "VR-SUPPORT-TYPE",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "Optional .trim() is called on object titles before checking string type. Each controller returns500; state and service remain healthy.",
+      "impactLimit": "Error contract/reliability; no persistence or ownership bypass.",
+      "sources": [
+        "medcollab-backend/src/features/support/support.controller.js:createBug",
+        "medcollab-backend/src/features/support/support.controller.js:createFeature",
+        "medcollab-backend/src/features/support/support.controller.js:createFeedback"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-625",
+      "name": "support feedback non-string title",
+      "rootCause": "SUPPORT_TYPE",
+      "reportIssueId": "VR-SUPPORT-TYPE",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "successfulEnvelope": false,
+        "deniedWritesMustPreserveState": true,
+        "semanticCheck": false
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": true,
+        "jsonResponse": true,
+        "evidence": {}
+      },
+      "scope": "Phase 4 Bounded HTTP",
+      "review": "Optional .trim() is called on object titles before checking string type. Each controller returns500; state and service remain healthy.",
+      "impactLimit": "Error contract/reliability; no persistence or ownership bypass.",
+      "sources": [
+        "medcollab-backend/src/features/support/support.controller.js:createBug",
+        "medcollab-backend/src/features/support/support.controller.js:createFeature",
+        "medcollab-backend/src/features/support/support.controller.js:createFeedback"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-641",
+      "name": "developer seed binds caller despite forged body seed-notifications",
+      "rootCause": "DEV_NOTIFICATION_REFERENCES",
+      "reportIssueId": "VR-DEV-NOTIFICATION-REFERENCES",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "Developer writes require the enabled configuration and an active authenticated caller; body identity/resource fields cannot redirect the write."
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "responseValidationFields": [
+            "referenceId",
+            "referenceType"
+          ],
+          "notificationRecipients": []
+        }
+      },
+      "scope": "Developer and Platform HTTP",
+      "review": "Sample records omit required referenceId/referenceType; Mongoose rejects400 before any notification persists.",
+      "impactLimit": "Development helper reliability only; configuration/auth denials pass.",
+      "sources": [
+        "medcollab-backend/src/features/dev/dev.routes.js:seed-notifications",
+        "medcollab-backend/src/features/notifications/notification.model.js:referenceType"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-653",
+      "name": "connected token expiry contrasted with fresh connection",
+      "rootCause": "SOCKET_EXPIRY_POLICY",
+      "reportIssueId": "VR-SOCKET-EXPIRY-POLICY",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Record documented handshake-only token expiry: expired tokens reject REST and fresh sockets; ongoing event writes require a session-expiry policy decision.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Record documented handshake-only token expiry: expired tokens reject REST and fresh sockets; ongoing event writes require a session-expiry policy decision.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "expiredRestRejected": true,
+          "freshHandshakeRejected": true,
+          "eventsAfterExpiry": 1,
+          "writeAfterExpiry": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Source documents handshake-only authentication; established socket writes continue after token expiry while fresh REST/socket authentication denies.",
+      "impactLimit": "Policy-dependent session duration; no stolen-token attack was executed.",
+      "sources": [
+        "medcollab-backend/src/socket/index.js:initSocket",
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-654",
+      "name": "deactivation after connection blocks availability",
+      "rootCause": "R1_ACTIVE_SOCKET",
+      "reportIssueId": "VR-R1-ACTIVE-SOCKET",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Deactivated users must lose protected socket actions even on an existing connection.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Deactivated users must lose protected socket actions even on an existing connection.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "restAndFreshHandshakeRejected": true,
+          "inactiveWritePersisted": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Handshake authentication loads active User once. Established handlers retain socket identity without active-user revalidation, so deactivation affects fresh requests/connections but not existing actions.",
+      "impactLimit": "Protected join acknowledgement and actual availability DB writes persist after synthetic deactivation. Other event types and production deployment were not exhaustively tested.",
+      "sources": [
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket",
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:registerPresenceHandlers"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-655",
+      "name": "deactivation after connection blocks join",
+      "rootCause": "R1_ACTIVE_SOCKET",
+      "reportIssueId": "VR-R1-ACTIVE-SOCKET",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Deactivated users must lose protected socket actions even on an existing connection.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Deactivated users must lose protected socket actions even on an existing connection.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "restAndFreshHandshakeRejected": true,
+          "inactiveJoinAcknowledged": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Handshake authentication loads active User once. Established handlers retain socket identity without active-user revalidation, so deactivation affects fresh requests/connections but not existing actions.",
+      "impactLimit": "Protected join acknowledgement and actual availability DB writes persist after synthetic deactivation. Other event types and production deployment were not exhaustively tested.",
+      "sources": [
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket",
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:registerPresenceHandlers"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-659",
+      "name": "removed space member presence before sync",
+      "rootCause": "R2_SPACE_PRESENCE",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Removed members must not receive subsequent space presence, including after explicit room sync.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Removed members must not receive subsequent space presence, including after explicit room sync.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "removedRecipientEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-660",
+      "name": "removed space member presence after sync",
+      "rootCause": "R2_SPACE_PRESENCE",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Removed members must not receive subsequent space presence, including after explicit room sync.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Removed members must not receive subsequent space presence, including after explicit room sync.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "removedRecipientEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-662",
+      "name": "private channel membership revocation evicts edit audience",
+      "rootCause": "S9",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "A member removed from a private channel must not receive future edits through a previously joined room.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "A member removed from a private channel must not receive future edits through a previously joined room.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "eventsAfterRevocation": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-663",
+      "name": "cached DM typing recipients respect participant removal",
+      "rootCause": "R3_TYPING_CACHE",
+      "reportIssueId": "VR-R3-TYPING-CACHE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Typing personal-room recipient caches must not deliver to a removed DM participant after channel leave.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Typing personal-room recipient caches must not deliver to a removed DM participant after channel leave.",
+          "quietWindowMs": 1000,
+          "personalRoomCacheControl": true,
+          "authorizedControl": true,
+          "removedPeerEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "typingMembers caches IDs for60 seconds and lacks invalidation/live recipient checks. A removed peer can receive personal-room typing after leaving the channel room.",
+      "impactLimit": "Post-removal typing is observed within the cache lifetime. Long-duration eviction/load/multi-instance behavior is untested.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:peerUserIds"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-672",
+      "name": "malformed null join_channel cannot escape handler",
+      "rootCause": "SOCKET_ASYNC_PAYLOAD",
+      "reportIssueId": "VR-SOCKET-ASYNC-PAYLOAD",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "processExited": false,
+          "exitCode": null,
+          "diagnostics": {
+            "uncaughtExceptions": 0,
+            "unhandledRejections": 1
+          },
+          "fixtureAvailabilityPreserved": true,
+          "childHealthStatus": 200,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Async listener argument destructuring happens before try/catch. The synthetic child logs an unhandled rejection but remains healthy and delivers a subsequent edit.",
+      "impactLimit": "Reliability hardening; distinct from synchronous process-exit evidence.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:registerPresenceHandlers",
+        "medcollab-backend/src/server.js:unhandledRejection"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-673",
+      "name": "malformed null leave_channel cannot escape handler",
+      "rootCause": "R4_SOCKET_CRASH",
+      "reportIssueId": "VR-R4-SOCKET-CRASH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "processExited": true,
+          "exitCode": 1,
+          "diagnostics": {
+            "uncaughtExceptions": 1,
+            "unhandledRejections": 0
+          },
+          "fixtureAvailabilityPreserved": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Synchronous listener signatures destructure incoming payloads before any validation/try-catch. Null throws an uncaught exception; the actual supervised child exits1.",
+      "impactLimit": "A single authenticated malformed packet kills the real test-mode backend child. Production exposure is not executed, but the synchronous handler mechanism is source-confirmed.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/server.js:uncaughtException"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-674",
+      "name": "malformed null typing_start cannot escape handler",
+      "rootCause": "R4_SOCKET_CRASH",
+      "reportIssueId": "VR-R4-SOCKET-CRASH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "processExited": true,
+          "exitCode": 1,
+          "diagnostics": {
+            "uncaughtExceptions": 1,
+            "unhandledRejections": 0
+          },
+          "fixtureAvailabilityPreserved": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Synchronous listener signatures destructure incoming payloads before any validation/try-catch. Null throws an uncaught exception; the actual supervised child exits1.",
+      "impactLimit": "A single authenticated malformed packet kills the real test-mode backend child. Production exposure is not executed, but the synchronous handler mechanism is source-confirmed.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/server.js:uncaughtException"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-675",
+      "name": "malformed null typing_stop cannot escape handler",
+      "rootCause": "R4_SOCKET_CRASH",
+      "reportIssueId": "VR-R4-SOCKET-CRASH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "processExited": true,
+          "exitCode": 1,
+          "diagnostics": {
+            "uncaughtExceptions": 1,
+            "unhandledRejections": 0
+          },
+          "fixtureAvailabilityPreserved": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Synchronous listener signatures destructure incoming payloads before any validation/try-catch. Null throws an uncaught exception; the actual supervised child exits1.",
+      "impactLimit": "A single authenticated malformed packet kills the real test-mode backend child. Production exposure is not executed, but the synchronous handler mechanism is source-confirmed.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/server.js:uncaughtException"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-676",
+      "name": "malformed null update_availability cannot escape handler",
+      "rootCause": "SOCKET_ASYNC_PAYLOAD",
+      "reportIssueId": "VR-SOCKET-ASYNC-PAYLOAD",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "processExited": false,
+          "exitCode": null,
+          "diagnostics": {
+            "uncaughtExceptions": 0,
+            "unhandledRejections": 1
+          },
+          "fixtureAvailabilityPreserved": true,
+          "childHealthStatus": 200,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "Async listener argument destructuring happens before try/catch. The synthetic child logs an unhandled rejection but remains healthy and delivers a subsequent edit.",
+      "impactLimit": "Reliability hardening; distinct from synchronous process-exit evidence.",
+      "sources": [
+        "medcollab-backend/src/socket/handlers/message.handler.js:registerMessageHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:registerPresenceHandlers",
+        "medcollab-backend/src/server.js:unhandledRejection"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-678",
+      "name": "transport recovery revalidates membership removal",
+      "rootCause": "R5_RECOVERY_AUTH",
+      "reportIssueId": "VR-R5-RECOVERY-AUTH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "recovery": {
+            "authenticated": true,
+            "recovered": true,
+            "identityMatches": false
+          },
+          "deniedFreshControl": true,
+          "replayedProtectedEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "connectionStateRecovery.skipMiddlewares=true restores/replays protected rooms without checking current identity validity or resource membership. Recovered connections also skip handler registration; identity/listener restoration needs developer investigation beyond measured replay.",
+      "impactLimit": "Protected edits replay after space revocation, deactivation and token expiry while independent fresh auth/REST checks deny. Future listener behavior is not fully proven.",
+      "sources": [
+        "medcollab-backend/src/socket/index.js:connectionStateRecovery",
+        "medcollab-backend/src/socket/index.js:initSocket",
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-679",
+      "name": "transport recovery revalidates user deactivation",
+      "rootCause": "R5_RECOVERY_AUTH",
+      "reportIssueId": "VR-R5-RECOVERY-AUTH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "recovery": {
+            "authenticated": true,
+            "recovered": true,
+            "identityMatches": false
+          },
+          "deniedFreshControl": true,
+          "replayedProtectedEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "connectionStateRecovery.skipMiddlewares=true restores/replays protected rooms without checking current identity validity or resource membership. Recovered connections also skip handler registration; identity/listener restoration needs developer investigation beyond measured replay.",
+      "impactLimit": "Protected edits replay after space revocation, deactivation and token expiry while independent fresh auth/REST checks deny. Future listener behavior is not fully proven.",
+      "sources": [
+        "medcollab-backend/src/socket/index.js:connectionStateRecovery",
+        "medcollab-backend/src/socket/index.js:initSocket",
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-680",
+      "name": "transport recovery revalidates expired token",
+      "rootCause": "R5_RECOVERY_AUTH",
+      "reportIssueId": "VR-R5-RECOVERY-AUTH",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "recovery": {
+            "authenticated": true,
+            "recovered": true,
+            "identityMatches": false
+          },
+          "deniedFreshControl": true,
+          "replayedProtectedEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Realtime Lifecycle Regression",
+      "review": "connectionStateRecovery.skipMiddlewares=true restores/replays protected rooms without checking current identity validity or resource membership. Recovered connections also skip handler registration; identity/listener restoration needs developer investigation beyond measured replay.",
+      "impactLimit": "Protected edits replay after space revocation, deactivation and token expiry while independent fresh auth/REST checks deny. Future listener behavior is not fully proven.",
+      "sources": [
+        "medcollab-backend/src/socket/index.js:connectionStateRecovery",
+        "medcollab-backend/src/socket/index.js:initSocket",
+        "medcollab-backend/src/middleware/auth.js:authenticateSocket"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-681",
+      "name": "invite join leave must revoke existing channel delivery",
+      "rootCause": "S9",
+      "reportIssueId": "VR-S9",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "A synthetic invite join then leave must remove future protected channel event delivery from the existing connection.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "A synthetic invite join then leave must remove future protected channel event delivery from the existing connection.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "revokedDeliveryEvents": 1,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Lifecycle Cross-module Regression",
+      "review": "Membership mutations do not evict existing sockets. syncSocketSpaceRooms updates space ID arrays and joins current rooms but never leaves obsolete space/channel rooms. Room membership can therefore outlive REST permissions.",
+      "impactLimit": "Matched protected edit/presence packets reach revoked synthetic users while REST denies and owner/remaining-member controls succeed.",
+      "sources": [
+        "medcollab-backend/src/features/spaces/space.controller.js:removeMember",
+        "medcollab-backend/src/features/spaces/space.controller.js:leaveSpace",
+        "medcollab-backend/src/socket/spaceRooms.js:syncSocketSpaceRooms",
+        "medcollab-backend/src/socket/handlers/space.handler.js:registerSpaceHandlers",
+        "medcollab-backend/src/socket/handlers/presence.handler.js:broadcastPresenceUpdate"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-685",
+      "name": "private message mention cannot disclose preview to outsider",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "reportIssueId": "VR-N3-MENTION-AUDIENCE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Private message mentions must not bypass audience authorization through notification previews.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Private message mentions must not bypass audience authorization through notification previews.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "unauthorizedPreviewEvents": 1,
+          "matchingMessageReference": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Lifecycle Cross-module Regression",
+      "review": "notifyMention filters only sender and current viewers. Caller-supplied recipient IDs are not intersected with channel/space permissions before notification persistence and personal-room emission.",
+      "impactLimit": "Matching preview canaries are stored for foreign/private-excluded users and delivered over local sockets. Real Firebase/provider push was disabled.",
+      "sources": [
+        "medcollab-backend/src/services/notification.service.js:notifyMention",
+        "medcollab-backend/src/services/notification.service.js:sendNotification",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-686",
+      "name": "private message mention cannot disclose preview to excluded space member",
+      "rootCause": "N3_MENTION_AUDIENCE",
+      "reportIssueId": "VR-N3-MENTION-AUDIENCE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "httpStatus": "not applicable",
+        "invariant": "Private message mentions must not bypass audience authorization through notification previews.",
+        "authenticatedControl": "required",
+        "eventEvidence": "required"
+      },
+      "actual": {
+        "status": null,
+        "httpStatus": "not applicable",
+        "healthStatus": 200,
+        "invariant": false,
+        "authenticatedControl": true,
+        "eventEvidence": {
+          "requirement": "Private message mentions must not bypass audience authorization through notification previews.",
+          "quietWindowMs": 1000,
+          "authorizedControl": true,
+          "unauthorizedPreviewEvents": 2,
+          "matchingMessageReference": true,
+          "invariantHeld": false
+        },
+        "stateUnchanged": false,
+        "semanticCheckPassed": false
+      },
+      "scope": "Lifecycle Cross-module Regression",
+      "review": "notifyMention filters only sender and current viewers. Caller-supplied recipient IDs are not intersected with channel/space permissions before notification persistence and personal-room emission.",
+      "impactLimit": "Matching preview canaries are stored for foreign/private-excluded users and delivered over local sockets. Real Firebase/provider push was disabled.",
+      "sources": [
+        "medcollab-backend/src/services/notification.service.js:notifyMention",
+        "medcollab-backend/src/services/notification.service.js:sendNotification",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-687",
+      "name": "concurrent OTP consumption issues at most one session",
+      "rootCause": "A1_OTP_CONSUMPTION",
+      "reportIssueId": "VR-A1-OTP-CONSUMPTION",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "successfulEnvelope": true,
+        "deniedWritesMustPreserveState": false,
+        "semanticCheck": true,
+        "semanticInvariant": "A single stored OTP may issue at most one authenticated session across simultaneous valid verification requests."
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "deniedResponseDataAbsent": true,
+        "semanticCheckPassed": false,
+        "jsonResponse": true,
+        "evidence": {
+          "concurrentStatuses": [
+            200,
+            200
+          ],
+          "usableSessionResponses": 2,
+          "identityControls": 2,
+          "sequentialReplayStatus": 400,
+          "storedOtpsAfter": 0,
+          "concurrency": "two overlapping real HTTP requests; no handler interception"
+        }
+      },
+      "scope": "Optional Authentication Hardening",
+      "review": "verifyOtp reads an eligible record, saves an incremented attempt counter, compares bcrypt and deletes by ID without requiring a successful atomic claim. Two overlapping reads both return valid even when only one delete consumes the record.",
+      "impactLimit": "Two overlapping HTTP responses each yield credentials independently accepted at protected profiles. Actual SMS delivery, distinct token values and multiple distinct sessions are not asserted.",
+      "sources": [
+        "medcollab-backend/src/features/auth/otp.model.js:verifyOtp",
+        "medcollab-backend/src/services/otp.service.js:verifyOtp",
+        "medcollab-backend/src/features/auth/auth.controller.js:verifyOtp"
+      ],
+      "applicationFixed": false
+    }
+  ],
+  "comparison": {
+    "previousRunId": "37175207493",
+    "changedPassObservationOutcomes": []
+  },
+  "applicationFixesPerformed": false
+}

@@ -1,3 +1,13 @@
+# Final validation and developer handoff — 2026-10-06
+
+Primary source of truth: [Vocle Developer Remediation Report](VOCLE_DEVELOPER_REMEDIATION_REPORT.md). All six relevant hosted lanes completed with healthy infrastructure; obsolete environment smoke excluded. Fork sources4eb4c2a57bb0f47bb771321a44c2a283e546ef3e and harness-only repaircac620eef477addda94e6756e36f6aebecc374ab are distinguished from read-only upstream sanity target4638682c0c930fcde3378d7e809612b6c0eab370.
+
+Final [broad37362263669](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37362263669):691/691,613 passes/78 observations; only171/355 harness assumptions repaired. [Offline37361859575](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361859575):97/97,62/35. [MongoDB37361864154](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361864154):31/31,22/9,zero residue. [Real TEST Cloudinary37361873736](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361873736):34/34,27/7,13/13 exact origins absent in finally/post-job. Raw/image immediate cache cases773/776 now404 without app change; video765 still200 cached bytes. [Sanity37361869623](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361869623):42 passes,two upstream application failures,four dependent blocks; runtime/provenance/report/teardown healthy. Initial and repair Secret Scans are green/zero findings.
+
+Fresh security union816 unique IDs:696 passes/120 unique observations,not853 unique cases (37 offline overlap). Remediation grouping:24 confirmed application roots (17 security/integrity,five media contracts,two upstream functional),three likely groups,18 hardening and13 policy groups; three external owner workstreams. Registry retains124 historical entries,62 candidate/62 excluded,zero active gates,with latest-validation status reconciliation. No application source fix or new discovery/gate activation. Only origin/master written; upstream/production/real users and unrelated Flutter/Android changes untouched.
+
+---
+
 # Current data-layer coverage and initial hardening closure — 2026-10-06
 
 [Hosted 37359326520](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37359326520): **31/31 focused data cases,22 passes/nine observations, healthy infrastructure**, source `15691c18149f93337f7b73a0835a952d29dc8d37`. Appended **786–816**, registered catalog816. [Exact source/property map, findings and limits](SECURITY_MONGODB_HARDENING_2026-10-06.md), [raw evidence/hashes](security-evidence/37359326520/execution.json), [frozen data manifest](../medcollab-backend/scripts/security-data/manifest.json).

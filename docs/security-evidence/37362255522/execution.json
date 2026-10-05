@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Secret Scan",
+  "workflowFile": "secrets-scan.yml",
+  "runId": 37362255522,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37362255522",
+  "attempt": 1,
+  "event": "push",
+  "harnessSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+  "testedApplicationSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:16:42Z",
+  "startedAt": "2026-10-05T19:16:42Z",
+  "completedAt": "2026-10-05T19:17:19Z",
+  "artifacts": [
+    {
+      "id": 11367247007,
+      "name": "gitleaks-results.sarif",
+      "size": 435,
+      "digest": "sha256:4d9a24d801de8cb3de8aa3d8bfc49ae121a7f07ba388bea07b7f2155971cd12e",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111939417941,
+      "name": "Scan for hardcoded secrets",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:17:09Z",
+      "completedAt": "2026-10-05T19:17:19Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run Gitleaks",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "work/medcollab-beta-workflows/medcollab-beta-workflows/results.sarif": "25b6c42cc4a9a22104b065248d10ae1e0b0cbab3f255a453c6efdd9f160dd4f0"
+  },
+  "purpose": "automatic repair-commit scan",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

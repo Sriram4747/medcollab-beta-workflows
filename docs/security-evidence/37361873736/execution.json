@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Vocle Real Cloudinary Security",
+  "workflowFile": "vocle-cloudinary-security.yml",
+  "runId": 37361873736,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361873736",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "testedApplicationSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:13:40Z",
+  "startedAt": "2026-10-05T19:13:40Z",
+  "completedAt": "2026-10-05T19:14:38Z",
+  "artifacts": [
+    {
+      "id": 11367315867,
+      "name": "vocle-real-cloudinary-security",
+      "size": 13283,
+      "digest": "sha256:c214e99f52840915333eba71229368bd79ed73a6e3b48f273581c429f348e24b",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111938203524,
+      "name": "real-cloudinary",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:14:04Z",
+      "completedAt": "2026-10-05T19:14:38Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Fail-closed safety configuration before provider or dependency operations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install dependencies without provider credentials or lifecycle scripts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Static checks and offline safety tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Execute bounded synthetic real-provider cases with finally cleanup",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent post-job scoped cleanup and origin verification",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify sanitized artifact files",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve sanitized provider evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "cleanup.json": "9642c369e46052fc8c34683e0343fe4248fb928cb924395628ba5ab1b7c22d61",
+    "manifest.json": "4ada66df211e1d3427594d7dfd0faa9ea48ecaaaaec66268cff4ddb854a0dda3",
+    "post-job-cleanup.json": "e81b05ef6dbe10249f89af3861f0e5218a33659cc07af8431505d52aa1c8c3f3",
+    "resources.json": "17b224212a893d1eb5da782b4c9fed2d60e35edf00e7d8bb0ad19bd766eeaff9",
+    "results.json": "04d9514982cecb111b9df1a618deb89eef72d883944618749ae505b2245a204f",
+    "reviewed-observations.json": "9f0c402be88665570f75aca17fe7f32a7b8404a9d1e74367d0bc112d1a783cc0",
+    "safety.json": "59c7506affa2e85d5e4c86d01a89326e41c9a03c091d0c603ca496ce2c759f1b",
+    "security-test-report.md": "49b2e2e2f1ef279c94a7078295758b3b004b3974e56da71a44ea3a12d62cb2e5",
+    "summary.md": "69915c380fe7ba1be8a7a21be70458c9e390fd33f1d11df6f04e3fa0ad4134f3"
+  },
+  "purpose": "final validation",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

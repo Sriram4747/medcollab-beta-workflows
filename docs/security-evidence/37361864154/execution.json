@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Vocle MongoDB Data Security",
+  "workflowFile": "vocle-data-security.yml",
+  "runId": 37361864154,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37361864154",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "testedApplicationSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:13:35Z",
+  "startedAt": "2026-10-05T19:13:35Z",
+  "completedAt": "2026-10-05T19:14:53Z",
+  "artifacts": [
+    {
+      "id": 11367142202,
+      "name": "vocle-mongodb-data-security",
+      "size": 8230,
+      "digest": "sha256:5552f27df7751b5cfe19bb0b152786f04c8c177acaf3b3f836e3eee3d9c6fe5d",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111938173395,
+      "name": "disposable-data",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:13:46Z",
+      "completedAt": "2026-10-05T19:14:53Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install dependencies before isolated execution",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Syntax manifests and safety guards",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare disposable network-none MongoDB",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Execute focused data security without external network",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify sanitized data artifacts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve sanitized data evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Stop disposable MongoDB",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "manifest.json": "d442113b1aeacbf9b6490fadf8882f9c962d54511961226c5f6154ce98c54c0b",
+    "results.json": "407a1b50e85b5ac69696703fedbb4f8843868acb572e8b5034520f8713574920",
+    "reviewed-observations.json": "66c0984e61379cccb08f3e7d40f98f0e08c83c2d6d3d3d9cbb3d7b7956f79377",
+    "summary.md": "f87b151654c5dd849f2fd7683002d3483325b9f1e39f1e9833f843a5a0444cce"
+  },
+  "purpose": "final validation",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

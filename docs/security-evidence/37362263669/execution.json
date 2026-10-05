@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "validationDateIndia": "2026-10-06",
+  "repository": "Sriram4747/medcollab-beta-workflows",
+  "workflow": "Vocle Backend Environment Test",
+  "workflowFile": "vocle-backend-environment-test.yml",
+  "runId": 37362263669,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/37362263669",
+  "attempt": 1,
+  "event": "workflow_dispatch",
+  "harnessSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+  "testedApplicationSource": "cac620eef477addda94e6756e36f6aebecc374ab",
+  "status": "completed",
+  "conclusion": "success",
+  "createdAt": "2026-10-05T19:16:47Z",
+  "startedAt": "2026-10-05T19:16:47Z",
+  "completedAt": "2026-10-05T19:26:16Z",
+  "artifacts": [
+    {
+      "id": 11367093060,
+      "name": "vocle-security-discovery",
+      "size": 92480,
+      "digest": "sha256:7f289be0943064c5395efd1d76a20c61d4c07f74c5cd924476c56e1dc630b8ca",
+      "expired": false
+    }
+  ],
+  "jobs": [
+    {
+      "id": 111939453472,
+      "name": "boot-backend",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-05T19:17:02Z",
+      "completedAt": "2026-10-05T19:26:16Z",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start isolated MongoDB",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install backend dependencies",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate security syntax and append-only manifest",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start backend",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Wait for healthy backend",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Create deterministic security fixtures",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify deterministic security fixtures",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Smoke-test test-only authentication identities",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Discover API authorization and validation behavior",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Generate API coverage report",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve security discovery reports",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Show diagnostics on failure",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Set up Node.js",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out repository",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "fileSha256": {
+    "results.json": "6b88267302655e6a0de14850db3e15f0040ee94ef304d09629197bc80b56ede7",
+    "reviewed-observations.json": "1181d317e041bbce1a82c5fd22f45b7bedd377dc423de50e2bc6c5829cf222a7",
+    "security-api-coverage-report.md": "9ba0fe8c4f6c3efd8a5ed6a70a26570842cf21b5c1c53efb7dc334da5621515c",
+    "security-test-report.md": "a7efdb4446cde92dde6c6195453d0d95e2e2bea9138b3973c34c5254af7f34aa",
+    "summary.md": "621844c1be9c700f8868796055c4ea7255ce220488f09ed9593abaebed396931"
+  },
+  "purpose": "harness repair rerun",
+  "upstreamReadOnly": true,
+  "productionAccess": false,
+  "applicationSourceModified": false
+}

@@ -1,3 +1,9 @@
+# Final-validation reconciliation — 2026-10-06
+
+Primary handoff: [Vocle Developer Remediation Report](VOCLE_DEVELOPER_REMEDIATION_REPORT.md). Fresh evidence covers816 unique security IDs,696 passes/120 observations; final broad613/78,offline62/35,real27/7,data22/9. Historical124 registry entries are retained;171/355 are resolved testing issues,773/776 are currently passing variable cache characterizations with no app change. Candidate counts62/62 and zero active gates remain unchanged. JSON latestValidation fields record exact current evidence; do not regenerate from historical sources and discard this overlay. Two upstream sanity failures and four dependent blocks are separately documented.
+
+---
+
 # Security regression gate registry
 
 Evidence runs: 37175207493, 37181051425, 37355451614, 37358018047, 37359326520. **62 after-remediation candidates; 62 observations excluded; zero active application gates.**
@@ -20,7 +26,7 @@ Infrastructure, positive-cloud allowlisting, credential exclusion, transport iso
 | VOCLE-110 | H1 | excluded | observed / unresolved review |
 | VOCLE-112 | H1 | excluded | observed / unresolved review |
 | VOCLE-159 | S3 | yes, after fix/assertion audit | observed / unfixed |
-| VOCLE-171 | BASELINE_SEMANTICS | excluded | observed / unresolved review |
+| VOCLE-171 | BASELINE_SEMANTICS | excluded | PASS / resolved test-harness issue |
 | VOCLE-193 | S1 | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-197 | S1 | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-267 | S4 | yes, after fix/assertion audit | observed / unfixed |
@@ -49,7 +55,7 @@ Infrastructure, positive-cloud allowlisting, credential exclusion, transport iso
 | VOCLE-347 | S8 | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-348 | S9 | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-349 | S9 | yes, after fix/assertion audit | observed / unfixed |
-| VOCLE-355 | BASELINE_SEMANTICS | excluded | observed / unresolved review |
+| VOCLE-355 | BASELINE_SEMANTICS | excluded | PASS / resolved test-harness issue |
 | VOCLE-356 | AUTH_WIDGET | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-357 | AUTH_WIDGET | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-398 | PUBLIC_PROFILE | excluded | observed / unresolved review |
@@ -124,8 +130,8 @@ Infrastructure, positive-cloud allowlisting, credential exclusion, transport iso
 | VOCLE-765 | media-invalidation-intent | excluded | observed / unresolved review |
 | VOCLE-770 | CLOUDINARY_PDF_ATTACHMENT | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-771 | CLOUDINARY_PDF_PREVIEW | yes, after fix/assertion audit | observed / unfixed |
-| VOCLE-773 | media-invalidation-intent | excluded | observed / unresolved review |
-| VOCLE-776 | media-invalidation-intent | excluded | observed / unresolved review |
+| VOCLE-773 | media-invalidation-intent | excluded | PASS current bounded cache probe / policy remains open |
+| VOCLE-776 | media-invalidation-intent | excluded | PASS current bounded cache probe / policy remains open |
 | VOCLE-782 | media-octet-resource-type | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-783 | media-octet-resource-type | yes, after fix/assertion audit | observed / unfixed |
 | VOCLE-784 | media-shared-handoff | excluded | observed / unresolved review |

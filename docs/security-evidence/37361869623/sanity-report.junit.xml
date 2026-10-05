@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="vocle-functional-sanity" tests="48" failures="6" errors="0">
+  <testcase classname="vocle.authentication-and-profiles-01" name="otp-verification-creates-user-and-tokens" time="0.296"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-02" name="returning-login-preserves-identity" time="0.180"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-03" name="incorrect-otp-fails-then-correct-works" time="0.262"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-04" name="consumed-otp-cannot-be-reused" time="0.005"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-05" name="onboarding-and-profile-persist" time="0.019"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-06" name="refresh-session-and-missing-refresh-fails" time="0.009"></testcase>
+  <testcase classname="vocle.authentication-and-profiles-07" name="device-deduplication-and-logout-removal" time="0.026"></testcase>
+  <testcase classname="vocle.spaces-and-invitations-01" name="space-creation-default-channels" time="0.015"></testcase>
+  <testcase classname="vocle.spaces-and-invitations-02" name="invitation-preview-join-and-membership" time="0.037"></testcase>
+  <testcase classname="vocle.spaces-and-invitations-03" name="duplicate-space-join-conflict" time="0.010"></testcase>
+  <testcase classname="vocle.spaces-and-invitations-04" name="rename-and-regenerate-invitation" time="0.018"></testcase>
+  <testcase classname="vocle.spaces-and-invitations-05" name="member-leave-owner-removal-and-owner-leave-rejection" time="0.034"></testcase>
+  <testcase classname="vocle.channels-01" name="public-channel-create-read-update-and-duplicate-rejection" time="0.026"></testcase>
+  <testcase classname="vocle.channels-02" name="private-channel-creator-access" time="0.014"></testcase>
+  <testcase classname="vocle.channels-03" name="archive-custom-channel-retains-messages-and-protects-defaults" time="0.047"></testcase>
+  <testcase classname="vocle.messaging-and-needl-01" name="text-message-sender-and-sidebar-preview" time="0.058"></testcase>
+  <testcase classname="vocle.messaging-and-needl-02" name="root-pagination-order-without-overlap" time="0.089"></testcase>
+  <testcase classname="vocle.messaging-and-needl-03" name="quoted-message-retains-metadata" time="0.019"></testcase>
+  <testcase classname="vocle.messaging-and-needl-04" name="thread-reply-needl-and-preview" time="0.057"></testcase>
+  <testcase classname="vocle.messaging-and-needl-05" name="edit-soft-delete-and-socket-events" time="0.061"></testcase>
+  <testcase classname="vocle.messaging-and-needl-06" name="reaction-and-pin-persistence" time="0.064"></testcase>
+  <testcase classname="vocle.messaging-and-needl-07" name="empty-text-rejection-and-emergency-priority" time="0.025"></testcase>
+  <testcase classname="vocle.message-requests-01" name="eligible-peer-request-lists-count-and-notification" time="5.125"><failure message="Recipient message-request notification was not persisted within 5 seconds (request state was persisted)." /></testcase>
+  <testcase classname="vocle.message-requests-02" name="accept-request-dm-and-notification" time="0.015"><failure message="POST /api/message-requests/6ac3f7538cc6dc981b8cc9c9/accept expected 200, received 500: {&quot;success&quot;:false,&quot;message&quot;:&quot;Plan executor error during findAndModify :: caused by :: cannot infer query fields to set, path &apos;members&apos; is matched twice&quot;,&quot;errors&quot;:[]}" /></testcase>
+  <testcase classname="vocle.message-requests-03" name="decline-request-and-terminal-transition-rejection" time="0.034"></testcase>
+  <testcase classname="vocle.direct-and-group-conversations-01" name="accepted-dm-reopens-to-same-id" time="0.000"><failure message="Required request, conversation, or message fixture was not created." /></testcase>
+  <testcase classname="vocle.direct-and-group-conversations-02" name="dm-message-peer-details-and-preview" time="0.000"><failure message="Required request, conversation, or message fixture was not created." /></testcase>
+  <testcase classname="vocle.direct-and-group-conversations-03" name="read-receipt-deduplication-and-preference" time="0.000"><failure message="Required request, conversation, or message fixture was not created." /></testcase>
+  <testcase classname="vocle.direct-and-group-conversations-04" name="notes-self-and-group-membership-rename" time="0.064"></testcase>
+  <testcase classname="vocle.direct-and-group-conversations-05" name="conversation-expansion-none-and-all" time="0.000"><failure message="Required request, conversation, or message fixture was not created." /></testcase>
+  <testcase classname="vocle.handoffs-01" name="handoff-draft-create-edit-read" time="0.039"></testcase>
+  <testcase classname="vocle.handoffs-02" name="empty-draft-rejection-and-disposable-delete" time="0.024"></testcase>
+  <testcase classname="vocle.handoffs-03" name="submit-handoff-inbox-history-notification-event" time="0.045"></testcase>
+  <testcase classname="vocle.handoffs-04" name="acknowledge-handoff-and-duplicate-rejection" time="0.119"></testcase>
+  <testcase classname="vocle.handoffs-05" name="writeback-reassign-reset-and-new-assignee-acknowledge" time="0.044"></testcase>
+  <testcase classname="vocle.media-01" name="png-upload-download-delete" time="0.031"></testcase>
+  <testcase classname="vocle.media-02" name="pdf-upload-and-handoff-attachment" time="0.034"></testcase>
+  <testcase classname="vocle.media-03" name="inert-image-ecg-document-message-metadata" time="0.052"></testcase>
+  <testcase classname="vocle.notifications-01" name="ordinary-message-inbox-count-metadata-socket" time="0.036"></testcase>
+  <testcase classname="vocle.notifications-02" name="mention-and-emergency-notification-types" time="0.046"></testcase>
+  <testcase classname="vocle.notifications-03" name="notification-read-unread-channel-read-all-delete" time="0.056"></testcase>
+  <testcase classname="vocle.realtime-and-availability-01" name="socket-auth-join-message-reconnect" time="0.069"></testcase>
+  <testcase classname="vocle.realtime-and-availability-02" name="typing-start-stop-peer-delivery" time="0.002"></testcase>
+  <testcase classname="vocle.realtime-and-availability-03" name="availability-persistence-broadcast-room-sync-presence" time="0.028"></testcase>
+  <testcase classname="vocle.search-01" name="known-user-search-and-phone-lookup" time="0.022"></testcase>
+  <testcase classname="vocle.search-02" name="global-search-and-empty-query-result" time="0.054"></testcase>
+  <testcase classname="vocle.support-01" name="bug-report-persistence-and-required-title" time="0.062"></testcase>
+  <testcase classname="vocle.startup-01" name="health-connected-test-and-disabled-providers" time="0.000"></testcase>
+</testsuite>

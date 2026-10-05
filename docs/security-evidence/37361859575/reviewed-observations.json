@@ -1,0 +1,2206 @@
+{
+  "runId": 37361859575,
+  "executedSource": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+  "rawResultsSha256": "00051f824b975caeeb78d3f7e6fa4bfa549a524c0f7533e1b538123417623233",
+  "observations": [
+    {
+      "caseId": "VOCLE-301",
+      "name": "upload rejects wrong field",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-302",
+      "name": "upload rejects multiple files",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-303",
+      "name": "upload rejects forbidden MIME",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-304",
+      "name": "upload rejects octet forbidden suffix",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "filesAdded": 0,
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-306",
+      "name": "upload rejects empty bytes",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000002/1791227703685-7ad88e570e85.png",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-307",
+      "name": "upload rejects inert MIME extension mismatch",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000002/1791227704901-07fd7f55dc05.html",
+            "sha256": "8182ffff1a3fbfefc99b0b1afc127f9588de5bc006729bbf6fe562c0060bb274",
+            "bytes": 21
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-313",
+      "name": "media canonical owner containment single",
+      "rootCause": "S6",
+      "reportIssueId": "VR-S6",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227712106-9428e9df7d44.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791227712112-9d57e7a6b908.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227712106-9428e9df7d44.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Express decoding plus decodeURIComponent and substring owner matching occur before path.join normalizes dot segments. A path containing the caller ownership substring can normalize to a different user file.",
+      "impactLimit": "Exact synthetic foreign message/avatar files are deleted after independently verified existence. Outside-upload arbitrary filesystem deletion and real Cloudinary cross-user destruction are not demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:deleteLocalUpload",
+        "medcollab-backend/src/features/media/media.routes.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-314",
+      "name": "media canonical owner containment double",
+      "rootCause": "S6",
+      "reportIssueId": "VR-S6",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227713277-8e0f2f55e471.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/messages/7ed000000000000000000003/1791227713283-3116b17bbd9b.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227713277-8e0f2f55e471.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Express decoding plus decodeURIComponent and substring owner matching occur before path.join normalizes dot segments. A path containing the caller ownership substring can normalize to a different user file.",
+      "impactLimit": "Exact synthetic foreign message/avatar files are deleted after independently verified existence. Outside-upload arbitrary filesystem deletion and real Cloudinary cross-user destruction are not demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:deleteLocalUpload",
+        "medcollab-backend/src/features/media/media.routes.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-323",
+      "name": "local upload to authorized message integration",
+      "rootCause": "U1",
+      "reportIssueId": "VR-U1",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "filesAdded": 1,
+          "uploadStatus": 200
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227724019-243e1b958417.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227724019-243e1b958417.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Local fallback returns a loopback HTTP URL while sendMessage requires HTTPS and a Cloudinary host. Upload succeeds but an authorized attachment gets400. Intended local beta/mobile contract remains unclear.",
+      "impactLimit": "Likely functional integration mismatch. No authorization bypass or released mobile reproduction is established.",
+      "sources": [
+        "medcollab-backend/src/utils/localMediaStorage.js:getApiBaseUrl",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-698",
+      "name": "upload validates malformed JPEG bytes",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227742093-7baf8240cd75.jpg",
+            "sha256": "d06f85b1a7bb837c2a4ffc10bd6b871d5faf84e9c98fec953d806f8ab80211d4",
+            "bytes": 21
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-699",
+      "name": "upload validates unsupported SVG",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-700",
+      "name": "upload validates unsupported MKV",
+      "rootCause": "H2",
+      "reportIssueId": "VR-H2",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": true,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Multer and fileFilter reject before storage; errorHandler maps file-size errors but leaves other user-input errors500.",
+      "impactLimit": "Operational/client error handling; no upload permission bypass.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/middleware/errorHandler.js:LIMIT_FILE_SIZE"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-701",
+      "name": "octet video metadata follows supported extension",
+      "rootCause": "media-octet-metadata",
+      "reportIssueId": "VR-MEDIA-OCTET-METADATA",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "returnedFormat": null,
+          "exactBytes": true
+        },
+        "filesBefore": [],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227745605-a6e6c69f3f82.mp4",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Local response format selection uses MIME flags; valid MP4 bytes admitted by extension produce format:null.",
+      "impactLimit": "Client compatibility; coordinated with confirmed octet provider dispatch.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-704",
+      "name": "avatar canonical foreign owner file survives",
+      "rootCause": "S6",
+      "reportIssueId": "VR-S6",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "HIGH",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "foreignFileSurvived": false
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791227748929-d6c239c71ef3.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "id": "medcollab/avatars/7ed000000000000000000003/1791227748935-7ee441020e76.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/avatars/7ed000000000000000000001/1791227748929-d6c239c71ef3.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Express decoding plus decodeURIComponent and substring owner matching occur before path.join normalizes dot segments. A path containing the caller ownership substring can normalize to a different user file.",
+      "impactLimit": "Exact synthetic foreign message/avatar files are deleted after independently verified existence. Outside-upload arbitrary filesystem deletion and real Cloudinary cross-user destruction are not demonstrated.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:deleteLocalUpload",
+        "medcollab-backend/src/features/media/media.routes.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-705",
+      "name": "shared handoff upload supports owner deletion",
+      "rootCause": "media-shared-handoff",
+      "reportIssueId": "VR-MEDIA-SHARED-HANDOFF",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "fileSurvived": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/handoffs/1791227750077-f5b5ae203024.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/handoffs/1791227750077-f5b5ae203024.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Handoff uploads use shared medcollab/handoffs folders; deletion recognizes only messages/<caller> or avatars/<caller>. Uploader deletion403 retains the asset in local/offline/real TEST evidence.",
+      "impactLimit": "Confirmed lifecycle limitation; whether immediate uploader delete should be permitted requires product policy before declaring a security defect.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-709",
+      "name": "draft deletion orphan lifecycle",
+      "rootCause": "media-reference-lifecycle",
+      "reportIssueId": "VR-MEDIA-REFERENCE-LIFECYCLE",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "draftRemoved": true,
+          "orphanFileRetained": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227754735-8b214df3839f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227754735-8b214df3839f.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Draft/message deletion can leave media assets; deleting media can leave stored URLs. Avatar replacement and failed attachment writes also retain assets in passing characterization cases.",
+      "impactLimit": "Storage/data lifecycle; deletion/erasure expectations determine security impact.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:deleteHandoff",
+        "medcollab-backend/src/features/messages/message.model.js:isModified('isDeleted')",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-710",
+      "name": "explicit file deletion reference consistency",
+      "rootCause": "media-reference-lifecycle",
+      "reportIssueId": "VR-MEDIA-REFERENCE-LIFECYCLE",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "referenceRetained": true,
+          "fileRemoved": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227755910-5912f528a6f5.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "Draft/message deletion can leave media assets; deleting media can leave stored URLs. Avatar replacement and failed attachment writes also retain assets in passing characterization cases.",
+      "impactLimit": "Storage/data lifecycle; deletion/erasure expectations determine security impact.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:deleteHandoff",
+        "medcollab-backend/src/features/messages/message.model.js:isModified('isDeleted')",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-713",
+      "name": "handoff rejects untrusted attachment URL",
+      "rootCause": "media-reference-validation",
+      "reportIssueId": "VR-MEDIA-REFERENCE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "authorizedControl": true,
+          "foreignUrlPersisted": true
+        },
+        "filesBefore": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227759421-13f7e9b735a2.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "filesAfter": [
+          {
+            "id": "medcollab/messages/7ed000000000000000000001/1791227759421-13f7e9b735a2.png",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "URL-host validation does not bind an asset to the approved cloud/owner/resource. Handoff URL, thumbnail and metadata sinks accept untrusted/foreign references and negative/missing metadata in focused probes.",
+      "impactLimit": "Defense-in-depth provenance and client integrity; actual confidential asset access is not established.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:updateHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:attachments",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-714",
+      "name": "message media validates alternate cloud provenance",
+      "rootCause": "media-reference-validation",
+      "reportIssueId": "VR-MEDIA-REFERENCE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "authorizedControl": true,
+          "messagesPersisted": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "URL-host validation does not bind an asset to the approved cloud/owner/resource. Handoff URL, thumbnail and metadata sinks accept untrusted/foreign references and negative/missing metadata in focused probes.",
+      "impactLimit": "Defense-in-depth provenance and client integrity; actual confidential asset access is not established.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:updateHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:attachments",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-715",
+      "name": "message media validates untrusted thumbnail",
+      "rootCause": "media-reference-validation",
+      "reportIssueId": "VR-MEDIA-REFERENCE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "authorizedControl": true,
+          "messagesPersisted": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "URL-host validation does not bind an asset to the approved cloud/owner/resource. Handoff URL, thumbnail and metadata sinks accept untrusted/foreign references and negative/missing metadata in focused probes.",
+      "impactLimit": "Defense-in-depth provenance and client integrity; actual confidential asset access is not established.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:updateHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:attachments",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-716",
+      "name": "message media validates negative size and dimensions",
+      "rootCause": "media-reference-validation",
+      "reportIssueId": "VR-MEDIA-REFERENCE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "authorizedControl": true,
+          "messagesPersisted": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "local",
+      "review": "URL-host validation does not bind an asset to the approved cloud/owner/resource. Handoff URL, thumbnail and metadata sinks accept untrusted/foreign references and negative/missing metadata in focused probes.",
+      "impactLimit": "Defense-in-depth provenance and client integrity; actual confidential asset access is not established.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:updateHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:attachments",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-717",
+      "name": "message media validates missing image media URL",
+      "rootCause": "media-reference-validation",
+      "reportIssueId": "VR-MEDIA-REFERENCE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 201,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "authorizedControl": true,
+          "messagesPersisted": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": false,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "scope": "local",
+      "review": "URL-host validation does not bind an asset to the approved cloud/owner/resource. Handoff URL, thumbnail and metadata sinks accept untrusted/foreign references and negative/missing metadata in focused probes.",
+      "impactLimit": "Defense-in-depth provenance and client integrity; actual confidential asset access is not established.",
+      "sources": [
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage",
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:updateHandoff",
+        "medcollab-backend/src/features/handoffs/handoff.model.js:attachments",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-721",
+      "name": "SDK shared handoff has caller ownership namespace",
+      "rootCause": "media-shared-handoff",
+      "reportIssueId": "VR-MEDIA-SHARED-HANDOFF",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/handoffs",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/handoffs/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/handoffs/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Handoff uploads use shared medcollab/handoffs folders; deletion recognizes only messages/<caller> or avatars/<caller>. Uploader deletion403 retains the asset in local/offline/real TEST evidence.",
+      "impactLimit": "Confirmed lifecycle limitation; whether immediate uploader delete should be permitted requires product policy before declaring a security defect.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-724",
+      "name": "SDK resource type octet PDF",
+      "rootCause": "media-octet-resource-type",
+      "reportIssueId": "VR-MEDIA-OCTET-RESOURCE-TYPE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "image"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 344,
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78"
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78",
+            "bytes": 344
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "The router admits supported octet-stream suffixes, but the controller chooses raw/video/image solely from MIME. Accepted octet-PDF/MP4 therefore defaults to image.",
+      "impactLimit": "Octet-PDF is stored image/pdf instead of raw; octet-MP4 receives provider400 and application500 with no asset. The cause is application dispatch, not a provider outage.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-725",
+      "name": "SDK resource type octet video",
+      "rootCause": "media-octet-resource-type",
+      "reportIssueId": "VR-MEDIA-OCTET-RESOURCE-TYPE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "requestedResourceType": "image"
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "The router admits supported octet-stream suffixes, but the controller chooses raw/video/image solely from MIME. Accepted octet-PDF/MP4 therefore defaults to image.",
+      "impactLimit": "Octet-PDF is stored image/pdf instead of raw; octet-MP4 receives provider400 and application500 with no asset. The cause is application dispatch, not a provider outage.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-727",
+      "name": "SDK explicit overwrite prevention",
+      "rootCause": "media-overwrite-intent",
+      "reportIssueId": "VR-MEDIA-OVERWRITE-INTENT",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "unique_filename:true and generated IDs exist, but overwrite:false is omitted. Real provider controls establish explicit false preserves bytes and true replaces them; no application collision occurred.",
+      "impactLimit": "Policy/defense in depth, not demonstrated overwrite vulnerability.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-733",
+      "name": "SDK prototype-like context denied before upload",
+      "rootCause": "media-context-validation",
+      "reportIssueId": "VR-MEDIA-CONTEXT-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 500
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "[function]",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "folderMap[context] accepts inherited properties; constructor selects a function instead of a folder string. The SDK double rejects and application500 is recorded.",
+      "impactLimit": "Input reliability and future namespace hardening.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-736",
+      "name": "SDK owner video delete operation",
+      "rootCause": "media-video-delete",
+      "reportIssueId": "VR-MEDIA-VIDEO-DELETE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 404,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyTypes": [
+            "image",
+            "raw"
+          ],
+          "simulatedAssetRetained": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "raw"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "deleteFile tries image then raw and never video. A stored video remains while the controller reports404.",
+      "impactLimit": "Offline call intent and real TEST video retention reproduce; independent typed deletion succeeds, so provider deletion support is established.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-737",
+      "name": "SDK deletion requests CDN invalidation",
+      "rootCause": "media-invalidation-intent",
+      "reportIssueId": "VR-MEDIA-INVALIDATION-INTENT",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "image"
+            }
+          }
+        ],
+        "simulatedAssets": [],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Application destroy omits invalidate:true. Cached video bytes remain200 after exact origin absence; raw/image delivery changed to404 in the fresh run with unchanged source.",
+      "impactLimit": "Conditional confidentiality/deletion policy; CI proves bounded origin/cache observations, not global revocation.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/config/cloudinary.js:cloudinary"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-739",
+      "name": "SDK delete rejects namespace containing embedded owner",
+      "rootCause": "media-namespace-validation",
+      "reportIssueId": "VR-MEDIA-NAMESPACE-VALIDATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400,
+          403,
+          404
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 404,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "destroyDispatches": 2
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "foreign-root/messages/7ed000000000000000000001/unregistered-canary",
+            "options": {
+              "resource_type": "image"
+            }
+          },
+          {
+            "operation": "destroy",
+            "publicId": "foreign-root/messages/7ed000000000000000000001/unregistered-canary",
+            "options": {
+              "resource_type": "raw"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "The embedded caller substring passes ownsFile without exact approved application root/typed asset identity; the double records two destroys even though the ID is unregistered.",
+      "impactLimit": "Authorization hardening based on call intent; no live provider IDOR claim.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-740",
+      "name": "SDK owner handoff deletion reaches exact asset",
+      "rootCause": "media-shared-handoff",
+      "reportIssueId": "VR-MEDIA-SHARED-HANDOFF",
+      "classification": "LIKELY DEFECT / REQUIRES DEVELOPER REVIEW",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 403,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/handoffs",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/handoffs/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/handoffs/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Handoff uploads use shared medcollab/handoffs folders; deletion recognizes only messages/<caller> or avatars/<caller>. Uploader deletion403 retains the asset in local/offline/real TEST evidence.",
+      "impactLimit": "Confirmed lifecycle limitation; whether immediate uploader delete should be permitted requires product policy before declaring a security defect.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-743",
+      "name": "SDK success then URL failure compensates upload",
+      "rootCause": "media-compensation",
+      "reportIssueId": "VR-MEDIA-COMPENSATION",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "LOW",
+      "expected": {
+        "statuses": [
+          500
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 500,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 500,
+          "authorizedControl": true,
+          "simulatedOrphanCount": 1
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          },
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-2",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          },
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-2",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 10
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Generic catch returns500 after successful upload but performs no compensating destroy. The SDK-double inventory contains a new orphan.",
+      "impactLimit": "Lifecycle/reliability hardening with simulated failure injection, not a newly executed provider orphan exploit.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-746",
+      "name": "SDK video upload to message compatibility",
+      "rootCause": "media-video-message",
+      "reportIssueId": "VR-MEDIA-VIDEO-MESSAGE",
+      "classification": "CONFIRMED DEFECT",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          201
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 400,
+        "success": false,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "video",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 1509,
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "resource_type": "video",
+              "format": "jpg",
+              "start_offset": "0",
+              "width": 400,
+              "crop": "limit",
+              "secure": true
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "video",
+            "sha256": "d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7",
+            "bytes": 1509
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Upload/controller/constants have video handling, but validateSendMessage allows only text,image,document,ecg. A valid uploaded MP4 cannot pass type=video admission.",
+      "impactLimit": "Authorized real message route returns400 after a successful video upload in the focused offline lane. Real released-device playback remains untested.",
+      "sources": [
+        "medcollab-backend/src/middleware/validate.js:validateSendMessage",
+        "medcollab-backend/src/constants/index.js:VIDEO",
+        "medcollab-backend/src/features/messages/message.controller.js:sendMessage"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-747",
+      "name": "SDK message soft-delete storage lifecycle",
+      "rootCause": "media-reference-lifecycle",
+      "reportIssueId": "VR-MEDIA-REFERENCE-LIFECYCLE",
+      "classification": "POLICY DECISION REQUIRED",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          200
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": false
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": false,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200,
+          "messageBlanked": true,
+          "simulatedAssetRetained": true
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 68,
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "9f81650ff972f04ecb98e05d93c4cc65f22fb721385b8529d3ae3c00d479f786",
+            "bytes": 68
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Draft/message deletion can leave media assets; deleting media can leave stored URLs. Avatar replacement and failed attachment writes also retain assets in passing characterization cases.",
+      "impactLimit": "Storage/data lifecycle; deletion/erasure expectations determine security impact.",
+      "sources": [
+        "medcollab-backend/src/features/handoffs/handoff.controller.js:deleteHandoff",
+        "medcollab-backend/src/features/messages/message.model.js:isModified('isDeleted')",
+        "medcollab-backend/src/features/media/media.controller.js:deleteFile",
+        "medcollab-backend/src/features/users/user.controller.js:updateMe"
+      ],
+      "applicationFixed": false
+    },
+    {
+      "caseId": "VOCLE-750",
+      "name": "SDK empty upload denied before stream invocation",
+      "rootCause": "H3",
+      "reportIssueId": "VR-H3",
+      "classification": "HARDENING RECOMMENDATION",
+      "severity": "MEDIUM",
+      "expected": {
+        "statuses": [
+          400
+        ],
+        "semanticCheck": true,
+        "deniedWritesMustPreserveDatabase": true
+      },
+      "actual": {
+        "status": 200,
+        "success": true,
+        "stateUnchanged": true,
+        "semanticCheckPassed": false,
+        "evidence": {
+          "uploadStatus": 200
+        },
+        "filesBefore": [],
+        "filesAfter": [],
+        "sdkCalls": [
+          {
+            "operation": "upload_stream",
+            "options": {
+              "folder": "medcollab/messages/7ed000000000000000000001",
+              "resource_type": "image",
+              "use_filename": true,
+              "unique_filename": true,
+              "filename_override": "synthetic"
+            },
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "operation": "url",
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "options": {
+              "width": 400,
+              "height": 400,
+              "crop": "limit",
+              "quality": "auto",
+              "format": "webp"
+            }
+          }
+        ],
+        "simulatedAssets": [
+          {
+            "publicId": "medcollab/messages/7ed000000000000000000001/canary-1",
+            "resourceType": "image",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "bytes": 0
+          }
+        ],
+        "safety": {
+          "sdkReplaced": true,
+          "realSdkLoaded": false,
+          "configurationPredicateOverride": true,
+          "network": {
+            "blocked": 0,
+            "allowedLoopback": 9
+          }
+        }
+      },
+      "scope": "contract",
+      "review": "Allowed caller MIME/suffix reaches raw storage or the SDK without an empty-content/decode check. Empty/inert mismatched/malformed bytes are accepted locally; SDK receives zero bytes in simulation.",
+      "impactLimit": "Defense against unsafe content and broken rendering; exploit severity depends on actual client/serving behavior.",
+      "sources": [
+        "medcollab-backend/src/features/media/media.routes.js:fileFilter",
+        "medcollab-backend/src/features/media/media.controller.js:uploadFile",
+        "medcollab-backend/src/utils/localMediaStorage.js:saveLocalUpload"
+      ],
+      "applicationFixed": false
+    }
+  ],
+  "comparison": {
+    "previousRunId": "37181051425",
+    "changedPassObservationOutcomes": []
+  },
+  "applicationFixesPerformed": false
+}
