@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medcollab_app/core/router/shell_tab_history.dart';
 import 'package:medcollab_app/core/router/app_routes.dart';
 
 /// Central Android/iOS back handling for [GoRouter].
@@ -53,6 +54,9 @@ class _AppNavigationBackHandlerState extends State<AppNavigationBackHandler> {
       router.pop();
       return;
     }
+
+    // Bottom tabs: Home → Handoffs → back should return to Home (not exit).
+    if (ShellTabHistory.goBack()) return;
 
     final location = router.state.uri.path.isNotEmpty
         ? router.state.uri.path

@@ -77,13 +77,15 @@ class UserModel extends Equatable {
   final bool isOnboarded;
 
   String get displayName {
-    if (name != null && name!.isNotEmpty) {
-      final prefix = displayTitle != null && displayTitle!.isNotEmpty
-          ? '$displayTitle '
+    if (name != null && name!.trim().isNotEmpty) {
+      final prefix = displayTitle != null && displayTitle!.trim().isNotEmpty
+          ? '${displayTitle!.trim()} '
           : '';
-      return '$prefix$name';
+      return '$prefix${name!.trim()}';
     }
-    return phone ?? 'Doctor';
+    final phoneValue = phone?.trim();
+    if (phoneValue != null && phoneValue.isNotEmpty) return phoneValue;
+    return 'Doctor';
   }
 
   /// True when the user has completed onboarding on the server.

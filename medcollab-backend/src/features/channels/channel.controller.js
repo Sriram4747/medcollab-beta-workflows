@@ -168,16 +168,50 @@ const archiveChannel = asyncHandler(async (req, res) => {
  */
 const enrichDM = (channel, currentUserId) => {
   const members = channel.members || [];
-  const peer = members.find(
+  const others = members.filter(
     (m) => (m._id || m).toString() !== currentUserId.toString()
   );
-  const peerName = peer?.name || peer?.displayTitle || 'Direct message';
-  const isSelfNotes = !peer && members.length === 1;
+  const peer = others[0] || null;
+  const isSelfNotes = members.length === 1;
+  const isNeedl = members.length > 2;
+
+  const memberLabel = (m) =>
+    [m?.displayTitle, m?.name].filter(Boolean).join(' ').trim() ||
+    m?.name ||
+    m?.displayTitle ||
+    '';
+
+  let name = channel.name && String(channel.name).trim();
+  if (!name || name.toLowerCase() === 'direct message' || name === 'channel') {
+    if (isSelfNotes) {
+      name = 'Notes to self';
+    } else if (isNeedl) {
+      name =
+        others
+          .map(memberLabel)
+          .filter(Boolean)
+          .slice(0, 4)
+          .join(', ') || 'Needl';
+    } else {
+      name = memberLabel(peer) || 'Direct message';
+    }
+  } else if (isNeedl) {
+    // After expanding a 1:1, stale titles sometimes equal one peer's name.
+    const otherNames = others.map(memberLabel).filter(Boolean);
+    if (
+      otherNames.length >= 2 &&
+      otherNames.some((n) => name === n)
+    ) {
+      name = otherNames.slice(0, 4).join(', ');
+    }
+  }
+
   return {
     ...channel,
     peer: peer || (isSelfNotes ? members[0] || null : null),
-    name: channel.name || (isSelfNotes ? 'Notes to self' : peerName),
+    name,
     isSelfNotes,
+    isNeedl,
   };
 };
 
@@ -300,11 +334,15 @@ const createGroupDM = asyncHandler(async (req, res) => {
         .filter((id) => id && id !== req.user._id.toString())
     ),
   ];
-  if (uniqueOthers.length < 2) {
+  if (uniqueOthers.length < 1) {
     return respond.badRequest(
       res,
-      'Select at least two other doctors for a group DM'
+      'Select at least one other doctor for a Needl'
     );
+  }
+  if (uniqueOthers.length === 1) {
+    req.body.userId = uniqueOthers[0];
+    return createOrGetDM(req, res, () => {});
   }
   if (uniqueOthers.length > 8) {
     return respond.badRequest(res, 'Group DMs support up to 8 other people');
@@ -338,21 +376,43 @@ const createGroupDM = asyncHandler(async (req, res) => {
 
   if (!channel) {
     const users = await User.find({ _id: { $in: uniqueOthers } })
-      .select('name')
+      .select('name displayTitle')
       .lean();
-    const defaultName = users
-      .map((u) => u.name)
-      .filter(Boolean)
-      .slice(0, 3)
-      .join(', ');
+    const defaultName =
+      users
+        .map(
+          (u) =>
+            [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+        )
+        .filter(Boolean)
+        .slice(0, 4)
+        .join(', ') || 'Needl';
 
     channel = await Channel.create({
       spaceId: null,
       type: CHANNEL_TYPES.DIRECT,
       members: objectIds,
       createdBy: req.user._id,
-      name: defaultName || null,
+      name: defaultName,
     });
+  } else {
+    const current = (channel.name || '').trim();
+    if (!current || current.toLowerCase() === 'direct message') {
+      const users = await User.find({ _id: { $in: uniqueOthers } })
+        .select('name displayTitle')
+        .lean();
+      channel.name =
+        users
+          .map(
+            (u) =>
+              [u.displayTitle, u.name].filter(Boolean).join(' ').trim() ||
+              u.name
+          )
+          .filter(Boolean)
+          .slice(0, 4)
+          .join(', ') || 'Needl';
+      await channel.save();
+    }
   }
 
   const populated = await Channel.findById(channel._id)
@@ -364,6 +424,162 @@ const createGroupDM = asyncHandler(async (req, res) => {
 
   return respond.ok(res, 'Group DM ready', {
     channel: enrichDM(populated, req.user._id),
+  });
+});
+
+/**
+ * POST /api/channels/:id/expand
+ * Slack-style: add people to a DM/Needl by creating a new conversation
+ * with optional history copy.
+ * Body: { userIds: string[], history: 'all' | 'today' | 'none' }
+ */
+const expandDM = asyncHandler(async (req, res) => {
+  const source = await Channel.findById(req.params.id);
+  if (!source) return respond.notFound(res, 'Conversation not found');
+  if (source.type !== CHANNEL_TYPES.DIRECT && source.spaceId) {
+    return respond.badRequest(res, 'Only Needl / DM conversations can be expanded');
+  }
+
+  const isMember = (source.members || []).some(
+    (m) => m.toString() === req.user._id.toString()
+  );
+  if (!isMember) return respond.forbidden(res, 'Not a conversation member');
+
+  const rawIds = Array.isArray(req.body.userIds) ? req.body.userIds : [];
+  const history = ['all', 'today', 'none'].includes(req.body.history)
+    ? req.body.history
+    : 'none';
+
+  const existing = new Set((source.members || []).map((m) => m.toString()));
+  const uniqueNew = [
+    ...new Set(
+      rawIds
+        .map((id) => id?.toString())
+        .filter((id) => id && !existing.has(id))
+    ),
+  ];
+  if (uniqueNew.length === 0) {
+    return respond.badRequest(res, 'Select at least one new person to add');
+  }
+
+  const User = require('../users/user.model');
+  const Message = require('../messages/message.model');
+  const { canMessageUser, canRequestMessage } = require('../../utils/knownUsers');
+
+  for (const targetId of uniqueNew) {
+    const target = await User.findById(targetId).select('_id name');
+    if (!target) return respond.notFound(res, 'One of the users was not found');
+    const allowed =
+      (await canMessageUser(req.user._id, targetId)) ||
+      (await canRequestMessage(req.user._id, targetId));
+    if (!allowed) {
+      return respond.forbidden(
+        res,
+        `Cannot add ${target.name || 'user'} — send a message request first or share a group`
+      );
+    }
+  }
+
+  const memberIds = [...existing, ...uniqueNew].sort();
+  if (memberIds.length > 9) {
+    return respond.badRequest(res, 'Needls support up to 9 people');
+  }
+
+  let channel = await Channel.findOne({
+    type: CHANNEL_TYPES.DIRECT,
+    members: { $all: memberIds, $size: memberIds.length },
+    isArchived: false,
+  });
+
+  const usersForTitle = await User.find({
+    _id: { $in: memberIds.filter((id) => id !== req.user._id.toString()) },
+  })
+    .select('name displayTitle')
+    .lean();
+  const needlTitle =
+    usersForTitle
+      .map(
+        (u) =>
+          [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+      )
+      .filter(Boolean)
+      .slice(0, 4)
+      .join(', ') || 'Needl';
+
+  if (!channel) {
+    channel = await Channel.create({
+      spaceId: null,
+      type: CHANNEL_TYPES.DIRECT,
+      members: memberIds,
+      createdBy: req.user._id,
+      name: needlTitle,
+    });
+
+    if (history !== 'none') {
+      const filter = {
+        channelId: source._id,
+        isDeleted: { $ne: true },
+      };
+      if (history === 'today') {
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        filter.createdAt = { $gte: start };
+      }
+      const messages = await Message.find(filter)
+        .sort({ createdAt: 1 })
+        .limit(500)
+        .lean();
+
+      if (messages.length > 0) {
+        const copies = messages.map((m) => ({
+          channelId: channel._id,
+          spaceId: null,
+          senderId: m.senderId,
+          type: m.type,
+          content: m.content,
+          priority: m.priority,
+          mentions: m.mentions || [],
+          replyTo: m.replyTo || undefined,
+          createdAt: m.createdAt,
+          updatedAt: m.updatedAt,
+        }));
+        await Message.insertMany(copies);
+        const last = messages[messages.length - 1];
+        await Channel.findByIdAndUpdate(channel._id, {
+          lastMessage: {
+            messageId: last._id,
+            text: last.content?.text?.slice(0, 200) || null,
+            senderName: null,
+            type: last.type,
+            sentAt: last.createdAt,
+          },
+        });
+      }
+    }
+  } else {
+    const current = (channel.name || '').trim();
+    const otherLabels = usersForTitle
+      .map(
+        (u) =>
+          [u.displayTitle, u.name].filter(Boolean).join(' ').trim() || u.name
+      )
+      .filter(Boolean);
+    if (!current || otherLabels.some((n) => current === n)) {
+      channel.name = needlTitle;
+      await channel.save();
+    }
+  }
+
+  const populated = await Channel.findById(channel._id)
+    .populate(
+      'members',
+      'name displayTitle role speciality avatarUrl availability lastSeenAt'
+    )
+    .lean();
+
+  return respond.ok(res, 'Needl updated', {
+    channel: enrichDM(populated, req.user._id),
+    createdNew: channel._id.toString() !== source._id.toString(),
   });
 });
 
@@ -480,5 +696,5 @@ const unpinMessage = asyncHandler(async (req, res) => {
 module.exports = {
   createChannel, getSpaceChannels, getChannelById,
   updateChannel, archiveChannel, getMyDMs, createOrGetDM, createGroupDM,
-  getChannelMembers, pinMessage, unpinMessage,
+  expandDM, getChannelMembers, pinMessage, unpinMessage,
 };

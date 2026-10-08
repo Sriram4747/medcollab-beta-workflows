@@ -26,7 +26,7 @@ class MessageComposer extends StatelessWidget {
     this.onPickGallery,
     this.onPickCamera,
     this.onPickDocument,
-    this.hintText = 'Message… @ to mention',
+    this.hintText = 'Message…',
     this.isBusy = false,
     this.showTopBorder = true,
     super.key,
@@ -68,7 +68,7 @@ class MessageComposer extends StatelessWidget {
                 },
               ),
             ListTile(
-              leading: const Icon(Icons.attach_file_outlined),
+              leading: const Icon(Icons.insert_drive_file_outlined),
               title: const Text('Document / PDF'),
               onTap: () {
                 Navigator.pop(ctx);
@@ -76,6 +76,71 @@ class MessageComposer extends StatelessWidget {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _insertAtCursor(String text) {
+    final value = controller.value;
+    final selection = value.selection;
+    final start = selection.start >= 0 ? selection.start : value.text.length;
+    final end = selection.end >= 0 ? selection.end : value.text.length;
+    final next = value.text.replaceRange(start, end, text);
+    controller.value = value.copyWith(
+      text: next,
+      selection: TextSelection.collapsed(offset: start + text.length),
+    );
+  }
+
+  void _showEmojiPicker(BuildContext context) {
+    const emojis = [
+      '👍', '🙏', '✅', '❌', '⚠️', '🚨',
+      '💉', '🩺', '💊', '🏥', '📋', '📝',
+      '😊', '😂', '😮', '😢', '🔥', '💯',
+      '👀', '🤝', '⏰', '📌', '➡️', '⬅️',
+    ];
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Quick emoji',
+                style: Theme.of(ctx).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final emoji in emojis)
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        _insertAtCursor(emoji);
+                        focusNode?.requestFocus();
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: Center(
+                          child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -99,79 +164,82 @@ class MessageComposer extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (canAttach)
+                IconButton(
+                  tooltip: 'Attach',
+                  onPressed: isBusy ? null : () => _showAttachMenu(context),
+                  icon: const Icon(Icons.add_circle_outline, size: 26),
+                  color: AppColors.tealDark,
+                  padding: const EdgeInsets.all(8),
+                  constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                ),
               Expanded(
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  minLines: 1,
-                  maxLines: 5,
-                  textCapitalization: TextCapitalization.sentences,
-                  enabled: !isBusy,
-                  keyboardType: TextInputType.multiline,
-                  textInputAction: TextInputAction.newline,
-                  style: AppTextStyles.body.copyWith(
-                    color: AppColors.textPrimary,
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 44),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceInput,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: AppColors.borderDefault,
+                      width: 0.5,
+                    ),
                   ),
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: AppTextStyles.body.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                    filled: true,
-                    fillColor: AppColors.surfaceInput,
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(22)),
-                      borderSide: BorderSide(
-                        color: AppColors.tealPrimary,
-                        width: 1.5,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          minLines: 1,
+                          maxLines: 6,
+                          textCapitalization: TextCapitalization.sentences,
+                          enabled: !isBusy,
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.newline,
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.textPrimary,
+                            fontSize: 15,
+                            height: 1.35,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: hintText,
+                            hintStyle: AppTextStyles.body.copyWith(
+                              color: AppColors.textMuted,
+                              fontSize: 15,
+                            ),
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.fromLTRB(
+                              16,
+                              12,
+                              4,
+                              12,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                      IconButton(
+                        tooltip: 'Emoji',
+                        onPressed:
+                            isBusy ? null : () => _showEmojiPicker(context),
+                        icon: const Icon(Icons.emoji_emotions_outlined, size: 22),
+                        color: AppColors.textSecondary,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              if (canAttach) ...[
-                const SizedBox(width: 6),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 1),
-                  child: Material(
-                    color: AppColors.surfaceInput,
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      onTap: isBusy ? null : () => _showAttachMenu(context),
-                      child: const SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Icon(
-                          Icons.attach_file_rounded,
-                          size: 20,
-                          color: AppColors.tealDark,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.only(bottom: 1),
+                padding: const EdgeInsets.only(bottom: 2),
                 child: Material(
                   color: isBusy
                       ? AppColors.navyPrimary.withValues(alpha: 0.5)
@@ -181,11 +249,11 @@ class MessageComposer extends StatelessWidget {
                     customBorder: const CircleBorder(),
                     onTap: isBusy ? null : () => onSend(controller.text),
                     child: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 44,
+                      height: 44,
                       child: isBusy
                           ? const Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.all(12),
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color: Colors.white,
@@ -193,7 +261,7 @@ class MessageComposer extends StatelessWidget {
                             )
                           : const Icon(
                               Icons.send_rounded,
-                              size: 18,
+                              size: 20,
                               color: Colors.white,
                             ),
                     ),
@@ -1101,9 +1169,16 @@ class _MessageBody extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      message.localOnly ? 'Uploading…' : 'Tap to play',
+                      message.deliveryState == MessageDeliveryState.failed
+                          ? 'Failed — tap attach to retry'
+                          : message.localOnly
+                              ? 'Uploading…'
+                              : 'Tap to play',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: message.deliveryState ==
+                                    MessageDeliveryState.failed
+                                ? AppColors.statusError
+                                : AppColors.textSecondary,
                           ),
                     ),
                   ],

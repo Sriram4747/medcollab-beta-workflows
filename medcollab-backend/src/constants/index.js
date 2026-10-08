@@ -127,8 +127,8 @@ const PAGINATION = {
 
 // ─── Media ─────────────────────────────────────────────────────────────────────
 const MEDIA = {
-  MAX_FILE_SIZE_MB: 25,
-  MAX_FILE_SIZE_BYTES: 25 * 1024 * 1024,
+  MAX_FILE_SIZE_MB: 50,
+  MAX_FILE_SIZE_BYTES: 50 * 1024 * 1024,
   ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
   ALLOWED_DOCUMENT_TYPES: ['application/pdf'],
   ALLOWED_TYPES: [

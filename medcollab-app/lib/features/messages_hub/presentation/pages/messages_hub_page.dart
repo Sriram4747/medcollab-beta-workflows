@@ -11,7 +11,6 @@ import 'package:medcollab_app/core/theme/app_colors.dart';
 import 'package:medcollab_app/core/theme/app_radius.dart';
 import 'package:medcollab_app/core/theme/app_text_styles.dart';
 import 'package:medcollab_app/features/messages/data/models/message_request_model.dart';
-import 'package:medcollab_app/features/messages/data/models/needl_thread_preview.dart';
 import 'package:medcollab_app/features/channels/presentation/widgets/create_channel_dialog.dart';
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/models/last_message_preview.dart';
@@ -39,7 +38,6 @@ class _MessagesHubPageState extends State<MessagesHubPage>
   late TabController _tabController;
   late Future<List<SpaceModel>> _spacesFuture;
   late Future<List<ChannelModel>> _dmsFuture;
-  late Future<List<NeedlThreadPreview>> _needlFuture;
   late Future<List<MessageRequestModel>> _pendingRequestsFuture;
   late Future<Set<String>> _draftIdsFuture;
   late Future<Map<String, int>> _unreadByChannelFuture;
@@ -56,7 +54,6 @@ class _MessagesHubPageState extends State<MessagesHubPage>
       _spacesFuture =
           AppDependencies.instance.spaceRepository.getMySpaces();
       _dmsFuture = AppDependencies.instance.channelRepository.getMyDMs();
-      _needlFuture = AppDependencies.instance.userRepository.getNeedl();
       _pendingRequestsFuture = AppDependencies.instance.messageRequestRepository
           .listRequests(direction: 'received', status: 'pending')
           .catchError((_) => <MessageRequestModel>[]);
@@ -105,7 +102,9 @@ class _MessagesHubPageState extends State<MessagesHubPage>
                   onReload: _reload,
                 ),
                 _NeedlTab(
-                  needlFuture: _needlFuture,
+                  dmsFuture: _dmsFuture,
+                  draftIdsFuture: _draftIdsFuture,
+                  unreadByChannelFuture: _unreadByChannelFuture,
                   onReload: _reload,
                 ),
                 _GroupsTab(
@@ -204,69 +203,116 @@ class _MessagesHeader extends StatelessWidget {
 
 class _NeedlTab extends StatelessWidget {
   const _NeedlTab({
-    required this.needlFuture,
+    required this.dmsFuture,
+    required this.draftIdsFuture,
+    required this.unreadByChannelFuture,
     required this.onReload,
   });
 
-  final Future<List<NeedlThreadPreview>> needlFuture;
+  final Future<List<ChannelModel>> dmsFuture;
+  final Future<Set<String>> draftIdsFuture;
+  final Future<Map<String, int>> unreadByChannelFuture;
   final VoidCallback onReload;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<NeedlThreadPreview>>(
-      future: needlFuture,
+    return FutureBuilder<List<Object>>(
+      future: Future.wait([
+        dmsFuture,
+        draftIdsFuture,
+        unreadByChannelFuture,
+      ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const AppCardSkeleton();
+          return const AppListSkeleton();
         }
-        final threads = snapshot.data ?? const <NeedlThreadPreview>[];
+        if (snapshot.hasError) {
+          return const Center(
+            child: ErrorBanner(message: 'Could not load Needls'),
+          );
+        }
+
+        final allDms = snapshot.data![0] as List<ChannelModel>;
+        final draftIds = snapshot.data![1] as Set<String>;
+        final unreadByChannel = snapshot.data![2] as Map<String, int>;
+        final needls = allDms.where((dm) => dm.isGroupDm).toList();
+
         return RefreshIndicator(
           onRefresh: () async => onReload(),
-          child: threads.isEmpty
+          child: needls.isEmpty
               ? ListView(
-                  children: const [
-                    SizedBox(height: 80),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppGaps.screenH,
+                    24,
+                    AppGaps.screenH,
+                    AppGaps.screenH,
+                  ),
+                  children: [
                     AppEmptyState(
-                      icon: Icons.forum_outlined,
-                      title: 'No Needl threads yet',
+                      icon: Icons.groups_outlined,
+                      title: 'No Needls yet',
                       subtitle:
-                          'Reply in a channel or DM thread and it will show up here.',
+                          'A Needl is a group chat with 3+ colleagues. '
+                          'Add people from a DM, or start a multi-person chat.',
+                      action: FilledButton.icon(
+                        onPressed: () => context.push(AppRoutes.startDm),
+                        icon: const Icon(Icons.person_add_alt_1_outlined, size: 18),
+                        label: const Text('Start a Needl'),
+                      ),
                     ),
                   ],
                 )
               : ListView.separated(
-                  itemCount: threads.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppGaps.screenH,
+                    8,
+                    AppGaps.screenH,
+                    AppGaps.screenH,
+                  ),
+                  itemCount: needls.length,
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: AppGaps.itemGap),
                   itemBuilder: (context, index) {
-                    final t = threads[index];
-                    return ListTile(
-                      leading: const Icon(Icons.forum_outlined),
-                      title: Text(
-                        t.preview.isEmpty ? 'Thread' : t.preview,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text(
-                        '${t.replyCount} replies'
-                        '${t.channelName != null ? ' · #${t.channelName}' : ''}',
-                      ),
-                      onTap: () {
-                        if (t.spaceId != null && t.spaceId!.isNotEmpty) {
-                          context.push(
-                            AppRoutes.threadPath(
-                              t.spaceId!,
-                              t.channelId,
-                              t.rootMessageId,
-                            ),
-                          );
-                        } else {
-                          context.push(
-                            AppRoutes.dmThreadPath(
-                              t.channelId,
-                              t.rootMessageId,
-                            ),
-                          );
-                        }
+                    final needl = needls[index];
+                    final preview = needl.lastMessage;
+                    final hasDraft = draftIds.contains(needl.id);
+                    final memberCount = needl.members.length;
+                    final previewText = hasDraft
+                        ? (preview != null
+                            ? 'Draft · ${preview.previewLabel}'
+                            : 'Draft awaiting')
+                        : (preview != null
+                            ? preview.previewLabel
+                            : 'No messages yet');
+                    final memberHint = memberCount > 0
+                        ? '$memberCount people'
+                        : 'Needl';
+
+                    return ListenableBuilder(
+                      listenable: TypingPresence.instance,
+                      builder: (context, _) {
+                        final typing =
+                            TypingPresence.instance.labelFor(needl.id);
+                        return DMRow(
+                          key: ValueKey('needl-${needl.id}'),
+                          name: needl.displayName,
+                          preview: '$memberHint · $previewText',
+                          imageUrl: null,
+                          timestamp: hasDraft
+                              ? null
+                              : _formatTimestamp(preview?.sentAt),
+                          unreadCount: unreadByChannel[needl.id] ?? 0,
+                          isOnline: false,
+                          typingLabel: typing,
+                          onTap: () async {
+                            await openDmChat(
+                              context,
+                              channelId: needl.id,
+                              channel: needl,
+                            );
+                            onReload();
+                          },
+                        );
                       },
                     );
                   },
@@ -748,12 +794,14 @@ class _DirectTabState extends State<_DirectTab> {
           );
         }
 
-        final dms = snapshot.data![0] as List<ChannelModel>;
+        final allDms = snapshot.data![0] as List<ChannelModel>;
         final pending =
             snapshot.data![1] as List<MessageRequestModel>;
         final draftIds = snapshot.data![2] as Set<String>;
         final unreadByChannel =
             snapshot.data![3] as Map<String, int>;
+        // Needls (3+ people) live under the Needl tab — keep Direct 1:1 / notes.
+        final dms = allDms.where((dm) => !dm.isGroupDm).toList();
 
         if (dms.isEmpty && pending.isEmpty) {
           return AppEmptyState(
