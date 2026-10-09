@@ -1,4 +1,5 @@
 const { appendFileSync, mkdirSync, readFileSync } = require('node:fs');
+const { Writable } = require('node:stream');
 const { createRequire } = require('node:module');
 const { join } = require('node:path');
 const Module = require('node:module');
@@ -47,14 +48,47 @@ if (process.env.VOCLE_FAKE_FIREBASE === '1') {
     getFirebaseAdmin: () => ({ messaging: () => fakeMessaging }),
   };
 }
-if (fakeFirebase || process.env.VOCLE_FAKE_CLOCK === '1') {
+let fakeCloudinary = null;
+if (process.env.VOCLE_FAKE_CLOUDINARY === '1') {
+  const mode = () => {
+    try { return JSON.parse(readFileSync(join(inbox, 'cloudinary-mode.json'), 'utf8')); }
+    catch (error) { if (error.code === 'ENOENT') return { enabled: false }; throw error; }
+  };
+  fakeCloudinary = {
+    connectCloudinary: () => {},
+    isCloudinaryConfigured: () => mode().enabled === true,
+    cloudinary: {
+      uploader: {
+        upload_stream: (options, callback) => {
+          const chunks = [];
+          return new Writable({
+            write(chunk, _encoding, done) { chunks.push(Buffer.from(chunk)); done(); },
+            final(done) {
+              const buffer = Buffer.concat(chunks);
+              const current = mode();
+              appendFileSync(join(inbox, 'cloudinary-capture.ndjson'), `${JSON.stringify({ options, size: buffer.length, firstBytes: buffer.subarray(0, 16).toString('hex'), outcome: current.outcome || 'success' })}\n`, { mode: 0o600 });
+              if (current.outcome === 'fail') callback(new Error('Synthetic provider upload failure'));
+              else callback(null, { secure_url: `https://res.cloudinary.com/synthetic/${options.resource_type}/upload/${options.filename_override}`, public_id: `${options.folder}/${options.filename_override}`, width: options.resource_type === 'image' ? 320 : null, height: options.resource_type === 'image' ? 240 : null, format: options.resource_type === 'raw' ? 'pdf' : options.resource_type === 'video' ? 'mp4' : 'png' });
+              done();
+            },
+          });
+        },
+        destroy: async () => ({ result: 'ok' }),
+      },
+      url: (publicId, options) => `https://res.cloudinary.com/synthetic/${options.resource_type || 'image'}/thumbnail/${encodeURIComponent(publicId)}?format=${options.format}&width=${options.width}`,
+    },
+  };
+}
+if (fakeFirebase || fakeCloudinary || process.env.VOCLE_FAKE_CLOCK === '1') {
   const originalLoad = Module._load;
   const firebaseConfigPath = join(backendRoot, 'src', 'config', 'firebase.js');
+  const cloudinaryConfigPath = join(backendRoot, 'src', 'config', 'cloudinary.js');
   const appPath = join(backendRoot, 'src', 'app.js');
   Module._load = function (request, parent, isMain) {
     let resolved;
     try { resolved = Module._resolveFilename(request, parent, isMain); } catch { /* preserve the ordinary module error */ }
     if (fakeFirebase && resolved === firebaseConfigPath) return fakeFirebase;
+    if (fakeCloudinary && resolved === cloudinaryConfigPath) return fakeCloudinary;
     const loaded = originalLoad.apply(this, arguments);
     if (resolved === appPath && process.env.VOCLE_FAKE_CLOCK === '1') installClock();
     return loaded;

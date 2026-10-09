@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "scope": "batch4-new-22-only",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "plannedCatalogCount": 187,
+  "selectedIds": [
+    "FR-HOF-01",
+    "FR-HOF-02",
+    "FR-HOF-03",
+    "FR-HOF-04",
+    "FR-HOF-05",
+    "FR-HOF-06",
+    "FR-HOF-07",
+    "FR-HOF-08",
+    "FR-HOF-09",
+    "FR-HOF-10",
+    "FR-MED-01",
+    "FR-MED-02",
+    "FR-MED-03",
+    "FR-MED-04",
+    "FR-MED-05",
+    "FR-MED-06",
+    "FR-MED-07",
+    "FR-SUP-01",
+    "FR-SUP-02",
+    "FR-SUP-03",
+    "FR-RUN-01",
+    "FR-RUN-02"
+  ],
+  "tally": {
+    "PASS": 13,
+    "FAIL": 2,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 7,
+    "SKIP": 0
+  },
+  "implementedBackendSoFar": 143,
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "harnessBaseShas": {
+    "handoffs": "25466123448e71a7680986ab55a8313d71345924",
+    "media": "fb152bbd6639a06780185f3e1409267118974d38",
+    "support": "fb152bbd6639a06780185f3e1409267118974d38",
+    "runtime": "fb152bbd6639a06780185f3e1409267118974d38"
+  },
+  "harnessContentSha256": "ab2486378ceeb1d77703c4359cd7072079f48a27213e6a2b8f9e6cdd7c9b7093",
+  "results": [
+    {
+      "id": "FR-HOF-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-05",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q3: draft audience policy pending; receiver search includes current draft false",
+      "verifiedSubassertions": [
+        "Owner draft detail and patient persisted",
+        "Receiver draft filter and detail excluded",
+        "Ordinary member detail/history excluded"
+      ]
+    },
+    {
+      "id": "FR-HOF-06",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-07",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q4: shiftDate sort with ID cursor; expected [\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f514\",\"6ac93ac6e457ffa41cf8f519\",\"6ac93ac6e457ffa41cf8f50f\"], observed [\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f514\",\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f50f\"]",
+      "verifiedSubassertions": [
+        "Four source handoffs persisted",
+        "First page follows shiftDate descending",
+        "Second page response captured"
+      ]
+    },
+    {
+      "id": "FR-HOF-08",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-09",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-10",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MED-01",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "Unsupported files must be client errors, not HTTP 500\n+ actual - expected\n\n  [\n+   500,\n+   500\n-   400,\n-   400\n  ]\n"
+    },
+    {
+      "id": "FR-MED-02",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q5: octet-stream upload format/MIME contract pending; synthetic-octet.pdf:pdf/application/octet-stream, synthetic-octet.mp4:video/application/octet-stream",
+      "verifiedSubassertions": [
+        "Extension fallback accepted PDF and MP4",
+        "Returned format and MIME captured",
+        "Local delivered bytes exact"
+      ]
+    },
+    {
+      "id": "FR-MED-03",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q5: local upload URL is rejected by image-message policy; full upload→message pipeline has no successful local path",
+      "verifiedSubassertions": [
+        "Upload bytes and metadata verified",
+        "Actual returned URL rejected by message route",
+        "No message persisted"
+      ]
+    },
+    {
+      "id": "FR-MED-04",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q5: video upload succeeds, but video message type is rejected by the pinned source",
+      "verifiedSubassertions": [
+        "Video upload format verified",
+        "Actual send rejected",
+        "No message persisted"
+      ]
+    },
+    {
+      "id": "FR-MED-05",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MED-06",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q6: profile points to replacement avatar; old file was deleted explicitly, automatic old-file lifecycle remains undecided",
+      "verifiedSubassertions": [
+        "Profile references B after reload",
+        "A deletion and B bytes verified"
+      ]
+    },
+    {
+      "id": "FR-MED-07",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q6: referenced local image/video bytes delete, handoff-context deletion is unsupported, and handoff attachment references remain",
+      "verifiedSubassertions": [
+        "Supported local file bytes removed",
+        "Handoff-context delete refused",
+        "Consumer retains stale reference"
+      ]
+    },
+    {
+      "id": "FR-SUP-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SUP-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SUP-03",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "Dev notification seeding must create three valid inbox records\n\n400 !== 200\n"
+    },
+    {
+      "id": "FR-RUN-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-RUN-02",
+      "status": "PASS"
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/handoffs-7e2db315-01cf-46ae-86f4-ce1a2a1dd424",
+    "tests/functional-regression/output/media-2a39ec0b-76d2-4db9-8e56-d7b7f534ba98",
+    "tests/functional-regression/output/support-b2ff1533-18d0-48bd-8f18-c6046ee92127",
+    "tests/functional-regression/output/runtime-a89363a9-1588-4458-bed1-85cdfde87700"
+  ]
+}

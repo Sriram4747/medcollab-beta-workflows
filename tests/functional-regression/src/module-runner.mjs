@@ -37,10 +37,11 @@ export async function runModule(moduleName, cases) {
   const origin = `http://127.0.0.1:${port}`;
   let mongo, backend, results = [], cleanup = { status: 'ERROR' };
   try {
-    mongo = await startMongo(backendRoot, join(outputRoot, 'mongo-binaries'), { enableTestCommands: cases.some((item) => item.mongoFailpoint === true) });
+    mongo = await startMongo(backendRoot, join(outputRoot, 'mongo-binaries'), { enableTestCommands: cases.some((item) => item.mongoFailpoint === true), ...(cases.some((item) => item.mongoRestart === true) ? { dbPath: join(runtime, 'mongo-data') } : {}) });
     const uri = databaseUri(mongo.uri, moduleName, runId);
     backend = await startBackend(uri, port, runtime, inbox, { extraEnv: {
       VOCLE_FAKE_FIREBASE: cases.some((item) => item.fakeFirebase === true) ? '1' : '0',
+      VOCLE_FAKE_CLOUDINARY: cases.some((item) => item.fakeCloudinary === true) ? '1' : '0',
       VOCLE_FAKE_CLOCK: cases.some((item) => item.fakeClock === true) ? '1' : '0',
     } });
     const request = createHttp(origin);
@@ -52,6 +53,21 @@ export async function runModule(moduleName, cases) {
         return identities.get(label);
       },
       db: (action) => inspectDatabase(backendRoot, uri, action),
+      restartBackend: async () => {
+        await stopChild(backend.child);
+        backend = await startBackend(uri, port, runtime, inbox, { extraEnv: {
+          VOCLE_FAKE_FIREBASE: cases.some((item) => item.fakeFirebase === true) ? '1' : '0',
+          VOCLE_FAKE_CLOUDINARY: cases.some((item) => item.fakeCloudinary === true) ? '1' : '0',
+          VOCLE_FAKE_CLOCK: cases.some((item) => item.fakeClock === true) ? '1' : '0',
+        } });
+      },
+      pauseMongo: async () => mongo.server.stop({ doCleanup: false, force: false }),
+      resumeMongo: async () => {
+        const beforePath = mongo.server.instanceInfo?.dbPath;
+        await mongo.server.start(true);
+        if (mongo.server.getUri() !== mongo.uri) throw new Error('MongoDB resume changed the disposable URI');
+        if (mongo.server.instanceInfo?.dbPath !== beforePath) throw new Error('MongoDB resume changed the disposable data path');
+      },
     };
     results = await executeCases(cases, context, 30000);
   } catch (error) {
