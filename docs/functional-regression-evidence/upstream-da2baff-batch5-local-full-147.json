@@ -1,0 +1,2803 @@
+{
+  "manifest": {
+    "schemaVersion": 1,
+    "environmentContractVersion": 1,
+    "scope": "backend-all",
+    "sourceKind": "upstream-read-only",
+    "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+    "harnessSha": "ce082e5b6654975c9ac2a954e73c569d31c9542d",
+    "fingerprint": "ef3ad6fd4b501c1e726ebb1e5ec29279b7ecc40ee3eca13ec67f76489ffd5e1d",
+    "selectedIds": [
+      "authentication-and-profiles-01",
+      "authentication-and-profiles-02",
+      "authentication-and-profiles-03",
+      "authentication-and-profiles-04",
+      "authentication-and-profiles-05",
+      "authentication-and-profiles-06",
+      "authentication-and-profiles-07",
+      "spaces-and-invitations-01",
+      "spaces-and-invitations-02",
+      "spaces-and-invitations-03",
+      "spaces-and-invitations-04",
+      "spaces-and-invitations-05",
+      "channels-01",
+      "channels-02",
+      "channels-03",
+      "messaging-and-needl-01",
+      "messaging-and-needl-02",
+      "messaging-and-needl-03",
+      "messaging-and-needl-04",
+      "messaging-and-needl-05",
+      "messaging-and-needl-06",
+      "messaging-and-needl-07",
+      "message-requests-01",
+      "message-requests-02",
+      "message-requests-03",
+      "direct-and-group-conversations-01",
+      "direct-and-group-conversations-02",
+      "direct-and-group-conversations-03",
+      "direct-and-group-conversations-04",
+      "direct-and-group-conversations-05",
+      "handoffs-01",
+      "handoffs-02",
+      "handoffs-03",
+      "handoffs-04",
+      "handoffs-05",
+      "media-01",
+      "media-02",
+      "media-03",
+      "notifications-01",
+      "notifications-02",
+      "notifications-03",
+      "realtime-and-availability-01",
+      "realtime-and-availability-02",
+      "realtime-and-availability-03",
+      "search-01",
+      "search-02",
+      "support-01",
+      "startup-01",
+      "FR-AUTH-01",
+      "FR-AUTH-02",
+      "FR-AUTH-03",
+      "FR-AUTH-04",
+      "FR-AUTH-05",
+      "FR-AUTH-06",
+      "FR-AUTH-07",
+      "FR-PRO-01",
+      "FR-PRO-02",
+      "FR-PRO-03",
+      "FR-PRO-04",
+      "FR-DISC-01",
+      "FR-DISC-02",
+      "FR-DISC-03",
+      "FR-DISC-04",
+      "FR-SPC-01",
+      "FR-SPC-02",
+      "FR-SPC-03",
+      "FR-SPC-04",
+      "FR-SPC-05",
+      "FR-SPC-06",
+      "FR-CH-01",
+      "FR-CH-02",
+      "FR-CH-03",
+      "FR-CH-04",
+      "FR-CH-05",
+      "FR-REQ-01",
+      "FR-REQ-02",
+      "FR-REQ-03",
+      "FR-REQ-04",
+      "FR-REQ-05",
+      "FR-DM-01",
+      "FR-DM-02",
+      "FR-DM-03",
+      "FR-DM-04",
+      "FR-DM-05",
+      "FR-DM-06",
+      "FR-DM-07",
+      "FR-DM-08",
+      "FR-DM-09",
+      "FR-MSG-01",
+      "FR-MSG-02",
+      "FR-MSG-03",
+      "FR-MSG-04",
+      "FR-MSG-05",
+      "FR-MSG-06",
+      "FR-MSG-07",
+      "FR-MSG-08",
+      "FR-THR-01",
+      "FR-THR-02",
+      "FR-THR-03",
+      "FR-THR-04",
+      "FR-SOC-01",
+      "FR-SOC-02",
+      "FR-SOC-03",
+      "FR-SOC-04",
+      "FR-SOC-05",
+      "FR-HOF-01",
+      "FR-HOF-02",
+      "FR-HOF-03",
+      "FR-HOF-04",
+      "FR-HOF-05",
+      "FR-HOF-06",
+      "FR-HOF-07",
+      "FR-HOF-08",
+      "FR-HOF-09",
+      "FR-HOF-10",
+      "FR-MED-01",
+      "FR-MED-02",
+      "FR-MED-03",
+      "FR-MED-04",
+      "FR-MED-05",
+      "FR-MED-06",
+      "FR-MED-07",
+      "FR-NOT-01",
+      "FR-NOT-02",
+      "FR-NOT-03",
+      "FR-NOT-04",
+      "FR-NOT-05",
+      "FR-PUSH-01",
+      "FR-PUSH-02",
+      "FR-PUSH-03",
+      "FR-PUSH-04",
+      "FR-RT-01",
+      "FR-RT-02",
+      "FR-RT-03",
+      "FR-RT-07",
+      "FR-SRCH-01",
+      "FR-SRCH-02",
+      "FR-SRCH-03",
+      "FR-SUP-01",
+      "FR-SUP-02",
+      "FR-SUP-03",
+      "FR-RUN-01",
+      "FR-RUN-02",
+      "FR-JRN-01",
+      "FR-JRN-02",
+      "FR-JRN-03",
+      "FR-JRN-04"
+    ],
+    "tally": {
+      "PASS": 109,
+      "FAIL": 17,
+      "ERROR": 0,
+      "BLOCKED": 4,
+      "NEEDS_DECISION": 17,
+      "SKIP": 0
+    },
+    "result": "FAIL",
+    "verifiedBackendAll": false,
+    "integrityError": null,
+    "runId": null,
+    "attempt": null
+  },
+  "results": {
+    "schemaVersion": 1,
+    "environmentContractVersion": 1,
+    "scope": "backend-all",
+    "sourceKind": "upstream-read-only",
+    "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+    "harnessSha": "ce082e5b6654975c9ac2a954e73c569d31c9542d",
+    "fingerprint": "ef3ad6fd4b501c1e726ebb1e5ec29279b7ecc40ee3eca13ec67f76489ffd5e1d",
+    "selectedIds": [
+      "authentication-and-profiles-01",
+      "authentication-and-profiles-02",
+      "authentication-and-profiles-03",
+      "authentication-and-profiles-04",
+      "authentication-and-profiles-05",
+      "authentication-and-profiles-06",
+      "authentication-and-profiles-07",
+      "spaces-and-invitations-01",
+      "spaces-and-invitations-02",
+      "spaces-and-invitations-03",
+      "spaces-and-invitations-04",
+      "spaces-and-invitations-05",
+      "channels-01",
+      "channels-02",
+      "channels-03",
+      "messaging-and-needl-01",
+      "messaging-and-needl-02",
+      "messaging-and-needl-03",
+      "messaging-and-needl-04",
+      "messaging-and-needl-05",
+      "messaging-and-needl-06",
+      "messaging-and-needl-07",
+      "message-requests-01",
+      "message-requests-02",
+      "message-requests-03",
+      "direct-and-group-conversations-01",
+      "direct-and-group-conversations-02",
+      "direct-and-group-conversations-03",
+      "direct-and-group-conversations-04",
+      "direct-and-group-conversations-05",
+      "handoffs-01",
+      "handoffs-02",
+      "handoffs-03",
+      "handoffs-04",
+      "handoffs-05",
+      "media-01",
+      "media-02",
+      "media-03",
+      "notifications-01",
+      "notifications-02",
+      "notifications-03",
+      "realtime-and-availability-01",
+      "realtime-and-availability-02",
+      "realtime-and-availability-03",
+      "search-01",
+      "search-02",
+      "support-01",
+      "startup-01",
+      "FR-AUTH-01",
+      "FR-AUTH-02",
+      "FR-AUTH-03",
+      "FR-AUTH-04",
+      "FR-AUTH-05",
+      "FR-AUTH-06",
+      "FR-AUTH-07",
+      "FR-PRO-01",
+      "FR-PRO-02",
+      "FR-PRO-03",
+      "FR-PRO-04",
+      "FR-DISC-01",
+      "FR-DISC-02",
+      "FR-DISC-03",
+      "FR-DISC-04",
+      "FR-SPC-01",
+      "FR-SPC-02",
+      "FR-SPC-03",
+      "FR-SPC-04",
+      "FR-SPC-05",
+      "FR-SPC-06",
+      "FR-CH-01",
+      "FR-CH-02",
+      "FR-CH-03",
+      "FR-CH-04",
+      "FR-CH-05",
+      "FR-REQ-01",
+      "FR-REQ-02",
+      "FR-REQ-03",
+      "FR-REQ-04",
+      "FR-REQ-05",
+      "FR-DM-01",
+      "FR-DM-02",
+      "FR-DM-03",
+      "FR-DM-04",
+      "FR-DM-05",
+      "FR-DM-06",
+      "FR-DM-07",
+      "FR-DM-08",
+      "FR-DM-09",
+      "FR-MSG-01",
+      "FR-MSG-02",
+      "FR-MSG-03",
+      "FR-MSG-04",
+      "FR-MSG-05",
+      "FR-MSG-06",
+      "FR-MSG-07",
+      "FR-MSG-08",
+      "FR-THR-01",
+      "FR-THR-02",
+      "FR-THR-03",
+      "FR-THR-04",
+      "FR-SOC-01",
+      "FR-SOC-02",
+      "FR-SOC-03",
+      "FR-SOC-04",
+      "FR-SOC-05",
+      "FR-HOF-01",
+      "FR-HOF-02",
+      "FR-HOF-03",
+      "FR-HOF-04",
+      "FR-HOF-05",
+      "FR-HOF-06",
+      "FR-HOF-07",
+      "FR-HOF-08",
+      "FR-HOF-09",
+      "FR-HOF-10",
+      "FR-MED-01",
+      "FR-MED-02",
+      "FR-MED-03",
+      "FR-MED-04",
+      "FR-MED-05",
+      "FR-MED-06",
+      "FR-MED-07",
+      "FR-NOT-01",
+      "FR-NOT-02",
+      "FR-NOT-03",
+      "FR-NOT-04",
+      "FR-NOT-05",
+      "FR-PUSH-01",
+      "FR-PUSH-02",
+      "FR-PUSH-03",
+      "FR-PUSH-04",
+      "FR-RT-01",
+      "FR-RT-02",
+      "FR-RT-03",
+      "FR-RT-07",
+      "FR-SRCH-01",
+      "FR-SRCH-02",
+      "FR-SRCH-03",
+      "FR-SUP-01",
+      "FR-SUP-02",
+      "FR-SUP-03",
+      "FR-RUN-01",
+      "FR-RUN-02",
+      "FR-JRN-01",
+      "FR-JRN-02",
+      "FR-JRN-03",
+      "FR-JRN-04"
+    ],
+    "tally": {
+      "PASS": 109,
+      "FAIL": 17,
+      "ERROR": 0,
+      "BLOCKED": 4,
+      "NEEDS_DECISION": 17,
+      "SKIP": 0
+    },
+    "result": "FAIL",
+    "verifiedBackendAll": false,
+    "integrityError": null,
+    "runId": null,
+    "attempt": null,
+    "results": [
+      {
+        "id": "authentication-and-profiles-01",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 163,
+        "title": "Request OTP",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-02",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 106,
+        "title": "Request/verify again for same phone",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-03",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 157,
+        "title": "Submit wrong code then correct captured code",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-04",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 3,
+        "title": "Reuse consumed code",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-05",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 12,
+        "title": "Update onboarding name/institution",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-06",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 7,
+        "title": "Refresh with missing token then valid token",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "authentication-and-profiles-07",
+        "module": "authentication-and-profiles",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 21,
+        "title": "Register device twice",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "spaces-and-invitations-01",
+        "module": "spaces-and-invitations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 16,
+        "title": "Create department space",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "spaces-and-invitations-02",
+        "module": "spaces-and-invitations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 27,
+        "title": "Preview invite as B",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "spaces-and-invitations-03",
+        "module": "spaces-and-invitations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 8,
+        "title": "Repeat B join",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "spaces-and-invitations-04",
+        "module": "spaces-and-invitations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 12,
+        "title": "Rename S2 and rotate invite",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "spaces-and-invitations-05",
+        "module": "spaces-and-invitations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 21,
+        "title": "B leaves, owner removes C, owner tries leaving",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "channels-01",
+        "module": "channels",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 16,
+        "title": "Create public channel, duplicate create gives 409, rename",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "channels-02",
+        "module": "channels",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 11,
+        "title": "Create private channel as A",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "channels-03",
+        "module": "channels",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 34,
+        "title": "Send in custom channel, archive",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-01",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 24,
+        "title": "Send text A→general",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-02",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 40,
+        "title": "Send three roots",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-03",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 10,
+        "title": "Quote prior message via replyToId",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-04",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 35,
+        "title": "Reply to root",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-05",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 27,
+        "title": "Subscribe, edit text, delete it",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-06",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 38,
+        "title": "Toggle reaction on/off",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "messaging-and-needl-07",
+        "module": "messaging-and-needl",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 12,
+        "title": "Empty text fails",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "message-requests-01",
+        "module": "message-requests",
+        "status": "FAIL",
+        "errorCategory": "APPLICATION_ASSERTION",
+        "error": "Recipient message-request notification was not persisted within 5 seconds (request state was persisted).",
+        "durationMs": 5069,
+        "title": "Enable D requests",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "message-requests-02",
+        "module": "message-requests",
+        "status": "FAIL",
+        "errorCategory": "APPLICATION_ASSERTION",
+        "error": "POST /api/message-requests/6ac9408f56db68320fc0d222/accept expected 200, received 500: {\"success\":false,\"message\":\"Plan executor error during findAndModify :: caused by :: cannot infer query fields to set, path 'members' is matched twice\",\"errors\":[]}",
+        "durationMs": 14,
+        "title": "D accepts preceding request",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "message-requests-03",
+        "module": "message-requests",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 25,
+        "title": "Create separate A→E eligible request",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "direct-and-group-conversations-01",
+        "module": "direct-and-group-conversations",
+        "status": "BLOCKED",
+        "errorCategory": "DEPENDENCY",
+        "error": "Required request, conversation, or message fixture was not created.",
+        "durationMs": 0,
+        "title": "Reopen accepted A/D DM from both sides",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "direct-and-group-conversations-02",
+        "module": "direct-and-group-conversations",
+        "status": "BLOCKED",
+        "errorCategory": "DEPENDENCY",
+        "error": "Required request, conversation, or message fixture was not created.",
+        "durationMs": 0,
+        "title": "Send in accepted DM",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "direct-and-group-conversations-03",
+        "module": "direct-and-group-conversations",
+        "status": "BLOCKED",
+        "errorCategory": "DEPENDENCY",
+        "error": "Required request, conversation, or message fixture was not created.",
+        "durationMs": 0,
+        "title": "Mark peer message read twice",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "direct-and-group-conversations-04",
+        "module": "direct-and-group-conversations",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 44,
+        "title": "Open self notes and send",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "direct-and-group-conversations-05",
+        "module": "direct-and-group-conversations",
+        "status": "BLOCKED",
+        "errorCategory": "DEPENDENCY",
+        "error": "Required request, conversation, or message fixture was not created.",
+        "durationMs": 0,
+        "title": "Expand independent source DMs with none/all",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "handoffs-01",
+        "module": "handoffs",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 17,
+        "title": "Create draft patient+attachment, edit summary, read",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "handoffs-02",
+        "module": "handoffs",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 15,
+        "title": "Empty draft submit gives 400",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "handoffs-03",
+        "module": "handoffs",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 32,
+        "title": "Submit populated draft",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "handoffs-04",
+        "module": "handoffs",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 10,
+        "title": "B acknowledges with note",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "handoffs-05",
+        "module": "handoffs",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 20,
+        "title": "B adds note then reassigns to C",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "media-01",
+        "module": "media",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 21,
+        "title": "Upload PNG, download exact bytes, delete, subsequent retrieval 404.",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "media-02",
+        "module": "media",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 18,
+        "title": "Upload PDF, compare downloaded bytes",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "media-03",
+        "module": "media",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 38,
+        "title": "Send inert image/ECG/document URL metadata",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "notifications-01",
+        "module": "notifications",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 25,
+        "title": "Send ordinary message to non-viewing B",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "notifications-02",
+        "module": "notifications",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 27,
+        "title": "Mention B then emergency message",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "notifications-03",
+        "module": "notifications",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 35,
+        "title": "Mark one read/unread, channel read, all read, delete",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "realtime-and-availability-01",
+        "module": "realtime-and-availability",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 36,
+        "title": "Authenticate two sockets, join, REST send, receive",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "realtime-and-availability-02",
+        "module": "realtime-and-availability",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 1,
+        "title": "Start/stop typing",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "realtime-and-availability-03",
+        "module": "realtime-and-availability",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 20,
+        "title": "REST/socket availability, room sync, final disconnect",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "search-01",
+        "module": "search",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 8,
+        "title": "Known-user name query and phone lookup return intended colleague.",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "search-02",
+        "module": "search",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 36,
+        "title": "Global marker search finds message/doctor/channel/attachment/handoff",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "support-01",
+        "module": "support",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 33,
+        "title": "Submit bug, inspect ticket ID/author/type/title/description",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "startup-01",
+        "module": "startup",
+        "status": "PASS",
+        "error": "",
+        "durationMs": 0,
+        "title": "GET health",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-01",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 410,
+        "error": "",
+        "title": "OTP format boundaries: missing phone, no plus, 6/7/15/16 digits",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-02",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 327,
+        "error": "",
+        "title": "Resend before consumption",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-03",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 251,
+        "error": "",
+        "title": "Seed expiry just before/after controlled now",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-04",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 579,
+        "error": "",
+        "title": "Two wrong attempts then correct third",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-05",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 407,
+        "error": "",
+        "title": "Fake SMS provider timeout/rejection then success",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-06",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 63,
+        "error": "",
+        "title": "Fake opaque widget accepted token with verified phone, rejected token, phone mismatch and explicit provider failure response",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-AUTH-07",
+        "module": "AUTH",
+        "status": "PASS",
+        "durationMs": 281,
+        "error": "",
+        "title": "Expired refresh then newly logged-in refresh",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PRO-01",
+        "module": "PRO",
+        "status": "PASS",
+        "durationMs": 435,
+        "error": "",
+        "title": "Save name+role for new user, read me, access spaces, relogin",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PRO-02",
+        "module": "PRO",
+        "status": "PASS",
+        "durationMs": 207,
+        "error": "",
+        "title": "Update name at 2/100/101, bio 300/301, institution 200/201, pgYear 1/6/0/7, invalid role",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PRO-03",
+        "module": "PRO",
+        "status": "PASS",
+        "durationMs": 48,
+        "error": "",
+        "title": "Set mentions=false",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PRO-04",
+        "module": "PRO",
+        "status": "PASS",
+        "durationMs": 172,
+        "prerequisiteSeed": "Existing A/B direct channel inserted directly to exercise profile projections; live direct-DM creation returns 500 on pinned upstream and is not credited here",
+        "error": "",
+        "title": "Change title/speciality/avatar/bio then view peer in DM and member list",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DISC-01",
+        "module": "DISC",
+        "status": "PASS",
+        "durationMs": 829,
+        "prerequisiteSeed": "Accepted A/C request inserted directly to represent an existing peer relationship",
+        "error": "",
+        "title": "Lookup self, shared-space B, stranger D opt-in, stranger E opt-out, accepted peer",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DISC-02",
+        "module": "DISC",
+        "status": "PASS",
+        "durationMs": 47,
+        "error": "",
+        "title": "Lookup valid absent phone and valid normalized variants",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DISC-03",
+        "module": "DISC",
+        "status": "PASS",
+        "durationMs": 128,
+        "error": "",
+        "title": "Search name/title/speciality, mixed case, spaces and literal punctuation",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DISC-04",
+        "module": "DISC",
+        "status": "PASS",
+        "durationMs": 63,
+        "prerequisiteSeed": "Twenty-one eligible and two ineligible synthetic users inserted directly as search fixtures, then added to a test space",
+        "error": "",
+        "title": "Search with 21 matching known users plus inactive/unonboarded fixture",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-01",
+        "module": "SPC",
+        "status": "PASS",
+        "durationMs": 357,
+        "error": "",
+        "title": "Create name 2/100/101, description 300/301, invalid type",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-02",
+        "module": "SPC",
+        "status": "PASS",
+        "durationMs": 423,
+        "error": "",
+        "title": "Preview/join lowercase invite",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-03",
+        "module": "SPC",
+        "status": "NEEDS_DECISION",
+        "durationMs": 303,
+        "errorCategory": "DecisionPending",
+        "error": "Q14: pending-join client state and approval completion need product decision",
+        "verifiedSubassertions": [
+          "requireApproval persisted",
+          "repeat join created one pending request",
+          "requester has no membership or channel detail access"
+        ],
+        "title": "Set requireApproval",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-04",
+        "module": "SPC",
+        "status": "PASS",
+        "durationMs": 437,
+        "prerequisiteSeed": "C space role promoted to admin directly; no promotion route exists",
+        "error": "",
+        "title": "Owner/admin update settings",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-05",
+        "module": "SPC",
+        "status": "PASS",
+        "durationMs": 1005,
+        "error": "",
+        "title": "Set availability for members in distinct priority ranks",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SPC-06",
+        "module": "SPC",
+        "status": "FAIL",
+        "durationMs": 2021,
+        "errorCategory": "AssertionError",
+        "error": "Explicit room sync left revoked users subscribed to a space room\n+ actual - expected\n\n  [\n+   true,\n+   true\n-   false,\n-   false\n  ]\n",
+        "title": "B leaves/removal while online",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-CH-01",
+        "module": "CH",
+        "status": "PASS",
+        "durationMs": 373,
+        "error": "",
+        "title": "Create channel name 1/80/81 and uppercase/space, description 200/201",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-CH-02",
+        "module": "CH",
+        "status": "PASS",
+        "durationMs": 210,
+        "error": "",
+        "title": "Read S/detail/channel lists as A and B with public X/private Y",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-CH-03",
+        "module": "CH",
+        "status": "PASS",
+        "durationMs": 63,
+        "error": "",
+        "title": "Set onlyAdminsCanPost",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-CH-04",
+        "module": "CH",
+        "status": "PASS",
+        "durationMs": 73,
+        "error": "",
+        "title": "Update custom description/name",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-CH-05",
+        "module": "CH",
+        "status": "PASS",
+        "durationMs": 126,
+        "error": "",
+        "title": "Archive X containing root/pin",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-REQ-01",
+        "module": "REQ",
+        "status": "PASS",
+        "durationMs": 500,
+        "error": "",
+        "title": "A requests D",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-REQ-02",
+        "module": "REQ",
+        "status": "PASS",
+        "durationMs": 472,
+        "prerequisiteSeed": "Accepted request inserted as component prerequisite; no accept endpoint behavior credited",
+        "error": "",
+        "title": "Try self, missing target, already accepted peer, opt-out E",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-REQ-03",
+        "module": "REQ",
+        "status": "PASS",
+        "durationMs": 613,
+        "prerequisiteSeed": "Accepted and declined statuses set directly after real request creation to isolate list/filter serialization; transition behavior is exercised separately",
+        "error": "",
+        "title": "Intro lengths 0/280/281",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-REQ-04",
+        "module": "REQ",
+        "status": "FAIL",
+        "durationMs": 456,
+        "errorCategory": "HttpContractError",
+        "error": "POST /api/message-requests/6ac940f1f998e176d56a5177/accept expected 200, got 500",
+        "title": "Recipient accepts/declines",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-REQ-05",
+        "module": "REQ",
+        "status": "NEEDS_DECISION",
+        "durationMs": 347,
+        "errorCategory": "DecisionPending",
+        "error": "Q7: recovery or atomic rollback contract for accepted-without-DM state requires product decision",
+        "verifiedSubassertions": [
+          "controlled database fault returned 500",
+          "request persisted as accepted without DM",
+          "reload exposes accepted request but no DM",
+          "accept retry rejected and did not recover"
+        ],
+        "title": "Interrupt accept after request state write via DB fault",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-01",
+        "module": "DM",
+        "status": "FAIL",
+        "durationMs": 10621,
+        "prerequisiteSeed": "Accepted A/B request inserted directly for pair-delegation branch; no accept endpoint behavior credited",
+        "errorCategory": "HttpContractError",
+        "error": "POST /api/channels/dm/group transport timed out after 10000 ms",
+        "title": "Create group through both aliases with reordered/duplicate/self IDs",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-02",
+        "module": "DM",
+        "status": "PASS",
+        "durationMs": 1264,
+        "error": "",
+        "title": "Create with 8 then 9 distinct other users",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-03",
+        "module": "DM",
+        "status": "PASS",
+        "durationMs": 487,
+        "error": "",
+        "title": "Rename to whitespace, 80 and 81 chars",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-04",
+        "module": "DM",
+        "status": "PASS",
+        "durationMs": 459,
+        "prerequisiteSeed": "Two direct channels inserted as existing conversation fixtures because live pair creation returns 500 on pinned upstream; list ordering and peer projection are tested independently",
+        "error": "",
+        "title": "Send in two DMs in known sequence",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-05",
+        "module": "DM",
+        "status": "NEEDS_DECISION",
+        "durationMs": 440,
+        "prerequisiteSeed": "Existing A/B direct channel and three timestamped synthetic roots inserted directly; live pair creation is a separate failing contract",
+        "errorCategory": "DecisionPending",
+        "error": "Q2: intended client timezone for today expansion needs product decision",
+        "verifiedSubassertions": [
+          "server UTC midnight excluded prior-day root",
+          "at/after-midnight roots copied with new IDs",
+          "source records unchanged"
+        ],
+        "title": "Expand today with messages before/at/after midnight, fixed server TZ",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-06",
+        "module": "DM",
+        "status": "NEEDS_DECISION",
+        "durationMs": 549,
+        "prerequisiteSeed": "Existing A/B direct channel and 502 synthetic roots inserted directly to isolate all-history copy behavior",
+        "errorCategory": "DecisionPending",
+        "error": "Q2: 500-item oldest-first cap and source-ID destination preview require product decision",
+        "verifiedSubassertions": [
+          "501 active source roots and one deleted root retained",
+          "oldest 500 active roots copied with new IDs",
+          "deleted and newest active roots excluded",
+          "destination preview points to source ID"
+        ],
+        "title": "Expand all with 501 roots plus deleted record",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-07",
+        "module": "DM",
+        "status": "NEEDS_DECISION",
+        "durationMs": 498,
+        "prerequisiteSeed": "Existing A/B direct channel inserted directly; root, thread reply and quote then created through live message APIs",
+        "errorCategory": "DecisionPending",
+        "error": "Q2: copied thread and quote graph remapping requires product decision",
+        "verifiedSubassertions": [
+          "source thread and quote references unchanged",
+          "three copies have new IDs",
+          "copied thread reply has no threadId",
+          "copied quote targets source root",
+          "destination thread and source-ID navigation cannot open the copied graph"
+        ],
+        "title": "Expand with root+thread+quote",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-08",
+        "module": "DM",
+        "status": "PASS",
+        "durationMs": 486,
+        "prerequisiteSeed": "Existing A/B direct channel inserted directly; history messages sent through live API before and after first expansion",
+        "error": "",
+        "title": "Expand to membership already existing",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-DM-09",
+        "module": "DM",
+        "status": "FAIL",
+        "durationMs": 441,
+        "prerequisiteSeed": "Accepted A/B request inserted directly before concurrent pair intents because live acceptance is a separate failing contract",
+        "errorCategory": "HttpContractError",
+        "error": "POST /api/channels/dm expected 200, got 500; concurrent group records observed: 2",
+        "title": "Concurrent pair/group reopen requests",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-01",
+        "module": "MSG",
+        "status": "FAIL",
+        "durationMs": 399,
+        "errorCategory": "HttpContractError",
+        "error": "POST /api/channels/6ac94118a6c3381d1491b8be/messages expected 201, got 400",
+        "title": "Send missing/nonstring/whitespace text, 4000/4001 trimmed chars",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-02",
+        "module": "MSG",
+        "status": "PASS",
+        "durationMs": 267,
+        "prerequisiteSeed": "Controlled ObjectId sequence and one thread reply inserted directly to isolate root cursor behavior",
+        "error": "",
+        "title": "Page roots with 0/1/100/101 limit, malformed before, empty and exact full final page",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-03",
+        "module": "MSG",
+        "status": "PASS",
+        "durationMs": 356,
+        "error": "",
+        "title": "Quote text >120 chars and image/document",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-04",
+        "module": "MSG",
+        "status": "PASS",
+        "durationMs": 425,
+        "error": "",
+        "title": "Edit text twice",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-05",
+        "module": "MSG",
+        "status": "NEEDS_DECISION",
+        "durationMs": 444,
+        "errorCategory": "DecisionPending",
+        "error": "Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision",
+        "verifiedSubassertions": [
+          "Root 6ac9411cd08dc84e5855580c persisted edit then soft deletion; search removed old text after edit and new text after deletion",
+          "Quote 6ac9411cd08dc84e5855580e after edit retained text \"Synthetic previeworiginal unique marker\"",
+          "Channel preview after edit {\"messageId\":\"6ac9411cd08dc84e5855580e\",\"text\":\"Synthetic quote of newest\",\"senderName\":\"Dr Synthetic B\",\"type\":\"text\",\"sentAt\":\"2026-10-09T19:31:40.347Z\"}; after delete {\"messageId\":\"6ac9411cd08dc84e58555810\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T19:31:40.390Z\"}",
+          "Newest 6ac9411cd08dc84e58555810 edited and deleted; preview after edit {\"messageId\":\"6ac9411cd08dc84e58555810\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T19:31:40.390Z\"}; after delete {\"messageId\":\"6ac9411cd08dc84e58555810\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T19:31:40.390Z\"}"
+        ],
+        "title": "Edit/delete newest message",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-06",
+        "module": "MSG",
+        "status": "PASS",
+        "durationMs": 360,
+        "error": "",
+        "title": "Delete older message as sender and space admin",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-07",
+        "module": "MSG",
+        "status": "PASS",
+        "durationMs": 356,
+        "error": "",
+        "title": "Send urgent in general and normal in emergency",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MSG-08",
+        "module": "MSG",
+        "status": "NEEDS_DECISION",
+        "durationMs": 203,
+        "errorCategory": "DecisionPending",
+        "error": "Q7: automatic duplicate prevention after a lost successful response needs product decision",
+        "verifiedSubassertions": [
+          "Proxy consumed HTTP 201 for committed message 6ac9412086e34e8e10aa97be and dropped the client response",
+          "A fresh channel fetch recovered exactly one persisted message before any manual resend"
+        ],
+        "title": "Commit send then drop response at proxy",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-THR-01",
+        "module": "THR",
+        "status": "PASS",
+        "durationMs": 537,
+        "error": "",
+        "title": "A/B reply to one root",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-THR-02",
+        "module": "THR",
+        "status": "PASS",
+        "durationMs": 362,
+        "error": "",
+        "title": "Three replies, limit=2 then before oldest returned",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-THR-03",
+        "module": "THR",
+        "status": "PASS",
+        "durationMs": 220,
+        "prerequisiteSeed": "41 active thread roots and one archived-channel root inserted directly with distinct updatedAt values to isolate Needl selection",
+        "error": "",
+        "title": "Seed 41 active roots with distinct updatedAt",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-THR-04",
+        "module": "THR",
+        "status": "NEEDS_DECISION",
+        "durationMs": 357,
+        "errorCategory": "DecisionPending",
+        "error": "Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision",
+        "verifiedSubassertions": [
+          "Reply 6ac9412b409db7114841f113 edit and soft deletion persisted; thread page excludes deleted reply",
+          "Root after edit: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac9412b409db7114841f10c\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T19:31:55.951Z\"}}",
+          "Root after delete: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac9412b409db7114841f10c\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T19:31:55.951Z\"}}",
+          "Needl after delete: {\"rootMessageId\":\"6ac9412b409db7114841f111\",\"channelId\":\"6ac9412b409db7114841f10e\",\"spaceId\":\"6ac9412b409db7114841f10d\",\"channelName\":\"general\",\"channelType\":\"general\",\"preview\":\"Synthetic revision root\",\"replyCount\":1,\"lastReplyAt\":\"2026-10-09T19:31:55.951Z\",\"sender\":{\"_id\":\"6ac9412b409db7114841f10b\",\"role\":\"intern\",\"avatarUrl\":null,\"name\":\"Dr Synthetic A\"}}"
+        ],
+        "title": "Delete/edit most recent reply then read root and Needl",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SOC-01",
+        "module": "SOC",
+        "status": "FAIL",
+        "durationMs": 531,
+        "errorCategory": "AssertionError",
+        "error": "Switching emoji must replace B prior reaction\n+ actual - expected\n\n  [\n+   '👍',\n    '❤️'\n  ]\n",
+        "title": "A and B toggle same emoji",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SOC-02",
+        "module": "SOC",
+        "status": "PASS",
+        "durationMs": 323,
+        "error": "",
+        "title": "React to deleted message",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SOC-03",
+        "module": "SOC",
+        "status": "PASS",
+        "durationMs": 400,
+        "error": "",
+        "title": "Pin five distinct",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SOC-04",
+        "module": "SOC",
+        "status": "PASS",
+        "durationMs": 285,
+        "error": "",
+        "title": "Re-pin same ID below cap and at cap",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SOC-05",
+        "module": "SOC",
+        "status": "PASS",
+        "durationMs": 494,
+        "error": "",
+        "title": "B/C mark separate group-DM messages/read batches twice",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-01",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 598,
+        "error": "",
+        "title": "Draft two patients",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-02",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 142,
+        "error": "",
+        "title": "Missing bed/alias, bed 20/21, alias 100/101, notes 2000/2001, summary 2000/2001, invalid status/date/shift",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-03",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 107,
+        "error": "",
+        "title": "Submit same populated draft concurrently twice, then acknowledge concurrently twice",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-04",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 98,
+        "error": "",
+        "title": "Draft acknowledge/note/reassign",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-05",
+        "module": "HOF",
+        "status": "NEEDS_DECISION",
+        "durationMs": 66,
+        "errorCategory": "DecisionPending",
+        "error": "Q3: draft audience policy pending; receiver search includes current draft false",
+        "verifiedSubassertions": [
+          "Owner draft detail and patient persisted",
+          "Receiver draft filter and detail excluded",
+          "Ordinary member detail/history excluded"
+        ],
+        "title": "Read draft through received status filter/detail/space/search as B/member/admin",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-06",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 123,
+        "error": "",
+        "title": "List sent/received/all by status, S/S2 and date with records at day boundaries",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-07",
+        "module": "HOF",
+        "status": "NEEDS_DECISION",
+        "durationMs": 95,
+        "errorCategory": "DecisionPending",
+        "error": "Q4: shiftDate sort with ID cursor; expected [\"6ac9416eb7d6de408cd7491c\",\"6ac9416eb7d6de408cd74926\",\"6ac9416eb7d6de408cd7492b\",\"6ac9416eb7d6de408cd74921\"], observed [\"6ac9416eb7d6de408cd7491c\",\"6ac9416eb7d6de408cd74926\",\"6ac9416eb7d6de408cd7491c\",\"6ac9416eb7d6de408cd74921\"]",
+        "verifiedSubassertions": [
+          "Four source handoffs persisted",
+          "First page follows shiftDate descending",
+          "Second page response captured"
+        ],
+        "title": "Page space history with out-of-order IDs vs shiftDate",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-08",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 70,
+        "error": "",
+        "title": "Add each note kind after submit, empty/1000/1001 text",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-09",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 75,
+        "error": "",
+        "title": "Reassign acknowledged B→C then C→B",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-HOF-10",
+        "module": "HOF",
+        "status": "PASS",
+        "durationMs": 187,
+        "error": "",
+        "title": "Reassign same assignee, nonmember, and draft",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-01",
+        "module": "MED",
+        "status": "FAIL",
+        "durationMs": 364,
+        "errorCategory": "AssertionError",
+        "error": "Unsupported files must be client errors, not HTTP 500\n+ actual - expected\n\n  [\n+   500,\n+   500\n-   400,\n-   400\n  ]\n",
+        "title": "Upload missing file, supported PNG/PDF/MP4, unsupported TXT/DOC, 25MiB/25MiB+1 file",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-02",
+        "module": "MED",
+        "status": "NEEDS_DECISION",
+        "durationMs": 13,
+        "errorCategory": "DecisionPending",
+        "error": "Q5: octet-stream upload format/MIME contract pending; synthetic-octet.pdf:pdf/application/octet-stream, synthetic-octet.mp4:video/application/octet-stream",
+        "verifiedSubassertions": [
+          "Extension fallback accepted PDF and MP4",
+          "Returned format and MIME captured",
+          "Local delivered bytes exact"
+        ],
+        "title": "Upload octet-stream named .pdf/.mp4 then inspect returned metadata/open",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-03",
+        "module": "MED",
+        "status": "NEEDS_DECISION",
+        "durationMs": 325,
+        "errorCategory": "DecisionPending",
+        "error": "Q5: local upload URL is rejected by image-message policy; full upload→message pipeline has no successful local path",
+        "verifiedSubassertions": [
+          "Upload bytes and metadata verified",
+          "Actual returned URL rejected by message route",
+          "No message persisted"
+        ],
+        "title": "Upload local PNG then use returned URL in image message",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-04",
+        "module": "MED",
+        "status": "NEEDS_DECISION",
+        "durationMs": 47,
+        "errorCategory": "DecisionPending",
+        "error": "Q5: video upload succeeds, but video message type is rejected by the pinned source",
+        "verifiedSubassertions": [
+          "Video upload format verified",
+          "Actual send rejected",
+          "No message persisted"
+        ],
+        "title": "Upload video then submit type=video",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-05",
+        "module": "MED",
+        "status": "PASS",
+        "durationMs": 47,
+        "error": "",
+        "title": "Fake provider image/PDF/video upload responses and failure",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-06",
+        "module": "MED",
+        "status": "NEEDS_DECISION",
+        "durationMs": 31,
+        "errorCategory": "DecisionPending",
+        "error": "Q6: profile points to replacement avatar; old file was deleted explicitly, automatic old-file lifecycle remains undecided",
+        "verifiedSubassertions": [
+          "Profile references B after reload",
+          "A deletion and B bytes verified"
+        ],
+        "title": "Upload avatar A, save profile URL, replace B",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-MED-07",
+        "module": "MED",
+        "status": "NEEDS_DECISION",
+        "durationMs": 58,
+        "errorCategory": "DecisionPending",
+        "error": "Q6: referenced local image/video bytes delete, handoff-context deletion is unsupported, and handoff attachment references remain",
+        "verifiedSubassertions": [
+          "Supported local file bytes removed",
+          "Handoff-context delete refused",
+          "Consumer retains stale reference"
+        ],
+        "title": "Delete referenced file and handoff-context/video file",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-NOT-01",
+        "module": "NOT",
+        "status": "FAIL",
+        "durationMs": 359,
+        "errorCategory": "AssertionError",
+        "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ Set(3) {\n+   '6ac9413eb8c07e60f593df54',\n- Set(2) {\n    '6ac9413eb8c07e60f593df56',\n    '6ac9413eb8c07e60f593df58'\n  }\n",
+        "title": "B joins viewed channel",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-NOT-02",
+        "module": "NOT",
+        "status": "FAIL",
+        "durationMs": 334,
+        "errorCategory": "AssertionError",
+        "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!inbox.data.notifications.some((item) => item.referenceId === viewed._id))\n",
+        "title": "Mention B and self while B viewing/not viewing",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-NOT-03",
+        "module": "NOT",
+        "status": "PASS",
+        "durationMs": 199,
+        "prerequisiteSeed": "Seven synthetic inbox documents inserted with controlled ObjectIds and read/type values to isolate cursor filtering",
+        "error": "",
+        "title": "Seed read/unread types across 3 pages",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-NOT-04",
+        "module": "NOT",
+        "status": "FAIL",
+        "durationMs": 191,
+        "prerequisiteSeed": "Synthetic inbox records inserted with both string and ObjectId channel metadata, bypassing schema casting for the legacy representation",
+        "errorCategory": "AssertionError",
+        "error": "Expected values to be strictly equal:\n\n1 !== 2\n",
+        "title": "Channel read with string/ObjectId metadata, unrelated channel, then repeat",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-NOT-05",
+        "module": "NOT",
+        "status": "PASS",
+        "durationMs": 514,
+        "prerequisiteSeed": "Disposable MongoDB notification collection validator rejects exactly the first synthetic message body, then is removed after the backend failure log",
+        "error": "",
+        "title": "Inject notification DB failure after successful send, restore",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PUSH-01",
+        "module": "PUSH",
+        "status": "PASS",
+        "durationMs": 393,
+        "error": "",
+        "title": "Register t1–t6, re-register t3, logout t3",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PUSH-02",
+        "module": "PUSH",
+        "status": "PASS",
+        "durationMs": 509,
+        "error": "",
+        "title": "Disable each mapped preference",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PUSH-03",
+        "module": "PUSH",
+        "status": "NEEDS_DECISION",
+        "durationMs": 785,
+        "errorCategory": "DecisionPending",
+        "error": "Q9: client/device timezone policy for quiet hours needs product decision",
+        "verifiedSubassertions": [
+          "same-day start inclusive: inbox 6ac8ad10cd11c58cf0075f8d, fake push false, priority normal",
+          "same-day end exclusive: inbox 6ac8ad4ccd11c58cf0075f8f, fake push true, priority normal",
+          "overnight start inclusive: inbox 6ac82070cd11c58cf0075f91, fake push false, priority normal",
+          "overnight inside: inbox 6ac83588cd11c58cf0075f93, fake push false, priority normal",
+          "overnight end exclusive: inbox 6ac83c90cd11c58cf0075f95, fake push true, priority normal",
+          "equal endpoints disable quiet hours: inbox 6ac8bb20cd11c58cf0075f97, fake push true, priority normal",
+          "emergency bypasses quiet hours: inbox 6ac83588cd11c58cf0075f99, fake push true, priority emergency",
+          "disabled emergency preference takes precedence: inbox 6ac83588cd11c58cf0075f9b, fake push false, priority emergency",
+          "enabled emergency control after disabled case: inbox 6ac83588cd11c58cf0075f9d, fake push true, priority emergency"
+        ],
+        "title": "Controlled time at start/end for same-day/overnight/equal quiet hours, emergency preference on/off",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-PUSH-04",
+        "module": "PUSH",
+        "status": "PASS",
+        "durationMs": 361,
+        "error": "",
+        "title": "Fake stale-token error for t1, temporary error t2, success t3",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RT-01",
+        "module": "RT",
+        "status": "PASS",
+        "durationMs": 523,
+        "error": "",
+        "title": "Connect two devices as A, disconnect first, then last",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RT-02",
+        "module": "RT",
+        "status": "PASS",
+        "durationMs": 316,
+        "error": "",
+        "title": "A joins new S while connected",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RT-03",
+        "module": "RT",
+        "status": "NEEDS_DECISION",
+        "durationMs": 328,
+        "errorCategory": "DecisionPending",
+        "error": "Q8: intended socket availability note/until convergence needs product decision",
+        "verifiedSubassertions": [
+          "REST peer event availability {\"status\":\"on_call\",\"until\":\"2030-01-15T08:00:00.000Z\",\"note\":\"Synthetic REST note\"}",
+          "Socket peer event availability {\"status\":\"in_ot\",\"until\":null,\"note\":\"\"}",
+          "HTTP and MongoDB persisted the socket note and until fields"
+        ],
+        "title": "Update availability via REST then socket with note/until",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RT-07",
+        "module": "RT",
+        "status": "FAIL",
+        "durationMs": 4826,
+        "errorCategory": "AssertionError",
+        "error": "Recovered socket must keep typing, room sync, availability handlers and persisted state\n+ actual - expected\n\n  {\n+   availabilityOk: false,\n+   persistedStatus: 'available',\n+   syncOk: false,\n+   typingOk: false\n-   availabilityOk: true,\n-   persistedStatus: 'on_call',\n-   syncOk: true,\n-   typingOk: true\n  }\n",
+        "title": "Preserve Socket.IO session/offset, interrupt transport briefly within configured 120 seconds, send while disconnected, reconnect",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SRCH-01",
+        "module": "SRCH",
+        "status": "PASS",
+        "durationMs": 654,
+        "error": "",
+        "title": "Query each type and all, mixed case/whitespace/literal punctuation, q length 1/2",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SRCH-02",
+        "module": "SRCH",
+        "status": "PASS",
+        "durationMs": 253,
+        "prerequisiteSeed": "51 matching text roots and 51 matching document attachments inserted directly with deterministic timestamps, plus two records in an archivable channel",
+        "error": "",
+        "title": "51 matching messages/attachments",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SRCH-03",
+        "module": "SRCH",
+        "status": "PASS",
+        "durationMs": 346,
+        "error": "",
+        "title": "Search alias/ward/bed/diagnosis/notes vs summary in handoff",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SUP-01",
+        "module": "SUP",
+        "status": "PASS",
+        "durationMs": 382,
+        "error": "",
+        "title": "Submit feature and feedback",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SUP-02",
+        "module": "SUP",
+        "status": "PASS",
+        "durationMs": 31,
+        "error": "",
+        "title": "Bug/feature lengths title 201, description 5001, steps/context 3001",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-SUP-03",
+        "module": "SUP",
+        "status": "FAIL",
+        "durationMs": 704,
+        "errorCategory": "AssertionError",
+        "error": "Dev notification seeding must create three valid inbox records\n\n400 !== 200\n",
+        "title": "Dev enabled: seed notification/conversation/handoff",
+        "tier": "B",
+        "priority": "P2",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RUN-01",
+        "module": "RUN",
+        "status": "PASS",
+        "durationMs": 1218,
+        "error": "",
+        "title": "Persist profile/space/message/handoff",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-RUN-02",
+        "module": "RUN",
+        "status": "FAIL",
+        "durationMs": 661,
+        "errorCategory": "AssertionError",
+        "error": "Post-restart independent Mongo read\n+ actual - expected\n\n+ ''\n- 'Synthetic outage recovery profile'\n",
+        "title": "Stop DB during read, restore and request again",
+        "tier": "B",
+        "priority": "P1",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-JRN-01",
+        "module": "JRN",
+        "status": "PASS",
+        "durationMs": 769,
+        "error": "",
+        "title": "Register A/B, onboard, A creates S, B joins, exchange text, A submits H, B acknowledges, relogin and reload",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-JRN-02",
+        "module": "JRN",
+        "status": "FAIL",
+        "durationMs": 170,
+        "errorCategory": "HttpContractError",
+        "error": "POST /api/message-requests/6ac9418bcf8700ea92e306f4/accept expected 200, got 500",
+        "title": "Lookup opted-in D, send request, D accepts, exchange DM, mark read, reopen from both users",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-JRN-03",
+        "module": "JRN",
+        "status": "PASS",
+        "durationMs": 207,
+        "error": "",
+        "title": "Submit H to B",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      },
+      {
+        "id": "FR-JRN-04",
+        "module": "JRN",
+        "status": "FAIL",
+        "durationMs": 10046,
+        "errorCategory": "Error",
+        "error": "Socket event sync_space_rooms timed out",
+        "title": "B leaves S, reloads spaces/search/Needl and syncs socket",
+        "tier": "B",
+        "priority": "P0",
+        "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9"
+      }
+    ]
+  },
+  "coverage": {
+    "planned": {
+      "total": 187,
+      "backend": 147,
+      "flutter": 32,
+      "device": 8
+    },
+    "scope": "backend-all",
+    "selected": 147,
+    "executed": 147,
+    "tally": {
+      "PASS": 109,
+      "FAIL": 17,
+      "ERROR": 0,
+      "BLOCKED": 4,
+      "NEEDS_DECISION": 17,
+      "SKIP": 0
+    },
+    "byTier": {
+      "B": {
+        "selected": 147,
+        "executed": 147
+      },
+      "F": {
+        "selected": 0,
+        "executed": 0
+      },
+      "D": {
+        "selected": 0,
+        "executed": 0
+      }
+    },
+    "byPriority": {
+      "P0": {
+        "selected": 79,
+        "executed": 79
+      },
+      "P1": {
+        "selected": 62,
+        "executed": 62
+      },
+      "P2": {
+        "selected": 6,
+        "executed": 6
+      }
+    }
+  },
+  "provenance": {
+    "status": "PASS",
+    "sourceKind": "upstream-read-only",
+    "targetRepository": "mathiharan29/medcollab-beta",
+    "targetRef": "refs/heads/master",
+    "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+    "targetTree": "7f8a0376baa9716c18961081893d920c1221b832",
+    "harnessSha": "ce082e5b6654975c9ac2a954e73c569d31c9542d",
+    "fingerprint": "ef3ad6fd4b501c1e726ebb1e5ec29279b7ecc40ee3eca13ec67f76489ffd5e1d",
+    "targetBackendLockSha256": "7183275f87ad484d9d1d149e545b469f72d9d657bf39c056bd2d9d3617a58f64",
+    "harnessLockSha256": "544dbb8279bf336bf6a55a41184a49e232330b25697976163f0fa3150eafc175",
+    "trackedChanges": ""
+  },
+  "cleanup": {
+    "status": "PASS",
+    "reportCleanup": [
+      {
+        "directory": "auth-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-06-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "auth-07-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "channels-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-06-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-07-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-08-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "conversations-09-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "discovery-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "handoffs-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "journeys-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "media-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-06-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-07-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "messages-08-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "notifications-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "notifications-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "notifications-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "notifications-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "notifications-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "profile-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "push-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "push-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "push-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "push-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "realtime-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "realtime-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "realtime-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "realtime-07-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "requests-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "requests-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "requests-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "requests-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "requests-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "runtime-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "sanity-adapted-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "search-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "search-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "search-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "social-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "social-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "social-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "social-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "social-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-05-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "spaces-06-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "support-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "threads-01-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "threads-02-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "threads-03-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      },
+      {
+        "directory": "threads-04-cia1e423fa6f7f40199ca2d6",
+        "cleanup": {
+          "status": "PASS",
+          "backendStopped": true,
+          "mongoStopped": true,
+          "runtimeRemoved": true
+        }
+      }
+    ],
+    "remainingRuntimeEntries": []
+  },
+  "note": "Pre-commit local full-backend execution; FR-RUN-02 was intermittent and passed isolated rechecks, including after fixture fsync. Hosted committed-harness runs are authoritative."
+}
