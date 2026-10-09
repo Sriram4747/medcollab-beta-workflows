@@ -8,6 +8,7 @@
     "validate": "node scripts/validate-catalog.mjs",
     "test": "node src/runner.mjs --self-check",
     "smoke": "node src/runner.mjs --smoke",
-    "sanity": "node src/sanity-adapter.mjs"
+    "sanity": "node src/sanity-adapter.mjs",
+    "batch2:subset": "node src/run-batch2-subset.mjs"
   }
 }

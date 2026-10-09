@@ -23,7 +23,7 @@ export async function executeCases(cases, context, timeoutMs = 10000) {
   const results = [];
   for (const item of cases) {
     const started = Date.now();
-    const result = { id: item.id || null, module: item.module || 'HARNESS', status: 'PASS', durationMs: 0 };
+    const result = { id: item.id || null, module: item.module || 'HARNESS', status: 'PASS', durationMs: 0, ...(item.prerequisiteSeed ? { prerequisiteSeed: item.prerequisiteSeed } : {}) };
     const failedDependency = (item.dependencies || []).find((id) => results.find((row) => row.id === id)?.status !== 'PASS');
     if (!item.id) { result.status = 'ERROR'; result.errorCategory = 'INVALID_CASE_ID'; result.error = 'Case ID is required'; }
     else if (failedDependency) { result.status = 'BLOCKED'; result.errorCategory = 'DEPENDENCY'; result.error = `Blocked by ${failedDependency}`; result.dependencyFailureIds = [failedDependency]; }

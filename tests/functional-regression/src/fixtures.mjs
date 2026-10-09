@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-export const users = Object.freeze(Object.fromEntries(['A', 'B', 'C', 'D', 'E'].map((label, index) => [label, { phone: `+1202555010${index + 1}`, name: `Dr Synthetic ${label}` }])));
+export const users = Object.freeze(Object.fromEntries(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'].map((label, index) => [label, { phone: `+120255501${String(index + 1).padStart(2, '0')}`, name: `Dr Synthetic ${label}` }])));
 
 export async function capturedOtp(inboxDirectory, phone) {
   const entries = (await readFile(join(inboxDirectory, 'msg91-inbox.ndjson'), 'utf8')).trim().split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line));

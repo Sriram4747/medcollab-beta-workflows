@@ -22,7 +22,9 @@ export async function startMongo(backendRoot, downloadDirectory) {
 export function databaseUri(baseUri, moduleName, runId) {
   if (!/^[a-z][a-z0-9_-]*$/.test(moduleName)) throw new Error('Invalid module name');
   const uri = new URL(baseUri);
-  uri.pathname = `/vocle_regression_${runId}_${moduleName}`.replaceAll('-', '_');
+  const name = `vocle_regression_${runId.replaceAll('-', '').slice(0, 16)}_${moduleName.replaceAll('-', '_')}`;
+  if (name.length > 63) throw new Error('Module database name exceeds MongoDB limit');
+  uri.pathname = `/${name}`;
   return uri.toString();
 }
 

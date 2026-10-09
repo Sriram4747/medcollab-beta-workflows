@@ -1,0 +1,329 @@
+{
+  "schemaVersion": 1,
+  "scope": "retained-sanity-48-plus-batch2-new-9",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "harnessBaseSha": "4591ee5ba229ae53f4941cf8e4e7cdb00ab85171",
+  "harnessContentSha256": "18c90c8b0201c521c9539eae3e90b77601a424b75817c55ffea8774fac174800",
+  "environment": "local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled",
+  "plannedCatalogCount": 187,
+  "implementedAndExecutedHere": 57,
+  "notImplementedHere": 130,
+  "selectedIds": [
+    "authentication-and-profiles-01",
+    "authentication-and-profiles-02",
+    "authentication-and-profiles-03",
+    "authentication-and-profiles-04",
+    "authentication-and-profiles-05",
+    "authentication-and-profiles-06",
+    "authentication-and-profiles-07",
+    "spaces-and-invitations-01",
+    "spaces-and-invitations-02",
+    "spaces-and-invitations-03",
+    "spaces-and-invitations-04",
+    "spaces-and-invitations-05",
+    "channels-01",
+    "channels-02",
+    "channels-03",
+    "messaging-and-needl-01",
+    "messaging-and-needl-02",
+    "messaging-and-needl-03",
+    "messaging-and-needl-04",
+    "messaging-and-needl-05",
+    "messaging-and-needl-06",
+    "messaging-and-needl-07",
+    "message-requests-01",
+    "message-requests-02",
+    "message-requests-03",
+    "direct-and-group-conversations-01",
+    "direct-and-group-conversations-02",
+    "direct-and-group-conversations-03",
+    "direct-and-group-conversations-04",
+    "direct-and-group-conversations-05",
+    "handoffs-01",
+    "handoffs-02",
+    "handoffs-03",
+    "handoffs-04",
+    "handoffs-05",
+    "media-01",
+    "media-02",
+    "media-03",
+    "notifications-01",
+    "notifications-02",
+    "notifications-03",
+    "realtime-and-availability-01",
+    "realtime-and-availability-02",
+    "realtime-and-availability-03",
+    "search-01",
+    "search-02",
+    "support-01",
+    "startup-01",
+    "FR-AUTH-01",
+    "FR-PRO-01",
+    "FR-PRO-02",
+    "FR-PRO-03",
+    "FR-DISC-02",
+    "FR-SPC-01",
+    "FR-CH-03",
+    "FR-REQ-02",
+    "FR-DM-02"
+  ],
+  "tally": {
+    "PASS": 51,
+    "FAIL": 2,
+    "ERROR": 0,
+    "BLOCKED": 4,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "results": [
+    {
+      "id": "authentication-and-profiles-01",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-02",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-03",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-04",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-05",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-06",
+      "status": "PASS"
+    },
+    {
+      "id": "authentication-and-profiles-07",
+      "status": "PASS"
+    },
+    {
+      "id": "spaces-and-invitations-01",
+      "status": "PASS"
+    },
+    {
+      "id": "spaces-and-invitations-02",
+      "status": "PASS"
+    },
+    {
+      "id": "spaces-and-invitations-03",
+      "status": "PASS"
+    },
+    {
+      "id": "spaces-and-invitations-04",
+      "status": "PASS"
+    },
+    {
+      "id": "spaces-and-invitations-05",
+      "status": "PASS"
+    },
+    {
+      "id": "channels-01",
+      "status": "PASS"
+    },
+    {
+      "id": "channels-02",
+      "status": "PASS"
+    },
+    {
+      "id": "channels-03",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-01",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-02",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-03",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-04",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-05",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-06",
+      "status": "PASS"
+    },
+    {
+      "id": "messaging-and-needl-07",
+      "status": "PASS"
+    },
+    {
+      "id": "message-requests-01",
+      "status": "FAIL",
+      "error": "Recipient message-request notification was not persisted within 5 seconds (request state was persisted)."
+    },
+    {
+      "id": "message-requests-02",
+      "status": "FAIL",
+      "error": "POST /api/message-requests/6ac8abc8e7a01d3ec18672d5/accept expected 200, received 500: {\"success\":false,\"message\":\"Plan executor error during findAndModify :: caused by :: cannot infer query fields to set, path 'members' is matched twice\",\"errors\":[]}"
+    },
+    {
+      "id": "message-requests-03",
+      "status": "PASS"
+    },
+    {
+      "id": "direct-and-group-conversations-01",
+      "status": "BLOCKED",
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-02",
+      "status": "BLOCKED",
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-03",
+      "status": "BLOCKED",
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "direct-and-group-conversations-04",
+      "status": "PASS"
+    },
+    {
+      "id": "direct-and-group-conversations-05",
+      "status": "BLOCKED",
+      "error": "Required request, conversation, or message fixture was not created."
+    },
+    {
+      "id": "handoffs-01",
+      "status": "PASS"
+    },
+    {
+      "id": "handoffs-02",
+      "status": "PASS"
+    },
+    {
+      "id": "handoffs-03",
+      "status": "PASS"
+    },
+    {
+      "id": "handoffs-04",
+      "status": "PASS"
+    },
+    {
+      "id": "handoffs-05",
+      "status": "PASS"
+    },
+    {
+      "id": "media-01",
+      "status": "PASS"
+    },
+    {
+      "id": "media-02",
+      "status": "PASS"
+    },
+    {
+      "id": "media-03",
+      "status": "PASS"
+    },
+    {
+      "id": "notifications-01",
+      "status": "PASS"
+    },
+    {
+      "id": "notifications-02",
+      "status": "PASS"
+    },
+    {
+      "id": "notifications-03",
+      "status": "PASS"
+    },
+    {
+      "id": "realtime-and-availability-01",
+      "status": "PASS"
+    },
+    {
+      "id": "realtime-and-availability-02",
+      "status": "PASS"
+    },
+    {
+      "id": "realtime-and-availability-03",
+      "status": "PASS"
+    },
+    {
+      "id": "search-01",
+      "status": "PASS"
+    },
+    {
+      "id": "search-02",
+      "status": "PASS"
+    },
+    {
+      "id": "support-01",
+      "status": "PASS"
+    },
+    {
+      "id": "startup-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-AUTH-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-PRO-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-PRO-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-PRO-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-DISC-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SPC-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-CH-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-REQ-02",
+      "status": "PASS",
+      "prerequisiteSeed": "Accepted request inserted as component prerequisite; no accept endpoint behavior credited"
+    },
+    {
+      "id": "FR-DM-02",
+      "status": "PASS"
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/sanity-adapted-209700ec-7207-4e70-90bd-2792d1b81af0",
+    "tests/functional-regression/output/auth-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/profile-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/discovery-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/spaces-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/channels-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/requests-ac6d5d54-18d4-491e-a60a-77116448c0f7",
+    "tests/functional-regression/output/conversations-ac6d5d54-18d4-491e-a60a-77116448c0f7"
+  ]
+}

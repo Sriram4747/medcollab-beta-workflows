@@ -28,13 +28,25 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **GitHub Actions run links:** none; dedicated workflow is Batch 5.
 - **Files changed:** `tests/functional-regression/package.json`, `package-lock.json`, `.gitignore`, `src/{config,http,db,socket,fixtures,runner,reporting,sanity-adapter}.mjs`, `providers/preload.cjs`, this progress document.
 - **Structured evidence:** ignored local output at `tests/functional-regression/output/sanity-adapted-12d824df-2af7-4f2a-817e-be233a273725/` contains JSON, JUnit, Markdown, coverage, provenance and cleanup. The unmodified runner's original report is at the matching `sanity-original-...` directory. These local paths are not durable hosted artifacts.
-- **Commit hash:** pending checkpoint commit; record in the next progress update.
+- **Commit hash:** `4591ee5ba229ae53f4941cf8e4e7cdb00ab85171` (pushed to `origin/master`).
 - **Remaining work:** Batches 2–7; 139 new catalog cases unimplemented; Q1–Q14 undecided.
 - **Exact next action:** implement Batch 2 backend cases using the isolated module fixture/process pattern, beginning with authentication and profiles; execute focused cases against the pinned source and preserve genuine failures.
 
 ## Batch 2 — identity and community
 
-- **Status:** not started.
+- **Status:** in progress; 9 new backend cases implemented and executed. Do not treat this as completed Batch 2 or backend-all coverage.
+- **Implemented new testcase IDs:** `FR-AUTH-01`, `FR-PRO-01`, `FR-PRO-02`, `FR-PRO-03`, `FR-DISC-02`, `FR-SPC-01`, `FR-CH-03`, `FR-REQ-02`, `FR-DM-02`. Each has executable HTTP and independent read/database assertions. `FR-REQ-02` explicitly model-seeds an accepted request as a component prerequisite; it gives no credit to the broken accept endpoint.
+- **Execution on pinned upstream SHA:** these 9 new cases PASS 9, FAIL 0, ERROR 0, BLOCKED 0, NEEDS_DECISION 0. Original unchanged 48 sanity cases: PASS 42, FAIL 2, BLOCKED 4, ERROR 0. Combined selected 57: PASS 51, FAIL 2, BLOCKED 4. Remaining 130 catalog cases have not been implemented and are not counted as SKIP/pass evidence. Source tree remained clean after test execution.
+- **Genuine application failures:** `message-requests-01` lacks the recipient notification because `MessageRequest` is invalid for the notification `referenceType` enum; `message-requests-02` returns HTTP 500 when accepting because MongoDB cannot infer the twice-matched `members` path in the DM upsert. This blocks `direct-and-group-conversations-01/-02/-03/-05`. These failures reproduce the historical pattern on the newly pinned upstream SHA and remain gates. No application source or oracle was changed.
+- **Infrastructure issues/fixes:** corrected the local harness's MongoDB name to meet its 63-character limit; corrected expected response paths/statuses for independent space and group-DM assertions; kept seeded component prerequisites explicit. The first local FR-REQ-02 attempt exposed the upstream accept defect and was replaced with an independent component fixture, with the defect retained in unchanged sanity results.
+- **Source SHA tested:** upstream master `da2baff621fe03b21e614965bdb77510f32a62b9`, fetched read-only and executed from an ignored detached local checkout. The fork checkout was also used for focused harness development; it is not upstream validation.
+- **Harness SHA at execution:** committed base `4591ee5ba229ae53f4941cf8e4e7cdb00ab85171` plus uncommitted Batch 2 files; exact content SHA-256 is in the checkpoint JSON. After committing, rerun if a strictly committed harness SHA is required.
+- **GitHub Actions run links:** none; dedicated workflow is Batch 5.
+- **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch2-checkpoint.json) and [summary](functional-regression-evidence/upstream-da2baff-batch2-checkpoint.md); detailed local JSON/JUnit/Markdown/coverage/provenance/cleanup outputs remain under ignored `tests/functional-regression/output/`.
+- **Files changed:** `tests/functional-regression/src/{config,db,fixtures,runner,module-runner,run-batch2-subset}.mjs`, `suites/{auth,profile,discovery,spaces,channels,requests,conversations}.mjs`, `scripts/aggregate-checkpoint.mjs`, `package.json`, evidence files, decision ledger and this progress document.
+- **Commit hash:** pending partial-Batch-2 checkpoint; record in the next progress update.
+- **Remaining work:** complete the other Batch 2 catalog cases before Batches 3–7. Q1–Q14 remain unresolved. No dedicated workflow, Flutter cases, or device cases have been implemented.
+- **Exact next action:** add the remaining Batch 2 AUTH/PRO/DISC/SPC/CH/REQ/DM behavioral cases, starting with request acceptance and recovery, while preserving the confirmed upstream failures; rerun the expanded module subset on the pinned SHA.
 
 ## Batch 3 — communication and realtime
 

@@ -2,6 +2,10 @@
 
 Status at Batch 0, tested source target `da2baff` (full SHA in progress document). No developer approval is inferred from source behavior. Affected cases retain executable safe subassertions where implemented; disputed assertions report `NEEDS_DECISION` until an authorized product decision is recorded here and included in the harness fingerprint.
 
+## Reproduced application defects on `da2baff621fe03b21e614965bdb77510f32a62b9`
+
+The unchanged sanity suite failed `message-requests-01` because the request notification was not persisted: backend logging reports `MessageRequest` rejected by the notification `referenceType` enum. `message-requests-02` returned HTTP 500 on acceptance because MongoDB could not infer the twice-matched `members` query path in `findAndModify`. Four dependent direct-conversation sanity cases were blocked. These are observed defects, not product decisions or accepted contracts. `FR-REQ-02` uses a directly seeded accepted-request prerequisite to test independent rejection boundaries while the original acceptance failure remains visible in the sanity lane.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |
