@@ -420,4 +420,3 @@ U+C+H through public APIs for B; D0 uses actual UI and local backend. Dependenci
 ## Guardrails for implementation
 
 Do not treat question-marked rows as expected failures or accept source bugs as desired contracts. Split verified subassertions from unresolved ones in reports, keeping this stable parent ID. Preserve the 48 existing IDs and existing failure gates. Existing Flutter unit coverage is credited as partial, not as completed widget/device proof. No route count, successful upload alone, or healthy backend proves a mobile workflow.
-

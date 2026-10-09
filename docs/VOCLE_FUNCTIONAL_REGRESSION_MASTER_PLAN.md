@@ -78,5 +78,14 @@ Product decisions to record in the catalog:
 
 ## Incremental delivery status
 
-Phase 1 inventory and baseline saved first. Phase 2 catalog, Phase 3 coverage reconciliation, and Phase 4 workflow/handoff are saved separately during this session. Final totals and implementation details are maintained in the companion documents.
+Completed 9 October 2026 after an execution-limit interruption. Phase 1 inventory and Phase 2 catalog were saved and committed first; Phase 3 coverage reconciliation and Phase 4 workflow/handoff followed. There are **187 cases: 48 retained + 139 new; 96 P0 / 81 P1 / 10 P2; 147 backend / 32 Flutter / 8 device**. The 23 feature modules and six cross-feature journeys are reconciled in the [coverage matrix](VOCLE_FUNCTIONAL_REGRESSION_COVERAGE_MATRIX.md). The [catalog](VOCLE_FUNCTIONAL_REGRESSION_TEST_CATALOG.md) contains fixture profiles, actions, assertions, source anchors, dependencies and clarification flags.
 
+## Execution and dedicated regression workflow
+
+The later implementation creates `.github/workflows/vocle-functional-regression.yml`, independently of existing sanity/security YAML. Manual runs select a captured upstream SHA; a daily 02:43 UTC / 08:13 India schedule resolves upstream master read-only and skips only when verified full-backend evidence matches SHA, harness fingerprint and environment contract. Relevant fork changes run verified P0 and affected modules, with fork provenance distinct from upstream validation. Flutter and device lanes remain separate.
+
+Use read-only contents/actions permissions, credential-free upstream fetch into a detached target, target lockfile, disposable MongoDB and synthetic fixtures, isolated runtime without provider egress, modular execution, structured JSON/JUnit/Markdown artifacts and explicit cleanup. A full success manifest requires every selected required case, provenance, cleanup and artifact upload to succeed. Product ambiguity, blocked dependencies and infrastructure errors remain visible and cannot become full-suite success. Retention loss causes retest. See the [implementation handoff](VOCLE_FUNCTIONAL_REGRESSION_IMPLEMENTATION_HANDOFF.md) for complete triggers, jobs, history verification, source strategy and failure classification.
+
+Implement in order: (0) baseline/oracle ledger, (1) isolated harness, (2) identity/community, (3) messaging/attention/realtime, (4) handoffs/media/recovery/journeys, (5) dedicated CI, (6) Flutter, (7) device/release. Each batch has explicit filenames and acceptance criteria in the handoff. Estimated warm backend-all runtime is 10–20 minutes plus 2–5 minutes cold setup; Flutter 3–8 minutes; device 15–30 minutes per platform plus build/boot. These are planning budgets to measure during implementation.
+
+All requested design documents are complete; application tests, workflow YAML, product decisions and runtime validation remain for the authorized implementation phase. No application behavior, existing suite, or unrelated worktree file was changed.
