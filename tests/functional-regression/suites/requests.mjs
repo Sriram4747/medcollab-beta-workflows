@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { runModule } from '../src/module-runner.mjs';
 
-await runModule('requests', [{
+const cases = [{
   id: 'FR-REQ-01', module: 'REQ',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), d = await identity('D');
@@ -25,6 +25,92 @@ await runModule('requests', [{
       assert.equal(String(records[0]._id), id);
       assert.equal(records[0].status, 'pending');
     });
+  },
+}, {
+  id: 'FR-REQ-03', module: 'REQ',
+  prerequisiteSeed: 'Accepted and declined statuses set directly after real request creation to isolate list/filter serialization; transition behavior is exercised separately',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), d = await identity('D'), e = await identity('E'), f = await identity('F');
+    for (const person of [d, e, f]) await request('/api/users/me', { method: 'PUT', token: person.token, body: { notifications: { allowMessageRequestsFromAnyone: true } } });
+    const requests = [];
+    for (const [person, introMessage] of [[d, ''], [e, 'X'.repeat(280)], [f, 'Synthetic declined intro']]) {
+      const created = await request('/api/message-requests', { method: 'POST', token: a.token, body: { toUserId: person.userId, introMessage }, expectedStatus: 201 });
+      assert.equal(created.data.request.introMessage, introMessage);
+      requests.push({ person, introMessage, id: created.data.request.id });
+    }
+    const rejected = await request('/api/message-requests', { method: 'POST', token: a.token, body: { toUserId: f.userId, introMessage: 'Y'.repeat(281) }, expectedStatus: 400 });
+    assert.equal(rejected.payload.success, false);
+    await db(async (connection) => {
+      const ids = requests.map((item) => new connection.base.Types.ObjectId(item.id));
+      assert.equal(await connection.collection('messagerequests').countDocuments({ _id: { $in: ids } }), 3);
+      assert.equal((await connection.collection('messagerequests').updateOne({ _id: ids[1] }, { $set: { status: 'accepted' } })).modifiedCount, 1);
+      assert.equal((await connection.collection('messagerequests').updateOne({ _id: ids[2] }, { $set: { status: 'declined' } })).modifiedCount, 1);
+    });
+    const list = async (person, direction, status) => (await request(`/api/message-requests?direction=${direction}&status=${status}`, { token: person.token })).data.requests;
+    for (const [index, status] of ['pending', 'accepted', 'declined'].entries()) {
+      const expected = requests[index];
+      const sent = await list(a, 'sent', status);
+      const all = await list(a, 'all', status);
+      const received = await list(expected.person, 'received', status);
+      for (const items of [sent, all, received]) {
+        assert.deepEqual(items.map((item) => item.id), [expected.id]);
+        assert.equal(items[0].introMessage, expected.introMessage);
+      }
+      assert.equal(sent[0].direction, 'sent');
+      assert.equal(received[0].direction, 'received');
+      assert.equal(sent[0].peer.id || sent[0].peer._id, expected.person.userId);
+      assert.equal(received[0].peer.id || received[0].peer._id, a.userId);
+    }
+    assert.deepEqual(await list(a, 'received', 'pending'), []);
+    const counts = await Promise.all([a, d, e, f].map((person) => request('/api/message-requests/pending-count', { token: person.token })));
+    assert.deepEqual(counts.map((item) => item.data.count), [0, 1, 0, 0]);
+    await db(async (connection) => {
+      const persisted = await connection.collection('messagerequests').find({ fromUserId: new connection.base.Types.ObjectId(a.userId) }).toArray();
+      assert.deepEqual(new Set(persisted.map((item) => item.status)), new Set(['pending', 'accepted', 'declined']));
+      assert.equal(persisted.length, 3, 'Overlength intro must not create another record');
+    });
+  },
+}, {
+  id: 'FR-REQ-04', module: 'REQ',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B'), c = await identity('C');
+    for (const person of [b, c]) await request('/api/users/me', { method: 'PUT', token: person.token, body: { notifications: { allowMessageRequestsFromAnyone: true } } });
+    const sendTo = async (person) => (await request('/api/message-requests', { method: 'POST', token: a.token, body: { toUserId: person.userId, introMessage: `Synthetic transition ${person.label}` }, expectedStatus: 201 })).data.request.id;
+    const declineId = await sendTo(c);
+    const declined = await request(`/api/message-requests/${declineId}/decline`, { method: 'POST', token: c.token });
+    assert.equal(declined.data.request.status, 'declined');
+    for (const action of ['decline', 'accept']) {
+      const rejected = await request(`/api/message-requests/${declineId}/${action}`, { method: 'POST', token: c.token, expectedStatus: 400 });
+      assert.equal(rejected.payload.success, false);
+    }
+    const cCount = await request('/api/message-requests/pending-count', { token: c.token });
+    assert.equal(cCount.data.count, 0);
+    await db(async (connection) => {
+      const stored = await connection.collection('messagerequests').findOne({ _id: new connection.base.Types.ObjectId(declineId) });
+      assert.equal(stored.status, 'declined');
+      assert.equal(await connection.collection('channels').countDocuments({ type: 'direct', members: new connection.base.Types.ObjectId(c.userId) }), 0);
+    });
+    const acceptId = await sendTo(b);
+    let acceptanceError;
+    try {
+      const accepted = await request(`/api/message-requests/${acceptId}/accept`, { method: 'POST', token: b.token });
+      assert.equal(accepted.data.request.status, 'accepted');
+      assert.ok(accepted.data.channel._id);
+    } catch (error) { acceptanceError = error; }
+    const bCount = await request('/api/message-requests/pending-count', { token: b.token });
+    assert.equal(bCount.data.count, 0);
+    for (const action of ['accept', 'decline']) {
+      const rejected = await request(`/api/message-requests/${acceptId}/${action}`, { method: 'POST', token: b.token, expectedStatus: 400 });
+      assert.equal(rejected.payload.success, false);
+    }
+    await db(async (connection) => {
+      const stored = await connection.collection('messagerequests').findOne({ _id: new connection.base.Types.ObjectId(acceptId) });
+      assert.equal(stored.status, 'accepted');
+      const channels = await connection.collection('channels').find({ type: 'direct', members: { $all: [new connection.base.Types.ObjectId(a.userId), new connection.base.Types.ObjectId(b.userId)] } }).toArray();
+      if (!acceptanceError) assert.equal(channels.length, 1, 'Successful accept must open exactly one DM');
+      else assert.equal(channels.length, 0, 'Failed accept left accepted state without a DM');
+    });
+    if (acceptanceError) throw acceptanceError;
   },
 }, {
   id: 'FR-REQ-02', module: 'REQ',
@@ -61,4 +147,8 @@ await runModule('requests', [{
       assert.equal(notifications, notificationCountBefore);
     });
   },
-}]);
+}];
+
+// Request statuses and opt-in preferences change shared relationship state.
+// A fresh backend and database per case keeps each transition independent.
+for (const item of cases) await runModule(`requests-${item.id.slice(-2).toLowerCase()}`, [item]);

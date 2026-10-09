@@ -10,6 +10,8 @@ The unchanged sanity suite failed `message-requests-01` because the request noti
 
 While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 500 after an accepted A/B request was seeded. The backend logged the same twice-matched `members` path inference error as request acceptance. The profile projection case now explicitly seeds an existing direct channel and verifies updated public, DM, channel-member and space-member views; it does not credit direct-DM creation. This observed failure remains an application defect for the direct conversation catalog cases.
 
+`FR-REQ-04` now executes a real decline and verifies that repeat decline and opposite accept are rejected. Its real accept branch returns HTTP 500. The request's stored status becomes `accepted`, pending count drops to zero, repeat accept/opposite decline reject, and no direct channel exists. This is observed partial state under Q7, not an approved atomicity or recovery contract. The case remains FAIL.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |
