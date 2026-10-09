@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "scope": "batch4-new-10-only",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "plannedCatalogCount": 187,
+  "selectedIds": [
+    "FR-HOF-01",
+    "FR-HOF-02",
+    "FR-HOF-03",
+    "FR-HOF-04",
+    "FR-HOF-05",
+    "FR-HOF-06",
+    "FR-HOF-07",
+    "FR-HOF-08",
+    "FR-HOF-09",
+    "FR-HOF-10"
+  ],
+  "tally": {
+    "PASS": 8,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 2,
+    "SKIP": 0
+  },
+  "implementedBackendSoFar": 131,
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "harnessBaseShas": {
+    "handoffs": "25466123448e71a7680986ab55a8313d71345924"
+  },
+  "harnessContentSha256": "3a5ebc627a493507410a1ea7b8104824207419b7f9ff3cf1f5e2a1aecec35267",
+  "results": [
+    {
+      "id": "FR-HOF-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-05",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q3: draft audience policy pending; receiver search includes current draft false",
+      "verifiedSubassertions": [
+        "Owner draft detail and patient persisted",
+        "Receiver draft filter and detail excluded",
+        "Ordinary member detail/history excluded"
+      ]
+    },
+    {
+      "id": "FR-HOF-06",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-07",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q4: shiftDate sort with ID cursor; expected [\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f514\",\"6ac93ac6e457ffa41cf8f519\",\"6ac93ac6e457ffa41cf8f50f\"], observed [\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f514\",\"6ac93ac6e457ffa41cf8f50a\",\"6ac93ac6e457ffa41cf8f50f\"]",
+      "verifiedSubassertions": [
+        "Four source handoffs persisted",
+        "First page follows shiftDate descending",
+        "Second page response captured"
+      ]
+    },
+    {
+      "id": "FR-HOF-08",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-09",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-HOF-10",
+      "status": "PASS"
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/handoffs-7e2db315-01cf-46ae-86f4-ce1a2a1dd424"
+  ]
+}

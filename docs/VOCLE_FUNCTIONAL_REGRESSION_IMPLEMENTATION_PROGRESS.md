@@ -89,7 +89,20 @@ This file records implementation and execution separately. The 187 catalog rows 
 
 ## Batch 4 — handoffs, media and recovery
 
-- **Status:** not started.
+- **Status:** in progress. The ten new backend handoff cases are implemented and executed; the remaining 16 new Batch 4 backend cases have not been implemented. Batch 4 is **not complete**.
+- **Implemented testcase IDs this checkpoint:** `FR-HOF-01`–`10` with executable behavioral assertions. Total implemented catalog cases: 131/187 (131 backend: 48 retained sanity, 40 Batch 2, 33 Batch 3, 10 Batch 4; Flutter 0; device 0).
+- **Focused execution:** pinned upstream handoff module PASS 8, FAIL 0, ERROR 0, BLOCKED 0, NEEDS_DECISION 2 (`FR-HOF-05` Q3, `FR-HOF-07` Q4), SKIP 0. Each of the ten IDs and its tier was validated against the catalog; provenance and disposable backend/Mongo cleanup passed. This is a handoff subset result, not a unified backend-all run.
+- **Verified behavior:** draft patient IDs, tasks, flags and attachments persist across edits/removal; schema limits reject without replacing the draft; concurrent submit and acknowledge each make one transition/event/notification; invalid lifecycle operations preserve patients; sent/received/date/space filters and populated users work; note kinds and 1000-character boundary persist; two reassignment transitions preserve patients/history, reset acknowledgement and notify the new assignee; invalid reassignment and note oversize leave state intact.
+- **Pending decisions and observations:** `FR-HOF-05` records draft visibility across sender detail, receiver filter/detail/search and ordinary member detail/history while Q3 remains undecided. `FR-HOF-07` demonstrates an actual duplicate and missing handoff on the second history page when the API sorts by shift date but applies an ID cursor; Q4 remains undecided, and the gap is not treated as acceptable. No application source or expected outcome was changed.
+- **Infrastructure issues/fixes:** an initial test edit used unsupported shift type `day`; changed fixture to the source-defined `morning` enum and reran. An initial filter case omitted an empty JSON body on acknowledge and hit the source's `req.body.note` HTTP 500; the filter fixture now sends `{}` because no-body acknowledgement is outside that catalog case. Filter assertions were scoped to their synthetic space because the module intentionally shares one disposable DB. All final selected cases have ERROR 0.
+- **Source SHA tested:** detached read-only upstream `da2baff621fe03b21e614965bdb77510f32a62b9`.
+- **Harness SHA:** base fork `25466123448e71a7680986ab55a8313d71345924` plus uncommitted handoff assertions; exact harness content SHA-256 is in the structured checkpoint JSON.
+- **GitHub Actions run links:** none; dedicated workflow remains Batch 5.
+- **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch4-checkpoint-10.json) and [summary](functional-regression-evidence/upstream-da2baff-batch4-checkpoint-10.md); per-case JSON/JUnit/Markdown/coverage/provenance/cleanup in ignored local `tests/functional-regression/output/handoffs-7e2db315-01cf-46ae-86f4-ce1a2a1dd424/`.
+- **Files changed:** `tests/functional-regression/suites/handoffs.mjs`, `scripts/aggregate-batch4-checkpoint.mjs`, decision ledger, two evidence files and this progress document.
+- **Commit hash:** pending partial Batch 4 handoff checkpoint push.
+- **Remaining work:** 56 catalog cases unimplemented: 16 backend Batch 4, 32 Flutter and 8 device. Batches 5–7 not started. Earlier backend failures and Q1–Q14 remain open.
+- **Exact next action:** implement `FR-MED-01`–`07` with byte-level local upload assertions and fake provider capture on the pinned source, then continue support, runtime and journeys in Batch 4.
 
 ## Batch 5 — dedicated GitHub Actions workflow
 
