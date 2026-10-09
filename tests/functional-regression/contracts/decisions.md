@@ -20,6 +20,10 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-DM-05` through `FR-DM-07` document Q2 copy behavior under a fixed UTC server timezone: today selection starts at server midnight; all-history selects the oldest 500 non-deleted roots from 501 eligible records; the destination preview points to a source message ID. A copied thread reply has no `threadId`, and a copied quote retains the source root ID, so the copied thread and quote target cannot open as a connected graph in the destination. These cases remain `NEEDS_DECISION` for the intended copy, cap and timezone contract. `FR-DM-08` independently confirms an existing destination is reused without importing later source history.
 
+`FR-MSG-01` exposes a boundary validation defect on the pinned upstream source. A 4,000-character text surrounded by whitespace passes route validation after trimming but reaches Mongoose with its original 4,004 characters and returns HTTP 400; the same 4,000 characters without surrounding spaces persist. This is a FAIL, not a revised 4,000-character expectation.
+
+`FR-MSG-05` verifies edits, soft deletes, root page reload and search reconciliation. Its quoted snapshot retains the original source text after edit; the channel preview for an edited/deleted newest message retains that message's original sent text and ID. Q1 still needs a product decision about whether these derived views should update or retain snapshots. `FR-MSG-08` consumed a successful backend send response at a local proxy, dropped the client response and recovered exactly one committed message by GET before any resend. Q7 remains open for automatic duplicate prevention after response loss.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

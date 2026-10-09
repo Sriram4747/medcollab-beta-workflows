@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "scope": "batch3-messages-8-only",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "harnessBaseSha": "555cb8db250ee6a1c62dd66990bc09fe18856c71",
+  "harnessContentSha256": "5314e43176787b200c3d142358757dee47f871f1f753a89b73d191cd993d8683",
+  "plannedCatalogCount": 187,
+  "implementedTotalSoFar": 96,
+  "implementedBackendSoFar": 96,
+  "selectedIds": [
+    "FR-MSG-01",
+    "FR-MSG-02",
+    "FR-MSG-03",
+    "FR-MSG-04",
+    "FR-MSG-05",
+    "FR-MSG-06",
+    "FR-MSG-07",
+    "FR-MSG-08"
+  ],
+  "tally": {
+    "PASS": 5,
+    "FAIL": 1,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 2,
+    "SKIP": 0
+  },
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "results": [
+    {
+      "id": "FR-MSG-01",
+      "status": "FAIL",
+      "errorCategory": "HttpContractError",
+      "error": "POST /api/channels/6ac8f2854d47d9bea0ad61c4/messages expected 201, got 400"
+    },
+    {
+      "id": "FR-MSG-02",
+      "status": "PASS",
+      "prerequisiteSeed": "Controlled ObjectId sequence and one thread reply inserted directly to isolate root cursor behavior"
+    },
+    {
+      "id": "FR-MSG-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-05",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision",
+      "verifiedSubassertions": [
+        "Root 6ac8f289cf8d5a9e9944ead3 persisted edit then soft deletion; search removed old text after edit and new text after deletion",
+        "Quote 6ac8f289cf8d5a9e9944ead5 after edit retained text \"Synthetic previeworiginal unique marker\"",
+        "Channel preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead5\",\"text\":\"Synthetic quote of newest\",\"senderName\":\"Dr Synthetic B\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.471Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}",
+        "Newest 6ac8f289cf8d5a9e9944ead7 edited and deleted; preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}"
+      ]
+    },
+    {
+      "id": "FR-MSG-06",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-07",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-08",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q7: automatic duplicate prevention after a lost successful response needs product decision",
+      "verifiedSubassertions": [
+        "Proxy consumed HTTP 201 for committed message 6ac8f28d3d8478864a1f9928 and dropped the client response",
+        "A fresh channel fetch recovered exactly one persisted message before any manual resend"
+      ]
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/messages-01-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-02-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-03-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-04-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-05-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-06-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-07-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-08-d8ec1f9f-46bd-40e8-8648-8873ab3664ef"
+  ]
+}
