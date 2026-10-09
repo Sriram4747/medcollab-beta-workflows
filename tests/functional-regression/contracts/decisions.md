@@ -8,6 +8,8 @@ The unchanged sanity suite failed `message-requests-01` because the request noti
 
 `FR-DM-01` also fails on this target: the single-other-user `/api/channels/dm/group` call never responds within the measured 10-second request deadline after an accepted A/B prerequisite is model-seeded. The same module's 9-member group cap case passes, so the failure is specific to the one-peer delegation path. The timeout is an application FAIL, not Q7 approval and not an environmental ERROR.
 
+While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 500 after an accepted A/B request was seeded. The backend logged the same twice-matched `members` path inference error as request acceptance. The profile projection case now explicitly seeds an existing direct channel and verifies updated public, DM, channel-member and space-member views; it does not credit direct-DM creation. This observed failure remains an application defect for the direct conversation catalog cases.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

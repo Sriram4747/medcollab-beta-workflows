@@ -10,13 +10,14 @@ const [sanityRun, subsetRun] = process.argv.slice(2);
 if (!/^[a-f0-9-]{36}$/.test(sanityRun || '') || !/^[a-f0-9-]{36}$/.test(subsetRun || '')) throw new Error('Pass exact sanity and subset run UUIDs');
 const output = join(harnessRoot, 'output');
 const modules = ['auth-01', 'auth-02', 'auth-03', 'auth-04', 'auth-05', 'auth-06', 'auth-07', 'profile', 'discovery', 'spaces', 'channels', 'requests', 'conversations'];
-const newCaseCount = 25;
+const newCaseCount = 28;
 const readReport = async (path) => JSON.parse(await readFile(path, 'utf8'));
 const sanity = await readReport(join(output, `sanity-adapted-${sanityRun}`, 'results.json'));
 const subset = await Promise.all(modules.map((name) => readReport(join(output, `${name}-${subsetRun}`, 'results.json'))));
 const reports = [sanity, ...subset];
 const targetSha = 'da2baff621fe03b21e614965bdb77510f32a62b9';
 if (reports.some((report) => report.targetSha !== targetSha || !report.complete || report.cleanup.status !== 'PASS' || report.provenance.status !== 'PASS')) throw new Error('Incomplete or mismatched evidence');
+if (subset.some((report) => report.harnessSha !== subset[0].harnessSha)) throw new Error('Subset reports have inconsistent harness Git SHAs');
 if (sanity.results.length !== 48 || subset.reduce((n, report) => n + report.results.length, 0) !== newCaseCount) throw new Error('Unexpected executed case count');
 const results = reports.flatMap((report) => report.results.map(({ id, status, error, dependencyFailureIds, prerequisiteSeed, verifiedSubassertions }) => ({ id, status, ...(error ? { error } : {}), ...(dependencyFailureIds ? { dependencyFailureIds } : {}), ...(prerequisiteSeed ? { prerequisiteSeed } : {}), ...(verifiedSubassertions ? { verifiedSubassertions } : {}) })));
 const catalog = await readReport(join(harnessRoot, 'catalog.json'));
@@ -46,7 +47,7 @@ const evidence = {
   schemaVersion: 1,
   scope: `retained-sanity-48-plus-batch2-new-${newCaseCount}`,
   targetKind: 'upstream-read-only', targetRepository: 'mathiharan29/medcollab-beta', targetSha,
-  harnessBaseSha: sanity.harnessSha, harnessContentSha256: hash.digest('hex'),
+  harnessAtSanitySha: sanity.harnessSha, harnessAtSubsetSha: subset[0].harnessSha, harnessContentSha256: hash.digest('hex'),
   environment: 'local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled',
   plannedCatalogCount: 187, implementedAndExecutedHere: 48 + newCaseCount, notImplementedHere: 187 - 48 - newCaseCount,
   selectedIds: results.map((item) => item.id), tally, fullBackendSuccess: false, fullCatalogSuccess: false,

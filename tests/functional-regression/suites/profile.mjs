@@ -65,6 +65,44 @@ await runModule('profile', [{
     });
   },
 }, {
+  id: 'FR-PRO-04', module: 'PRO',
+  prerequisiteSeed: 'Existing A/B direct channel inserted directly to exercise profile projections; live direct-DM creation returns 500 on pinned upstream and is not credited here',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Profile Projection', type: 'department' }, expectedStatus: 201 })).data.space;
+    await request('/api/spaces/join', { method: 'POST', token: b.token, body: { inviteCode: space.inviteCode } });
+    const dmId = await db(async (connection) => {
+      const inserted = await connection.collection('channels').insertOne({
+        spaceId: null, type: 'direct', members: [new connection.base.Types.ObjectId(a.userId), new connection.base.Types.ObjectId(b.userId)],
+        createdBy: new connection.base.Types.ObjectId(a.userId), isArchived: false, createdAt: new Date(), updatedAt: new Date(),
+      });
+      return String(inserted.insertedId);
+    });
+    const changed = { displayTitle: 'Synthetic Consultant', speciality: 'Synthetic Cardiology', avatarUrl: 'https://example.invalid/synthetic-avatar.png', bio: 'Synthetic profile detail for regression' };
+    const updated = await request('/api/users/me', { method: 'PUT', token: b.token, body: changed });
+    for (const [field, value] of Object.entries(changed)) assert.equal(updated.data.user[field], value);
+    const publicProfile = await request(`/api/users/${b.userId}`, { token: a.token });
+    for (const [field, value] of Object.entries(changed)) assert.equal(publicProfile.data.user[field], value);
+    const dmDetail = await request(`/api/channels/${dmId}`, { token: a.token });
+    const dmPeer = dmDetail.data.channel.members.find((member) => member._id === b.userId);
+    assert.ok(dmPeer, 'Updated peer must remain in the DM');
+    for (const field of ['displayTitle', 'speciality', 'avatarUrl']) assert.equal(dmPeer[field], changed[field]);
+    const dmMembers = await request(`/api/channels/${dmId}/members`, { token: a.token });
+    const member = dmMembers.data.members.find((item) => item._id === b.userId);
+    assert.ok(member);
+    for (const field of ['displayTitle', 'speciality', 'avatarUrl']) assert.equal(member[field], changed[field]);
+    const spaces = await request(`/api/spaces/${space._id}/members`, { token: a.token });
+    const spaceMember = spaces.data.members.find((item) => item._id === b.userId);
+    assert.ok(spaceMember);
+    for (const field of ['displayTitle', 'speciality', 'avatarUrl']) assert.equal(spaceMember[field], changed[field]);
+    await db(async (connection) => {
+      const stored = await connection.collection('users').findOne({ phone: b.phone });
+      for (const [field, value] of Object.entries(changed)) assert.equal(stored[field], value);
+      const channel = await connection.collection('channels').findOne({ _id: new connection.base.Types.ObjectId(dmId) });
+      assert.deepEqual(new Set(channel.members.map(String)), new Set([a.userId, b.userId]));
+    });
+  },
+}, {
   id: 'FR-PRO-03', module: 'PRO',
   run: async ({ identity, request, db }) => {
     const a = await identity('A');
