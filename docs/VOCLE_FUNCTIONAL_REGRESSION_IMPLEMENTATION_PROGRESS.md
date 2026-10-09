@@ -44,7 +44,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **GitHub Actions run links:** none; dedicated workflow is Batch 5.
 - **Structured evidence:** latest [JSON](functional-regression-evidence/upstream-da2baff-batch2-checkpoint-40.json) and [summary](functional-regression-evidence/upstream-da2baff-batch2-checkpoint-40.md); previous partial checkpoints retained. Local module JSON/JUnit/Markdown/coverage/provenance/cleanup outputs remain under ignored `tests/functional-regression/output/`.
 - **Files changed:** `tests/functional-regression/src/{config,db,fixtures,runner,module-runner,run-batch2-subset,socket}.mjs`, `suites/{auth,profile,discovery,spaces,channels,requests,conversations}.mjs`, `providers/preload.cjs`, `scripts/aggregate-checkpoint.mjs`, `package.json`, evidence files, decision ledger and this progress document.
-- **Commit hashes:** earlier partial checkpoints through `55f1c6c` and documentation checkpoint `52307b5` pushed to `origin/master`; full Batch 2 implementation checkpoint pending commit and push.
+- **Commit hashes:** earlier partial checkpoints through `55f1c6c`, documentation checkpoint `52307b5`, and full Batch 2 implementation checkpoint `e3419f3` pushed to `origin/master`.
 - **Remaining work:** Batches 3–7; 99 catalog cases unimplemented, including 59 backend, 32 Flutter and 8 device. Q1–Q14 remain unresolved; Q2/Q7/Q10/Q14 have observed subassertions or defects but no product approval. No dedicated workflow, Flutter cases, or device cases have been implemented.
 - **Exact next action:** implement Batch 3 backend communication/realtime cases beginning with root messaging, threads and lifecycle assertions on the pinned upstream SHA; preserve all Batch 2 failures and undecided results.
 
