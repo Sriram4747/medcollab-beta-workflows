@@ -61,7 +61,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **GitHub Actions run links:** none; dedicated workflow remains Batch 5 work.
 - **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch3-messages-checkpoint-8.json) and [summary](functional-regression-evidence/upstream-da2baff-batch3-messages-checkpoint-8.md); per-case JSON/JUnit/Markdown/coverage/provenance/cleanup under ignored local output. The aggregate checks exact eight IDs, target SHA, cleanup and provenance; it cannot be used as full backend success.
 - **Files changed:** `tests/functional-regression/suites/messages.mjs`, `scripts/aggregate-batch3-messages.mjs`, decision ledger, two evidence files and this progress document.
-- **Commit hash:** pending checkpoint commit to `origin/master`.
+- **Commit hash:** `31866cc` (root messaging checkpoint; pushed to `origin/master` with this documentation update).
 - **Remaining work:** 91 catalog cases unimplemented: 51 backend (25 remaining Batch 3 plus Batch 4), 32 Flutter and 8 device. Batches 4–7 remain not started. Batch 2 and Batch 3 red/undecided outcomes remain open.
 - **Exact next action:** implement `FR-THR-01`–`04` thread/Needl behavior against the pinned upstream, then the social, notification, push, realtime and search cases in Batch 3; run focused modules and update the aggregate checkpoint.
 
