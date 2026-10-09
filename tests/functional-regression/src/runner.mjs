@@ -90,7 +90,7 @@ export async function startBackend(uri, port, runtimeDirectory, inboxDirectory, 
     logWaiters.add(waiter);
   });
   try { await ready(`http://127.0.0.1:${port}`, child); return { child, logs, waitForLog }; }
-  catch (error) { child.kill(); throw error; }
+  catch (error) { child.kill(); throw new InfrastructureError(`${error.message}; backend startup output: ${logs().slice(-3000)}`); }
 }
 
 export async function stopChild(child) {

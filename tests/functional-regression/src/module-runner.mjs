@@ -39,7 +39,10 @@ export async function runModule(moduleName, cases) {
   try {
     mongo = await startMongo(backendRoot, join(outputRoot, 'mongo-binaries'), { enableTestCommands: cases.some((item) => item.mongoFailpoint === true) });
     const uri = databaseUri(mongo.uri, moduleName, runId);
-    backend = await startBackend(uri, port, runtime, inbox);
+    backend = await startBackend(uri, port, runtime, inbox, { extraEnv: {
+      VOCLE_FAKE_FIREBASE: cases.some((item) => item.fakeFirebase === true) ? '1' : '0',
+      VOCLE_FAKE_CLOCK: cases.some((item) => item.fakeClock === true) ? '1' : '0',
+    } });
     const request = createHttp(origin);
     const identities = new Map();
     const context = {
