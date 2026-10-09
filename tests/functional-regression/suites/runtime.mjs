@@ -48,6 +48,8 @@ const cases = [{
     await db(async (connection) => {
       const row = await connection.collection('users').findOne({ _id: new connection.base.Types.ObjectId(a.userId) });
       assert.equal(row.bio, 'Synthetic outage recovery profile', 'Pre-outage independent Mongo read');
+      try { await connection.db.admin().command({ fsync: 1 }); }
+      catch (error) { throw new InfrastructureError(`Disposable MongoDB could not flush the recovery fixture: ${error.message}`); }
     });
     await pauseMongo();
     let resumed = false;

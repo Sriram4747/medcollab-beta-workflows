@@ -1,0 +1,235 @@
+name: Vocle Functional Regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Retest even when matching full-backend success exists
+        type: boolean
+        required: false
+        default: false
+      scope:
+        description: Backend scope; a P0 subset never becomes full success evidence
+        type: choice
+        options: [backend-all, backend-p0]
+        required: true
+        default: backend-all
+      upstream_sha:
+        description: Optional exact 40-character upstream source SHA
+        type: string
+        required: false
+  schedule:
+    - cron: '43 2 * * *'
+  push:
+    branches: [master]
+    paths:
+      - 'medcollab-backend/**'
+      - 'tests/functional-regression/**'
+      - 'tests/sanity/**'
+      - '.github/workflows/vocle-functional-regression.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'medcollab-backend/**'
+      - 'tests/functional-regression/**'
+      - 'tests/sanity/**'
+      - '.github/workflows/vocle-functional-regression.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: vocle-functional-${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && 'upstream-master' || github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('fork-{0}', github.ref) }}
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    name: Detect
+    runs-on: ubuntu-24.04
+    outputs:
+      targetKind: ${{ steps.target.outputs.targetKind }}
+      targetSha: ${{ steps.target.outputs.targetSha }}
+      scope: ${{ steps.target.outputs.scope }}
+      force: ${{ steps.target.outputs.force }}
+      fingerprint: ${{ steps.fingerprint.outputs.value }}
+      affected_modules: ${{ steps.affected.outputs.modules }}
+      needs_run: ${{ steps.history.outputs.needs_run }}
+      reason: ${{ steps.history.outputs.reason }}
+      baseline_url: ${{ steps.history.outputs.baseline_url }}
+    steps:
+      - name: Check out exact fork harness revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Validate catalog and CI contracts
+        run: |
+          node tests/functional-regression/scripts/validate-catalog.mjs
+          node --test tests/functional-regression/scripts/ci-contracts.test.mjs
+      - id: target
+        name: Resolve exact read-only target
+        env:
+          VOCLE_INPUT_FORCE: ${{ inputs.force || 'false' }}
+          VOCLE_INPUT_SCOPE: ${{ inputs.scope || 'backend-all' }}
+          VOCLE_INPUT_UPSTREAM_SHA: ${{ inputs.upstream_sha || '' }}
+          VOCLE_PR_HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || '' }}
+          VOCLE_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+        run: node tests/functional-regression/scripts/resolve-target.mjs
+      - id: fingerprint
+        name: Fingerprint exact harness and assertions
+        run: echo "value=$(node tests/functional-regression/scripts/fingerprint.mjs)" >> "$GITHUB_OUTPUT"
+      - id: affected
+        name: Select affected fork modules with shared-code fallback
+        if: steps.target.outputs.targetKind == 'fork-change'
+        env:
+          VOCLE_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+        run: node tests/functional-regression/scripts/affected-modules.mjs
+      - id: history
+        name: Check validated full-backend success history
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_TARGET_SHA: ${{ steps.target.outputs.targetSha }}
+          VOCLE_TARGET_KIND: ${{ steps.target.outputs.targetKind }}
+          VOCLE_SCOPE: ${{ steps.target.outputs.scope }}
+          VOCLE_FORCE: ${{ steps.target.outputs.force }}
+          VOCLE_FINGERPRINT: ${{ steps.fingerprint.outputs.value }}
+        run: node tests/functional-regression/scripts/find-baseline.mjs
+
+  execute:
+    name: Execute
+    needs: detect
+    if: needs.detect.outputs.needs_run == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    outputs:
+      result: ${{ steps.report.outputs.result }}
+      verified_backend_all: ${{ steps.report.outputs.verified_backend_all }}
+      report_ready: ${{ steps.report.outputs.report_ready }}
+      artifact_digest: ${{ steps.upload.outputs.artifact-digest }}
+    steps:
+      - name: Check out exact harness revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: harness
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Fetch captured source without credentials
+        env:
+          TARGET_KIND: ${{ needs.detect.outputs.targetKind }}
+          TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+        run: |
+          set -euo pipefail
+          if [[ "$TARGET_KIND" == upstream-read-only ]]; then repository='mathiharan29/medcollab-beta'; else repository='Sriram4747/medcollab-beta-workflows'; fi
+          git init target
+          git -C target remote add source "https://github.com/${repository}.git"
+          git -C target fetch --depth=1 source "$TARGET_SHA"
+          git -C target checkout --detach FETCH_HEAD
+          node harness/tests/functional-regression/scripts/verify-target.mjs target "$TARGET_SHA"
+      - name: Prepare pinned runtime dependencies and Mongo binary
+        env:
+          NODE_IMAGE: node:22.20.0-bookworm@sha256:915acd9e9b885ead0c620e27e37c81b74c226e0e1c8177f37a60217b6eabb0d7
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/vocle-functional-output" "$RUNNER_TEMP/vocle-functional-output/runtime"
+          docker pull "$NODE_IMAGE"
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e npm_config_cache=/tmp/npm-cache --mount "type=bind,source=$PWD/target,target=/target" --workdir /target/medcollab-backend "$NODE_IMAGE" npm ci --ignore-scripts
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e npm_config_cache=/tmp/npm-cache --mount "type=bind,source=$PWD/harness,target=/harness" --workdir /harness/tests/sanity "$NODE_IMAGE" npm ci --ignore-scripts
+          docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp --mount "type=bind,source=$PWD/target,target=/target,readonly" --mount "type=bind,source=$PWD/harness,target=/harness,readonly" --mount "type=bind,source=$RUNNER_TEMP/vocle-functional-output,target=/output" "$NODE_IMAGE" node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output
+      - name: Run retained sanity and backend modules with loopback-only providers
+        env:
+          NODE_IMAGE: node:22.20.0-bookworm@sha256:915acd9e9b885ead0c620e27e37c81b74c226e0e1c8177f37a60217b6eabb0d7
+          VOCLE_SCOPE: ${{ needs.detect.outputs.scope }}
+        run: |
+          set -euo pipefail
+          docker run --rm --network none --read-only --tmpfs /tmp:rw,exec --user "$(id -u):$(id -g)" \
+            --mount "type=bind,source=$PWD/target,target=/target,readonly" \
+            --mount "type=bind,source=$PWD/harness,target=/harness,readonly" \
+            --mount "type=bind,source=$RUNNER_TEMP/vocle-functional-output,target=/output" \
+            -e VOCLE_TARGET_DIR=/target -e VOCLE_OUTPUT_DIR=/output -e VOCLE_SCOPE="$VOCLE_SCOPE" \
+            -e VOCLE_AFFECTED_MODULES="${{ needs.detect.outputs.affected_modules }}" \
+            -e HOME=/tmp -e TZ=UTC "$NODE_IMAGE" sh -c 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/scripts/run-backend.mjs'
+      - id: report
+        name: Verify provenance, cleanup, exact IDs and write reports
+        if: always()
+        env:
+          VOCLE_TARGET_DIR: ${{ github.workspace }}/target
+          VOCLE_OUTPUT_DIR: ${{ runner.temp }}/vocle-functional-output
+          VOCLE_SCOPE: ${{ needs.detect.outputs.scope }}
+          VOCLE_TARGET_KIND: ${{ needs.detect.outputs.targetKind }}
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+          VOCLE_HARNESS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          VOCLE_FINGERPRINT: ${{ needs.detect.outputs.fingerprint }}
+          VOCLE_AFFECTED_MODULES: ${{ needs.detect.outputs.affected_modules }}
+          VOCLE_REQUIRE_PREFLIGHT: 'true'
+        run: |
+          node harness/tests/functional-regression/scripts/manifest.mjs
+          cat "$VOCLE_OUTPUT_DIR/report.md" >> "$GITHUB_STEP_SUMMARY"
+      - id: upload
+        name: Upload full diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vocle-functional-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/vocle-functional-output/
+            !${{ runner.temp }}/vocle-functional-output/mongo-binaries/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Create validated success marker after diagnostic upload
+        if: steps.report.outputs.verified_backend_all == 'true' && needs.detect.outputs.targetKind == 'upstream-read-only' && steps.upload.outcome == 'success'
+        run: node harness/tests/functional-regression/scripts/write-success-manifest.mjs "$RUNNER_TEMP/vocle-functional-output" '${{ steps.upload.outputs.artifact-digest }}'
+      - name: Upload validated full-backend success marker
+        if: steps.report.outputs.verified_backend_all == 'true' && needs.detect.outputs.targetKind == 'upstream-read-only' && steps.upload.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vocle-functional-success-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/vocle-functional-output/success-manifest.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Enforce verified regression gate
+        if: always()
+        env:
+          REPORT_RESULT: ${{ steps.report.outputs.result }}
+          ARTIFACT_RESULT: ${{ steps.upload.outcome }}
+        run: |
+          test "$ARTIFACT_RESULT" = success
+          test "$REPORT_RESULT" = PASS
+
+  summary:
+    name: Summary
+    needs: [detect, execute]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Summarize detection, coverage gate and artifacts
+        env:
+          DETECT_RESULT: ${{ needs.detect.result }}
+          EXECUTE_RESULT: ${{ needs.execute.result }}
+          NEEDS_RUN: ${{ needs.detect.outputs.needs_run }}
+          TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+          TARGET_KIND: ${{ needs.detect.outputs.targetKind }}
+          SCOPE: ${{ needs.detect.outputs.scope }}
+          REASON: ${{ needs.detect.outputs.reason }}
+          BASELINE_URL: ${{ needs.detect.outputs.baseline_url }}
+          REPORT_RESULT: ${{ needs.execute.outputs.result }}
+          VERIFIED_FULL: ${{ needs.execute.outputs.verified_backend_all }}
+        run: |
+          {
+            echo '## Vocle Functional Regression'
+            echo "- Target: $TARGET_KIND $TARGET_SHA"
+            echo "- Scope: $SCOPE"
+            echo "- Detection: $DETECT_RESULT; $REASON"
+            echo "- Execution: $EXECUTE_RESULT; report $REPORT_RESULT; full-backend success $VERIFIED_FULL"
+            if [ -n "$BASELINE_URL" ]; then echo "- Matching evidence: $BASELINE_URL"; fi
+            if [ "$NEEDS_RUN" = true ]; then echo "- [Diagnostic artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"; fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$DETECT_RESULT" = success
+          if [ "$NEEDS_RUN" = false ]; then test "$BASELINE_URL" != ''; else test "$EXECUTE_RESULT" = success; fi

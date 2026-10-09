@@ -22,6 +22,9 @@ async function freePort() {
 }
 
 export async function runModule(moduleName, cases) {
+  const selectedIds = process.env.VOCLE_CASE_IDS?.split(',').filter(Boolean);
+  if (selectedIds) cases = cases.filter((item) => selectedIds.includes(item.id));
+  if (cases.length === 0) return null;
   validateConfig();
   if (!/^[a-z][a-z0-9-]*$/.test(moduleName)) throw new Error('Invalid module name');
   for (const item of cases) {
