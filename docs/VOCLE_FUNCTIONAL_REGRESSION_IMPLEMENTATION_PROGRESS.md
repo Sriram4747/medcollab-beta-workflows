@@ -100,7 +100,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **GitHub Actions run links:** none; dedicated workflow remains Batch 5.
 - **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch4-checkpoint-10.json) and [summary](functional-regression-evidence/upstream-da2baff-batch4-checkpoint-10.md); per-case JSON/JUnit/Markdown/coverage/provenance/cleanup in ignored local `tests/functional-regression/output/handoffs-7e2db315-01cf-46ae-86f4-ce1a2a1dd424/`.
 - **Files changed:** `tests/functional-regression/suites/handoffs.mjs`, `scripts/aggregate-batch4-checkpoint.mjs`, decision ledger, two evidence files and this progress document.
-- **Commit hash:** pending partial Batch 4 handoff checkpoint push.
+- **Commit hash:** `28a4507` (partial Batch 4 handoff checkpoint; pushed to `origin/master` with this documentation update).
 - **Remaining work:** 56 catalog cases unimplemented: 16 backend Batch 4, 32 Flutter and 8 device. Batches 5–7 not started. Earlier backend failures and Q1–Q14 remain open.
 - **Exact next action:** implement `FR-MED-01`–`07` with byte-level local upload assertions and fake provider capture on the pinned source, then continue support, runtime and journeys in Batch 4.
 
