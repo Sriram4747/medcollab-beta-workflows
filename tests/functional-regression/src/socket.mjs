@@ -1,7 +1,11 @@
-import { backendRequire } from './db.mjs';
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
+import { repoRoot } from './config.mjs';
 
-export async function connectSocket(backendRoot, origin, token, timeoutMs = 10000) {
-  const { io } = backendRequire(backendRoot)('socket.io-client');
+const sanityRequire = createRequire(join(repoRoot, 'tests/sanity/package.json'));
+
+export async function connectSocket(_backendRoot, origin, token, timeoutMs = 10000) {
+  const { io } = sanityRequire('socket.io-client');
   const socket = io(origin, { auth: { token }, transports: ['websocket'], timeout: timeoutMs, autoConnect: false });
   const authenticated = waitFor(socket, 'authenticated', () => true, timeoutMs);
   socket.connect();

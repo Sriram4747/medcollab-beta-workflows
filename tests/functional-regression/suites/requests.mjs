@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { runModule } from '../src/module-runner.mjs';
+import { DecisionPending } from '../src/runner.mjs';
 
 const cases = [{
   id: 'FR-REQ-01', module: 'REQ',
@@ -111,6 +112,43 @@ const cases = [{
       else assert.equal(channels.length, 0, 'Failed accept left accepted state without a DM');
     });
     if (acceptanceError) throw acceptanceError;
+  },
+}, {
+  id: 'FR-REQ-05', module: 'REQ', mongoFailpoint: true,
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B');
+    await request('/api/users/me', { method: 'PUT', token: b.token, body: { notifications: { allowMessageRequestsFromAnyone: true } } });
+    const created = await request('/api/message-requests', { method: 'POST', token: a.token, body: { toUserId: b.userId, introMessage: 'Synthetic interrupted acceptance' }, expectedStatus: 201 });
+    const id = created.data.request.id;
+    await db(async (connection) => {
+      const result = await connection.db.admin().command({
+        configureFailPoint: 'failCommand', mode: { times: 1 },
+        data: { failCommands: ['findAndModify'], errorCode: 42 },
+      });
+      assert.equal(result.ok, 1, 'Disposable MongoDB did not arm the findAndModify fault');
+    });
+    const interrupted = await request(`/api/message-requests/${id}/accept`, { method: 'POST', token: b.token, expectedStatus: 500 });
+    assert.equal(interrupted.payload.success, false);
+    await db(async (connection) => {
+      const record = await connection.collection('messagerequests').findOne({ _id: new connection.base.Types.ObjectId(id) });
+      assert.equal(record.status, 'accepted', 'The injected fault must occur after the request state write');
+      const dmCount = await connection.collection('channels').countDocuments({ type: 'direct', members: { $all: [new connection.base.Types.ObjectId(a.userId), new connection.base.Types.ObjectId(b.userId)] } });
+      assert.equal(dmCount, 0);
+    });
+    const acceptedList = await request('/api/message-requests?direction=received&status=accepted', { token: b.token });
+    assert.deepEqual(acceptedList.data.requests.map((item) => item.id), [id]);
+    const dms = await request('/api/channels/dm', { token: b.token });
+    assert.ok(!dms.data.channels.some((channel) => channel.members?.some((member) => member._id === a.userId)));
+    const retry = await request(`/api/message-requests/${id}/accept`, { method: 'POST', token: b.token, expectedStatus: 400 });
+    assert.equal(retry.payload.success, false);
+    await db(async (connection) => {
+      const record = await connection.collection('messagerequests').findOne({ _id: new connection.base.Types.ObjectId(id) });
+      assert.equal(record.status, 'accepted');
+      assert.equal(await connection.collection('channels').countDocuments({ type: 'direct', members: { $all: [new connection.base.Types.ObjectId(a.userId), new connection.base.Types.ObjectId(b.userId)] } }), 0);
+    });
+    throw new DecisionPending('Q7: recovery or atomic rollback contract for accepted-without-DM state requires product decision', [
+      'controlled database fault returned 500', 'request persisted as accepted without DM', 'reload exposes accepted request but no DM', 'accept retry rejected and did not recover',
+    ]);
   },
 }, {
   id: 'FR-REQ-02', module: 'REQ',

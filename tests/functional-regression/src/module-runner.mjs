@@ -37,7 +37,7 @@ export async function runModule(moduleName, cases) {
   const origin = `http://127.0.0.1:${port}`;
   let mongo, backend, results = [], cleanup = { status: 'ERROR' };
   try {
-    mongo = await startMongo(backendRoot, join(outputRoot, 'mongo-binaries'));
+    mongo = await startMongo(backendRoot, join(outputRoot, 'mongo-binaries'), { enableTestCommands: cases.some((item) => item.mongoFailpoint === true) });
     const uri = databaseUri(mongo.uri, moduleName, runId);
     backend = await startBackend(uri, port, runtime, inbox);
     const request = createHttp(origin);

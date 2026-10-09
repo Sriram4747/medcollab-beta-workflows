@@ -12,6 +12,14 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-REQ-04` now executes a real decline and verifies that repeat decline and opposite accept are rejected. Its real accept branch returns HTTP 500. The request's stored status becomes `accepted`, pending count drops to zero, repeat accept/opposite decline reject, and no direct channel exists. This is observed partial state under Q7, not an approved atomicity or recovery contract. The case remains FAIL.
 
+`FR-SPC-06` proves a post-revocation room defect: after B leaves and C is removed, database membership, lists and search exclude both. Explicit `sync_space_rooms` acknowledges zero spaces, but the still-connected B and C sockets both receive A's correlated space presence event. Reconnected sockets do not receive that event. The post-sync leak is a FAIL; Q10 remains open only for the intended *immediate* eviction guarantee before sync.
+
+`FR-DM-09` issues simultaneous group reopen requests and observes two persisted exact-membership group channels on this run. Concurrent pair intents both return HTTP 500 from the direct upsert path. The case remains FAIL. Group creation's required idempotency policy is still Q7; this observed duplication must not be described as successful or approved behavior.
+
+`FR-REQ-05` uses a one-shot `findAndModify` failpoint on disposable MongoDB to interrupt acceptance after the request status write. The request persists as accepted with no DM; reloading shows that split state, and a retry returns 400 without recovery. This is a Q7 `NEEDS_DECISION` case with verified subassertions, while the independently reproduced natural acceptance failure remains a FAIL in `FR-REQ-04` and retained sanity.
+
+`FR-DM-05` through `FR-DM-07` document Q2 copy behavior under a fixed UTC server timezone: today selection starts at server midnight; all-history selects the oldest 500 non-deleted roots from 501 eligible records; the destination preview points to a source message ID. A copied thread reply has no `threadId`, and a copied quote retains the source root ID, so the copied thread and quote target cannot open as a connected graph in the destination. These cases remain `NEEDS_DECISION` for the intended copy, cap and timezone contract. `FR-DM-08` independently confirms an existing destination is reused without importing later source history.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

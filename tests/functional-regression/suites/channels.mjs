@@ -86,6 +86,46 @@ await runModule('channels', [{
     });
   },
 }, {
+  id: 'FR-CH-05', module: 'CH',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Archive', type: 'department' }, expectedStatus: 201 })).data.space;
+    await request('/api/spaces/join', { method: 'POST', token: b.token, body: { inviteCode: space.inviteCode } });
+    const channel = (await request(`/api/spaces/${space._id}/channels`, { method: 'POST', token: a.token, body: { name: 'archive-x' }, expectedStatus: 201 })).data.channel;
+    const rootText = 'Synthetic archive retained root 5081';
+    const root = (await request(`/api/channels/${channel._id}/messages`, { method: 'POST', token: a.token, body: { content: { text: rootText } }, expectedStatus: 201 })).data.message;
+    await request(`/api/channels/${channel._id}/pin/${root._id}`, { method: 'POST', token: a.token });
+    await db(async (connection) => {
+      const saved = await connection.collection('channels').findOne({ _id: new connection.base.Types.ObjectId(channel._id) });
+      assert.equal(saved.pinnedMessages.length, 1);
+      assert.equal(String(saved.pinnedMessages[0].messageId), root._id);
+    });
+    const archived = await request(`/api/channels/${channel._id}`, { method: 'DELETE', token: a.token });
+    assert.match(archived.payload.message, /archived/i);
+    for (const viewer of [a, b]) {
+      const list = await request(`/api/spaces/${space._id}/channels`, { token: viewer.token });
+      assert.ok(!list.data.channels.some((item) => item._id === channel._id));
+      const spaceDetail = await request(`/api/spaces/${space._id}`, { token: viewer.token });
+      assert.ok(!spaceDetail.data.space.channels.some((item) => item._id === channel._id));
+      const search = await request(`/api/search?q=${encodeURIComponent('archive-x')}&type=channels`, { token: viewer.token });
+      assert.ok(!search.data.channels.some((item) => item._id === channel._id));
+      const messageSearch = await request(`/api/search?q=${encodeURIComponent(rootText)}&type=messages`, { token: viewer.token });
+      assert.ok(!messageSearch.data.messages.some((item) => item._id === root._id));
+      const denied = await request(`/api/channels/${channel._id}/messages`, { method: 'POST', token: viewer.token, body: { content: { text: 'should not persist after archive' } }, expectedStatus: 403 });
+      assert.equal(denied.payload.success, false);
+    }
+    await db(async (connection) => {
+      const id = new connection.base.Types.ObjectId(channel._id);
+      const saved = await connection.collection('channels').findOne({ _id: id });
+      assert.equal(saved.isArchived, true);
+      assert.equal(saved.pinnedMessages.length, 1);
+      assert.equal(String(saved.pinnedMessages[0].messageId), root._id);
+      const messages = await connection.collection('messages').find({ channelId: id }).toArray();
+      assert.deepEqual(messages.map((message) => String(message._id)), [root._id]);
+      assert.equal(messages[0].content.text, rootText);
+    });
+  },
+}, {
   id: 'FR-CH-03', module: 'CH',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), b = await identity('B');

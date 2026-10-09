@@ -3,13 +3,13 @@ import { join } from 'node:path';
 
 export function backendRequire(backendRoot) { return createRequire(join(backendRoot, 'package.json')); }
 
-export async function startMongo(backendRoot, downloadDirectory) {
+export async function startMongo(backendRoot, downloadDirectory, { enableTestCommands = false } = {}) {
   const require = backendRequire(backendRoot);
   const { MongoMemoryServer } = require('mongodb-memory-server');
   const previous = process.env.MONGOMS_DOWNLOAD_DIR;
   process.env.MONGOMS_DOWNLOAD_DIR = downloadDirectory;
   try {
-    const server = await MongoMemoryServer.create({ instance: { ip: '127.0.0.1' } });
+    const server = await MongoMemoryServer.create({ instance: { ip: '127.0.0.1', ...(enableTestCommands ? { args: ['--setParameter', 'enableTestCommands=1'] } : {}) } });
     const uri = server.getUri();
     if (!/^mongodb:\/\/127\.0\.0\.1:/.test(uri)) { await server.stop(); throw new Error('Mongo server was not loopback'); }
     return { server, uri };

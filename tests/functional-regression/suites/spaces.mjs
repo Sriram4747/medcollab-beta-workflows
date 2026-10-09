@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { runModule } from '../src/module-runner.mjs';
 import { DecisionPending } from '../src/runner.mjs';
+import { backendRoot } from '../src/config.mjs';
+import { connectSocket, waitFor } from '../src/socket.mjs';
 
-await runModule('spaces', [{
+const cases = [{
   id: 'FR-SPC-01', module: 'SPC',
   run: async ({ identity, request, db }) => {
     const a = await identity('A');
@@ -115,6 +117,68 @@ await runModule('spaces', [{
     assert.equal(ranks.at(-1), 4);
   },
 }, {
+  id: 'FR-SPC-06', module: 'SPC', timeoutMs: 30000,
+  run: async ({ identity, request, db, origin }) => {
+    const a = await identity('A'), b = await identity('B'), c = await identity('C');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Revocation', type: 'department' }, expectedStatus: 201 })).data.space;
+    for (const person of [b, c]) await request('/api/spaces/join', { method: 'POST', token: person.token, body: { inviteCode: space.inviteCode } });
+    const sockets = [];
+    const sync = async (socket) => {
+      const acknowledged = waitFor(socket, 'sync_space_rooms', (payload) => typeof payload?.spaceCount === 'number');
+      socket.emit('sync_space_rooms');
+      const response = await acknowledged;
+      assert.equal(response.success, true);
+      return response.spaceCount;
+    };
+    try {
+      const owner = await connectSocket(backendRoot, origin, a.token);
+      const leaving = await connectSocket(backendRoot, origin, b.token);
+      const removed = await connectSocket(backendRoot, origin, c.token);
+      sockets.push(owner, leaving, removed);
+      assert.equal(await sync(leaving), 1);
+      assert.equal(await sync(removed), 1);
+      await request(`/api/spaces/${space._id}/leave`, { method: 'POST', token: b.token });
+      await request(`/api/spaces/${space._id}/members/${c.userId}`, { method: 'DELETE', token: a.token });
+      for (const person of [b, c]) {
+        const list = await request('/api/spaces', { token: person.token });
+        assert.ok(!list.data.spaces.some((item) => item._id === space._id));
+        await request(`/api/spaces/${space._id}`, { token: person.token, expectedStatus: 403 });
+      }
+      const search = await request(`/api/users/search?q=${encodeURIComponent('Synthetic')}&spaceId=${space._id}`, { token: a.token });
+      assert.ok(!search.data.users.some((user) => [b.userId, c.userId].includes(user._id)));
+      const members = await request(`/api/spaces/${space._id}/members`, { token: a.token });
+      assert.deepEqual(members.data.members.map((member) => member._id), [a.userId]);
+      await db(async (connection) => {
+        const stored = await connection.collection('spaces').findOne({ _id: new connection.base.Types.ObjectId(space._id) });
+        assert.deepEqual(stored.members.map((member) => String(member.userId)), [a.userId]);
+      });
+      assert.equal(await sync(leaving), 0);
+      assert.equal(await sync(removed), 0);
+      const probe = async (note, peers) => {
+        const predicate = (event) => event?.userId === a.userId && event?.availability?.note === note;
+        const ownerEvent = waitFor(owner, 'presence_update', predicate, 3000);
+        const unexpected = peers.map((socket) => waitFor(socket, 'presence_update', predicate, 1500).then(() => true, () => false));
+        const updated = await request('/api/users/me/availability', { method: 'PUT', token: a.token, body: { status: 'on_call', note } });
+        assert.equal(updated.data.availability.note, note);
+        await ownerEvent;
+        return Promise.all(unexpected);
+      };
+      const afterSyncLeaks = await probe('synthetic-post-sync-revocation', [leaving, removed]);
+      leaving.disconnect(); removed.disconnect();
+      const reconnectedB = await connectSocket(backendRoot, origin, b.token);
+      const reconnectedC = await connectSocket(backendRoot, origin, c.token);
+      sockets.push(reconnectedB, reconnectedC);
+      assert.equal(await sync(reconnectedB), 0);
+      assert.equal(await sync(reconnectedC), 0);
+      const afterReconnectLeaks = await probe('synthetic-post-reconnect-revocation', [reconnectedB, reconnectedC]);
+      assert.deepEqual(afterReconnectLeaks, [false, false], 'Revoked users rejoined a space room after reconnect');
+      assert.deepEqual(afterSyncLeaks, [false, false], 'Explicit room sync left revoked users subscribed to a space room');
+      throw new DecisionPending('Q10: immediate room eviction before explicit sync/reconnect needs product decision', [
+        'leave and removal persisted', 'lists and search excluded former members', 'sync and reconnect showed zero spaces', 'reconnected sockets received no correlated space event',
+      ]);
+    } finally { for (const socket of sockets) socket.disconnect(); }
+  },
+}, {
   id: 'FR-SPC-03', module: 'SPC',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), b = await identity('B');
@@ -139,4 +203,7 @@ await runModule('spaces', [{
       'requireApproval persisted', 'repeat join created one pending request', 'requester has no membership or channel detail access',
     ]);
   },
-}]);
+}];
+
+// Membership and room state must be independent for each lifecycle case.
+for (const item of cases) await runModule(`spaces-${item.id.slice(-2).toLowerCase()}`, [item]);
