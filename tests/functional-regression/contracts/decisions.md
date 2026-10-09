@@ -26,6 +26,8 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-THR-04` verifies an edited latest reply reads with its new content and a soft-deleted latest reply is omitted from the thread page. The root still reports `replyCount: 1` and retains the pre-edit `lastReply` text after both changes; Needl also reports count one after the only reply is deleted. This observed derived-state mismatch is recorded under Q1 and is not accepted as the intended aggregate policy.
 
+`FR-SOC-01` is a genuine catalog mismatch on the pinned upstream source: after B adds 👍 and then switches to ❤️, both reactions remain persisted for B. A separately removes A's 👍, leaving B in both emoji groups. The catalog requires one emoji per user and a switch that replaces B's earlier emoji. This stays FAIL; the source model's multiple-emoji comment is not treated as product approval to change the expected behavior.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |
