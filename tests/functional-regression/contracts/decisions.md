@@ -40,6 +40,8 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-SUP-03` found a developer-tool defect: `seed-notifications` creates records without required `referenceId` and `referenceType`, so the route returns HTTP 400 and creates no notifications. The same case independently verifies the no-space errors, joined conversation/handoff fixtures, and disabled-mode 403 responses. It remains FAIL, not an environmental error.
 
+`FR-JRN-01` completes a live registration/onboarding, space join, bidirectional messaging, handoff submit/acknowledge, relogin and independent reload journey. `FR-JRN-03` completes the live cant-cover note, B→C reassignment and C acknowledgement with patient/task continuity. `FR-JRN-02` cannot finish its DM steps because live request acceptance returns HTTP 500 after persisting `accepted` without a direct channel; it remains FAIL and no seeded DM is credited. `FR-JRN-04` verifies leave/rejoin lists, search, Needl, thread and room-count recovery, then detects a correlated space event delivered to the departed user after explicit room sync. It remains FAIL; Q10 immediate eviction before sync is still undecided.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |
