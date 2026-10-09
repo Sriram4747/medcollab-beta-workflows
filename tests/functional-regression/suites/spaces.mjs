@@ -38,6 +38,30 @@ await runModule('spaces', [{
     });
   },
 }, {
+  id: 'FR-SPC-02', module: 'SPC',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B'), c = await identity('C');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Invite Rotation', type: 'department' }, expectedStatus: 201 })).data.space;
+    const lower = space.inviteCode.toLowerCase();
+    const preview = await request(`/api/spaces/invite/${lower}`, { token: b.token });
+    assert.equal(preview.data.invite.inviteCode, space.inviteCode);
+    assert.equal(preview.data.invite.alreadyMember, false);
+    await request('/api/spaces/join', { method: 'POST', token: b.token, body: { inviteCode: lower } });
+    const after = await request(`/api/spaces/invite/${lower}`, { token: b.token });
+    assert.equal(after.data.invite.alreadyMember, true);
+    const rotated = await request(`/api/spaces/${space._id}/invite`, { method: 'POST', token: a.token });
+    assert.notEqual(rotated.data.inviteCode, space.inviteCode);
+    await request(`/api/spaces/invite/${lower}`, { token: c.token, expectedStatus: 404 });
+    const newPreview = await request(`/api/spaces/invite/${rotated.data.inviteCode.toLowerCase()}`, { token: c.token });
+    assert.equal(newPreview.data.invite.inviteCode, rotated.data.inviteCode);
+    await request('/api/spaces/join', { method: 'POST', token: c.token, body: { inviteCode: rotated.data.inviteCode.toLowerCase() } });
+    await db(async (connection) => {
+      const stored = await connection.collection('spaces').findOne({ _id: new connection.base.Types.ObjectId(space._id) });
+      assert.equal(stored.inviteCode, rotated.data.inviteCode);
+      assert.deepEqual(new Set(stored.members.map((item) => String(item.userId))), new Set([a.userId, b.userId, c.userId]));
+    });
+  },
+}, {
   id: 'FR-SPC-03', module: 'SPC',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), b = await identity('B');

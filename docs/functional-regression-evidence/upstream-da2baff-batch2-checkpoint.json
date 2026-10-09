@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "scope": "retained-sanity-48-plus-batch2-new-10",
+  "scope": "retained-sanity-48-plus-batch2-new-14",
   "targetKind": "upstream-read-only",
   "targetRepository": "mathiharan29/medcollab-beta",
   "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
   "harnessBaseSha": "4591ee5ba229ae53f4941cf8e4e7cdb00ab85171",
-  "harnessContentSha256": "815872204b65526dace69b07be4479b8c3403cdc03711774134d81f4fbe87eb0",
+  "harnessContentSha256": "ddb0d3e64412c83cb9515ac810439eb61dcf198e712cc60247c0e22c0822544e",
   "environment": "local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled",
   "plannedCatalogCount": 187,
-  "implementedAndExecutedHere": 58,
-  "notImplementedHere": 129,
+  "implementedAndExecutedHere": 62,
+  "notImplementedHere": 125,
   "selectedIds": [
     "authentication-and-profiles-01",
     "authentication-and-profiles-02",
@@ -65,14 +65,18 @@
     "FR-PRO-03",
     "FR-DISC-02",
     "FR-SPC-01",
+    "FR-SPC-02",
     "FR-SPC-03",
+    "FR-CH-01",
     "FR-CH-03",
+    "FR-REQ-01",
     "FR-REQ-02",
+    "FR-DM-01",
     "FR-DM-02"
   ],
   "tally": {
-    "PASS": 51,
-    "FAIL": 2,
+    "PASS": 54,
+    "FAIL": 3,
     "ERROR": 0,
     "BLOCKED": 4,
     "NEEDS_DECISION": 1,
@@ -304,6 +308,10 @@
       "status": "PASS"
     },
     {
+      "id": "FR-SPC-02",
+      "status": "PASS"
+    },
+    {
       "id": "FR-SPC-03",
       "status": "NEEDS_DECISION",
       "error": "Q14: pending-join client state and approval completion need product decision",
@@ -314,7 +322,15 @@
       ]
     },
     {
+      "id": "FR-CH-01",
+      "status": "PASS"
+    },
+    {
       "id": "FR-CH-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-REQ-01",
       "status": "PASS"
     },
     {
@@ -323,18 +339,24 @@
       "prerequisiteSeed": "Accepted request inserted as component prerequisite; no accept endpoint behavior credited"
     },
     {
+      "id": "FR-DM-01",
+      "status": "FAIL",
+      "error": "POST /api/channels/dm/group transport timed out after 10000 ms",
+      "prerequisiteSeed": "Accepted A/B request inserted directly for pair-delegation branch; no accept endpoint behavior credited"
+    },
+    {
       "id": "FR-DM-02",
       "status": "PASS"
     }
   ],
   "originalReportDirectories": [
     "tests/functional-regression/output/sanity-adapted-209700ec-7207-4e70-90bd-2792d1b81af0",
-    "tests/functional-regression/output/auth-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/profile-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/discovery-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/spaces-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/channels-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/requests-51ec3081-7724-49a8-b420-7af966e0d159",
-    "tests/functional-regression/output/conversations-51ec3081-7724-49a8-b420-7af966e0d159"
+    "tests/functional-regression/output/auth-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/profile-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/discovery-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/spaces-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/channels-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/requests-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
+    "tests/functional-regression/output/conversations-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172"
   ]
 }

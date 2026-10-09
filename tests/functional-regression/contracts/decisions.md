@@ -6,6 +6,8 @@ Status at Batch 0, tested source target `da2baff` (full SHA in progress document
 
 The unchanged sanity suite failed `message-requests-01` because the request notification was not persisted: backend logging reports `MessageRequest` rejected by the notification `referenceType` enum. `message-requests-02` returned HTTP 500 on acceptance because MongoDB could not infer the twice-matched `members` query path in `findAndModify`. Four dependent direct-conversation sanity cases were blocked. These are observed defects, not product decisions or accepted contracts. `FR-REQ-02` uses a directly seeded accepted-request prerequisite to test independent rejection boundaries while the original acceptance failure remains visible in the sanity lane.
 
+`FR-DM-01` also fails on this target: the single-other-user `/api/channels/dm/group` call never responds within the measured 10-second request deadline after an accepted A/B prerequisite is model-seeded. The same module's 9-member group cap case passes, so the failure is specific to the one-peer delegation path. The timeout is an application FAIL, not Q7 approval and not an environmental ERROR.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

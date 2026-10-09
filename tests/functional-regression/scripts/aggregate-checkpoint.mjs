@@ -16,12 +16,12 @@ const subset = await Promise.all(modules.map((name) => readReport(join(output, `
 const reports = [sanity, ...subset];
 const targetSha = 'da2baff621fe03b21e614965bdb77510f32a62b9';
 if (reports.some((report) => report.targetSha !== targetSha || !report.complete || report.cleanup.status !== 'PASS' || report.provenance.status !== 'PASS')) throw new Error('Incomplete or mismatched evidence');
-if (sanity.results.length !== 48 || subset.reduce((n, report) => n + report.results.length, 0) !== 10) throw new Error('Unexpected executed case count');
+if (sanity.results.length !== 48 || subset.reduce((n, report) => n + report.results.length, 0) !== 14) throw new Error('Unexpected executed case count');
 const results = reports.flatMap((report) => report.results.map(({ id, status, error, dependencyFailureIds, prerequisiteSeed, verifiedSubassertions }) => ({ id, status, ...(error ? { error } : {}), ...(dependencyFailureIds ? { dependencyFailureIds } : {}), ...(prerequisiteSeed ? { prerequisiteSeed } : {}), ...(verifiedSubassertions ? { verifiedSubassertions } : {}) })));
 const catalog = await readReport(join(harnessRoot, 'catalog.json'));
 const registered = new Set(catalog.cases.map((item) => item.id));
 const executed = new Set(results.map((item) => item.id));
-if (executed.size !== 58 || results.some((item) => !registered.has(item.id))) throw new Error('Duplicate or unregistered result IDs');
+if (executed.size !== 62 || results.some((item) => !registered.has(item.id))) throw new Error('Duplicate or unregistered result IDs');
 
 async function sourceFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -43,11 +43,11 @@ const statuses = ['PASS', 'FAIL', 'ERROR', 'BLOCKED', 'NEEDS_DECISION', 'SKIP'];
 const tally = Object.fromEntries(statuses.map((status) => [status, results.filter((item) => item.status === status).length]));
 const evidence = {
   schemaVersion: 1,
-  scope: 'retained-sanity-48-plus-batch2-new-10',
+  scope: 'retained-sanity-48-plus-batch2-new-14',
   targetKind: 'upstream-read-only', targetRepository: 'mathiharan29/medcollab-beta', targetSha,
   harnessBaseSha: sanity.harnessSha, harnessContentSha256: hash.digest('hex'),
   environment: 'local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled',
-  plannedCatalogCount: 187, implementedAndExecutedHere: 58, notImplementedHere: 129,
+  plannedCatalogCount: 187, implementedAndExecutedHere: 62, notImplementedHere: 125,
   selectedIds: results.map((item) => item.id), tally, fullBackendSuccess: false, fullCatalogSuccess: false,
   results,
   originalReportDirectories: [`tests/functional-regression/output/sanity-adapted-${sanityRun}`, ...modules.map((name) => `tests/functional-regression/output/${name}-${subsetRun}`)],
@@ -55,5 +55,5 @@ const evidence = {
 const destination = join(repoRoot, 'docs/functional-regression-evidence');
 await mkdir(destination, { recursive: true });
 await writeFile(join(destination, 'upstream-da2baff-batch2-checkpoint.json'), `${JSON.stringify(evidence, null, 2)}\n`);
-await writeFile(join(destination, 'upstream-da2baff-batch2-checkpoint.md'), `# Upstream functional regression checkpoint\n\nPinned upstream: \`${targetSha}\`. Scope: 48 retained sanity plus 10 new Batch 2 cases. This is a partial catalog run and **not** backend-all success.\n\n- PASS: ${tally.PASS}\n- FAIL: ${tally.FAIL}\n- BLOCKED: ${tally.BLOCKED}\n- ERROR: ${tally.ERROR}\n- NEEDS_DECISION: ${tally.NEEDS_DECISION}\n- Unimplemented catalog cases: 129\n\n${results.filter((item) => item.status !== 'PASS').map((item) => `- **${item.id} ${item.status}:** ${item.error || ''}`).join('\n')}\n\nNine new cases passed with independent module databases; FR-SPC-03 verified safe subassertions and remains NEEDS_DECISION under Q14. The retained sanity failures remain application defects. See the JSON for each selected ID and seeded-prerequisite disclosures.\n`);
+await writeFile(join(destination, 'upstream-da2baff-batch2-checkpoint.md'), `# Upstream functional regression checkpoint\n\nPinned upstream: \`${targetSha}\`. Scope: 48 retained sanity plus 14 new Batch 2 cases. This is a partial catalog run and **not** backend-all success.\n\n- PASS: ${tally.PASS}\n- FAIL: ${tally.FAIL}\n- BLOCKED: ${tally.BLOCKED}\n- ERROR: ${tally.ERROR}\n- NEEDS_DECISION: ${tally.NEEDS_DECISION}\n- Unimplemented catalog cases: 125\n\n${results.filter((item) => item.status !== 'PASS').map((item) => `- **${item.id} ${item.status}:** ${item.error || ''}`).join('\n')}\n\nFR-SPC-03 verified safe subassertions and remains NEEDS_DECISION under Q14. The retained sanity request failures and FR-DM-01 timeout remain application defects. See the JSON for each selected ID and seeded-prerequisite disclosures.\n`);
 console.log(JSON.stringify({ destination, tally, hash: evidence.harnessContentSha256, selected: results.length }, null, 2));
