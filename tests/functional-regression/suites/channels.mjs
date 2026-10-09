@@ -26,6 +26,66 @@ await runModule('channels', [{
     });
   },
 }, {
+  id: 'FR-CH-02', module: 'CH',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Channel Views', type: 'department' }, expectedStatus: 201 })).data.space;
+    await request('/api/spaces/join', { method: 'POST', token: b.token, body: { inviteCode: space.inviteCode } });
+    const publicId = (await request(`/api/spaces/${space._id}/channels`, { method: 'POST', token: a.token, body: { name: 'public-x' }, expectedStatus: 201 })).data.channel._id;
+    const privateId = (await request(`/api/spaces/${space._id}/channels`, { method: 'POST', token: a.token, body: { name: 'private-y', isPrivate: true }, expectedStatus: 201 })).data.channel._id;
+    for (const viewer of [a, b]) {
+      const spaceDetail = await request(`/api/spaces/${space._id}`, { token: viewer.token });
+      const channelList = await request(`/api/spaces/${space._id}/channels`, { token: viewer.token });
+      const spaces = await request('/api/spaces', { token: viewer.token });
+      const surfaces = [spaceDetail.data.space.channels, channelList.data.channels, spaces.data.spaces.find((item) => item._id === space._id).channels];
+      for (const entries of surfaces) {
+        const ids = new Set(entries.map((item) => item._id));
+        assert.ok(ids.has(publicId));
+        assert.equal(ids.has(privateId), viewer.userId === a.userId);
+      }
+      const detail = await request(`/api/channels/${publicId}`, { token: viewer.token });
+      assert.equal(detail.data.channel._id, publicId);
+    }
+    const ownerPrivate = await request(`/api/channels/${privateId}`, { token: a.token });
+    assert.equal(ownerPrivate.data.channel._id, privateId);
+    await request(`/api/channels/${privateId}`, { token: b.token, expectedStatus: 403 });
+    await db(async (connection) => {
+      const ids = [publicId, privateId].map((id) => new connection.base.Types.ObjectId(id));
+      const stored = await connection.collection('channels').find({ _id: { $in: ids } }).toArray();
+      assert.equal(stored.length, 2);
+      assert.equal(stored.find((item) => String(item._id) === privateId).isPrivate, true);
+    });
+  },
+}, {
+  id: 'FR-CH-04', module: 'CH',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A');
+    const created = await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Channel Edit', type: 'department' }, expectedStatus: 201 });
+    const space = created.data.space;
+    const defaults = created.data.channels;
+    const custom = (await request(`/api/spaces/${space._id}/channels`, { method: 'POST', token: a.token, body: { name: 'custom-old' }, expectedStatus: 201 })).data.channel;
+    await request(`/api/channels/${custom._id}`, { method: 'PUT', token: a.token, body: { name: 'custom-new', description: 'Synthetic changed description' } });
+    const reread = await request(`/api/channels/${custom._id}`, { token: a.token });
+    assert.equal(reread.data.channel.name, 'custom-new');
+    assert.equal(reread.data.channel.description, 'Synthetic changed description');
+    for (const channel of defaults) {
+      await request(`/api/channels/${channel._id}`, { method: 'PUT', token: a.token, body: { name: 'renamed-default' } });
+      const after = await request(`/api/channels/${channel._id}`, { token: a.token });
+      assert.equal(after.data.channel.name, channel.name);
+      const archived = await request(`/api/channels/${channel._id}`, { method: 'DELETE', token: a.token, expectedStatus: 400 });
+      assert.equal(archived.payload.success, false);
+    }
+    await db(async (connection) => {
+      const channels = await connection.collection('channels').find({ spaceId: new connection.base.Types.ObjectId(space._id) }).toArray();
+      assert.equal(channels.find((item) => String(item._id) === custom._id).name, 'custom-new');
+      for (const channel of defaults) {
+        const stored = channels.find((item) => String(item._id) === channel._id);
+        assert.equal(stored.name, channel.name);
+        assert.equal(stored.isArchived, false);
+      }
+    });
+  },
+}, {
   id: 'FR-CH-03', module: 'CH',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), b = await identity('B');

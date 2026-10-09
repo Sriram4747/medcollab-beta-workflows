@@ -62,6 +62,59 @@ await runModule('spaces', [{
     });
   },
 }, {
+  id: 'FR-SPC-04', module: 'SPC',
+  prerequisiteSeed: 'C space role promoted to admin directly; no promotion route exists',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B'), c = await identity('C');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Roles', type: 'department' }, expectedStatus: 201 })).data.space;
+    for (const person of [b, c]) await request('/api/spaces/join', { method: 'POST', token: person.token, body: { inviteCode: space.inviteCode } });
+    await db(async (connection) => {
+      const changed = await connection.collection('spaces').updateOne({ _id: new connection.base.Types.ObjectId(space._id), 'members.userId': new connection.base.Types.ObjectId(c.userId) }, { $set: { 'members.$.role': 'admin' } });
+      assert.equal(changed.modifiedCount, 1);
+    });
+    const ownerChange = await request(`/api/spaces/${space._id}`, { method: 'PUT', token: a.token, body: { name: 'Synthetic Roles Updated' } });
+    assert.equal(ownerChange.data.space.name, 'Synthetic Roles Updated');
+    const adminChange = await request(`/api/spaces/${space._id}`, { method: 'PUT', token: c.token, body: { description: 'Admin saved setting', settings: { requireApproval: true } } });
+    assert.equal(adminChange.data.space.settings.requireApproval, true);
+    await request(`/api/spaces/${space._id}`, { method: 'PUT', token: b.token, body: { name: 'Forbidden Name' }, expectedStatus: 403 });
+    await request(`/api/spaces/${space._id}/members/${a.userId}`, { method: 'DELETE', token: b.token, expectedStatus: 403 });
+    const reread = await request(`/api/spaces/${space._id}`, { token: a.token });
+    assert.equal(reread.data.space.name, 'Synthetic Roles Updated');
+    assert.equal(reread.data.space.description, 'Admin saved setting');
+    assert.equal(reread.data.space.settings.requireApproval, true);
+    await db(async (connection) => {
+      const stored = await connection.collection('spaces').findOne({ _id: new connection.base.Types.ObjectId(space._id) });
+      assert.equal(stored.members.find((item) => String(item.userId) === a.userId).role, 'owner');
+      assert.equal(stored.members.find((item) => String(item.userId) === c.userId).role, 'admin');
+      assert.equal(stored.name, 'Synthetic Roles Updated');
+    });
+  },
+}, {
+  id: 'FR-SPC-05', module: 'SPC',
+  run: async ({ identity, request }) => {
+    const a = await identity('A');
+    const space = (await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Presence Rank', type: 'department' }, expectedStatus: 201 })).data.space;
+    const ranked = [
+      ['B', 'on_call', 0], ['C', 'in_ot', 1], ['D', 'on_rounds', 1], ['E', 'in_icu', 1],
+      ['F', 'available', 2], ['G', 'do_not_disturb', 3], ['H', 'off_duty', 4],
+    ];
+    const byId = new Map();
+    for (const [label, status, rank] of ranked) {
+      const person = await identity(label);
+      byId.set(person.userId, rank);
+      await request('/api/spaces/join', { method: 'POST', token: person.token, body: { inviteCode: space.inviteCode } });
+      const updated = await request('/api/users/me/availability', { method: 'PUT', token: person.token, body: { status } });
+      assert.equal(updated.data.availability.status, status);
+    }
+    const members = (await request(`/api/spaces/${space._id}/members`, { token: a.token })).data.members;
+    const selected = members.filter((person) => byId.has(person._id));
+    assert.equal(selected.length, ranked.length);
+    const ranks = selected.map((person) => byId.get(person._id));
+    assert.deepEqual(ranks, [...ranks].sort((x, y) => x - y));
+    assert.equal(ranks[0], 0);
+    assert.equal(ranks.at(-1), 4);
+  },
+}, {
   id: 'FR-SPC-03', module: 'SPC',
   run: async ({ identity, request, db }) => {
     const a = await identity('A'), b = await identity('B');

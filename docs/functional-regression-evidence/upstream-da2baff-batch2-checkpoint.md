@@ -1,13 +1,13 @@
 # Upstream functional regression checkpoint
 
-Pinned upstream: `da2baff621fe03b21e614965bdb77510f32a62b9`. Scope: 48 retained sanity plus 14 new Batch 2 cases. This is a partial catalog run and **not** backend-all success.
+Pinned upstream: `da2baff621fe03b21e614965bdb77510f32a62b9`. Scope: 48 retained sanity plus 20 new Batch 2 cases. This is a partial catalog run and **not** backend-all success.
 
-- PASS: 54
+- PASS: 60
 - FAIL: 3
 - BLOCKED: 4
 - ERROR: 0
 - NEEDS_DECISION: 1
-- Unimplemented catalog cases: 125
+- Unimplemented catalog cases: 119
 
 - **message-requests-01 FAIL:** Recipient message-request notification was not persisted within 5 seconds (request state was persisted).
 - **message-requests-02 FAIL:** POST /api/message-requests/6ac8abc8e7a01d3ec18672d5/accept expected 200, received 500: {"success":false,"message":"Plan executor error during findAndModify :: caused by :: cannot infer query fields to set, path 'members' is matched twice","errors":[]}

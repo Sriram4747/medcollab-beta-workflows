@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "scope": "retained-sanity-48-plus-batch2-new-14",
+  "scope": "retained-sanity-48-plus-batch2-new-20",
   "targetKind": "upstream-read-only",
   "targetRepository": "mathiharan29/medcollab-beta",
   "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
   "harnessBaseSha": "4591ee5ba229ae53f4941cf8e4e7cdb00ab85171",
-  "harnessContentSha256": "ddb0d3e64412c83cb9515ac810439eb61dcf198e712cc60247c0e22c0822544e",
+  "harnessContentSha256": "2140135e631d1249327b317f2495c4570f96efd4c5a9d925c81e73efbe9752c8",
   "environment": "local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled",
   "plannedCatalogCount": 187,
-  "implementedAndExecutedHere": 62,
-  "notImplementedHere": 125,
+  "implementedAndExecutedHere": 68,
+  "notImplementedHere": 119,
   "selectedIds": [
     "authentication-and-profiles-01",
     "authentication-and-profiles-02",
@@ -60,14 +60,20 @@
     "support-01",
     "startup-01",
     "FR-AUTH-01",
+    "FR-AUTH-07",
     "FR-PRO-01",
     "FR-PRO-02",
     "FR-PRO-03",
+    "FR-DISC-01",
     "FR-DISC-02",
     "FR-SPC-01",
     "FR-SPC-02",
+    "FR-SPC-04",
+    "FR-SPC-05",
     "FR-SPC-03",
     "FR-CH-01",
+    "FR-CH-02",
+    "FR-CH-04",
     "FR-CH-03",
     "FR-REQ-01",
     "FR-REQ-02",
@@ -75,7 +81,7 @@
     "FR-DM-02"
   ],
   "tally": {
-    "PASS": 54,
+    "PASS": 60,
     "FAIL": 3,
     "ERROR": 0,
     "BLOCKED": 4,
@@ -288,6 +294,10 @@
       "status": "PASS"
     },
     {
+      "id": "FR-AUTH-07",
+      "status": "PASS"
+    },
+    {
       "id": "FR-PRO-01",
       "status": "PASS"
     },
@@ -298,6 +308,11 @@
     {
       "id": "FR-PRO-03",
       "status": "PASS"
+    },
+    {
+      "id": "FR-DISC-01",
+      "status": "PASS",
+      "prerequisiteSeed": "Accepted A/C request inserted directly to represent an existing peer relationship"
     },
     {
       "id": "FR-DISC-02",
@@ -312,6 +327,15 @@
       "status": "PASS"
     },
     {
+      "id": "FR-SPC-04",
+      "status": "PASS",
+      "prerequisiteSeed": "C space role promoted to admin directly; no promotion route exists"
+    },
+    {
+      "id": "FR-SPC-05",
+      "status": "PASS"
+    },
+    {
       "id": "FR-SPC-03",
       "status": "NEEDS_DECISION",
       "error": "Q14: pending-join client state and approval completion need product decision",
@@ -323,6 +347,14 @@
     },
     {
       "id": "FR-CH-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-CH-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-CH-04",
       "status": "PASS"
     },
     {
@@ -351,12 +383,12 @@
   ],
   "originalReportDirectories": [
     "tests/functional-regression/output/sanity-adapted-209700ec-7207-4e70-90bd-2792d1b81af0",
-    "tests/functional-regression/output/auth-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/profile-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/discovery-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/spaces-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/channels-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/requests-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172",
-    "tests/functional-regression/output/conversations-0e0b93fd-dd02-4c7f-a13f-66f62e2d5172"
+    "tests/functional-regression/output/auth-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/profile-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/discovery-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/spaces-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/channels-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/requests-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c",
+    "tests/functional-regression/output/conversations-15eb5cc1-8260-47f3-a30f-5e7de21d9c7c"
   ]
 }
