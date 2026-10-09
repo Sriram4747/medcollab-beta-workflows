@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { runModule } from '../src/module-runner.mjs';
+import { DecisionPending } from '../src/runner.mjs';
 
 await runModule('spaces', [{
   id: 'FR-SPC-01', module: 'SPC',
@@ -35,5 +36,30 @@ await runModule('spaces', [{
       const channels = await connection.collection('channels').countDocuments({ spaceId: { $in: spaces.map((item) => item._id) } });
       assert.equal(channels, 6, 'Rejected creates must leave no partial spaces or channels');
     });
+  },
+}, {
+  id: 'FR-SPC-03', module: 'SPC',
+  run: async ({ identity, request, db }) => {
+    const a = await identity('A'), b = await identity('B');
+    const created = await request('/api/spaces', { method: 'POST', token: a.token, body: { name: 'Synthetic Pending Approval', type: 'department' }, expectedStatus: 201 });
+    const space = created.data.space;
+    const updated = await request(`/api/spaces/${space._id}`, { method: 'PUT', token: a.token, body: { settings: { requireApproval: true } } });
+    assert.equal(updated.data.space.settings.requireApproval, true);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const joined = await request('/api/spaces/join', { method: 'POST', token: b.token, body: { inviteCode: space.inviteCode } });
+      assert.match(joined.payload.message, /waiting for admin approval/i);
+    }
+    const list = await request('/api/spaces', { token: b.token });
+    assert.ok(!list.data.spaces.some((item) => item._id === space._id));
+    await request(`/api/spaces/${space._id}`, { token: b.token, expectedStatus: 403 });
+    await db(async (connection) => {
+      const stored = await connection.collection('spaces').findOne({ _id: new connection.base.Types.ObjectId(space._id) });
+      assert.equal(stored.pendingRequests.length, 1);
+      assert.equal(String(stored.pendingRequests[0].userId), b.userId);
+      assert.ok(!stored.members.some((member) => String(member.userId) === b.userId));
+    });
+    throw new DecisionPending('Q14: pending-join client state and approval completion need product decision', [
+      'requireApproval persisted', 'repeat join created one pending request', 'requester has no membership or channel detail access',
+    ]);
   },
 }]);

@@ -11,7 +11,7 @@ import { createIdentity } from './fixtures.mjs';
 import { writeReports } from './reporting.mjs';
 
 export class InfrastructureError extends Error { constructor(message) { super(message); this.name = 'InfrastructureError'; } }
-export class DecisionPending extends Error { constructor(message) { super(message); this.name = 'DecisionPending'; } }
+export class DecisionPending extends Error { constructor(message, verifiedSubassertions = []) { super(message); this.name = 'DecisionPending'; this.verifiedSubassertions = verifiedSubassertions; } }
 export class SkipCase extends Error { constructor(message) { super(message); this.name = 'SkipCase'; } }
 
 function withDeadline(action, milliseconds) {
@@ -33,6 +33,7 @@ export async function executeCases(cases, context, timeoutMs = 10000) {
         result.status = error instanceof InfrastructureError ? 'ERROR' : error instanceof DecisionPending ? 'NEEDS_DECISION' : error instanceof SkipCase ? 'SKIP' : 'FAIL';
         result.errorCategory = error.name || 'ASSERTION';
         result.error = error.message;
+        if (error instanceof DecisionPending) result.verifiedSubassertions = error.verifiedSubassertions;
       }
     }
     result.durationMs = Date.now() - started;

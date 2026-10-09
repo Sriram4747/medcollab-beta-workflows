@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "scope": "retained-sanity-48-plus-batch2-new-9",
+  "scope": "retained-sanity-48-plus-batch2-new-10",
   "targetKind": "upstream-read-only",
   "targetRepository": "mathiharan29/medcollab-beta",
   "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
   "harnessBaseSha": "4591ee5ba229ae53f4941cf8e4e7cdb00ab85171",
-  "harnessContentSha256": "18c90c8b0201c521c9539eae3e90b77601a424b75817c55ffea8774fac174800",
+  "harnessContentSha256": "815872204b65526dace69b07be4479b8c3403cdc03711774134d81f4fbe87eb0",
   "environment": "local Windows, Node 24, disposable MongoDB 7.0.14, loopback backend, synthetic identities, test-owned MSG91 fake; Firebase and Cloudinary disabled",
   "plannedCatalogCount": 187,
-  "implementedAndExecutedHere": 57,
-  "notImplementedHere": 130,
+  "implementedAndExecutedHere": 58,
+  "notImplementedHere": 129,
   "selectedIds": [
     "authentication-and-profiles-01",
     "authentication-and-profiles-02",
@@ -65,6 +65,7 @@
     "FR-PRO-03",
     "FR-DISC-02",
     "FR-SPC-01",
+    "FR-SPC-03",
     "FR-CH-03",
     "FR-REQ-02",
     "FR-DM-02"
@@ -74,7 +75,7 @@
     "FAIL": 2,
     "ERROR": 0,
     "BLOCKED": 4,
-    "NEEDS_DECISION": 0,
+    "NEEDS_DECISION": 1,
     "SKIP": 0
   },
   "fullBackendSuccess": false,
@@ -303,6 +304,16 @@
       "status": "PASS"
     },
     {
+      "id": "FR-SPC-03",
+      "status": "NEEDS_DECISION",
+      "error": "Q14: pending-join client state and approval completion need product decision",
+      "verifiedSubassertions": [
+        "requireApproval persisted",
+        "repeat join created one pending request",
+        "requester has no membership or channel detail access"
+      ]
+    },
+    {
       "id": "FR-CH-03",
       "status": "PASS"
     },
@@ -318,12 +329,12 @@
   ],
   "originalReportDirectories": [
     "tests/functional-regression/output/sanity-adapted-209700ec-7207-4e70-90bd-2792d1b81af0",
-    "tests/functional-regression/output/auth-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/profile-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/discovery-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/spaces-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/channels-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/requests-ac6d5d54-18d4-491e-a60a-77116448c0f7",
-    "tests/functional-regression/output/conversations-ac6d5d54-18d4-491e-a60a-77116448c0f7"
+    "tests/functional-regression/output/auth-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/profile-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/discovery-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/spaces-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/channels-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/requests-51ec3081-7724-49a8-b420-7af966e0d159",
+    "tests/functional-regression/output/conversations-51ec3081-7724-49a8-b420-7af966e0d159"
   ]
 }
