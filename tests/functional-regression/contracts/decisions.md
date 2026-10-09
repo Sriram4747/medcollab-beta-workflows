@@ -28,6 +28,8 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-SOC-01` is a genuine catalog mismatch on the pinned upstream source: after B adds 👍 and then switches to ❤️, both reactions remain persisted for B. A separately removes A's 👍, leaving B in both emoji groups. The catalog requires one emoji per user and a switch that replaces B's earlier emoji. This stays FAIL; the source model's multiple-emoji comment is not treated as product approval to change the expected behavior.
 
+`FR-NOT-01` and `FR-NOT-02` reproduce an inbox suppression defect. B's socket receives the acknowledged `join_channel` event and correlated `new_message`, yet ordinary and mention notifications for that viewed channel are persisted. Source inspection suggests `channelViewers` reads `userId` from sockets returned by `fetchSockets`, while authentication attaches it as a custom `socket.userId`; the observed failure is decisive even without accepting that causal inference as a fix. Both cases remain FAIL. `FR-NOT-04` also fails: marking a channel read changes only one of two records seeded with legacy string versus ObjectId `metadata.channelId`; the catalog requires both representations. `FR-NOT-05` confirms a test-owned notification insert rejection does not erase the committed message and a later send notifies after the validator is removed.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

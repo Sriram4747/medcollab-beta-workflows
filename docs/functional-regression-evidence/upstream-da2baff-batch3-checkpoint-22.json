@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "scope": "batch3-new-22-only",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "harnessAtMessagesSha": "555cb8db250ee6a1c62dd66990bc09fe18856c71",
+  "harnessAtThreadsSha": "b75cfbba233e35f2355f53b97a4e38a76d5fef79",
+  "harnessAtSocialSha": "268ed63374e7bdfdf148aa2bbeb915b131ed63ed",
+  "harnessAtNotificationsSha": "2bbc98be20e5a03984eae52457b2b0eb3c93f61c",
+  "harnessContentSha256": "1cbe47d7cc1330f07c6bff5d3a93791b3b82922b474bd763aba199312c7cd560",
+  "plannedCatalogCount": 187,
+  "implementedTotalSoFar": 110,
+  "implementedBackendSoFar": 110,
+  "selectedIds": [
+    "FR-MSG-01",
+    "FR-MSG-02",
+    "FR-MSG-03",
+    "FR-MSG-04",
+    "FR-MSG-05",
+    "FR-MSG-06",
+    "FR-MSG-07",
+    "FR-MSG-08",
+    "FR-THR-01",
+    "FR-THR-02",
+    "FR-THR-03",
+    "FR-THR-04",
+    "FR-SOC-01",
+    "FR-SOC-02",
+    "FR-SOC-03",
+    "FR-SOC-04",
+    "FR-SOC-05",
+    "FR-NOT-01",
+    "FR-NOT-02",
+    "FR-NOT-03",
+    "FR-NOT-04",
+    "FR-NOT-05"
+  ],
+  "tally": {
+    "PASS": 14,
+    "FAIL": 5,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 3,
+    "SKIP": 0
+  },
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "results": [
+    {
+      "id": "FR-MSG-01",
+      "status": "FAIL",
+      "errorCategory": "HttpContractError",
+      "error": "POST /api/channels/6ac8f2854d47d9bea0ad61c4/messages expected 201, got 400"
+    },
+    {
+      "id": "FR-MSG-02",
+      "status": "PASS",
+      "prerequisiteSeed": "Controlled ObjectId sequence and one thread reply inserted directly to isolate root cursor behavior"
+    },
+    {
+      "id": "FR-MSG-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-05",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision",
+      "verifiedSubassertions": [
+        "Root 6ac8f289cf8d5a9e9944ead3 persisted edit then soft deletion; search removed old text after edit and new text after deletion",
+        "Quote 6ac8f289cf8d5a9e9944ead5 after edit retained text \"Synthetic previeworiginal unique marker\"",
+        "Channel preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead5\",\"text\":\"Synthetic quote of newest\",\"senderName\":\"Dr Synthetic B\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.471Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}",
+        "Newest 6ac8f289cf8d5a9e9944ead7 edited and deleted; preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}"
+      ]
+    },
+    {
+      "id": "FR-MSG-06",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-07",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-08",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q7: automatic duplicate prevention after a lost successful response needs product decision",
+      "verifiedSubassertions": [
+        "Proxy consumed HTTP 201 for committed message 6ac8f28d3d8478864a1f9928 and dropped the client response",
+        "A fresh channel fetch recovered exactly one persisted message before any manual resend"
+      ]
+    },
+    {
+      "id": "FR-THR-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-THR-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-THR-03",
+      "status": "PASS",
+      "prerequisiteSeed": "41 active thread roots and one archived-channel root inserted directly with distinct updatedAt values to isolate Needl selection"
+    },
+    {
+      "id": "FR-THR-04",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision",
+      "verifiedSubassertions": [
+        "Reply 6ac8f34896375089c7648ab3 edit and soft deletion persisted; thread page excludes deleted reply",
+        "Root after edit: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac8f34896375089c7648aac\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T13:59:36.484Z\"}}",
+        "Root after delete: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac8f34896375089c7648aac\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T13:59:36.484Z\"}}",
+        "Needl after delete: {\"rootMessageId\":\"6ac8f34896375089c7648ab1\",\"channelId\":\"6ac8f34896375089c7648aae\",\"spaceId\":\"6ac8f34896375089c7648aad\",\"channelName\":\"general\",\"channelType\":\"general\",\"preview\":\"Synthetic revision root\",\"replyCount\":1,\"lastReplyAt\":\"2026-10-09T13:59:36.484Z\",\"sender\":{\"_id\":\"6ac8f34896375089c7648aab\",\"role\":\"intern\",\"avatarUrl\":null,\"name\":\"Dr Synthetic A\"}}"
+      ]
+    },
+    {
+      "id": "FR-SOC-01",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "Switching emoji must replace B prior reaction\n+ actual - expected\n\n  [\n+   '👍',\n    '❤️'\n  ]\n"
+    },
+    {
+      "id": "FR-SOC-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SOC-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SOC-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-SOC-05",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-NOT-01",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ Set(3) {\n+   '6ac8f5addbbefeffe3fce1c6',\n- Set(2) {\n    '6ac8f5addbbefeffe3fce1c8',\n    '6ac8f5addbbefeffe3fce1ca'\n  }\n"
+    },
+    {
+      "id": "FR-NOT-02",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!inbox.data.notifications.some((item) => item.referenceId === viewed._id))\n"
+    },
+    {
+      "id": "FR-NOT-03",
+      "status": "PASS",
+      "prerequisiteSeed": "Seven synthetic inbox documents inserted with controlled ObjectIds and read/type values to isolate cursor filtering"
+    },
+    {
+      "id": "FR-NOT-04",
+      "status": "FAIL",
+      "errorCategory": "AssertionError",
+      "error": "Expected values to be strictly equal:\n\n1 !== 2\n",
+      "prerequisiteSeed": "Synthetic inbox records inserted with both string and ObjectId channel metadata, bypassing schema casting for the legacy representation"
+    },
+    {
+      "id": "FR-NOT-05",
+      "status": "PASS",
+      "prerequisiteSeed": "Disposable MongoDB notification collection validator rejects exactly the first synthetic message body, then is removed after the backend failure log"
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/messages-01-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-02-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-03-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-04-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-05-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-06-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-07-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-08-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/threads-01-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-02-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-03-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-04-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/social-01-6bdef63c-c496-4ffc-85cb-74458dbbbbe8",
+    "tests/functional-regression/output/social-02-6bdef63c-c496-4ffc-85cb-74458dbbbbe8",
+    "tests/functional-regression/output/social-03-6bdef63c-c496-4ffc-85cb-74458dbbbbe8",
+    "tests/functional-regression/output/social-04-6bdef63c-c496-4ffc-85cb-74458dbbbbe8",
+    "tests/functional-regression/output/social-05-6bdef63c-c496-4ffc-85cb-74458dbbbbe8",
+    "tests/functional-regression/output/notifications-01-e8dca9c3-f38f-4832-a28b-a0cd44e0d165",
+    "tests/functional-regression/output/notifications-02-e8dca9c3-f38f-4832-a28b-a0cd44e0d165",
+    "tests/functional-regression/output/notifications-03-e8dca9c3-f38f-4832-a28b-a0cd44e0d165",
+    "tests/functional-regression/output/notifications-04-e8dca9c3-f38f-4832-a28b-a0cd44e0d165",
+    "tests/functional-regression/output/notifications-05-e8dca9c3-f38f-4832-a28b-a0cd44e0d165"
+  ]
+}

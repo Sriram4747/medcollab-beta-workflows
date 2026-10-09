@@ -43,7 +43,7 @@ export async function runModule(moduleName, cases) {
     const request = createHttp(origin);
     const identities = new Map();
     const context = {
-      request, uri, origin, inbox,
+      request, uri, origin, inbox, waitForBackendLog: backend.waitForLog,
       identity: async (label) => {
         if (!identities.has(label)) identities.set(label, await createIdentity(request, inbox, label));
         return identities.get(label);

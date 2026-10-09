@@ -74,9 +74,22 @@ export async function startBackend(uri, port, runtimeDirectory, inboxDirectory, 
   };
   const child = spawn(process.execPath, [join(backendRoot, 'src/server.js')], { cwd: runtimeDirectory, env, stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true });
   const chunks = [];
-  child.stdout.on('data', (data) => chunks.push(data));
-  child.stderr.on('data', (data) => chunks.push(data));
-  try { await ready(`http://127.0.0.1:${port}`, child); return { child, logs: () => Buffer.concat(chunks).toString('utf8') }; }
+  const logWaiters = new Set();
+  const logs = () => Buffer.concat(chunks).toString('utf8');
+  const capture = (data) => {
+    chunks.push(data);
+    const current = logs();
+    for (const waiter of logWaiters) if (current.includes(waiter.text)) { clearTimeout(waiter.timer); logWaiters.delete(waiter); waiter.resolve(current); }
+  };
+  child.stdout.on('data', capture);
+  child.stderr.on('data', capture);
+  const waitForLog = (text, timeoutMs = 10000) => new Promise((resolve, reject) => {
+    if (logs().includes(text)) return resolve(logs());
+    const waiter = { text, resolve, timer: null };
+    waiter.timer = setTimeout(() => { logWaiters.delete(waiter); reject(new Error(`Backend log did not contain ${JSON.stringify(text)} within ${timeoutMs} ms`)); }, timeoutMs);
+    logWaiters.add(waiter);
+  });
+  try { await ready(`http://127.0.0.1:${port}`, child); return { child, logs, waitForLog }; }
   catch (error) { child.kill(); throw error; }
 }
 
