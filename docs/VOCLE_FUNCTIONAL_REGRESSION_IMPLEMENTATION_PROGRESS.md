@@ -44,7 +44,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **GitHub Actions run links:** none; dedicated workflow is Batch 5.
 - **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch2-checkpoint.json) and [summary](functional-regression-evidence/upstream-da2baff-batch2-checkpoint.md); detailed local JSON/JUnit/Markdown/coverage/provenance/cleanup outputs remain under ignored `tests/functional-regression/output/`.
 - **Files changed:** `tests/functional-regression/src/{config,db,fixtures,runner,module-runner,run-batch2-subset}.mjs`, `suites/{auth,profile,discovery,spaces,channels,requests,conversations}.mjs`, `scripts/aggregate-checkpoint.mjs`, `package.json`, evidence files, decision ledger and this progress document.
-- **Commit hashes:** partial checkpoints `b6734f5`, `61bf06e`, and `c371890` pushed; this 20-case update is pending commit.
+- **Commit hashes:** partial checkpoints `b6734f5`, `61bf06e`, `c371890`, and `a0b9a01` pushed to `origin/master`.
 - **Remaining work:** complete the other Batch 2 catalog cases before Batches 3–7. Q1–Q14 remain unresolved. No dedicated workflow, Flutter cases, or device cases have been implemented.
 - **Exact next action:** add the remaining Batch 2 AUTH/PRO/DISC/SPC/CH/REQ/DM behavioral cases, starting with request acceptance and recovery, while preserving the confirmed upstream failures; rerun the expanded module subset on the pinned SHA.
 
