@@ -24,6 +24,8 @@ While preparing `FR-PRO-04`, a live `POST /api/channels/dm` also returned HTTP 5
 
 `FR-MSG-05` verifies edits, soft deletes, root page reload and search reconciliation. Its quoted snapshot retains the original source text after edit; the channel preview for an edited/deleted newest message retains that message's original sent text and ID. Q1 still needs a product decision about whether these derived views should update or retain snapshots. `FR-MSG-08` consumed a successful backend send response at a local proxy, dropped the client response and recovered exactly one committed message by GET before any resend. Q7 remains open for automatic duplicate prevention after response loss.
 
+`FR-THR-04` verifies an edited latest reply reads with its new content and a soft-deleted latest reply is omitted from the thread page. The root still reports `replyCount: 1` and retains the pre-edit `lastReply` text after both changes; Needl also reports count one after the only reply is deleted. This observed derived-state mismatch is recorded under Q1 and is not accepted as the intended aggregate policy.
+
 | Question | Decision needed | Status | Safe verified scope pending decision |
 |---|---|---|---|
 | Q1 | Whether edit/delete changes channel preview, quote snapshots and thread aggregates | NEEDS_DECISION | Assert primary message persistence, edited/deleted state and events; record derived views. |

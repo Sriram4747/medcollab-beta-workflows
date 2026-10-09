@@ -50,7 +50,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 
 ## Batch 3 — communication and realtime
 
-- **Status:** in progress. Root messaging submodule implemented and executed; the other 25 new Batch 3 backend cases have not been implemented. Batch 3 is **not complete**.
+- **Status:** in progress. Root messaging and thread/Needl submodules implemented and executed; the other 21 new Batch 3 backend cases have not been implemented. Batch 3 is **not complete**.
 - **Implemented testcase IDs this checkpoint:** `FR-MSG-01`–`FR-MSG-08` with executable assertions. Combined implementation so far is 96 backend cases: 48 unchanged sanity, 40 new Batch 2 and 8 new Batch 3. Flutter 0; device 0. Registry remains 187 unique, 48 retained, 139 new, and 147/32/8 by tier.
 - **Focused execution:** pinned upstream message subset of 8: PASS 5 (`FR-MSG-02`, `03`, `04`, `06`, `07`), FAIL 1 (`FR-MSG-01`), NEEDS_DECISION 2 (`FR-MSG-05`, `08`), BLOCKED 0, ERROR 0, SKIP 0. This subset is separate from prior Batch 2 evidence and does not claim that all 96 implemented cases were rerun at this checkpoint.
 - **Genuine application failure:** `FR-MSG-01` returns HTTP 400 for whitespace-padded 4,000-character text after the route checks the trimmed length; the model validates the untrimmed 4,004 characters. Valid exact 4,000-character and Unicode/newline messages passed before this final boundary assertion. No application source or expected outcome was changed.
@@ -62,8 +62,13 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **Structured evidence:** [JSON](functional-regression-evidence/upstream-da2baff-batch3-messages-checkpoint-8.json) and [summary](functional-regression-evidence/upstream-da2baff-batch3-messages-checkpoint-8.md); per-case JSON/JUnit/Markdown/coverage/provenance/cleanup under ignored local output. The aggregate checks exact eight IDs, target SHA, cleanup and provenance; it cannot be used as full backend success.
 - **Files changed:** `tests/functional-regression/suites/messages.mjs`, `scripts/aggregate-batch3-messages.mjs`, decision ledger, two evidence files and this progress document.
 - **Commit hash:** `31866cc` (root messaging checkpoint; pushed to `origin/master` with this documentation update).
-- **Remaining work:** 91 catalog cases unimplemented: 51 backend (25 remaining Batch 3 plus Batch 4), 32 Flutter and 8 device. Batches 4–7 remain not started. Batch 2 and Batch 3 red/undecided outcomes remain open.
-- **Exact next action:** implement `FR-THR-01`–`04` thread/Needl behavior against the pinned upstream, then the social, notification, push, realtime and search cases in Batch 3; run focused modules and update the aggregate checkpoint.
+- **Second partial checkpoint:** `FR-THR-01`–`04` are executable. Focused pinned-upstream thread/Needl run: PASS 3, NEEDS_DECISION 1 (`FR-THR-04`, Q1), FAIL/BLOCKED/ERROR/SKIP 0. The 12-case Batch 3 aggregate (eight messages plus four threads) is PASS 8, FAIL 1, NEEDS_DECISION 3, ERROR/BLOCKED/SKIP 0. Aggregate scope remains a partial subset. The four threads verify correlated async side effects, root counts and 100-character preview, cursor order with deleted reply omitted, 40-item Needl cap and archived-channel exclusion. `FR-THR-04` verifies edit/delete persistence and records unchanged root aggregate/Needl state for Q1.
+- **Second checkpoint infrastructure:** one aggregation attempt rejected different base Git SHAs between sequential module runs; validator now requires a consistent base SHA *within* each module group and records both base SHAs plus one content fingerprint. All four disposable backend and MongoDB cleanups passed; no application code was changed.
+- **Second checkpoint harness/source:** pinned upstream `da2baff621fe03b21e614965bdb77510f32a62b9`; thread execution base fork SHA `b75cfbb` plus uncommitted thread assertions; combined harness content SHA-256 `6b495a374311e6ae3d3e9ebeaed761396fcc52d7b891f1c3c59b805a6567ecb3`.
+- **Second checkpoint evidence/files:** [JSON](functional-regression-evidence/upstream-da2baff-batch3-checkpoint-12.json) and [summary](functional-regression-evidence/upstream-da2baff-batch3-checkpoint-12.md); `tests/functional-regression/suites/threads.mjs`, `scripts/aggregate-batch3-checkpoint.mjs`, and this progress document. GitHub Actions run links: none; workflow is Batch 5.
+- **Second checkpoint commit hash:** pending commit/push to `origin/master`.
+- **Remaining work:** 87 catalog cases unimplemented: 47 backend (21 remaining Batch 3 plus Batch 4), 32 Flutter and 8 device. Batches 4–7 remain not started. Batch 2 and Batch 3 red/undecided outcomes remain open.
+- **Exact next action:** implement `FR-SOC-01`–`05` reaction, pin and receipt behavior, then notification, push, realtime and search cases in Batch 3; run focused modules and update the aggregate checkpoint.
 
 ## Batch 4 — handoffs, media and recovery
 

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "scope": "batch3-messages-and-threads-12-only",
+  "targetKind": "upstream-read-only",
+  "targetRepository": "mathiharan29/medcollab-beta",
+  "targetSha": "da2baff621fe03b21e614965bdb77510f32a62b9",
+  "harnessAtMessagesSha": "555cb8db250ee6a1c62dd66990bc09fe18856c71",
+  "harnessAtThreadsSha": "b75cfbba233e35f2355f53b97a4e38a76d5fef79",
+  "harnessContentSha256": "6b495a374311e6ae3d3e9ebeaed761396fcc52d7b891f1c3c59b805a6567ecb3",
+  "plannedCatalogCount": 187,
+  "implementedTotalSoFar": 100,
+  "implementedBackendSoFar": 100,
+  "selectedIds": [
+    "FR-MSG-01",
+    "FR-MSG-02",
+    "FR-MSG-03",
+    "FR-MSG-04",
+    "FR-MSG-05",
+    "FR-MSG-06",
+    "FR-MSG-07",
+    "FR-MSG-08",
+    "FR-THR-01",
+    "FR-THR-02",
+    "FR-THR-03",
+    "FR-THR-04"
+  ],
+  "tally": {
+    "PASS": 8,
+    "FAIL": 1,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 3,
+    "SKIP": 0
+  },
+  "fullBackendSuccess": false,
+  "fullCatalogSuccess": false,
+  "results": [
+    {
+      "id": "FR-MSG-01",
+      "status": "FAIL",
+      "errorCategory": "HttpContractError",
+      "error": "POST /api/channels/6ac8f2854d47d9bea0ad61c4/messages expected 201, got 400"
+    },
+    {
+      "id": "FR-MSG-02",
+      "status": "PASS",
+      "prerequisiteSeed": "Controlled ObjectId sequence and one thread reply inserted directly to isolate root cursor behavior"
+    },
+    {
+      "id": "FR-MSG-03",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-04",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-05",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision",
+      "verifiedSubassertions": [
+        "Root 6ac8f289cf8d5a9e9944ead3 persisted edit then soft deletion; search removed old text after edit and new text after deletion",
+        "Quote 6ac8f289cf8d5a9e9944ead5 after edit retained text \"Synthetic previeworiginal unique marker\"",
+        "Channel preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead5\",\"text\":\"Synthetic quote of newest\",\"senderName\":\"Dr Synthetic B\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.471Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}",
+        "Newest 6ac8f289cf8d5a9e9944ead7 edited and deleted; preview after edit {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}; after delete {\"messageId\":\"6ac8f289cf8d5a9e9944ead7\",\"text\":\"Synthetic newest before edit\",\"senderName\":\"Dr Synthetic A\",\"type\":\"text\",\"sentAt\":\"2026-10-09T13:56:25.513Z\"}"
+      ]
+    },
+    {
+      "id": "FR-MSG-06",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-07",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-MSG-08",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q7: automatic duplicate prevention after a lost successful response needs product decision",
+      "verifiedSubassertions": [
+        "Proxy consumed HTTP 201 for committed message 6ac8f28d3d8478864a1f9928 and dropped the client response",
+        "A fresh channel fetch recovered exactly one persisted message before any manual resend"
+      ]
+    },
+    {
+      "id": "FR-THR-01",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-THR-02",
+      "status": "PASS"
+    },
+    {
+      "id": "FR-THR-03",
+      "status": "PASS",
+      "prerequisiteSeed": "41 active thread roots and one archived-channel root inserted directly with distinct updatedAt values to isolate Needl selection"
+    },
+    {
+      "id": "FR-THR-04",
+      "status": "NEEDS_DECISION",
+      "errorCategory": "DecisionPending",
+      "error": "Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision",
+      "verifiedSubassertions": [
+        "Reply 6ac8f34896375089c7648ab3 edit and soft deletion persisted; thread page excludes deleted reply",
+        "Root after edit: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac8f34896375089c7648aac\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T13:59:36.484Z\"}}",
+        "Root after delete: {\"replyCount\":1,\"lastReply\":{\"senderId\":\"6ac8f34896375089c7648aac\",\"senderName\":\"Dr Synthetic B\",\"text\":\"Synthetic reply before revision\",\"sentAt\":\"2026-10-09T13:59:36.484Z\"}}",
+        "Needl after delete: {\"rootMessageId\":\"6ac8f34896375089c7648ab1\",\"channelId\":\"6ac8f34896375089c7648aae\",\"spaceId\":\"6ac8f34896375089c7648aad\",\"channelName\":\"general\",\"channelType\":\"general\",\"preview\":\"Synthetic revision root\",\"replyCount\":1,\"lastReplyAt\":\"2026-10-09T13:59:36.484Z\",\"sender\":{\"_id\":\"6ac8f34896375089c7648aab\",\"role\":\"intern\",\"avatarUrl\":null,\"name\":\"Dr Synthetic A\"}}"
+      ]
+    }
+  ],
+  "originalReportDirectories": [
+    "tests/functional-regression/output/messages-01-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-02-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-03-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-04-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-05-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-06-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-07-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/messages-08-d8ec1f9f-46bd-40e8-8648-8873ab3664ef",
+    "tests/functional-regression/output/threads-01-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-02-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-03-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1",
+    "tests/functional-regression/output/threads-04-0afb13b7-6b3e-4de9-aa4d-b2a47fed7fc1"
+  ]
+}
