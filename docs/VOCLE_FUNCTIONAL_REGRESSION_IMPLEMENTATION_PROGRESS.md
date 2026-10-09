@@ -66,7 +66,7 @@ This file records implementation and execution separately. The 187 catalog rows 
 - **Second checkpoint infrastructure:** one aggregation attempt rejected different base Git SHAs between sequential module runs; validator now requires a consistent base SHA *within* each module group and records both base SHAs plus one content fingerprint. All four disposable backend and MongoDB cleanups passed; no application code was changed.
 - **Second checkpoint harness/source:** pinned upstream `da2baff621fe03b21e614965bdb77510f32a62b9`; thread execution base fork SHA `b75cfbb` plus uncommitted thread assertions; combined harness content SHA-256 `6b495a374311e6ae3d3e9ebeaed761396fcc52d7b891f1c3c59b805a6567ecb3`.
 - **Second checkpoint evidence/files:** [JSON](functional-regression-evidence/upstream-da2baff-batch3-checkpoint-12.json) and [summary](functional-regression-evidence/upstream-da2baff-batch3-checkpoint-12.md); `tests/functional-regression/suites/threads.mjs`, `scripts/aggregate-batch3-checkpoint.mjs`, and this progress document. GitHub Actions run links: none; workflow is Batch 5.
-- **Second checkpoint commit hash:** pending commit/push to `origin/master`.
+- **Second checkpoint commit hash:** `6c6f959` (thread/Needl cases and evidence; pushed to `origin/master` with this documentation update).
 - **Remaining work:** 87 catalog cases unimplemented: 47 backend (21 remaining Batch 3 plus Batch 4), 32 Flutter and 8 device. Batches 4–7 remain not started. Batch 2 and Batch 3 red/undecided outcomes remain open.
 - **Exact next action:** implement `FR-SOC-01`–`05` reaction, pin and receipt behavior, then notification, push, realtime and search cases in Batch 3; run focused modules and update the aggregate checkpoint.
 
