@@ -254,11 +254,15 @@ jobs:
         working-directory: medcollab-app
         run: |
           set +e
-          flutter test --no-pub --reporter json test/functional_regression > "$VOCLE_FLUTTER_OUTPUT/catalog.ndjson" 2> "$VOCLE_FLUTTER_OUTPUT/catalog.stderr.log"
-          catalog_exit=$?
+          echo 'Running Flutter catalog with a 12-minute command deadline'
+          timeout --signal=TERM --kill-after=30s 12m flutter test --no-pub --reporter json test/functional_regression 2> "$VOCLE_FLUTTER_OUTPUT/catalog.stderr.log" | tee "$VOCLE_FLUTTER_OUTPUT/catalog.ndjson"
+          catalog_exit=${PIPESTATUS[0]}
+          echo "Flutter catalog command exited $catalog_exit"
           mapfile -t retained < <(find test -maxdepth 1 -name '*_test.dart' -print | sort)
-          flutter test --no-pub "${retained[@]}" > "$VOCLE_FLUTTER_OUTPUT/retained.log" 2>&1
-          retained_exit=$?
+          echo 'Running retained Flutter tests with a 5-minute command deadline'
+          timeout --signal=TERM --kill-after=30s 5m flutter test --no-pub "${retained[@]}" 2>&1 | tee "$VOCLE_FLUTTER_OUTPUT/retained.log"
+          retained_exit=${PIPESTATUS[0]}
+          echo "Retained Flutter command exited $retained_exit"
           echo "catalog_exit=$catalog_exit" >> "$GITHUB_OUTPUT"
           echo "retained_exit=$retained_exit" >> "$GITHUB_OUTPUT"
           exit 0
