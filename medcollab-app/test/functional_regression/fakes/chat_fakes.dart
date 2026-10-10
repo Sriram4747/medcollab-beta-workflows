@@ -20,6 +20,7 @@ class FakeMessageRepository extends MessageRepository {
   Future<MessageModel> Function(String text, String? replyToId)? onSendText;
   Future<MessageModel> Function(MessageType type, MediaUploadResult upload, String? caption)? onSendMedia;
   int textSendCount = 0;
+  final List<String> sentChannelIds = [];
   int mediaSendCount = 0;
 
   @override
@@ -33,6 +34,7 @@ class FakeMessageRepository extends MessageRepository {
     List<String> mentions = const [], String? replyToId,
   }) {
     textSendCount++;
+    sentChannelIds.add(channelId);
     return onSendText!(text, replyToId);
   }
 
