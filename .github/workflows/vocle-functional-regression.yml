@@ -220,7 +220,7 @@ jobs:
     timeout-minutes: 30
     env:
       TZ: Asia/Kolkata
-      VOCLE_FLUTTER_OUTPUT: ${{ runner.temp }}/vocle-flutter-output
+      VOCLE_FLUTTER_OUTPUT: ${{ github.workspace }}/vocle-flutter-output
     steps:
       - name: Check out exact fork revision
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -289,7 +289,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: vocle-flutter-report-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/vocle-flutter-output/
+          path: ${{ github.workspace }}/vocle-flutter-output/
           if-no-files-found: error
           retention-days: 90
       - name: Enforce Flutter functional gate
