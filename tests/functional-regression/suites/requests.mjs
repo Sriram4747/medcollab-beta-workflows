@@ -123,7 +123,14 @@ const cases = [{
     await db(async (connection) => {
       const result = await connection.db.admin().command({
         configureFailPoint: 'failCommand', mode: { times: 1 },
-        data: { failCommands: ['findAndModify'], errorCode: 42 },
+        // Authentication and request middleware can issue findAndModify too.
+        // Restrict the disposable fault to the DM upsert's collection so the
+        // failure occurs after request.save(), at the intended lifecycle edge.
+        data: {
+          failCommands: ['findAndModify'],
+          namespace: `${connection.db.databaseName}.channels`,
+          errorCode: 42,
+        },
       });
       assert.equal(result.ok, 1, 'Disposable MongoDB did not arm the findAndModify fault');
     });
