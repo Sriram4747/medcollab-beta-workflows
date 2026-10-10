@@ -114,13 +114,28 @@ void main() {
     expect(dashboard.state.pendingHandoffs, 1);
     expect(dashboard.state.pendingTaskCount, 1);
     Future<void> renderCards() async {
-      await tester.pumpWidget(MaterialApp(home: Scaffold(body: SingleChildScrollView(
-        child: Column(children: [
-          TodayShiftWidget(handoffs: dashboard.state.todayHandoffs, onOpenHandoffs: () {}),
-          AssignedHandoffsWidget(handoffs: dashboard.state.assignedHandoffs),
-          PendingTasksWidget(state: dashboard.state),
-        ]),
-      ))));
+      // Flutter 3.29.3's diagnostic-tree renderer can itself throw while
+      // formatting a failed paint. Capture the original exception before that
+      // formatting step, then explicitly fail; never suppress a render defect.
+      final previousHandler = FlutterError.onError;
+      final renderErrors = <String>[];
+      FlutterError.onError = (details) {
+        renderErrors.add('${details.exception}\n${details.stack}');
+      };
+      try {
+        await tester.pumpWidget(MaterialApp(home: Scaffold(body: SingleChildScrollView(
+          child: Column(children: [
+            TodayShiftWidget(handoffs: dashboard.state.todayHandoffs, onOpenHandoffs: () {}),
+            AssignedHandoffsWidget(handoffs: dashboard.state.assignedHandoffs),
+            PendingTasksWidget(state: dashboard.state),
+          ]),
+        ))));
+      } finally {
+        FlutterError.onError = previousHandler;
+      }
+      if (renderErrors.isNotEmpty) {
+        throw TestFailure('Application card rendering failed:\n${renderErrors.join('\n')}');
+      }
     }
     await renderCards();
     expect(find.text('Synthetic shift assigned'), findsOneWidget);

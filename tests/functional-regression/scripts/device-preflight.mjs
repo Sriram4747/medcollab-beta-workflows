@@ -16,6 +16,7 @@ const cases = {
   'FR-JRN-06': 'journeys_test.dart',
 };
 const reasons = [];
+const isolatedOverlay = process.argv.includes('--isolated-overlay');
 const result = {
   kind: 'device-preflight',
   ready: false,
@@ -23,6 +24,7 @@ const result = {
   cases: Object.keys(cases),
   sdk: null,
   emulator: null,
+  dependencyMode: isolatedOverlay ? 'committed-archive-test-overlay' : 'working-app',
   reasons,
 };
 
@@ -65,17 +67,20 @@ if (!apiArg) {
 }
 
 const pubspec = readFileSync(resolve(app, 'pubspec.yaml'), 'utf8');
-if (!/^\s{2}integration_test:\s*$/m.test(pubspec)) {
+if (!isolatedOverlay && !/^\s{2}integration_test:\s*$/m.test(pubspec)) {
   reasons.push('App pubspec.yaml has no integration_test SDK dependency.');
 }
 const dirtyLock = run('git', ['status', '--porcelain', '--', 'medcollab-app/pubspec.lock']);
 if (dirtyLock === null) {
   reasons.push('Could not verify the committed Flutter lockfile.');
-} else if (dirtyLock) {
+} else if (dirtyLock && !isolatedOverlay) {
   reasons.push('App pubspec.lock has uncommitted work; preserve it and use an isolated checkout.');
 }
+result.userLockfileDirty = Boolean(dirtyLock);
+result.userWorkingFilesExcluded = isolatedOverlay;
 
-const flutterBin = process.platform === 'win32'
+const flutterArg = process.argv.find((arg) => arg.startsWith('--flutter-bin='));
+const flutterBin = flutterArg ? flutterArg.slice('--flutter-bin='.length) : process.platform === 'win32'
   ? resolve('C:/flutter/bin/flutter.bat')
   : 'flutter';
 const sdkText = run(flutterBin, ['--version', '--machine'], app);

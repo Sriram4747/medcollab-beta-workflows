@@ -1,0 +1,22 @@
+{
+  "kind": "device-preflight",
+  "ready": true,
+  "requiredBuildMode": "debug",
+  "cases": [
+    "FR-MED-08",
+    "FR-PUSH-05",
+    "FR-PUSH-06",
+    "FR-NAV-04",
+    "FR-NAV-05",
+    "FR-LINK-04",
+    "FR-JRN-05",
+    "FR-JRN-06"
+  ],
+  "sdk": "3.29.3",
+  "emulator": "emulator-5580",
+  "dependencyMode": "committed-archive-test-overlay",
+  "reasons": [],
+  "apiOrigin": "http://10.0.2.2:5000",
+  "userLockfileDirty": true,
+  "userWorkingFilesExcluded": true
+}
