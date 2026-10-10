@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:medcollab_app/core/di/app_dependencies.dart';
 import 'package:medcollab_app/core/error/app_exception.dart';
@@ -33,11 +34,15 @@ class _ForwardSpaces extends SpaceRepository {
 }
 
 void main() {
-  testWidgets('FR-LINK-01: forwarding retains payload and sheet on failure', (tester) async {
-    final messages = FakeMessageRepository();
+  setUpAll(() {
     final deps = AppDependencies.instance;
     deps.channelRepository = _ForwardChannels();
     deps.spaceRepository = _ForwardSpaces();
+  });
+
+  testWidgets('FR-LINK-01: forwarding retains payload and sheet on failure', (tester) async {
+    final messages = FakeMessageRepository();
+    final deps = AppDependencies.instance;
     deps.messageRepository = messages;
     const source = MessageModel(
       id: 'source-message',
@@ -96,5 +101,43 @@ void main() {
     expect(sent.last, contains('https://synthetic.invalid/file.jpg'));
     expect(sent.first, sent.last,
         reason: 'Retry must preserve exact source attribution and media URL');
+  });
+
+  testWidgets('FR-LINK-02: copy exact message link [NEEDS_DECISION Q13]',
+      (tester) async {
+    String? copied;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform, (call) async {
+        if (call.method == 'Clipboard.setData') {
+          copied = (call.arguments as Map)['text'] as String?;
+        }
+        return null;
+      },
+    );
+    addTearDown(() => tester.binding.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null));
+    const source = MessageModel(
+      id: 'source-message', channelId: 'source-channel',
+      sender: UserModel(id: 'doctor-a', name: 'Doctor A'),
+      content: MessageContent(text: 'Synthetic shift note'),
+    );
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: Builder(
+      builder: (context) => TextButton(
+        onPressed: () => showForwardMessageSheet(context,
+            message: source, sourceChannelId: source.channelId),
+        child: const Text('Open source message'),
+      ),
+    ))));
+    await tester.tap(find.text('Open source message'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Copy message link'));
+    await tester.pumpAndSettle();
+    expect(copied, 'vocle://c/source-channel/m/source-message');
+    expect(Uri.parse(copied!).scheme, 'vocle');
+    expect(Uri.parse(copied!).host, 'c');
+    expect(Uri.parse(copied!).pathSegments,
+        ['source-channel', 'm', 'source-message']);
+    expect(find.text('Forward message'), findsNothing);
+    // Q13 remains open: there is no verified app route for this copied URI.
   });
 }
