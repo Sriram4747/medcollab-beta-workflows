@@ -13,6 +13,7 @@ const events = fs.readFileSync(input, 'utf8').split(/\r?\n/).filter(Boolean).map
 const starts = new Map();
 const startedAt = new Map();
 const prints = new Map();
+const errors = new Map();
 const results = [];
 const seenIds = new Set();
 for (const event of events) {
@@ -21,6 +22,8 @@ for (const event of events) {
     startedAt.set(event.test.id, event.time ?? 0);
   } else if (event.type === 'print') {
     prints.set(event.testID, [...(prints.get(event.testID) ?? []), event.message]);
+  } else if (event.type === 'error') {
+    errors.set(event.testID, [...(errors.get(event.testID) ?? []), event]);
   } else if (event.type === 'testDone') {
     const started = starts.get(event.testID);
     const id = started?.name.match(/\bFR-[A-Z]+-\d{2}\b/)?.[0];
@@ -28,7 +31,8 @@ for (const event of events) {
     if (!flutterCatalog.has(id)) throw new Error(`Unknown Flutter catalog ID ${id}`);
     if (seenIds.has(id)) throw new Error(`Duplicate Flutter test ID ${id}`);
     seenIds.add(id);
-    const log = (prints.get(event.testID) ?? []).join('\n');
+    const testErrors = errors.get(event.testID) ?? [];
+    const log = [...(prints.get(event.testID) ?? []), ...testErrors.map((error) => error.error)].join('\n');
     const decision = started.name.includes('[NEEDS_DECISION ');
     if (decision && flutterCatalog.get(id).questionIds.length === 0) {
       throw new Error(`${id} marked NEEDS_DECISION without a catalog question`);
@@ -36,8 +40,9 @@ for (const event of events) {
     let status;
     if (event.skipped || event.result === 'skipped') status = 'SKIP';
     else if (event.result === 'success') status = decision ? 'NEEDS_DECISION' : 'PASS';
-    else if (event.result === 'error') {
-      status = /TestFailure|EXCEPTION CAUGHT BY FLUTTER FRAMEWORK|EXCEPTION CAUGHT BY RENDERING LIBRARY/.test(log)
+    else if (event.result === 'failure' || event.result === 'error') {
+      status = testErrors.some((error) => error.isFailure === true) ||
+        /TestFailure|EXCEPTION CAUGHT BY FLUTTER FRAMEWORK|EXCEPTION CAUGHT BY RENDERING LIBRARY/.test(log)
         ? 'FAIL' : 'ERROR';
     } else status = 'ERROR';
     results.push({
@@ -77,7 +82,7 @@ const lines = [
   `Complete: ${complete}; full success: ${fullSuccess}; Flutter reporter success: ${done.success}.`,
   `PASS ${counts.PASS}; FAIL ${counts.FAIL}; ERROR ${counts.ERROR}; BLOCKED ${counts.BLOCKED}; NEEDS_DECISION ${counts.NEEDS_DECISION}; SKIP ${counts.SKIP}.`,
   '', '| ID | Status | Product questions |', '| --- | --- | --- |',
-  ...results.map((item) => `| ${item.id} | ${item.status} | ${item.questionIds.join(', ')} |`), '',
+  ...results.map((item) => `| ${item.id} | ${item.status} | ${item.questionIds.join(', ')} |`),
 ];
 fs.writeFileSync(`${outputBase}.md`, `${lines.join('\n')}\n`);
 const escape = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
