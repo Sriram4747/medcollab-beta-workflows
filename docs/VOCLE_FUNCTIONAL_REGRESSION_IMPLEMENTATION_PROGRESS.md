@@ -143,7 +143,12 @@ This file records implementation and execution separately. The 187 catalog rows 
 
 ## Batch 6 — Flutter functional regression
 
-- **Status:** not started.
+- **Status:** in progress; first four of 32 Flutter catalog IDs implemented with executable service assertions and run. Do not count the other 28 Flutter IDs or any device ID as implemented.
+- **Implemented/passed IDs:** `FR-OFF-03`, `FR-SAVE-01`, `FR-SAVE-03`, `FR-HOME-01`. PASS 4, FAIL/BLOCKED/NEEDS_DECISION/ERROR/SKIP 0 for this focused subset. `FR-OFF-03` verifies root/thread draft restoration and separate channel badge keys; `FR-SAVE-01` verifies bookmark deduplication, newest-first order, persisted removal and destination IDs; `FR-SAVE-03` verifies recent-channel cap 8, pin cap 12, deduplication and visit order; `FR-HOME-01` verifies visibility/order persistence, new-widget merge, reset and corrupt-storage recovery. These are service-level cases; no untested navigation or platform behavior is claimed.
+- **Execution evidence:** Flutter SDK 3.47.2 / Dart 3.13.2, `flutter test --no-pub --reporter json test/functional_regression/storage_test.dart test/functional_regression/home_test.dart`, exit 0, four catalog test events succeeded, `done.success=true`. [Machine-readable NDJSON](functional-regression-evidence/flutter-batch6-checkpoint-4.ndjson). The earlier unchanged Flutter baseline had 33 passing tests in eight files, separate from these four new cases.
+- **Infrastructure:** default sandbox invocation stalled without test output; it was interrupted. The authorized escalated invocation with the installed SDK completed in under eight seconds. No test oracle or application source changed. Existing unrelated Flutter/Android modifications remain untouched.
+- **Source SHA tested:** fork working tree based on `3fdfe9c` with only these two new test files; application source is the fork's existing tracked source. **Harness SHA:** `3fdfe9c` base plus new tests, pending commit. **GitHub Actions run links:** no Flutter lane yet; the two Batch 5 backend runs are recorded above.
+- **Files changed:** `medcollab-app/test/functional_regression/{storage,home}_test.dart`, machine-readable focused result, and this progress document. **Commit hash:** pending. **Remaining work:** 28 Flutter catalog cases, full Flutter suite execution and report integration, then eight device cases. **Exact next action:** implement the next Flutter catalog cases against injectable client state/repositories and run focused tests, preserving genuine failures and Q11–Q13 decision boundaries.
 
 ## Batch 7 — device and release
 
