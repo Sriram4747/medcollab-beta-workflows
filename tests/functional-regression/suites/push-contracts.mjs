@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, rename, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { runModule } from '../src/module-runner.mjs';
 import { DecisionPending } from '../src/runner.mjs';
@@ -114,15 +114,22 @@ const cases = [{
         ['2026-10-09T00:30:00.000Z', '23:00', '01:00', 'emergency', false, false, 'disabled emergency preference takes precedence'],
         ['2026-10-09T00:30:00.000Z', '23:00', '01:00', 'emergency', true, true, 'enabled emergency control after disabled case'],
       ];
-      for (const [iso, start, end, priority, emergencyAlerts, shouldPush, label] of scenarios) {
-        await writeFile(join(inbox, 'clock.json'), JSON.stringify({ iso }));
+      for (const [index, scenario] of scenarios.entries()) {
+        const [iso, start, end, priority, emergencyAlerts, shouldPush, label] = scenario;
+        const clockFile = `clock-${String(index).padStart(2, '0')}.json`;
+        const pendingClock = join(inbox, `${clockFile}.tmp`);
+        await writeFile(pendingClock, JSON.stringify({ iso }));
+        await rename(pendingClock, join(inbox, clockFile));
         const updated = await request('/api/users/me', { method: 'PUT', token: b.token, body: { notifications: { quietHoursStart: start, quietHoursEnd: end, emergencyAlerts } } });
         assert.equal(updated.data.user.notifications.quietHoursStart, start);
+        assert.equal(updated.data.user.notifications.quietHoursEnd, end);
+        assert.equal(updated.data.user.notifications.emergencyAlerts, emergencyAlerts);
         const text = `Synthetic quiet ${label}`;
         const notification = waitFor(socket, 'new_notification', (payload) => payload?.body === text);
         const message = (await request(`/api/channels/${channelId}/messages`, { method: 'POST', token: a.token, body: { priority, content: { text } }, expectedStatus: 201 })).data.message;
         const emitted = await notification;
         assert.equal(emitted.referenceId, message._id);
+        await waitForBackendLog(`VOCLE_FAKE_NOTIFY_DONE ${message._id}`);
         if (shouldPush) await waitForBackendLog(`VOCLE_FAKE_FCM_CAPTURE ${emitted._id} ${token} success`);
         observations.push({ label, notificationId: emitted._id, shouldPush, priority: emitted.priority });
       }

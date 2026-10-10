@@ -1,4 +1,4 @@
-const { appendFileSync, mkdirSync, readFileSync } = require('node:fs');
+const { appendFileSync, mkdirSync, readFileSync, readdirSync } = require('node:fs');
 const { Writable } = require('node:stream');
 const { createRequire } = require('node:module');
 const { join } = require('node:path');
@@ -12,12 +12,12 @@ let installClock = () => {};
 if (process.env.VOCLE_FAKE_CLOCK === '1') {
   const NativeDate = global.Date;
   const now = () => {
-    try {
-      const iso = JSON.parse(readFileSync(join(inbox, 'clock.json'), 'utf8')).iso;
-      const milliseconds = NativeDate.parse(iso);
-      if (!Number.isFinite(milliseconds)) throw new Error('Invalid synthetic clock ISO timestamp');
-      return milliseconds;
-    } catch (error) { if (error.code === 'ENOENT') return NativeDate.now(); throw error; }
+    const clocks = readdirSync(inbox).filter((name) => /^clock-\d+\.json$/.test(name)).sort();
+    if (clocks.length === 0) return NativeDate.now();
+    const iso = JSON.parse(readFileSync(join(inbox, clocks.at(-1)), 'utf8')).iso;
+    const milliseconds = NativeDate.parse(iso);
+    if (!Number.isFinite(milliseconds)) throw new Error('Invalid synthetic clock ISO timestamp');
+    return milliseconds;
   };
   installClock = () => {
     global.Date = class ControlledDate extends NativeDate {
@@ -34,8 +34,8 @@ if (process.env.VOCLE_FAKE_FIREBASE === '1') {
       try { modes = JSON.parse(readFileSync(join(inbox, 'fcm-modes.json'), 'utf8')); }
       catch (error) { if (error.code !== 'ENOENT') throw error; }
       const mode = modes[message.token] || 'success';
-      appendFileSync(join(inbox, 'fcm-capture.ndjson'), `${JSON.stringify({ mode, message })}\n`, { mode: 0o600 });
-      console.log(`VOCLE_FAKE_FCM_CAPTURE ${message.data?.notificationId || 'none'} ${message.token} ${mode}`);
+      appendFileSync(join(inbox, 'fcm-capture.ndjson'), `${JSON.stringify({ mode, message, observedAt: new Date().toISOString(), localHour: new Date().getHours() })}\n`, { mode: 0o600 });
+      console.log(`VOCLE_FAKE_FCM_CAPTURE ${message.data?.notificationId || 'none'} ${message.token} ${mode} localHour=${new Date().getHours()}`);
       if (mode === 'stale') { const error = new Error('Synthetic stale FCM token'); error.code = 'messaging/registration-token-not-registered'; throw error; }
       if (mode === 'temporary') { const error = new Error('Synthetic temporary FCM error'); error.code = 'messaging/unavailable'; throw error; }
       if (mode !== 'success') throw new Error(`Unknown synthetic FCM mode ${mode}`);
@@ -83,6 +83,7 @@ if (fakeFirebase || fakeCloudinary || process.env.VOCLE_FAKE_CLOCK === '1') {
   const originalLoad = Module._load;
   const firebaseConfigPath = join(backendRoot, 'src', 'config', 'firebase.js');
   const cloudinaryConfigPath = join(backendRoot, 'src', 'config', 'cloudinary.js');
+  const notificationServicePath = join(backendRoot, 'src', 'services', 'notification.service.js');
   const appPath = join(backendRoot, 'src', 'app.js');
   Module._load = function (request, parent, isMain) {
     let resolved;
@@ -90,6 +91,16 @@ if (fakeFirebase || fakeCloudinary || process.env.VOCLE_FAKE_CLOCK === '1') {
     if (fakeFirebase && resolved === firebaseConfigPath) return fakeFirebase;
     if (fakeCloudinary && resolved === cloudinaryConfigPath) return fakeCloudinary;
     const loaded = originalLoad.apply(this, arguments);
+    if (resolved === notificationServicePath && process.env.VOCLE_FAKE_CLOCK === '1') {
+      return {
+        ...loaded,
+        notifyNewMessage: async (options) => {
+          const result = await loaded.notifyNewMessage(options);
+          console.log(`VOCLE_FAKE_NOTIFY_DONE ${options.message?._id}`);
+          return result;
+        },
+      };
+    }
     if (resolved === appPath && process.env.VOCLE_FAKE_CLOCK === '1') installClock();
     return loaded;
   };
