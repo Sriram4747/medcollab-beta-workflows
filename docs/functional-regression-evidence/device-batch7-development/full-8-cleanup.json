@@ -1,0 +1,4 @@
+{
+  "status": "ERROR",
+  "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows\\tests\\functional-regression\\output\\d-d39d3ffe\\target\\medcollab-app'"
+}

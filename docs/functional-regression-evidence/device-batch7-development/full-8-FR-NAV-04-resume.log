@@ -1,0 +1,121 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AndroidStudioProjects\Vocle\medcollab-beta-workflows\tests\functional-regression\output\d-d39d3ffe\target\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             24.0s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,046ms
+D/CompatChangeReporter(12464): Compat change id reported: 349153669; UID 10246; state: ENABLED
+W/HWUI    (12464): Unknown dataspace 0
+I/WindowExtensionsImpl(12464): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](12464): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(12464): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (12464): called unimplemented OpenGL ES API
+I/ocle.regression(12464): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:34097/[redacted-vm-service]/
+I/Choreographer(12464): Skipped 38 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(12464): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@657cee6
+I/HWUI    (12464): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Isolate found with number: 8038777531850275
+VMServiceFlutterDriver: Isolate 8038777531850275 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (12464): 00:00 +0: FR-NAV-04: Android resume
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (12464): called unimplemented OpenGL ES API
+I/Choreographer(12464): Skipped 30 frames!  The application may be doing too much work on its main thread.
+V/Configuration(12464): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(12464): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(12464): hide(ime())
+I/ImeTracker(12464): com.vocle.regression:fb55c941: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller(12464): Installing profile for com.vocle.regression
+E/libEGL  (12464): called unimplemented OpenGL ES API
+E/libEGL  (12464): called unimplemented OpenGL ES API
+W/ocle.regression(12464): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+E/libEGL  (12464): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(12464): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(12464): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/ocle.regression(12464): Background young concurrent mark compact GC freed 1728KB AllocSpace bytes, 62(2232KB) LOS objects, 47% free, 4099KB/7782KB, paused 1.958ms,15.055ms total 68.844ms
+I/ImeTracker(12464): com.vocle.regression:4ee0dde5: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(12464): show(ime())
+D/InsetsController(12464): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker(12464): com.vocle.regression:7a29103f: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(12464): show(ime())
+I/ImeTracker(12464): com.vocle.regression:7a29103f: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+E/libEGL  (12464): called unimplemented OpenGL ES API
+D/InputConnectionAdaptor(12464): The input method toggled cursor monitoring on
+I/AssistStructure(12464): Flattened final assist data: 512 bytes, containing 1 windows, 3 views
+D/WindowOnBackDispatcher(12464): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@4d5e192
+I/ocle.regression(12464): Background concurrent mark compact GC freed 1589KB AllocSpace bytes, 59(2124KB) LOS objects, 49% free, 4115KB/8231KB, paused 67.512ms,25.064ms total 323.890ms
+D/VRI[MainActivity](12464): WindowInsets changed: ime:[0,0,0,1008]
+W/InteractionJankMonitor(12464): Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.vocle.regression
+I/ImeTracker(12464): com.vocle.regression:4ee0dde5: onShown
+I/ocle.regression(12464): Background young concurrent mark compact GC freed 1608KB AllocSpace bytes, 52(1872KB) LOS objects, 48% free, 4007KB/7798KB, paused 1.174ms,5.265ms total 21.672ms
+I/ImeTracker(12464): system_server:2543449d: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/WindowOnBackDispatcher(12464): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+I/ocle.regression(12464): Background concurrent mark compact GC freed 1652KB AllocSpace bytes, 68(2448KB) LOS objects, 49% free, 3787KB/7574KB, paused 22.865ms,11.975ms total 177.547ms
+D/VRI[MainActivity](12464): visibilityChanged oldVisibility=true newVisibility=false
+I/AutofillManager(12464): onInvisibleForAutofill(): expiringResponse
+I/flutter (12464): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (12464): The following DeviceInfrastructureError was thrown running a test:
+I/flutter (12464): Local device control result failed (DioExceptionType.connectionTimeout)
+I/flutter (12464):
+I/flutter (12464): When the exception was thrown, this was the stack:
+I/flutter (12464): #0      control (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:82:5)
+I/flutter (12464): <asynchronous suspension>
+I/flutter (12464): #1      deviceCase.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:246:5)
+I/flutter (12464): <asynchronous suspension>
+I/flutter (12464): #2      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+I/flutter (12464): <asynchronous suspension>
+I/flutter (12464): #3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+I/flutter (12464): <asynchronous suspension>
+I/flutter (12464): #4      TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+I/flutter (12464): <asynchronous suspension>
+I/flutter (12464):
+I/flutter (12464): The test description was:
+I/flutter (12464):   FR-NAV-04: Android resume
+I/flutter (12464): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (12464): 00:21 +0: FR-NAV-04: Android resume [E]
+I/flutter (12464):   Test failed. See exception logs above.
+I/flutter (12464):   The test description was: FR-NAV-04: Android resume
+I/flutter (12464):
+I/flutter (12464): 00:21 +0 -1: (tearDownAll)
+Failure Details:
+Failure in method: FR-NAV-04: Android resume
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following DeviceInfrastructureError was thrown running a
+test:
+Local device control result failed
+(DioExceptionType.connectionTimeout)
+
+When the exception was thrown, this was the stack:
+#0      control (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:82:5)
+<asynchronous suspension>
+#1      deviceCase.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:246:5)
+<asynchronous suspension>
+#2      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+<asynchronous suspension>
+#3      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+<asynchronous suspension>
+
+The test description was:
+  FR-NAV-04: Android resume
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+I/flutter (12464): 00:21 +1 -1: Some tests failed.
+Leaving the application running.

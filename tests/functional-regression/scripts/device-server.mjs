@@ -2,14 +2,16 @@ import assert from 'node:assert/strict';
 import { createServer, request as httpRequest } from 'node:http';
 import { join } from 'node:path';
 import { readFile, mkdir, writeFile, rm } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import { deflateSync } from 'node:zlib';
 import { backendRoot, outputRoot, runId } from '../src/config.mjs';
 import { startMongo, databaseUri, inspectDatabase } from '../src/db.mjs';
 import { startBackend, stopChild } from '../src/runner.mjs';
 import { createHttp } from '../src/http.mjs';
 import { capturedOtp } from '../src/fixtures.mjs';
 import { connectSocket } from '../src/socket.mjs';
-import { command } from './prepare-device-workspace.mjs';
-import { deviceCases, devicePackage, emulatorSerial } from './device-contracts.mjs';
+import { deviceCases, devicePackage, emulatorSerial, resumedActivityState as resumed } from './device-contracts.mjs';
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function observe(read, accept, reason, timeout = 15000) {
@@ -26,7 +28,6 @@ async function listen(server) {
   return server.address().port;
 }
 const redact = (value) => String(value).replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]');
-const resumed = (text) => text.split(/\r?\n/).filter((line) => /(?:mResumedActivity|topResumedActivity):/.test(line)).join(' ');
 
 // Complete synthetic PDF with valid byte offsets, for native reader checks.
 function syntheticPdf() {
@@ -43,6 +44,26 @@ function syntheticPdf() {
   return Buffer.from(text);
 }
 
+function syntheticPng() {
+  const chunk = (tag, bytes) => {
+    const data = Buffer.concat([Buffer.from(tag), bytes]);
+    let crc = 0xffffffff;
+    for (const byte of data) {
+      crc ^= byte;
+      for (let bit = 0; bit < 8; bit++) crc = crc >>> 1 ^ (crc & 1 ? 0xedb88320 : 0);
+    }
+    const output = Buffer.alloc(bytes.length + 12);
+    output.writeUInt32BE(bytes.length); data.copy(output, 4);
+    output.writeUInt32BE((crc ^ 0xffffffff) >>> 0, bytes.length + 8);
+    return output;
+  };
+  const header = Buffer.alloc(13);
+  header.writeUInt32BE(1, 0); header.writeUInt32BE(1, 4);
+  header[8] = 8; header[9] = 6; // One RGBA pixel, no interlace.
+  return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    chunk('IHDR', header), chunk('IDAT', deflateSync(Buffer.from([0, 0, 112, 255, 255]))), chunk('IEND', Buffer.alloc(0))]);
+}
+
 export async function startDeviceServer({ adb, serial, caseId }) {
   emulatorSerial(serial);
   const runtime = join(outputRoot, 'runtime', `device-${caseId.toLowerCase()}-${runId}`);
@@ -53,7 +74,11 @@ export async function startDeviceServer({ adb, serial, caseId }) {
   let outage = false, logoutFailure = false, logoutFaults = 0;
   let ackListening = false; const ackEvents = [];
   const sockets = new Set();
-  const native = (...args) => command(adb, ['-s', serial, ...args], runtime);
+  const native = async (...args) => {
+    const result = await promisify(execFile)(adb, ['-s', serial, ...args],
+      { cwd: runtime, encoding: 'utf8', timeout: 15000, maxBuffer: 4 * 1024 * 1024, windowsHide: true });
+    return result.stdout.trim();
+  };
   const foreground = () => native('shell', 'dumpsys', 'activity', 'activities');
   const activity = `${devicePackage}/com.example.medcollab_app.MainActivity`;
   let uri, fixture;
@@ -210,23 +235,23 @@ export async function startDeviceServer({ adb, serial, caseId }) {
           case 'outage': outage = input.enabled === true; if (outage) for (const socket of sockets) socket.destroy(); answer = { enabled: outage }; break;
           case 'logout-failure': logoutFailure = input.enabled === true; answer = { enabled: logoutFailure, injectedRequests: logoutFaults }; break;
           case 'background-resume': {
-            native('shell', 'input', 'keyevent', 'KEYCODE_HOME');
+            await native('shell', 'input', 'keyevent', 'KEYCODE_HOME');
             await observe(foreground, (text) => resumed(text).length > 0 && !resumed(text).includes(devicePackage), 'native background');
             if (input.recoverTransport === true) outage = false;
-            native('shell', 'am', 'start', '-n', activity);
+            await native('shell', 'am', 'start', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.LAUNCHER', '-f', '0x20000000', '-n', activity);
             await observe(foreground, (text) => resumed(text).includes(devicePackage), 'native foreground');
             answer = { backgroundObserved: true, foregroundObserved: true, transportOutageInjection: 'local HTTP/Socket.IO gateway' }; break;
           }
           case 'camera-permission': case 'notification-permission': {
             const permission = action === 'camera-permission' ? 'android.permission.CAMERA' : 'android.permission.POST_NOTIFICATIONS';
-            native('shell', 'pm', 'clear-permission-flags', devicePackage, permission, 'user-fixed');
-            native('shell', 'pm', input.granted ? 'grant' : 'revoke', devicePackage, permission);
-            if (!input.granted) native('shell', 'pm', 'set-permission-flags', devicePackage, permission, 'user-fixed');
-            const state = native('shell', 'dumpsys', 'package', devicePackage);
+            await native('shell', 'pm', 'clear-permission-flags', devicePackage, permission, 'user-fixed');
+            await native('shell', 'pm', input.granted ? 'grant' : 'revoke', devicePackage, permission);
+            if (!input.granted) await native('shell', 'pm', 'set-permission-flags', devicePackage, permission, 'user-fixed');
+            const state = await native('shell', 'dumpsys', 'package', devicePackage);
             assert.ok(state.includes(`${permission}: granted=${Boolean(input.granted)}`), 'Native permission transition did not take effect');
             answer = { granted: Boolean(input.granted) }; break;
           }
-          case 'camera-permission-state': answer = { granted: native('shell', 'dumpsys', 'package', devicePackage).includes('android.permission.CAMERA: granted=true') }; break;
+          case 'camera-permission-state': answer = { granted: (await native('shell', 'dumpsys', 'package', devicePackage)).includes('android.permission.CAMERA: granted=true') }; break;
           case 'token-state': answer = await tokenState(input.label, input.token); break;
           case 'await-token': answer = await observe(() => tokenState(input.label, input.token), (row) => row.present, 'token registration'); break;
           case 'membership': answer = await membership(input.spaceId, input.label); break;
@@ -237,17 +262,17 @@ export async function startDeviceServer({ adb, serial, caseId }) {
             // No file-extension-only stand-in for media compatibility.
             const mp4Path = join(runtime, 'synthetic.mp4');
             const deviceVideo = `/data/local/tmp/vocle_regression_${runId}.mp4`;
-            native('shell', 'screenrecord', '--time-limit', '1', deviceVideo);
-            native('pull', deviceVideo, mp4Path);
-            native('shell', 'rm', deviceVideo);
+            await native('shell', 'screenrecord', '--time-limit', '1', deviceVideo);
+            await native('pull', deviceVideo, mp4Path);
+            await native('shell', 'rm', deviceVideo);
             answer = { pdf: syntheticPdf().toString('base64'),
-              png: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aM9sAAAAASUVORK5CYII=',
+              png: syntheticPng().toString('base64'),
               mp4: (await readFile(mp4Path)).toString('base64') }; break;
           }
           case 'observe-opener': {
             const detail = await observe(foreground, (text) => resumed(text).length > 0 &&
               !resumed(text).includes(devicePackage) && /content:\/\/com\.vocle\.regression/.test(text), 'external local document activity');
-            native('shell', 'am', 'start', '-n', activity);
+            await native('shell', 'am', 'start', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.LAUNCHER', '-f', '0x20000000', '-n', activity);
             answer = { externalActivityObserved: true, localUriObserved: true,
               activity: resumed(detail).trim() }; break;
           }

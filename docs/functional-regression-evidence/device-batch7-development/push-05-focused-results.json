@@ -1,0 +1,72 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-PUSH-05"
+  ],
+  "planned": 8,
+  "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+  "harnessSha": "9e0f811ccee348846e36ddfb022f8652faec13ab",
+  "executed": 1,
+  "counts": {
+    "PASS": 1,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-PUSH-05",
+      "status": "PASS",
+      "executed": true,
+      "phase": "notification-grouping",
+      "runId": "72f2c3d1-913e-4de6-a428-82da78258b68",
+      "processId": 17306,
+      "durationMs": 11326,
+      "evidence": [
+        "Native shade has one tag per channel; grouped lines persist; injected tap routes exactly; native-token reply stores one backend message."
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-PUSH-05",
+      "phase": "notification-grouping",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-PUSH-05-notification-grouping.log",
+      "completed": true,
+      "toolProcessId": 40580,
+      "consoleCleanup": {
+        "status": "PASS",
+        "captured": 4
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "54ebd7cb3b154522a11941b3dd8f4dc09f9b4bb3e1f6c796226fd0d77de469f9"
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "ERROR",
+    "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-device-8pU97d\\medcollab-app'"
+  },
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T13:25:51.244Z"
+}

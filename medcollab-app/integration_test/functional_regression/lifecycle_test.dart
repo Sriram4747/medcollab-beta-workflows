@@ -34,6 +34,7 @@ void main() {
           await control('background-resume', {'recoverTransport': true});
       expect(cycle['backgroundObserved'], true);
       expect(cycle['foregroundObserved'], true);
+      observations.add('Observed native lifecycle: ${trace.states.map((state) => state.name).join(', ')}');
       await until(
           tester,
           () =>

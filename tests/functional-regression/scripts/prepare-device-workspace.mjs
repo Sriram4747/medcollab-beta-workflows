@@ -1,7 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
-import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve, join, sep } from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { devicePackage } from './device-contracts.mjs';
 
@@ -22,8 +23,12 @@ export async function prepareDeviceWorkspace(sha = command('git', ['rev-parse', 
   if (!/^[a-f0-9]{40}$/.test(sha)) throw new Error('A complete source SHA is required');
   const runRoot = resolve(root, 'tests/functional-regression/output', `d-${randomUUID().slice(0, 8)}`);
   if (!runRoot.startsWith(`${resolve(root, 'tests/functional-regression/output')}${sep}`)) throw new Error('Unsafe workspace');
-  const target = join(runRoot, 'target');
-  await mkdir(target, { recursive: true });
+  // Keep transient Flutter projects outside the IDE's watched repository tree.
+  // This limits path length and avoids repository project discovery. Cleanup
+  // still verifies deletion; retaining a target is never a PASS.
+  await mkdir(runRoot, { recursive: true });
+  const target = await mkdtemp(join(tmpdir(), 'vocle-device-'));
+  if (!resolve(target).startsWith(`${resolve(tmpdir())}${sep}vocle-device-`)) throw new Error('Unsafe isolated temporary target');
   const archive = join(runRoot, 'source.tar');
   command('git', ['archive', '--format=tar', `--output=${archive}`, sha], root);
   command('tar', ['-xf', archive, '-C', target], root);
@@ -72,7 +77,7 @@ export async function prepareDeviceWorkspace(sha = command('git', ['rev-parse', 
   const sourceHashes = {};
   for (const file of tracked) sourceHashes[file] = hash(await readFile(join(target, file)));
   const provenance = { sourceSha: sha, harnessSha: command('git', ['rev-parse', 'HEAD'], root),
-    sourceKind: 'committed-fork-archive', sourceHashes, harnessHashes,
+    sourceKind: 'committed-fork-archive', sourceHashes, harnessHashes, temporaryTarget: target,
     originalPubspecHash: hash(originalPubspec), originalAppLockHash: hash(await readFile(join(app, 'pubspec.lock'))),
     isolatedTestOverlays: ['integration_test SDK and existing plugin interface dev dependencies (original versions verified unchanged)', `Android applicationId ${devicePackage}`, 'debug cleartext HTTP permission'],
     userWorkingTreeCopied: false, releaseBuildAllowed: false };
@@ -85,6 +90,11 @@ export async function verifyDeviceSource(workspace) {
     if (hash(await readFile(join(workspace.target, file))) !== expected) throw new Error(`Application source changed: ${file}`);
   }
   return { status: 'PASS', sourceSha: workspace.provenance.sourceSha, checkedFiles: Object.keys(workspace.provenance.sourceHashes).length };
+}
+
+export function verifyDeviceCleanupPath(workspace) {
+  if (!resolve(workspace.target).startsWith(`${resolve(tmpdir())}${sep}vocle-device-`) ||
+      workspace.target !== workspace.provenance.temporaryTarget) throw new Error('Unsafe device cleanup path');
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

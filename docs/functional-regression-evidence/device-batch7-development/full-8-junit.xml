@@ -1,0 +1,13 @@
+<testsuite name="Vocle Android device" tests="8" failures="4" errors="3">
+<testcase name="FR-NAV-05"><failure message="FAIL">Device phase ended without a complete catalog result; inspect phase diagnostics</failure></testcase>
+<testcase name="FR-NAV-04"><error message="ERROR">Local device control background-resume failed (DioExceptionType.unknown)</error></testcase>
+<testcase name="FR-MED-08"><error message="ERROR">Timed out observing external local document activity</error></testcase>
+<testcase name="FR-PUSH-05"></testcase>
+<testcase name="FR-PUSH-06"><failure message="FAIL">Device phase ended without a complete catalog result; inspect phase diagnostics</failure></testcase>
+<testcase name="FR-LINK-04"><failure message="FAIL">Expected: true
+  Actual: &lt;false>
+joined response opens its actual space
+</failure></testcase>
+<testcase name="FR-JRN-05"><error message="ERROR">Local device control background-resume failed (DioExceptionType.unknown)</error></testcase>
+<testcase name="FR-JRN-06"><failure message="FAIL">Device phase ended without a complete catalog result; inspect phase diagnostics</failure></testcase>
+</testsuite>

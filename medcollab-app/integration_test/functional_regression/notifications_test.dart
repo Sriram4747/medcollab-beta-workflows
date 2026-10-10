@@ -40,8 +40,15 @@ void main() {
       await firebaseMessagingBackgroundHandler(first);
       await firebaseMessagingBackgroundHandler(second);
       await firebaseMessagingBackgroundHandler(third);
-      final notifications =
+      var notifications =
           await GroupedMessageNotification.plugin.getActiveNotifications();
+      final shadeDeadline = Stopwatch()..start();
+      while ((!notifications.any((entry) => entry.tag == channel) ||
+              !notifications.any((entry) => entry.tag == other)) &&
+          shadeDeadline.elapsed < const Duration(seconds: 10)) {
+        await tester.pump(const Duration(milliseconds: 50));
+        notifications = await GroupedMessageNotification.plugin.getActiveNotifications();
+      }
       expect(notifications.where((n) => n.tag == channel).length, 1);
       expect(notifications.where((n) => n.tag == other).length, 1);
       expect(notifications.where((n) => n.tag == channel).single.body,

@@ -1,0 +1,85 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AppData\Local\Temp\vocle-device-8pU97d\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Running Gradle task 'assembleDebug'...                             57.5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,184ms
+D/FLTFireContextHolder(17306): received application context.
+I/ocle.regression(17306): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(17306): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(17306): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(17306): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(17306): Compat change id reported: 309578419; UID 10262; state: ENABLED
+D/CompatChangeReporter(17306): Compat change id reported: 349153669; UID 10262; state: ENABLED
+W/HWUI    (17306): Unknown dataspace 0
+I/WindowExtensionsImpl(17306): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](17306): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(17306): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (17306): called unimplemented OpenGL ES API
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:34359/[redacted-vm-service]/
+VMServiceFlutterDriver: Isolate found with number: 7123119423852859
+I/ocle.regression(17306): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Isolate 7123119423852859 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/Choreographer(17306): Skipped 48 frames!  The application may be doing too much work on its main thread.
+I/flutter (17306): 00:00 +0: FR-PUSH-05: Android notification-grouping
+VMServiceFlutterDriver: Connected to Flutter application.
+I/HWUI    (17306): Using FreeType backend (prop=Auto)
+E/libEGL  (17306): called unimplemented OpenGL ES API
+D/WindowLayoutComponentImpl(17306): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@36d93c3
+I/Choreographer(17306): Skipped 51 frames!  The application may be doing too much work on its main thread.
+I/HWUI    (17306): Davey! duration=974ms; Flags=1, FrameTimelineVsyncId=325956, IntendedVsync=6467390894796, Vsync=6468240894762, InputEventId=0, HandleInputStart=6468243022500, AnimationStart=6468243082800, PerformTraversalsStart=6468243108800, DrawStart=6468251087000, FrameDeadline=6467407561462, FrameStartTime=6468242547700, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=6468251799000, SyncStart=6468252597100, IssueDrawCommandsStart=6468254003500, SwapBuffers=6468284547300, FrameCompleted=6468366561500, DequeueBufferDuration=2271800, QueueBufferDuration=2733400, GpuCompleted=6468364069700, SwapBuffersCompleted=6468366561500, DisplayPresentTime=129583458328049, CommandSubmissionCompleted=6468284547300,
+D/ProfileInstaller(17306): Installing profile for com.vocle.regression
+D/InsetsController(17306): hide(ime())
+I/ImeTracker(17306): com.vocle.regression:de8c6440: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/ocle.regression(17306): Verification of void com.it_nomads.fluttersecurestorage.ciphers.StorageCipherAlgorithm.<clinit>() took 237.033ms (164.53 bytecodes/s) (0B arena alloc)
+V/Configuration(17306): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(17306): Updating configuration, locales updated from [en] to [en_US]
+E/libEGL  (17306): called unimplemented OpenGL ES API
+W/ocle.regression(17306): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+I/ocle.regression(17306): Background concurrent mark compact GC freed 4949KB AllocSpace bytes, 94(3584KB) LOS objects, 49% free, 3567KB/7134KB, paused 2.218ms,6.208ms total 54.463ms
+E/libEGL  (17306): called unimplemented OpenGL ES API
+I/flutter (17306): FCM: no device token yet
+W/WindowOnBackDispatcher(17306): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(17306): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+D/CompatChangeReporter(17306): Compat change id reported: 270674727; UID 10262; state: ENABLED
+E/libEGL  (17306): called unimplemented OpenGL ES API
+I/ocle.regression(17306): Background young concurrent mark compact GC freed 1801KB AllocSpace bytes, 62(2296KB) LOS objects, 53% free, 4003KB/8550KB, paused 1.975ms,6.818ms total 74.093ms
+I/ocle.regression(17306): Background concurrent mark compact GC freed 2137KB AllocSpace bytes, 85(3060KB) LOS objects, 49% free, 3919KB/7838KB, paused 1.711ms,9.056ms total 314.590ms
+I/ocle.regression(17306): Background young concurrent mark compact GC freed 1860KB AllocSpace bytes, 60(2160KB) LOS objects, 49% free, 4131KB/8206KB, paused 1.233ms,17.999ms total 93.738ms
+E/libEGL  (17306): called unimplemented OpenGL ES API
+I/flutter (17306): VOCLE_DEVICE_RECORD {"id":"FR-PUSH-05","status":"PASS","executed":true,"phase":"notification-grouping","runId":"72f2c3d1-913e-4de6-a428-82da78258b68","processId":17306,"durationMs":11326,"evidence":["Native shade has one tag per channel; grouped lines persist; injected tap routes exactly; native-token reply stores one backend message."]}
+I/ocle.regression(17306): Background young concurrent mark compact GC freed 1704KB AllocSpace bytes, 64(2304KB) LOS objects, 47% free, 4003KB/7606KB, paused 6.656ms,7.105ms total 168.923ms
+I/flutter (17306): 00:12 +1: (tearDownAll)
+I/flutter (17306): 00:12 +2: All tests passed!
+All tests passed.
+Leaving the application running.

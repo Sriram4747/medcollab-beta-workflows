@@ -1,0 +1,330 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-NAV-05",
+    "FR-NAV-04",
+    "FR-MED-08",
+    "FR-PUSH-05",
+    "FR-PUSH-06",
+    "FR-LINK-04",
+    "FR-JRN-05",
+    "FR-JRN-06"
+  ],
+  "planned": 8,
+  "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+  "harnessSha": "9e0f811ccee348846e36ddfb022f8652faec13ab",
+  "executed": 8,
+  "counts": {
+    "PASS": 1,
+    "FAIL": 4,
+    "ERROR": 3,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-NAV-05",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-NAV-05",
+          "phase": "session-seed",
+          "exitCode": 0,
+          "signal": null,
+          "log": "diagnostics\\FR-NAV-05-session-seed.log",
+          "completed": true,
+          "infrastructureFailure": false,
+          "assertionFailure": false
+        },
+        {
+          "id": "FR-NAV-05",
+          "phase": "session-restore",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-NAV-05-session-restore.log",
+          "completed": true,
+          "infrastructureFailure": false,
+          "assertionFailure": true
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-NAV-04",
+      "status": "ERROR",
+      "executed": true,
+      "phase": "resume",
+      "runId": "7ed6faa6-d77b-416d-a61d-4f7fa07f8719",
+      "processId": 12464,
+      "durationMs": 14967,
+      "evidence": [],
+      "error": "Local device control background-resume failed (DioExceptionType.unknown)",
+      "driverFallback": true,
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-MED-08",
+      "status": "ERROR",
+      "executed": true,
+      "phase": "media",
+      "runId": "7ed6faa6-d77b-416d-a61d-4f7fa07f8719",
+      "processId": 12826,
+      "durationMs": 32845,
+      "evidence": [],
+      "error": "Timed out observing external local document activity",
+      "driverFallback": true,
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-PUSH-05",
+      "status": "PASS",
+      "executed": true,
+      "phase": "notification-grouping",
+      "runId": "7ed6faa6-d77b-416d-a61d-4f7fa07f8719",
+      "processId": 13409,
+      "durationMs": 12016,
+      "evidence": [
+        "Native shade has one tag per channel; grouped lines persist; injected tap routes exactly; native-token reply stores one backend message."
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-PUSH-06",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-PUSH-06",
+          "phase": "notification-token",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-PUSH-06-notification-token.log",
+          "completed": true,
+          "infrastructureFailure": false,
+          "assertionFailure": true
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-LINK-04",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "invites",
+      "runId": "7ed6faa6-d77b-416d-a61d-4f7fa07f8719",
+      "processId": 13825,
+      "durationMs": 25108,
+      "evidence": [],
+      "error": "Expected: true\n  Actual: <false>\njoined response opens its actual space\n",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-JRN-05",
+      "status": "ERROR",
+      "executed": true,
+      "phase": "chat-journey",
+      "runId": "7ed6faa6-d77b-416d-a61d-4f7fa07f8719",
+      "processId": 14063,
+      "durationMs": 13660,
+      "evidence": [],
+      "error": "Local device control background-resume failed (DioExceptionType.unknown)",
+      "driverFallback": true,
+      "cleanup": {
+        "status": "ERROR",
+        "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows\\tests\\functional-regression\\output\\d-d39d3ffe\\runtime\\device-fr-jrn-05-7ed6faa6-d77b-416d-a61d-4f7fa07f8719'"
+      }
+    },
+    {
+      "id": "FR-JRN-06",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-JRN-06",
+          "phase": "handoff-seed",
+          "exitCode": 0,
+          "signal": null,
+          "log": "diagnostics\\FR-JRN-06-handoff-seed.log",
+          "completed": true,
+          "infrastructureFailure": false,
+          "assertionFailure": false
+        },
+        {
+          "id": "FR-JRN-06",
+          "phase": "handoff-cold",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-JRN-06-handoff-cold.log",
+          "completed": true,
+          "infrastructureFailure": false,
+          "assertionFailure": true
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-NAV-05",
+      "phase": "session-seed",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-05-session-seed.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-NAV-05",
+      "phase": "session-restore",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-05-session-restore.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": true
+    },
+    {
+      "id": "FR-NAV-04",
+      "phase": "resume",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-04-resume.log",
+      "completed": true,
+      "infrastructureFailure": true,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-MED-08",
+      "phase": "media",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-MED-08-media.log",
+      "completed": true,
+      "infrastructureFailure": true,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-PUSH-05",
+      "phase": "notification-grouping",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-PUSH-05-notification-grouping.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-PUSH-06",
+      "phase": "notification-token",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-PUSH-06-notification-token.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": true
+    },
+    {
+      "id": "FR-LINK-04",
+      "phase": "invites",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-LINK-04-invites.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": true
+    },
+    {
+      "id": "FR-JRN-05",
+      "phase": "chat-journey",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-05-chat-journey.log",
+      "completed": true,
+      "infrastructureFailure": true,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-JRN-06",
+      "phase": "handoff-seed",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-06-handoff-seed.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": false
+    },
+    {
+      "id": "FR-JRN-06",
+      "phase": "handoff-cold",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-06-handoff-cold.log",
+      "completed": true,
+      "infrastructureFailure": false,
+      "assertionFailure": true
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "ERROR",
+    "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows\\tests\\functional-regression\\output\\d-d39d3ffe\\target\\medcollab-app'"
+  },
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T12:18:52.389Z"
+}

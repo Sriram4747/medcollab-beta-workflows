@@ -1,0 +1,68 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AndroidStudioProjects\Vocle\medcollab-beta-workflows\tests\functional-regression\output\d-d39d3ffe\target\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Running Gradle task 'assembleDebug'...                             54.2s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,231ms
+D/FLTFireContextHolder(12060): received application context.
+I/ocle.regression(12060): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(12060): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(12060): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(12060): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(12060): Compat change id reported: 309578419; UID 10245; state: ENABLED
+D/CompatChangeReporter(12060): Compat change id reported: 349153669; UID 10245; state: ENABLED
+W/HWUI    (12060): Unknown dataspace 0
+I/WindowExtensionsImpl(12060): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](12060): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(12060): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (12060): called unimplemented OpenGL ES API
+I/ocle.regression(12060): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(12060): Skipped 39 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(12060): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@657cee6
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:32023/[redacted-vm-service]/
+I/HWUI    (12060): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Isolate found with number: 5798100712890287
+VMServiceFlutterDriver: Isolate 5798100712890287 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (12060): 00:00 +0: Native session seed prerequisite
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (12060): called unimplemented OpenGL ES API
+V/Configuration(12060): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(12060): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(12060): hide(ime())
+I/ImeTracker(12060): com.vocle.regression:241a8d0: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller(12060): Installing profile for com.vocle.regression
+E/libEGL  (12060): called unimplemented OpenGL ES API
+I/flutter (12060): 00:04 +1: (tearDownAll)
+All tests passed.
+I/flutter (12060): 00:04 +2: All tests passed!
+Leaving the application running.

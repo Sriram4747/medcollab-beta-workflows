@@ -1,0 +1,3 @@
+<testsuite name="Vocle Android device" tests="1" failures="0" errors="1">
+<testcase name="FR-MED-08"><error message="ERROR">Device phase ended without a complete catalog result; inspect phase diagnostics</error></testcase>
+</testsuite>

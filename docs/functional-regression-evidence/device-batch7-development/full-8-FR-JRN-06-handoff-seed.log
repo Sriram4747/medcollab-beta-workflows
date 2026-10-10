@@ -1,0 +1,46 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AndroidStudioProjects\Vocle\medcollab-beta-workflows\tests\functional-regression\output\d-d39d3ffe\target\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             16.0s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          944ms
+D/CompatChangeReporter(14461): Compat change id reported: 309578419; UID 10252; state: ENABLED
+D/CompatChangeReporter(14461): Compat change id reported: 349153669; UID 10252; state: ENABLED
+W/HWUI    (14461): Unknown dataspace 0
+I/WindowExtensionsImpl(14461): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](14461): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(14461): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (14461): called unimplemented OpenGL ES API
+I/ocle.regression(14461): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(14461): Skipped 31 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(14461): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@657cee6
+I/HWUI    (14461): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:62767/[redacted-vm-service]/
+VMServiceFlutterDriver: Isolate found with number: 6102235882297615
+VMServiceFlutterDriver: Isolate 6102235882297615 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (14461): 00:00 +0: Cold handoff prerequisite clears the native session
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (14461): called unimplemented OpenGL ES API
+V/Configuration(14461): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(14461): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(14461): hide(ime())
+I/ImeTracker(14461): com.vocle.regression:daab7059: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/ocle.regression(14461): Verification of void com.google.crypto.tink.daead.DeterministicAeadConfig.<clinit>() took 102.635ms (341.01 bytecodes/s) (0B arena alloc)
+D/ProfileInstaller(14461): Installing profile for com.vocle.regression
+E/libEGL  (14461): called unimplemented OpenGL ES API
+I/flutter (14461): 00:04 +1: (tearDownAll)
+All tests passed.
+I/flutter (14461): 00:04 +2: All tests passed!
+Leaving the application running.

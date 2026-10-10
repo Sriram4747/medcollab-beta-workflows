@@ -1,0 +1,178 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AndroidStudioProjects\Vocle\medcollab-beta-workflows\tests\functional-regression\output\d-d39d3ffe\target\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             22.1s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,044ms
+D/FLTFireContextHolder(13623): received application context.
+I/ocle.regression(13623): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13623): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13623): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13623): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(13623): Compat change id reported: 309578419; UID 10249; state: ENABLED
+D/CompatChangeReporter(13623): Compat change id reported: 349153669; UID 10249; state: ENABLED
+W/HWUI    (13623): Unknown dataspace 0
+I/WindowExtensionsImpl(13623): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](13623): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(13623): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (13623): called unimplemented OpenGL ES API
+I/ocle.regression(13623): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(13623): Skipped 38 frames!  The application may be doing too much work on its main thread.
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:3985/[redacted-vm-service]/
+D/WindowLayoutComponentImpl(13623): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@657cee6
+I/HWUI    (13623): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Isolate found with number: 1307643148937167
+VMServiceFlutterDriver: Isolate 1307643148937167 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (13623): 00:00 +0: FR-PUSH-06: Android notification-token
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (13623): called unimplemented OpenGL ES API
+V/Configuration(13623): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(13623): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(13623): hide(ime())
+I/ImeTracker(13623): com.vocle.regression:9a3fbe51: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller(13623): Installing profile for com.vocle.regression
+V/Activity(13623): No requestable permission in the request.
+E/libEGL  (13623): called unimplemented OpenGL ES API
+W/ocle.regression(13623): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+I/ocle.regression(13623): Background concurrent mark compact GC freed 5225KB AllocSpace bytes, 102(3904KB) LOS objects, 49% free, 3955KB/7910KB, paused 2.275ms,25.215ms total 134.810ms
+I/ocle.regression(13623): Background young concurrent mark compact GC freed 1628KB AllocSpace bytes, 58(2088KB) LOS objects, 50% free, 3915KB/7910KB, paused 2.082ms,6.790ms total 48.348ms
+E/libEGL  (13623): called unimplemented OpenGL ES API
+V/Activity(13623): No requestable permission in the request.
+E/libEGL  (13623): called unimplemented OpenGL ES API
+I/flutter (13623): FCM: no device token yet
+W/WindowOnBackDispatcher(13623): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(13623): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+V/Activity(13623): No requestable permission in the request.
+I/flutter (13623): FCM: no device token yet
+I/ocle.regression(13623): IncrementDisableThreadFlip blocked for 45.337ms
+I/ocle.regression(13623): Background concurrent mark compact GC freed 1501KB AllocSpace bytes, 53(1908KB) LOS objects, 49% free, 3871KB/7742KB, paused 6.495ms,44.541ms total 108.543ms
+I/flutter (13623): FCM: token registered with API
+I/ocle.regression(13623): Background concurrent mark compact GC freed 1616KB AllocSpace bytes, 66(2376KB) LOS objects, 49% free, 3795KB/7590KB, paused 6.156ms,5.721ms total 52.344ms
+E/libEGL  (13623): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(13623): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(13623): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (13623): called unimplemented OpenGL ES API
+E/libEGL  (13623): call to OpenGL ES API with no current context (logged once per thread)
+W/WindowOnBackDispatcher(13623): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(13623): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/ImeTracker(13623): com.vocle.regression:301422cf: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(13623): show(ime())
+D/InsetsController(13623): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker(13623): com.vocle.regression:358b3055: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(13623): show(ime())
+I/ImeTracker(13623): com.vocle.regression:358b3055: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor(13623): The input method toggled cursor monitoring on
+I/AssistStructure(13623): Flattened final assist data: 636 bytes, containing 1 windows, 4 views
+D/WindowOnBackDispatcher(13623): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@15d342
+D/VRI[MainActivity](13623): WindowInsets changed: ime:[0,0,0,1008]
+W/InteractionJankMonitor(13623): Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.vocle.regression
+I/ImeTracker(13623): com.vocle.regression:301422cf: onShown
+E/libEGL  (13623): called unimplemented OpenGL ES API
+I/ImeTracker(13623): com.vocle.regression:62b71440: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+D/InsetsController(13623): hide(ime())
+D/WindowOnBackDispatcher(13623): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+D/InsetsController(13623): Setting requestedVisibleTypes to 503 (was 511)
+D/VRI[MainActivity](13623): WindowInsets changed: ime:null
+I/ImeTracker(13623): system_server:85b46035: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/flutter (13623): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (13623): The following assertion was thrown running a test:
+I/flutter (13623):
+I/flutter (13623):
+I/flutter (13623): emit was called after an event handler completed normally.
+I/flutter (13623): This is usually due to an unawaited future in an event handler.
+I/flutter (13623): Please make sure to await all asynchronous operations with event handlers
+I/flutter (13623): and use emit.isDone after asynchronous operations before calling emit() to
+I/flutter (13623): ensure the event handler has not completed.
+I/flutter (13623):
+I/flutter (13623):   **BAD**
+I/flutter (13623):   on<Event>((event, emit) {
+I/flutter (13623):     future.whenComplete(() => emit(...));
+I/flutter (13623):   });
+I/flutter (13623):
+I/flutter (13623):   **GOOD**
+I/flutter (13623):   on<Event>((event, emit) async {
+I/flutter (13623):     await future.whenComplete(() => emit(...));
+I/flutter (13623):   });
+I/flutter (13623): 'package:bloc/src/emitter.dart':
+I/flutter (13623): Failed assertion: line 114 pos 7: '!_isCompleted'
+I/flutter (13623):
+I/flutter (13623): When the exception was thrown, this was the stack:
+I/flutter (13623): #2      _Emitter.call (package:bloc/src/emitter.dart:114:7)
+I/flutter (13623): #3      AuthBloc._onOtpSubmitted.<anonymous closure> (package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart:244:17)
+I/flutter (13623): (elided 13 frames from class _AssertionError and dart:async)
+I/flutter (13623):
+I/flutter (13623): The test description was:
+I/flutter (13623):   FR-PUSH-06: Android notification-token
+I/flutter (13623): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (13623): 00:16 +0: FR-PUSH-06: Android notification-token [E]
+I/flutter (13623):   Test failed. See exception logs above.
+I/flutter (13623):   The test description was: FR-PUSH-06: Android notification-token
+I/flutter (13623):
+I/flutter (13623):   'package:flutter_test/src/binding.dart': Failed assertion: line 2148 pos 12: '_pendingFrame == null': is not true.
+I/flutter (13623):   dart:core-patch/errors_patch.dart 63:4            _AssertionError._doThrowNew
+I/flutter (13623):   dart:core-patch/errors_patch.dart 45:5            _AssertionError._throwNew
+I/flutter (13623):   package:flutter_test/src/binding.dart 2148:12     LiveTestWidgetsFlutterBinding.postTest
+I/flutter (13623):   dart:async/future.dart 315:27                     new Future.sync
+I/flutter (13623):   package:test_api/src/backend/invoker.dart 236:18  Invoker.runTearDowns.<fn>.<fn>
+I/flutter (13623):   package:test_api/src/backend/invoker.dart 258:17  Invoker._waitForOutstandingCallbacks.<fn>
+I/flutter (13623):   dart:async/zone.dart 1525:13                      _rootRun
+I/flutter (13623):   dart:async/zone.dart 1422:19                      _CustomZone.run
+I/flutter (13623):   dart:async/zone.dart 2034:6                       _runZoned
+I/flutter (13623):   dart:async/zone.dart 1960:10                      runZoned
+I/flutter (13623):   package:test_api/src/backend/invoker.dart 254:5   Invoker._waitForOutstandingCallbacks
+I/flutter (13623):   package:test_api/src/backend/invoker.dart 235:9   Invoker.runTearDowns.<fn>
+I/flutter (13623):   dart:async/zone.dart 1525:13                      _rootRun
+I/flutter (13623):   dart:async/zone.dart 1422:19
+I/flutter (13623): 00:16 +0 -1: (tearDownAll)
+Failure Details:
+Failure in method: FR-PUSH-06: Android notification-token
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following assertion was thrown running a test:
+
+
+emit was called after an event handler completed normally.
+This is usually due to an unawaited future in an event handler.
+Please make sure to await all asynchronous operations with event
+handlers
+and use emit.isDone after asynchronous operations before calling
+emit() to
+ensure the event handler has not completed.
+
+  **BAD**
+  on<Event>((event, emit) {
+    future.whenComplete(() => emit(...));
+  });
+
+  **GOOD**
+  on<Event>((event, emit) async {
+    await future.whenComplete(() => emit(...));
+  });
+'package:bloc/src/emitter.dart':
+Failed assertion: line 114 pos 7: '!_isCompleted'
+
+When the exception was thrown, this was the stack:
+#2      _Emitter.call (package:bloc/src/emitter.dart:114:7)
+#3      AuthBloc._onOtpSubmitted.<anonymous closure> (package:medcollab_app/features/auth/presentation/bloc/auth_bloc.dart:244:17)
+(elided 13 frames from class _AssertionError and dart:async)
+
+The test description was:
+  FR-PUSH-06: Android notification-token
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+Leaving the application running.

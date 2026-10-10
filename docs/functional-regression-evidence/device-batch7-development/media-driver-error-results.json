@@ -1,0 +1,85 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-MED-08"
+  ],
+  "planned": 8,
+  "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+  "harnessSha": "9e0f811ccee348846e36ddfb022f8652faec13ab",
+  "executed": 0,
+  "counts": {
+    "PASS": 0,
+    "FAIL": 0,
+    "ERROR": 1,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-MED-08",
+      "status": "ERROR",
+      "executed": false,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-MED-08",
+          "phase": "media",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-MED-08-media.log",
+          "completed": true,
+          "toolProcessId": 29636,
+          "consoleCleanup": {
+            "status": "PASS",
+            "captured": 4
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": false,
+          "androidApkSha256": "bc21cea396901b6692e5d6601aa4f298b49ecd8104e1fd8b4e9eda498cbcb3bc"
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-MED-08",
+      "phase": "media",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-MED-08-media.log",
+      "completed": true,
+      "toolProcessId": 29636,
+      "consoleCleanup": {
+        "status": "PASS",
+        "captured": 4
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "bc21cea396901b6692e5d6601aa4f298b49ecd8104e1fd8b4e9eda498cbcb3bc"
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "2ec09d4822840e2e7aaa561ea774044618137dcf",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "PASS",
+    "dedicatedTestAppRemoved": true,
+    "isolatedTargetRemoved": true
+  },
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T13:37:56.963Z"
+}

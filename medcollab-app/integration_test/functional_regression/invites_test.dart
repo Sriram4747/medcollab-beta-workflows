@@ -75,7 +75,7 @@ void main() {
             {'spaceId': first['spaceId'], 'label': 'C'}))['member'],
         false,
         reason: 'Preview must not join automatically');
-    await tester.tap(find.text('Join space'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Join space'));
     await until(
         tester,
         () =>
@@ -112,7 +112,7 @@ void main() {
           (await control('membership',
               {'spaceId': invite['spaceId'], 'label': 'C'}))['member'],
           false);
-      await tester.tap(find.text('Join space'));
+      await tester.tap(find.widgetWithText(FilledButton, 'Join space'));
       await until(
           tester,
           () =>
@@ -132,7 +132,7 @@ void main() {
         tester,
         () => find.text(pending['name'] as String).evaluate().isNotEmpty,
         'approval space preview loads');
-    await tester.tap(find.text('Join space'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Join space'));
     final state = await control(
         'await-pending', {'spaceId': pending['spaceId'], 'label': 'C'});
     expect(state['member'], false);

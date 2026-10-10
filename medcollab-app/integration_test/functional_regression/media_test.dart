@@ -15,8 +15,16 @@ import 'support/device_harness.dart';
 import 'support/provider_inputs.dart';
 
 Future<void> attach(WidgetTester tester, String label) async {
-  await tester.tap(find.byTooltip('Attach'));
-  await tester.pumpAndSettle();
+  final attachButton = find.byWidgetPredicate((widget) =>
+      widget is IconButton && widget.tooltip == 'Attach');
+  await until(tester, () => WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed,
+      'the native app resumes before opening the attachment menu');
+  await until(tester, () => attachButton.evaluate().isNotEmpty &&
+      tester.widget<IconButton>(attachButton).onPressed != null,
+      'the attachment control is enabled');
+  await tester.tap(attachButton);
+  await until(tester, () => find.text(label).evaluate().isNotEmpty,
+      'the attachment menu exposes $label');
   await tester.tap(find.text(label));
   await tester.pump();
   checkFramework(tester);

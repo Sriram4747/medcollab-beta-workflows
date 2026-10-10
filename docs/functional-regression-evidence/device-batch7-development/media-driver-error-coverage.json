@@ -1,0 +1,16 @@
+{
+  "planned": 8,
+  "selected": [
+    "FR-MED-08"
+  ],
+  "executed": 0,
+  "counts": {
+    "PASS": 0,
+    "FAIL": 0,
+    "ERROR": 1,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "fullSuccess": false
+}

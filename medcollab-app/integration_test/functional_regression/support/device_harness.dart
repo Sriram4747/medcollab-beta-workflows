@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:firebase_messaging_platform_interface/firebase_messaging_platform_interface.dart';
@@ -240,6 +241,16 @@ void deviceCase(String id, Future<void> Function(WidgetTester) body) {
       'evidence': List.of(observations),
       if (error != null) 'error': error
     };
+    // Preserve the original business outcome even if the control connection
+    // fails while reporting it. The host driver writes this fallback evidence.
+    binding.reportData = {'case': record};
+    final diagnostic = jsonEncode(record)
+        .replaceAll(RegExp(r'eyJ[\w-]+\.[\w-]+\.[\w-]+'), '[redacted-jwt]')
+        .replaceAll(RegExp(r'synthetic-device-[a-z0-9_-]+'), '[redacted-device-token]');
+    // A transport-independent copy preserves the first failure if the report
+    // POST or integration driver's response-data callback cannot complete.
+    // ignore: avoid_print
+    print('VOCLE_DEVICE_RECORD $diagnostic');
     await control('result', record);
     if (failure != null && status != 'NEEDS_DECISION')
       Error.throwWithStackTrace(failure, stack!);

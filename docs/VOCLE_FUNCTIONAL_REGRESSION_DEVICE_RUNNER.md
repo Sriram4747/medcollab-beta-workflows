@@ -39,7 +39,8 @@ list selects a subset. Optional `--source-sha=<40-character-local-commit>` pins 
 commit already present in the authorized fork checkout. This runner does not
 fetch, push or write any remote repository.
 
-The runner archives that exact committed revision into an ignored, disposable
+The runner archives that exact committed revision into a fresh `vocle-device-*`
+OS temporary directory and retains diagnostics in the fork's ignored output
 directory. It copies the device assertions/driver with content hashes, adds
 `integration_test` and existing plugin interfaces as **test-only dependency
 overlays**, and verifies every original package version/source/hash stayed
@@ -63,13 +64,21 @@ observed Home skeleton/render failures remain failures in those cases and in
 the Flutter tier. Session fixtures are written before dependency initialization
 so initial unauthenticated badge requests cannot erase a newly seeded session.
 
-`flutter drive --keep-app-running` runs the native integration binding. **Do not replace it with
+`flutter drive --keep-app-running --no-dds` runs the native integration binding. **Do not replace it with
 `flutter test` for restart cases:** that command uninstalls the app on completion
 and destroys the session evidence. Plain `flutter drive` also uninstalls by
 default; the explicit keep flag is required. The host force-stops only the
 dedicated regression app between native phases. Restart proof requires distinct
 Android process IDs and matching run/phase checkpoints; no storage write occurs
 before the restoration assertion. The test package is removed after execution.
+
+Windows commands use the initialized SDK's cached Dart executable. Gradle runs
+without its persistent daemon or filesystem watcher; Kotlin compilation runs in
+process. Console hosts are captured while their test-tool parents are alive and
+may be stopped only with matching captured PIDs and creation times. These are
+harness controls, not application changes. The current Windows session still
+reported `EBUSY` on source-directory removal; cleanup remains ERROR and prevents
+release success. Unrelated processes are not stopped to obtain green results.
 
 ## Case ownership
 
@@ -113,3 +122,18 @@ node tests/functional-regression/scripts/validate-catalog.mjs
 
 Consult the implementation progress document for **actual** run results. Presence
 of a test file or a successful build does not establish a passing device case.
+
+## Current platform limitations
+
+Android 36.1 uses `topResumedActivity=` and `ResumedActivity:` in its activity
+dump; both are supported by the host parser. Native Home/foreground actions were
+observed, but the passive Flutter lifecycle probe recorded only `inactive`.
+The injection/SDK activity-resume path needs investigation before attributing
+that result to application resume logic. API 35 is an additional reproduction
+option; no execution on that platform is claimed.
+
+Native runs reached application Home layout, accepted invite navigation,
+AuthBloc emit-after-completion and duplicate chat GlobalKey failures. Media
+development also found a bad fixture PNG CRC and a test finder cast; both were
+corrected. Inspect the corrected execution before classifying media. iOS remains
+unimplemented, and actual provider delivery is outside this suite.

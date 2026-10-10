@@ -1,8 +1,10 @@
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn, spawnSync, execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { resolve, join, dirname } from 'node:path';
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { deviceCases, devicePackage, deviceSdk, emulatorSerial, selectedDeviceCases, validateRestart } from './device-contracts.mjs';
-import { prepareDeviceWorkspace, verifyDeviceSource, command, hash } from './prepare-device-workspace.mjs';
+import { prepareDeviceWorkspace, verifyDeviceSource, verifyDeviceCleanupPath, command, hash } from './prepare-device-workspace.mjs';
 
 const root = resolve(import.meta.dirname, '../../..');
 const option = (key) => process.argv.find((arg) => arg.startsWith(`--${key}=`))?.slice(key.length + 3);
@@ -15,14 +17,40 @@ const results = [], phases = [];
 let serial;
 
 async function runLogged(bin, args, cwd, log, timeoutMs) {
+  // The SDK is initialized and version-checked before this call. Invoke its
+  // cached tool directly on Windows so a batch/console child cannot retain the
+  // disposable app directory handle after the Flutter command has finished.
+  if (process.platform === 'win32' && /flutter\.bat$/i.test(bin)) {
+    const sdkRoot = resolve(dirname(bin), '..');
+    const dart = join(sdkRoot, 'bin/cache/dart-sdk/bin/dart.exe');
+    const snapshot = join(sdkRoot, 'bin/cache/flutter_tools.snapshot');
+    if (!existsSync(dart) || !existsSync(snapshot)) throw new Error('Initialized Flutter tool cache is required');
+    bin = dart; args = [snapshot, ...args];
+  }
   const batch = process.platform === 'win32' && /\.(bat|cmd)$/i.test(bin);
   if (batch && [bin, ...args].some((arg) => /[&|<>^%\r\n"]/.test(arg))) throw new Error('Unsafe batch argument');
   const child = spawn(batch ? 'cmd.exe' : bin,
     batch ? ['/d', '/s', '/c', `""${bin}" ${args.map((arg) => `"${arg}"`).join(' ')}"`] : args,
-    { cwd, env: { ...process.env, CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true' }, windowsHide: true, windowsVerbatimArguments: batch,
+    { cwd, env: { ...process.env, CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true', GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.vfs.watch=false',
+      'ORG_GRADLE_PROJECT_kotlin.compiler.execution.strategy': 'in-process' }, windowsHide: true, windowsVerbatimArguments: batch,
       stdio: ['ignore', 'pipe', 'pipe'], shell: false });
   const chunks = [];
-  const output = (chunk) => { chunks.push(chunk); };
+  const consoleCaptures = [];
+  let firstConsoleCaptured = false, driverConsoleCaptured = false;
+  const output = (chunk) => {
+    chunks.push(chunk);
+    const first = !firstConsoleCaptured;
+    const driver = !driverConsoleCaptured && chunk.toString().includes('VMServiceFlutterDriver: Connecting');
+    if (process.platform === 'win32' && (first || driver)) {
+      firstConsoleCaptured = true;
+      if (driver) driverConsoleCaptured = true;
+      // Capture ownership while the tool/driver parents are alive. Windows
+      // console hosts can survive those parents and retain their cwd handles.
+      const script = `$rows=Get-CimInstance Win32_Process; $owned=@(${child.pid}); do { $more=@($rows | Where-Object { $owned -contains $_.ParentProcessId -and $owned -notcontains $_.ProcessId } | ForEach-Object { $_.ProcessId }); $owned += $more } while ($more.Count -gt 0); @($rows | Where-Object { $owned -contains $_.ProcessId -and $_.Name -eq 'conhost.exe' } | ForEach-Object { @{id=$_.ProcessId; created=$_.CreationDate.ToUniversalTime().ToString('o')} }) | ConvertTo-Json -Compress`;
+      consoleCaptures.push(promisify(execFile)('powershell.exe', ['-NoProfile', '-Command', script],
+        { windowsHide: true, timeout: 15000, encoding: 'utf8' }).then((result) => JSON.parse(result.stdout || '[]')).catch(() => []));
+    }
+  };
   child.stdout.on('data', output); child.stderr.on('data', output);
   const timer = setTimeout(() => {
     if (process.platform === 'win32' && child.pid && child.exitCode === null) {
@@ -33,11 +61,29 @@ async function runLogged(bin, args, cwd, log, timeoutMs) {
   const status = await new Promise((resolveDone, reject) => {
     child.once('error', reject); child.once('exit', (code, signal) => resolveDone({ exitCode: code, signal }));
   }).finally(() => clearTimeout(timer));
+  const consoles = [...new Map((await Promise.all(consoleCaptures)).flat().filter(Boolean)
+    .map((entry) => [entry.id, entry])).values()];
+  let consoleCleanup = { status: 'PASS', captured: consoles.length };
+  for (const console of consoles) {
+    try {
+      if (!Number.isSafeInteger(console.id) || !/^\d{4}-\d{2}-\d{2}T[0-9:.]+Z$/.test(console.created)) throw new Error('Invalid owned process identity');
+      const script = `$p=Get-CimInstance Win32_Process -Filter 'ProcessId=${console.id}'; if ($p -and $p.Name -eq 'conhost.exe' -and $p.CreationDate.ToUniversalTime().ToString('o') -eq '${console.created}') { Stop-Process -Id ${console.id} -Force -ErrorAction Stop }`;
+      await promisify(execFile)('powershell.exe', ['-NoProfile', '-Command', script], { windowsHide: true, timeout: 15000 });
+    } catch (error) { consoleCleanup = { status: 'ERROR', error: error.message }; }
+  }
   // Provider tokens/OTP/session secrets are synthetic but still redacted.
-  const text = Buffer.concat(chunks).toString().replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]');
+  const text = Buffer.concat(chunks).toString().replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]')
+    .replace(/http:\/\/127\.0\.0\.1:(\d+)\/[A-Za-z0-9_=-]+\//g, 'http://127.0.0.1:$1/[redacted-vm-service]/');
   await writeFile(log, text);
+  const nativeRecord = [...text.matchAll(/VOCLE_DEVICE_RECORD (\{[^\r\n]+\})/g)].map((match) => {
+    try { return JSON.parse(match[1]); } catch { return null; }
+  }).filter(Boolean).at(-1);
   return { ...status, log: log.slice(workspace.runRoot.length + 1), completed: status.exitCode !== null,
-    assertionFailure: /TestFailure|Expected:|Application framework exception|EXCEPTION CAUGHT BY/.test(text) };
+    toolProcessId: child.pid, consoleCleanup,
+    nativeRecord,
+    infrastructureFailure: /DeviceInfrastructureError|could not uniquely locate/.test(text),
+    assertionFailure: !/DeviceInfrastructureError|could not uniquely locate/.test(text) &&
+      /TestFailure|Expected:|Application framework exception|emit was called after an event handler completed|EXCEPTION CAUGHT BY (?:RENDERING|FLUTTER FRAMEWORK)/.test(text) };
 }
 
 function lockPackages(text) {
@@ -95,26 +141,49 @@ try {
       let failedPhase;
       for (const phase of deviceCases[id].phases) {
         const processes = command(adb, ['-s', serial, 'shell', 'ps', '-A'], root);
-        if (processes.includes(devicePackage)) active.forceStop();
+        if (processes.includes(devicePackage)) await active.forceStop();
         console.log(`Executing ${id} native phase ${phase}`);
+        const driverResponse = join(workspace.app, 'build/integration_response_data.json');
+        await rm(driverResponse, { force: true });
         // flutter test uninstalls the app on completion. flutter drive leaves
         // native data in place, which is essential for real process-death tests.
         const args = ['drive', `--target=integration_test/functional_regression/${deviceCases[id].file}`,
           '--driver=test_driver/functional_regression_driver.dart', '-d', serial,
-          '--debug', '--keep-app-running', '--no-pub', '--dart-define=ENABLE_API_LOGGING=false',
+          '--debug', '--keep-app-running', '--no-dds', '--no-pub', '--dart-define=ENABLE_API_LOGGING=false',
           `--dart-define=API_BASE_URL=${active.apiOrigin}`, `--dart-define=SOCKET_URL=${active.apiOrigin}`,
           `--dart-define=DEVICE_CONTROL_URL=${active.controlOrigin}`, `--dart-define=DEVICE_RUN_ID=${active.runId}`,
           `--dart-define=DEVICE_PHASE=${phase}`];
         const phaseResult = await runLogged(flutter, args, workspace.app,
           join(workspace.runRoot, 'diagnostics', `${id}-${phase}.log`), 600000);
-        phases.push({ id, phase, ...phaseResult });
+        // The control gateway can fail during result submission. The native
+        // driver retains the original case outcome instead of overwriting it
+        // with a reporting timeout or turning a business FAIL into ERROR.
+        try {
+          const response = await readFile(driverResponse, 'utf8').catch(() => 'null');
+          const fallback = JSON.parse(response)?.case || phaseResult.nativeRecord;
+          if (fallback && active.results.length === 0 && fallback.id === id &&
+              fallback.phase === deviceCases[id].phases.at(-1) && fallback.runId === active.runId &&
+              fallback.executed === true && ['PASS', 'FAIL', 'ERROR', 'NEEDS_DECISION'].includes(fallback.status)) {
+            if (phaseResult.exitCode !== 0 && fallback.status === 'PASS') {
+              fallback.status = phaseResult.assertionFailure ? 'FAIL' : 'ERROR';
+              fallback.error = 'Native driver reported a subsequent failure; inspect phase diagnostics';
+            }
+            fallback.driverFallback = true;
+            if (fallback.error) fallback.error = fallback.error.replace(/eyJ[\w-]+\.[\w-]+\.[\w-]+/g, '[redacted-jwt]');
+            active.results.push(fallback);
+          }
+        } catch { /* no fallback: missing completed record remains non-success */ }
+        const { nativeRecord, ...publicPhase } = phaseResult;
+        try { publicPhase.androidApkSha256 = hash(await readFile(join(workspace.app, 'build/app/outputs/flutter-apk/app-debug.apk'))); }
+        catch { publicPhase.androidApkSha256 = null; }
+        phases.push({ id, phase, ...publicPhase });
         if (phaseResult.exitCode !== 0) { failedPhase = phaseResult; break; }
       }
       const records = active.results.filter((row) => row.id === id);
       if (records.length > 1) throw new Error(`Duplicate device record ${id}`);
       if (records.length === 1) {
         results.push(records[0]);
-        if (failedPhase && ['PASS', 'NEEDS_DECISION'].includes(records[0].status)) {
+        if (failedPhase && !records[0].driverFallback && ['PASS', 'NEEDS_DECISION'].includes(records[0].status)) {
           records[0].status = failedPhase.assertionFailure ? 'FAIL' : 'ERROR';
           records[0].error = 'Flutter reported a subsequent failure after the case body; inspect phase diagnostics';
         }
@@ -154,9 +223,10 @@ try {
       provenance = await verifyDeviceSource(workspace);
       // Keep logs/source archive/provenance; remove test-owned credentials and
       // dependencies with the isolated target after checking unchanged source.
-      await rm(workspace.target, { recursive: true, force: true });
+      verifyDeviceCleanupPath(workspace);
+      await rm(workspace.target, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
     }
-    cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
+    cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') || phases.some((row) => row.consoleCleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
       dedicatedTestAppRemoved: Boolean(serial), isolatedTargetRemoved: Boolean(workspace) };
   } catch (error) { cleanup = { status: 'ERROR', error: error.message }; }
   const directory = workspace?.runRoot || resolve(root, 'tests/functional-regression/output/device-prerequisites');

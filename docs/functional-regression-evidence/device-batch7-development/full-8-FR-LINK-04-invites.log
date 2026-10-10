@@ -1,0 +1,139 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AndroidStudioProjects\Vocle\medcollab-beta-workflows\tests\functional-regression\output\d-d39d3ffe\target\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             20.4s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...          988ms
+D/FLTFireContextHolder(13825): received application context.
+I/ocle.regression(13825): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13825): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13825): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(13825): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(13825): Compat change id reported: 309578419; UID 10250; state: ENABLED
+D/CompatChangeReporter(13825): Compat change id reported: 349153669; UID 10250; state: ENABLED
+W/HWUI    (13825): Unknown dataspace 0
+I/WindowExtensionsImpl(13825): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](13825): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(13825): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+E/libEGL  (13825): called unimplemented OpenGL ES API
+I/ocle.regression(13825): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(13825): Skipped 35 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(13825): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@657cee6
+I/HWUI    (13825): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:4183/[redacted-vm-service]/
+VMServiceFlutterDriver: Isolate found with number: 6629201360576695
+VMServiceFlutterDriver: Isolate 6629201360576695 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (13825): 00:00 +0: FR-LINK-04: Android invites
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (13825): called unimplemented OpenGL ES API
+V/Configuration(13825): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(13825): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(13825): hide(ime())
+I/ImeTracker(13825): com.vocle.regression:749ce605: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller(13825): Installing profile for com.vocle.regression
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+W/ocle.regression(13825): userfaultfd: MOVE ioctl seems unsupported: Try again
+I/ocle.regression(13825): Background concurrent mark compact GC freed 6946KB AllocSpace bytes, 162(5936KB) LOS objects, 49% free, 3843KB/7686KB, paused 1.663ms,8.632ms total 38.776ms
+W/WindowOnBackDispatcher(13825): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(13825): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (13825): called unimplemented OpenGL ES API
+I/ocle.regression(13825): Background young concurrent mark compact GC freed 1600KB AllocSpace bytes, 56(2016KB) LOS objects, 49% free, 3899KB/7798KB, paused 4.532ms,7.094ms total 33.419ms
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(13825): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(13825): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (13825): call to OpenGL ES API with no current context (logged once per thread)
+E/libEGL  (13825): called unimplemented OpenGL ES API
+I/ocle.regression(13825): Background concurrent mark compact GC freed 1657KB AllocSpace bytes, 62(2232KB) LOS objects, 49% free, 3823KB/7646KB, paused 835us,5.486ms total 35.433ms
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+E/libEGL  (13825): called unimplemented OpenGL ES API
+I/flutter (13825): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (13825): The following TestFailure was thrown running a test:
+I/flutter (13825): Expected: true
+I/flutter (13825):   Actual: <false>
+I/flutter (13825): joined response opens its actual space
+I/flutter (13825):
+I/flutter (13825): When the exception was thrown, this was the stack:
+I/flutter (13825): #4      until (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:157:3)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825): #5      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/invites_test.dart:79:5)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825): #6      deviceCase.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:219:7)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825): #7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825): #8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825): #9      TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+I/flutter (13825): <asynchronous suspension>
+I/flutter (13825):
+I/flutter (13825): This was caught by the test expectation on the following line:
+I/flutter (13825):   file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart line 157
+I/flutter (13825): The test description was:
+I/flutter (13825):   FR-LINK-04: Android invites
+I/flutter (13825): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (13825): 00:26 +0: FR-LINK-04: Android invites [E]
+I/flutter (13825):   Test failed. See exception logs above.
+I/flutter (13825):   The test description was: FR-LINK-04: Android invites
+I/flutter (13825):
+I/flutter (13825): 00:26 +0 -1: (tearDownAll)
+Failure Details:
+Failure in method: FR-LINK-04: Android invites
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: <false>
+joined response opens its actual space
+
+When the exception was thrown, this was the stack:
+#4      until (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:157:3)
+<asynchronous suspension>
+#5      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/invites_test.dart:79:5)
+<asynchronous suspension>
+#6      deviceCase.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart:219:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+<asynchronous suspension>
+#9      TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+<asynchronous suspension>
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/d-d39d3ffe/target/medcollab-app/integration_test/functional_regression/support/device_harness.dart line 157
+The test description was:
+  FR-LINK-04: Android invites
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+I/flutter (13825): 00:26 +1 -1: Some tests failed.
+Leaving the application running.

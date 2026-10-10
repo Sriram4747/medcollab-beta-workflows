@@ -13,6 +13,11 @@ export const deviceCases = Object.freeze({
 export const devicePackage = 'com.vocle.regression';
 export const deviceSdk = '3.29.3';
 
+export function resumedActivityState(text) {
+  return text.split(/\r?\n/).filter((line) =>
+    /\b(?:mResumedActivity|topResumedActivity|ResumedActivity)\s*[:=]/.test(line)).join(' ');
+}
+
 export function emulatorOrigin(raw) {
   const url = new URL(raw);
   assert.equal(url.protocol, 'http:');

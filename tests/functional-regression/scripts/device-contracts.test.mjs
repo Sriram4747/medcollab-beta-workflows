@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { deviceCases, emulatorOrigin, emulatorSerial, selectedDeviceCases, validateRestart } from './device-contracts.mjs';
+import { deviceCases, emulatorOrigin, emulatorSerial, selectedDeviceCases, validateRestart, resumedActivityState } from './device-contracts.mjs';
 
 test('device registry matches the exact eight catalog IDs, files and phases', async () => {
   const catalog = JSON.parse(await readFile(new URL('../catalog.json', import.meta.url)));
@@ -33,4 +33,11 @@ test('restart proof rejects same-process, stale-run and absent-phase evidence', 
   assert.throws(() => validateRestart(checkpoints, ['seed', 'missing'], 'this-run'));
   assert.throws(() => validateRestart(checkpoints, ['seed', 'restore'], 'other-run'));
   assert.throws(() => validateRestart(checkpoints.map((row) => ({ ...row, processId: 100 })), ['seed', 'restore'], 'this-run'));
+});
+
+test('activity observation accepts Android 36 fields and excludes historical activities', () => {
+  const current = '  topResumedActivity=ActivityRecord{abc com.vocle.regression/MainActivity t42}\n  ResumedActivity: ActivityRecord{abc com.vocle.regression/MainActivity t42}';
+  assert.match(resumedActivityState(current), /com\.vocle\.regression/);
+  assert.match(resumedActivityState('mResumedActivity: ActivityRecord{old MainActivity}'), /MainActivity/);
+  assert.equal(resumedActivityState('mLastResumedActivity: stale\n  activity: inactive'), '');
 });
