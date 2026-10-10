@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { deviceCases, emulatorOrigin, emulatorSerial, selectedDeviceCases, validateRestart, resumedActivityState } from './device-contracts.mjs';
+import { deviceCases, emulatorOrigin, emulatorSerial, selectedDeviceCases, validateRestart, resumedActivityState, activityLifecycleStates, classifyDeviceDiagnostics } from './device-contracts.mjs';
 
 test('device registry matches the exact eight catalog IDs, files and phases', async () => {
   const catalog = JSON.parse(await readFile(new URL('../catalog.json', import.meta.url)));
@@ -40,4 +40,19 @@ test('activity observation accepts Android 36 fields and excludes historical act
   assert.match(resumedActivityState(current), /com\.vocle\.regression/);
   assert.match(resumedActivityState('mResumedActivity: ActivityRecord{old MainActivity}'), /MainActivity/);
   assert.equal(resumedActivityState('mLastResumedActivity: stale\n  activity: inactive'), '');
+});
+
+test('background barrier requires the test activity to stop, not only another top activity', () => {
+  const fixture = (state) => `topResumedActivity=ActivityRecord{launcher}\npackageName=com.vocle.regression processName=com.vocle.regression\nstate=${state}\npackageName=launcher processName=launcher\nstate=RESUMED`;
+  assert.deepEqual(activityLifecycleStates(fixture('PAUSING'), 'com.vocle.regression'), ['PAUSING']);
+  assert.deepEqual(activityLifecycleStates(fixture('STOPPED'), 'com.vocle.regression'), ['STOPPED']);
+  assert.deepEqual(activityLifecycleStates(fixture('STOPPED'), 'unrelated'), []);
+  assert.deepEqual(activityLifecycleStates('packageName=com.vocle.regression processName=test\npackageName=other processName=other\nstate=STOPPED', 'com.vocle.regression'), []);
+});
+
+test('late application Bloc failure is functional failure; setup and unknown errors are infrastructure', () => {
+  assert.deepEqual(classifyDeviceDiagnostics('StateError: Bad state: Cannot emit new states after calling close\nChannelChatCubit.loadMessages'), { infrastructureFailure: false, assertionFailure: true });
+  assert.deepEqual(classifyDeviceDiagnostics('TestFailure: Expected: one stored message'), { infrastructureFailure: false, assertionFailure: true });
+  assert.deepEqual(classifyDeviceDiagnostics('DeviceInfrastructureError: Expected: local control server'), { infrastructureFailure: true, assertionFailure: false });
+  assert.equal(classifyDeviceDiagnostics('Unknown native driver exit').assertionFailure, false);
 });

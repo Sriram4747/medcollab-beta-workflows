@@ -13,9 +13,28 @@ export const deviceCases = Object.freeze({
 export const devicePackage = 'com.vocle.regression';
 export const deviceSdk = '3.29.3';
 
+export function classifyDeviceDiagnostics(text) {
+  const infrastructureFailure = /DeviceInfrastructureError|could not uniquely locate/.test(text);
+  return {
+    infrastructureFailure,
+    assertionFailure: !infrastructureFailure &&
+      /TestFailure|Expected:|Application framework exception|emit was called after an event handler completed|Bad state: Cannot emit new states after calling close|EXCEPTION CAUGHT BY (?:RENDERING|FLUTTER FRAMEWORK)/.test(text),
+  };
+}
+
 export function resumedActivityState(text) {
   return text.split(/\r?\n/).filter((line) =>
     /\b(?:mResumedActivity|topResumedActivity|ResumedActivity)\s*[:=]/.test(line)).join(' ');
+}
+
+// A different top activity can be resumed before our Activity has finished
+// onStop. Wait for its own state before returning it to the foreground.
+export function activityLifecycleStates(text, packageName) {
+  return text.split(/\bpackageName=/).slice(1).flatMap((block) => {
+    if (block.split(/\s/, 1)[0] !== packageName) return [];
+    const state = block.match(/\bstate=([A-Z_]+)\b/);
+    return state ? [state[1]] : [];
+  });
 }
 
 export function emulatorOrigin(raw) {

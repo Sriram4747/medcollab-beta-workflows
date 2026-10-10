@@ -1,0 +1,407 @@
+{
+  "observedAt": "2026-10-10T19:11:19.0605579Z",
+  "evidenceType": "public GitHub REST metadata; case counts separately observed in authenticated rendered job summaries",
+  "run": {
+    "id": 38056813204,
+    "run_number": 14,
+    "head_sha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204",
+    "created_at": "2026-10-10T13:43:22Z",
+    "updated_at": "2026-10-10T13:49:47Z"
+  },
+  "jobs": [
+    {
+      "id": 114226878712,
+      "name": "Detect",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204/job/114226878712",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-10T13:43:26Z",
+          "completed_at": "2026-10-10T13:43:27Z"
+        },
+        {
+          "name": "Check out exact fork harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-10T13:43:27Z",
+          "completed_at": "2026-10-10T13:43:29Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-10T13:43:29Z",
+          "completed_at": "2026-10-10T13:43:31Z"
+        },
+        {
+          "name": "Validate catalog and CI contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-10T13:43:31Z",
+          "completed_at": "2026-10-10T13:43:31Z"
+        },
+        {
+          "name": "Resolve exact read-only target",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-10T13:43:31Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Fingerprint exact harness and assertions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Select affected fork modules with shared-code fallback",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Check validated full-backend success history",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Post Check out exact fork harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-10T13:43:32Z",
+          "completed_at": "2026-10-10T13:43:32Z"
+        }
+      ]
+    },
+    {
+      "id": 114226916113,
+      "name": "Flutter",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204/job/114226916113",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-10T13:43:38Z",
+          "completed_at": "2026-10-10T13:43:40Z"
+        },
+        {
+          "name": "Check out exact fork revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-10T13:43:40Z",
+          "completed_at": "2026-10-10T13:43:42Z"
+        },
+        {
+          "name": "Verify source provenance and prepare report directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-10T13:43:42Z",
+          "completed_at": "2026-10-10T13:43:42Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-10T13:43:42Z",
+          "completed_at": "2026-10-10T13:43:43Z"
+        },
+        {
+          "name": "Set up pinned Flutter SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-10T13:43:43Z",
+          "completed_at": "2026-10-10T13:44:11Z"
+        },
+        {
+          "name": "Resolve exact locked dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-10T13:44:11Z",
+          "completed_at": "2026-10-10T13:44:22Z"
+        },
+        {
+          "name": "Run catalog and retained Flutter tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-10T13:44:22Z",
+          "completed_at": "2026-10-10T13:44:56Z"
+        },
+        {
+          "name": "Aggregate exact Flutter catalog and coverage gate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-10T13:44:56Z",
+          "completed_at": "2026-10-10T13:44:56Z"
+        },
+        {
+          "name": "Upload Flutter reports and provenance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-10T13:44:56Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        },
+        {
+          "name": "Enforce Flutter functional gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 10,
+          "started_at": "2026-10-10T13:44:57Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        },
+        {
+          "name": "Post Set up pinned Flutter SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-10T13:44:57Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 19,
+          "started_at": "2026-10-10T13:44:57Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        },
+        {
+          "name": "Post Check out exact fork revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-10T13:44:57Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-10T13:44:57Z",
+          "completed_at": "2026-10-10T13:44:57Z"
+        }
+      ]
+    },
+    {
+      "id": 114226916128,
+      "name": "Execute",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204/job/114226916128",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-10T13:43:39Z",
+          "completed_at": "2026-10-10T13:43:39Z"
+        },
+        {
+          "name": "Check out exact harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-10T13:43:39Z",
+          "completed_at": "2026-10-10T13:43:41Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-10T13:43:41Z",
+          "completed_at": "2026-10-10T13:43:45Z"
+        },
+        {
+          "name": "Fetch captured source without credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-10T13:43:45Z",
+          "completed_at": "2026-10-10T13:43:46Z"
+        },
+        {
+          "name": "Prepare pinned runtime dependencies and Mongo binary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-10T13:43:46Z",
+          "completed_at": "2026-10-10T13:44:23Z"
+        },
+        {
+          "name": "Run retained sanity and backend modules with loopback-only providers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-10T13:44:23Z",
+          "completed_at": "2026-10-10T13:49:38Z"
+        },
+        {
+          "name": "Verify provenance, cleanup, exact IDs and write reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-10T13:49:38Z",
+          "completed_at": "2026-10-10T13:49:38Z"
+        },
+        {
+          "name": "Upload full diagnostic evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-10T13:49:38Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Create validated success marker after diagnostic upload",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Upload validated full-backend success marker",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Enforce verified regression gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 11,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Post Check out exact harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:39Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-10T13:49:39Z",
+          "completed_at": "2026-10-10T13:49:40Z"
+        }
+      ]
+    },
+    {
+      "id": 114228061742,
+      "name": "Summary",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204/job/114228061742",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-10T13:49:44Z",
+          "completed_at": "2026-10-10T13:49:45Z"
+        },
+        {
+          "name": "Summarize detection, coverage gate and artifacts",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 2,
+          "started_at": "2026-10-10T13:49:45Z",
+          "completed_at": "2026-10-10T13:49:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-10T13:49:45Z",
+          "completed_at": "2026-10-10T13:49:45Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11671968020,
+      "name": "vocle-functional-report-38056813204-1",
+      "size_in_bytes": 301525,
+      "expired": false,
+      "created_at": "2026-10-10T13:49:39Z",
+      "digest": "sha256:4ac5d75dfd59a90e0a296f77fa01c5de86a3d29bf73871683272b63ebf1e496e"
+    },
+    {
+      "id": 11671018422,
+      "name": "vocle-flutter-report-38056813204-1",
+      "size_in_bytes": 32203,
+      "expired": false,
+      "created_at": "2026-10-10T13:44:57Z",
+      "digest": "sha256:37c84fdd0e77eeae6b26217e6c5bb35ca949c9cbaf4c8f05cad64202db50a8e4"
+    }
+  ]
+}

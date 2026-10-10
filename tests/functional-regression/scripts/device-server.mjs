@@ -11,7 +11,7 @@ import { startBackend, stopChild } from '../src/runner.mjs';
 import { createHttp } from '../src/http.mjs';
 import { capturedOtp } from '../src/fixtures.mjs';
 import { connectSocket } from '../src/socket.mjs';
-import { deviceCases, devicePackage, emulatorSerial, resumedActivityState as resumed } from './device-contracts.mjs';
+import { deviceCases, devicePackage, emulatorSerial, resumedActivityState as resumed, activityLifecycleStates } from './device-contracts.mjs';
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function observe(read, accept, reason, timeout = 15000) {
@@ -237,10 +237,11 @@ export async function startDeviceServer({ adb, serial, caseId }) {
           case 'background-resume': {
             await native('shell', 'input', 'keyevent', 'KEYCODE_HOME');
             await observe(foreground, (text) => resumed(text).length > 0 && !resumed(text).includes(devicePackage), 'native background');
+            await observe(foreground, (text) => activityLifecycleStates(text, devicePackage).includes('STOPPED'), 'test activity onStop completion');
             if (input.recoverTransport === true) outage = false;
             await native('shell', 'am', 'start', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.LAUNCHER', '-f', '0x20000000', '-n', activity);
             await observe(foreground, (text) => resumed(text).includes(devicePackage), 'native foreground');
-            answer = { backgroundObserved: true, foregroundObserved: true, transportOutageInjection: 'local HTTP/Socket.IO gateway' }; break;
+            answer = { backgroundObserved: true, stoppedObserved: true, foregroundObserved: true, transportOutageInjection: 'local HTTP/Socket.IO gateway' }; break;
           }
           case 'camera-permission': case 'notification-permission': {
             const permission = action === 'camera-permission' ? 'android.permission.CAMERA' : 'android.permission.POST_NOTIFICATIONS';

@@ -19,12 +19,17 @@ Future<void> attach(WidgetTester tester, String label) async {
       widget is IconButton && widget.tooltip == 'Attach');
   await until(tester, () => WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed,
       'the native app resumes before opening the attachment menu');
-  await until(tester, () => attachButton.evaluate().isNotEmpty &&
+  await until(tester, () => attachButton.hitTestable().evaluate().isNotEmpty &&
       tester.widget<IconButton>(attachButton).onPressed != null,
       'the attachment control is enabled');
   await tester.tap(attachButton);
   await until(tester, () => find.text(label).evaluate().isNotEmpty,
       'the attachment menu exposes $label');
+  // A modal's text is built before its slide transition puts it on screen.
+  // Settle that transition, then require a pointer-accessible target.
+  await tester.pumpAndSettle();
+  await until(tester, () => find.text(label).hitTestable().evaluate().isNotEmpty,
+      'the attachment menu target is visible and hit-testable');
   await tester.tap(find.text(label));
   await tester.pump();
   checkFramework(tester);
@@ -69,7 +74,8 @@ void main() {
     documents.inputs.add(PlatformFile(
         name: 'synthetic-device.pdf', size: pdf.length, bytes: pdf));
     await attach(tester, 'Document / PDF');
-    await until(tester, () => !chat.state.isSending,
+    await until(tester, () => !chat.state.isSending && chat.state.messages.any(
+        (message) => message.content.fileName == 'synthetic-device.pdf'),
         'PDF send completes or exposes a typed failure');
     expect(find.text('synthetic-device.pdf'), findsWidgets,
         reason: 'Selected PDF has a visible preview/file entry');
@@ -102,7 +108,8 @@ void main() {
     await File(pngPath).writeAsBytes(png, flush: true);
     images.inputs.add(XFile(pngPath));
     await attach(tester, 'Photos & videos');
-    await until(tester, () => !chat.state.isSending, 'image send terminates');
+    await until(tester, () => !chat.state.isSending && chat.state.messages.any(
+        (message) => message.content.fileName == 'synthetic-device.png'), 'image send terminates');
     expect(
         chat.state.messages.any(
             (message) => message.content.fileName == 'synthetic-device.png'),
@@ -125,7 +132,10 @@ void main() {
     await File(videoPath).writeAsBytes(video, flush: true);
     images.inputs.add(XFile(videoPath));
     await attach(tester, 'Photos & videos');
-    await until(tester, () => !chat.state.isSending, 'video send terminates');
+    await until(tester, () => !chat.state.isSending && chat.state.messages.any(
+        (message) => message.content.fileName == 'synthetic-device.mp4'), 'video send terminates');
+    await until(tester, () => find.text('synthetic-device.mp4').evaluate().isNotEmpty,
+        'the selected video preview is rendered');
     expect(find.text('synthetic-device.mp4'), findsWidgets);
 
     final unsupported =
@@ -135,7 +145,8 @@ void main() {
         size: unsupported.length,
         bytes: unsupported));
     await attach(tester, 'Document / PDF');
-    await until(tester, () => !chat.state.isSending,
+    await until(tester, () => !chat.state.isSending && chat.state.messages.any(
+        (message) => message.content.fileName == 'synthetic-unsupported.txt'),
         'unsupported input does not hang the composer');
     expect(chat.state.error, isNotNull);
     expect(find.text('Failed to send'), findsWidgets);

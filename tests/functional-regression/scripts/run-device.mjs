@@ -3,7 +3,7 @@ import { promisify } from 'node:util';
 import { resolve, join, dirname } from 'node:path';
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { deviceCases, devicePackage, deviceSdk, emulatorSerial, selectedDeviceCases, validateRestart } from './device-contracts.mjs';
+import { deviceCases, devicePackage, deviceSdk, emulatorSerial, selectedDeviceCases, validateRestart, classifyDeviceDiagnostics } from './device-contracts.mjs';
 import { prepareDeviceWorkspace, verifyDeviceSource, verifyDeviceCleanupPath, command, hash } from './prepare-device-workspace.mjs';
 
 const root = resolve(import.meta.dirname, '../../..');
@@ -35,7 +35,7 @@ async function runLogged(bin, args, cwd, log, timeoutMs) {
       'ORG_GRADLE_PROJECT_kotlin.compiler.execution.strategy': 'in-process' }, windowsHide: true, windowsVerbatimArguments: batch,
       stdio: ['ignore', 'pipe', 'pipe'], shell: false });
   const chunks = [];
-  const consoleCaptures = [];
+  const resourceCaptures = [];
   let firstConsoleCaptured = false, driverConsoleCaptured = false;
   const output = (chunk) => {
     chunks.push(chunk);
@@ -44,10 +44,11 @@ async function runLogged(bin, args, cwd, log, timeoutMs) {
     if (process.platform === 'win32' && (first || driver)) {
       firstConsoleCaptured = true;
       if (driver) driverConsoleCaptured = true;
-      // Capture ownership while the tool/driver parents are alive. Windows
-      // console hosts can survive those parents and retain their cwd handles.
-      const script = `$rows=Get-CimInstance Win32_Process; $owned=@(${child.pid}); do { $more=@($rows | Where-Object { $owned -contains $_.ParentProcessId -and $owned -notcontains $_.ProcessId } | ForEach-Object { $_.ProcessId }); $owned += $more } while ($more.Count -gt 0); @($rows | Where-Object { $owned -contains $_.ProcessId -and $_.Name -eq 'conhost.exe' } | ForEach-Object { @{id=$_.ProcessId; created=$_.CreationDate.ToUniversalTime().ToString('o')} }) | ConvertTo-Json -Compress`;
-      consoleCaptures.push(promisify(execFile)('powershell.exe', ['-NoProfile', '-Command', script],
+      // Capture ownership while the tool/driver parents are alive. Flutter's
+      // streaming ADB logcat reader can outlive drive and retain its app cwd.
+      // Never stop the shared ADB server or unrelated ADB invocations.
+      const script = `$rows=Get-CimInstance Win32_Process; $owned=@(${child.pid}); do { $more=@($rows | Where-Object { $owned -contains $_.ParentProcessId -and $owned -notcontains $_.ProcessId } | ForEach-Object { $_.ProcessId }); $owned += $more } while ($more.Count -gt 0); @($rows | Where-Object { $owned -contains $_.ProcessId -and ($_.Name -eq 'conhost.exe' -or ($_.Name -eq 'adb.exe' -and $_.CommandLine -match ' -s emulator-\\d+ shell -x logcat\\b')) } | ForEach-Object { @{id=$_.ProcessId; name=$_.Name; created=$_.CreationDate.ToUniversalTime().ToString('o')} }) | ConvertTo-Json -Compress`;
+      resourceCaptures.push(promisify(execFile)('powershell.exe', ['-NoProfile', '-Command', script],
         { windowsHide: true, timeout: 15000, encoding: 'utf8' }).then((result) => JSON.parse(result.stdout || '[]')).catch(() => []));
     }
   };
@@ -61,15 +62,16 @@ async function runLogged(bin, args, cwd, log, timeoutMs) {
   const status = await new Promise((resolveDone, reject) => {
     child.once('error', reject); child.once('exit', (code, signal) => resolveDone({ exitCode: code, signal }));
   }).finally(() => clearTimeout(timer));
-  const consoles = [...new Map((await Promise.all(consoleCaptures)).flat().filter(Boolean)
+  const resources = [...new Map((await Promise.all(resourceCaptures)).flat().filter(Boolean)
     .map((entry) => [entry.id, entry])).values()];
-  let consoleCleanup = { status: 'PASS', captured: consoles.length };
-  for (const console of consoles) {
+  let ownedResourceCleanup = { status: 'PASS', captured: resources.length,
+    logcatReaders: resources.filter((entry) => entry.name === 'adb.exe').length };
+  for (const resource of resources) {
     try {
-      if (!Number.isSafeInteger(console.id) || !/^\d{4}-\d{2}-\d{2}T[0-9:.]+Z$/.test(console.created)) throw new Error('Invalid owned process identity');
-      const script = `$p=Get-CimInstance Win32_Process -Filter 'ProcessId=${console.id}'; if ($p -and $p.Name -eq 'conhost.exe' -and $p.CreationDate.ToUniversalTime().ToString('o') -eq '${console.created}') { Stop-Process -Id ${console.id} -Force -ErrorAction Stop }`;
+      if (!Number.isSafeInteger(resource.id) || !['conhost.exe', 'adb.exe'].includes(resource.name) || !/^\d{4}-\d{2}-\d{2}T[0-9:.]+Z$/.test(resource.created)) throw new Error('Invalid owned process identity');
+      const script = `$p=Get-CimInstance Win32_Process -Filter 'ProcessId=${resource.id}'; if ($p -and $p.Name -eq '${resource.name}' -and $p.CreationDate.ToUniversalTime().ToString('o') -eq '${resource.created}') { Stop-Process -Id ${resource.id} -Force -ErrorAction Stop }`;
       await promisify(execFile)('powershell.exe', ['-NoProfile', '-Command', script], { windowsHide: true, timeout: 15000 });
-    } catch (error) { consoleCleanup = { status: 'ERROR', error: error.message }; }
+    } catch (error) { ownedResourceCleanup = { status: 'ERROR', error: error.message }; }
   }
   // Provider tokens/OTP/session secrets are synthetic but still redacted.
   const text = Buffer.concat(chunks).toString().replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[redacted-jwt]')
@@ -79,11 +81,9 @@ async function runLogged(bin, args, cwd, log, timeoutMs) {
     try { return JSON.parse(match[1]); } catch { return null; }
   }).filter(Boolean).at(-1);
   return { ...status, log: log.slice(workspace.runRoot.length + 1), completed: status.exitCode !== null,
-    toolProcessId: child.pid, consoleCleanup,
+    toolProcessId: child.pid, ownedResourceCleanup,
     nativeRecord,
-    infrastructureFailure: /DeviceInfrastructureError|could not uniquely locate/.test(text),
-    assertionFailure: !/DeviceInfrastructureError|could not uniquely locate/.test(text) &&
-      /TestFailure|Expected:|Application framework exception|emit was called after an event handler completed|EXCEPTION CAUGHT BY (?:RENDERING|FLUTTER FRAMEWORK)/.test(text) };
+    ...classifyDeviceDiagnostics(text) };
 }
 
 function lockPackages(text) {
@@ -196,7 +196,10 @@ try {
         controlActions: active.controlRecords, backendRequests: active.requests }, null, 2));
     } catch (error) {
       const existing = results.find((row) => row.id === id);
-      if (existing) { existing.status = 'ERROR'; existing.error = error.message; }
+      // Preserve a completed behavioral failure if writing evidence or checking
+      // the harness fails afterwards. Report both facts and gate infrastructure
+      // independently instead of relabeling the application result.
+      if (existing) { existing.infrastructureError = error.message; }
       else results.push({ id, status: error.name === 'HttpContractError' ? 'FAIL' : 'ERROR', executed: false,
         error: error.message, ...(error.deviceCleanup ? { cleanup: error.deviceCleanup } : {}) });
     } finally {
@@ -226,7 +229,7 @@ try {
       verifyDeviceCleanupPath(workspace);
       await rm(workspace.target, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
     }
-    cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') || phases.some((row) => row.consoleCleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
+    cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') || phases.some((row) => row.ownedResourceCleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
       dedicatedTestAppRemoved: Boolean(serial), isolatedTargetRemoved: Boolean(workspace) };
   } catch (error) { cleanup = { status: 'ERROR', error: error.message }; }
   const directory = workspace?.runRoot || resolve(root, 'tests/functional-regression/output/device-prerequisites');
@@ -236,7 +239,8 @@ try {
   const report = { tier: 'D', platform: 'Android emulator', selected, planned: Object.keys(deviceCases).length,
     sourceSha: workspace?.provenance.sourceSha || null, harnessSha: workspace?.provenance.harnessSha || null,
     executed: results.filter((row) => row.executed).length, counts, cases: results, phases, provenance, cleanup,
-    fullSuccess: selected.length === 8 && counts.PASS === 8 && provenance.status === 'PASS' && cleanup.status === 'PASS',
+    infrastructureErrors: results.filter((row) => row.infrastructureError).map((row) => ({ id: row.id, error: row.infrastructureError })),
+    fullSuccess: selected.length === 8 && counts.PASS === 8 && !results.some((row) => row.infrastructureError) && provenance.status === 'PASS' && cleanup.status === 'PASS',
     providerDeliveryProven: false, iosImplemented: false, transportOutage: 'test-owned local gateway; no claim of carrier/radio delivery',
     generatedAt: new Date().toISOString() };
   await writeFile(join(directory, 'results.json'), JSON.stringify(report, null, 2));

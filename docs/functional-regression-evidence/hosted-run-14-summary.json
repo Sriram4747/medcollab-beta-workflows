@@ -1,0 +1,40 @@
+{
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38056813204",
+  "runNumber": 14,
+  "sourceRepository": "Sriram4747/medcollab-beta-workflows",
+  "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "harnessSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "event": "push",
+  "sourceMode": "fork-change",
+  "scope": "backend-p0",
+  "conclusion": "failure",
+  "evidenceType": "Authenticated rendered GitHub job summaries, corroborated by public REST job and artifact metadata. Artifact archive contents were not downloaded in this checkpoint.",
+  "backend": {
+    "implemented": 147,
+    "selected": 147,
+    "executed": 147,
+    "counts": {"PASS": 118, "FAIL": 13, "ERROR": 0, "BLOCKED": 0, "NEEDS_DECISION": 16, "SKIP": 0},
+    "provenance": "PASS",
+    "cleanup": "PASS",
+    "backendAllSuccess": false,
+    "failedIds": ["FR-SPC-06", "FR-CH-02", "FR-MSG-01", "FR-HOF-05", "FR-MED-01", "FR-MED-02", "FR-MED-05", "FR-NOT-01", "FR-NOT-02", "FR-NOT-04", "FR-RT-07", "FR-SUP-03", "FR-JRN-04"]
+  },
+  "flutter": {
+    "implemented": 32,
+    "executed": 32,
+    "counts": {"PASS": 15, "FAIL": 14, "ERROR": 0, "BLOCKED": 0, "NEEDS_DECISION": 3, "SKIP": 0},
+    "complete": true,
+    "fullSuccess": false,
+    "catalogExit": 1,
+    "retainedExit": 0,
+    "failedIds": ["FR-HOF-13", "FR-HOME-02", "FR-LINK-03", "FR-NAV-01", "FR-NAV-02", "FR-NAV-03", "FR-REQ-06", "FR-RT-04", "FR-RT-06", "FR-RUN-03", "FR-SAVE-02", "FR-SOC-06", "FR-SRCH-04", "FR-SUP-04"],
+    "decisionIds": ["FR-HOF-12", "FR-LINK-02", "FR-OFF-06"]
+  },
+  "device": {"hostedLaneExists": false, "hostedExecuted": 0},
+  "successMarkerCreated": false,
+  "artifacts": [
+    {"id": 11671018422, "name": "vocle-flutter-report-38056813204-1", "digest": "sha256:37c84fdd0e77eeae6b26217e6c5bb35ca949c9cbaf4c8f05cad64202db50a8e4"},
+    {"id": 11671968020, "name": "vocle-functional-report-38056813204-1", "digest": "sha256:4ac5d75dfd59a90e0a296f77fa01c5de86a3d29bf73871683272b63ebf1e496e"}
+  ],
+  "limitations": ["The configured backend-p0 scope selected all 147 through affected/shared-code selection, but this remains fork-change validation and does not establish upstream or backend-all success.", "Browser artifact download timed out. No archive inspection claim is made.", "iOS has no implemented or executed coverage."]
+}

@@ -75,10 +75,12 @@ before the restoration assertion. The test package is removed after execution.
 Windows commands use the initialized SDK's cached Dart executable. Gradle runs
 without its persistent daemon or filesystem watcher; Kotlin compilation runs in
 process. Console hosts are captured while their test-tool parents are alive and
-may be stopped only with matching captured PIDs and creation times. These are
-harness controls, not application changes. The current Windows session still
-reported `EBUSY` on source-directory removal; cleanup remains ERROR and prevents
-release success. Unrelated processes are not stopped to obtain green results.
+may be stopped only with matching captured PIDs and creation times. Flutter's
+run-owned streaming ADB logcat readers are captured and stopped in the same way;
+they were proven to hold the temporary app directory after drive exited. The
+shared ADB server and unrelated ADB processes are preserved. Historical `EBUSY`
+results remain ERROR; fresh runs must verify automatic removal. These are
+harness controls, not application changes.
 
 ## Case ownership
 
@@ -126,11 +128,11 @@ of a test file or a successful build does not establish a passing device case.
 ## Current platform limitations
 
 Android 36.1 uses `topResumedActivity=` and `ResumedActivity:` in its activity
-dump; both are supported by the host parser. Native Home/foreground actions were
-observed, but the passive Flutter lifecycle probe recorded only `inactive`.
-The injection/SDK activity-resume path needs investigation before attributing
-that result to application resume logic. API 35 is an additional reproduction
-option; no execution on that platform is claimed.
+dump; both are supported by the host parser. A resumed launcher alone did not
+prove the app had stopped. The host now waits for the test Activity's own
+`state=STOPPED` before foregrounding it. Subsequent execution delivered native
+pause/resume and verified socket/message/draft recovery, then exposed a late
+application Bloc-close exception. No API 35 execution is claimed.
 
 Native runs reached application Home layout, accepted invite navigation,
 AuthBloc emit-after-completion and duplicate chat GlobalKey failures. Media
