@@ -1,0 +1,32 @@
+{
+  "kind": "device-preflight",
+  "ready": false,
+  "requiredBuildMode": "debug",
+  "cases": [
+    "FR-MED-08",
+    "FR-PUSH-05",
+    "FR-PUSH-06",
+    "FR-NAV-04",
+    "FR-NAV-05",
+    "FR-LINK-04",
+    "FR-JRN-05",
+    "FR-JRN-06"
+  ],
+  "sdk": "3.47.2",
+  "emulator": null,
+  "reasons": [
+    "App pubspec.yaml has no integration_test SDK dependency.",
+    "App pubspec.lock has uncommitted work; preserve it and use an isolated checkout.",
+    "Flutter SDK 3.47.2 differs from the lockfile-validated 3.29.3.",
+    "Expected exactly one online Android emulator and no physical device; found 0 emulator(s) and 0 other device(s).",
+    "FR-MED-08 integration test file media_test.dart is missing.",
+    "FR-PUSH-05 integration test file notifications_test.dart is missing.",
+    "FR-PUSH-06 integration test file notifications_test.dart is missing.",
+    "FR-NAV-04 integration test file lifecycle_test.dart is missing.",
+    "FR-NAV-05 integration test file lifecycle_test.dart is missing.",
+    "FR-LINK-04 integration test file invites_test.dart is missing.",
+    "FR-JRN-05 integration test file journeys_test.dart is missing.",
+    "FR-JRN-06 integration test file journeys_test.dart is missing."
+  ],
+  "apiOrigin": "http://10.0.2.2:5000"
+}

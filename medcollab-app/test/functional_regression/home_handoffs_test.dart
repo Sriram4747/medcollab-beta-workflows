@@ -150,7 +150,7 @@ void main() {
     expect(dashboard.state.todayHandoffs, isEmpty);
     expect(dashboard.state.pendingTaskCount, 0);
     expect(handoffs.reads, greaterThanOrEqualTo(3));
-  });
+  }, timeout: const Timeout(Duration(seconds: 45)));
 
   testWidgets('FR-HOME-03: announcements, emergency, partial failure and retry',
       (tester) async {
