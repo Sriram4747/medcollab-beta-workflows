@@ -27,6 +27,13 @@ export function affectedModules(paths) {
   }
   return selected.size ? all.filter((module) => selected.has(module)) : all;
 }
+export function affectsFlutter(paths) {
+  if (!paths.length) return true; // Unknown diff: validate conservatively.
+  return paths.some((path) => path.startsWith('medcollab-app/') ||
+    path === 'tests/functional-regression/scripts/aggregate-flutter.mjs' ||
+    path === '.github/workflows/vocle-functional-regression.yml' ||
+    path === 'tests/functional-regression/scripts/affected-modules.mjs');
+}
 if (process.argv[1] && process.argv[1].replaceAll('\\', '/').endsWith('/affected-modules.mjs')) {
   const base = process.env.VOCLE_BASE_SHA;
   let paths = [];
@@ -35,6 +42,8 @@ if (process.argv[1] && process.argv[1].replaceAll('\\', '/').endsWith('/affected
     catch { paths = ['tests/functional-regression/unknown']; }
   }
   const modules = affectedModules(paths);
-  if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, `modules=${modules.join(',')}\n`);
-  console.log(JSON.stringify({ changedPaths: paths, modules }));
+  const flutterChanged = affectsFlutter(paths);
+  if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT,
+    `modules=${modules.join(',')}\nflutter_changed=${flutterChanged}\n`);
+  console.log(JSON.stringify({ changedPaths: paths, modules, flutterChanged }));
 }

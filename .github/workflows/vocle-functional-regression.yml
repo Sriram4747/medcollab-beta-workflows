@@ -26,6 +26,10 @@ on:
       - 'medcollab-backend/**'
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
+      - 'medcollab-app/lib/**'
+      - 'medcollab-app/test/**'
+      - 'medcollab-app/pubspec.yaml'
+      - 'medcollab-app/pubspec.lock'
       - '.github/workflows/vocle-functional-regression.yml'
   pull_request:
     branches: [master]
@@ -33,6 +37,10 @@ on:
       - 'medcollab-backend/**'
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
+      - 'medcollab-app/lib/**'
+      - 'medcollab-app/test/**'
+      - 'medcollab-app/pubspec.yaml'
+      - 'medcollab-app/pubspec.lock'
       - '.github/workflows/vocle-functional-regression.yml'
 
 permissions:
@@ -54,6 +62,7 @@ jobs:
       force: ${{ steps.target.outputs.force }}
       fingerprint: ${{ steps.fingerprint.outputs.value }}
       affected_modules: ${{ steps.affected.outputs.modules }}
+      flutter_changed: ${{ steps.affected.outputs.flutter_changed }}
       needs_run: ${{ steps.history.outputs.needs_run }}
       reason: ${{ steps.history.outputs.reason }}
       baseline_url: ${{ steps.history.outputs.baseline_url }}
@@ -203,9 +212,103 @@ jobs:
           test "$ARTIFACT_RESULT" = success
           test "$REPORT_RESULT" = PASS
 
+  flutter:
+    name: Flutter
+    needs: detect
+    if: needs.detect.outputs.targetKind == 'fork-change' && needs.detect.outputs.flutter_changed == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      TZ: Asia/Kolkata
+      VOCLE_FLUTTER_OUTPUT: ${{ runner.temp }}/vocle-flutter-output
+    steps:
+      - name: Check out exact fork revision
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify source provenance and prepare report directory
+        env:
+          TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$VOCLE_FLUTTER_OUTPUT"
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          printf '{"targetKind":"fork-change","targetSha":"%s","harnessSha":"%s","timezone":"%s"}\n' "$TARGET_SHA" "$(git rev-parse HEAD)" "$TZ" > "$VOCLE_FLUTTER_OUTPUT/provenance.json"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Set up pinned Flutter SDK
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          flutter-version: '3.47.2'
+          cache: true
+      - name: Resolve exact locked dependencies
+        working-directory: medcollab-app
+        run: |
+          flutter --version > "$VOCLE_FLUTTER_OUTPUT/sdk.txt"
+          flutter pub get --enforce-lockfile
+      - id: tests
+        name: Run catalog and retained Flutter tests
+        working-directory: medcollab-app
+        run: |
+          set +e
+          flutter test --no-pub --reporter json test/functional_regression > "$VOCLE_FLUTTER_OUTPUT/catalog.ndjson" 2> "$VOCLE_FLUTTER_OUTPUT/catalog.stderr.log"
+          catalog_exit=$?
+          mapfile -t retained < <(find test -maxdepth 1 -name '*_test.dart' -print | sort)
+          flutter test --no-pub "${retained[@]}" > "$VOCLE_FLUTTER_OUTPUT/retained.log" 2>&1
+          retained_exit=$?
+          echo "catalog_exit=$catalog_exit" >> "$GITHUB_OUTPUT"
+          echo "retained_exit=$retained_exit" >> "$GITHUB_OUTPUT"
+          exit 0
+      - id: report
+        name: Aggregate exact Flutter catalog and coverage gate
+        if: always()
+        env:
+          CATALOG_EXIT: ${{ steps.tests.outputs.catalog_exit }}
+          RETAINED_EXIT: ${{ steps.tests.outputs.retained_exit }}
+        run: |
+          set -euo pipefail
+          if [[ -s "$VOCLE_FLUTTER_OUTPUT/catalog.ndjson" ]]; then
+            if ! node tests/functional-regression/scripts/aggregate-flutter.mjs "$VOCLE_FLUTTER_OUTPUT/catalog.ndjson" "$VOCLE_FLUTTER_OUTPUT/report" > "$VOCLE_FLUTTER_OUTPUT/aggregation.log" 2>&1; then
+              cat "$VOCLE_FLUTTER_OUTPUT/aggregation.log" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+          if [[ ! -s "$VOCLE_FLUTTER_OUTPUT/report.json" ]]; then
+            echo '{"tier":"F","result":"ERROR","reason":"Flutter setup, execution or aggregation did not produce a valid report"}' > "$VOCLE_FLUTTER_OUTPUT/report.json"
+            echo '# Flutter infrastructure error' > "$VOCLE_FLUTTER_OUTPUT/report.md"
+            echo '<testsuite name="Vocle Flutter" tests="1" errors="1"><testcase name="infrastructure"><error message="missing report"/></testcase></testsuite>' > "$VOCLE_FLUTTER_OUTPUT/report.xml"
+          fi
+          cat "$VOCLE_FLUTTER_OUTPUT/report.md" >> "$GITHUB_STEP_SUMMARY"
+          node -e 'const r=require(process.argv[1]); if (!r.complete || r.implementedAndExecuted !== 32) process.exit(1)' "$VOCLE_FLUTTER_OUTPUT/report.json"
+          echo "catalog_exit=${CATALOG_EXIT:-missing}; retained_exit=${RETAINED_EXIT:-missing}" >> "$GITHUB_STEP_SUMMARY"
+      - id: upload
+        name: Upload Flutter reports and provenance
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vocle-flutter-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/vocle-flutter-output/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Enforce Flutter functional gate
+        if: always()
+        env:
+          CATALOG_EXIT: ${{ steps.tests.outputs.catalog_exit }}
+          RETAINED_EXIT: ${{ steps.tests.outputs.retained_exit }}
+          REPORT_RESULT: ${{ steps.report.outcome }}
+          ARTIFACT_RESULT: ${{ steps.upload.outcome }}
+        run: |
+          test "$REPORT_RESULT" = success
+          test "$ARTIFACT_RESULT" = success
+          test "$CATALOG_EXIT" = 0
+          test "$RETAINED_EXIT" = 0
+          node -e 'const r=require(process.argv[1]); if (!r.fullSuccess || !r.complete || r.counts.PASS !== 32) process.exit(1)' "$VOCLE_FLUTTER_OUTPUT/report.json"
+
   summary:
     name: Summary
-    needs: [detect, execute]
+    needs: [detect, execute, flutter]
     if: always()
     runs-on: ubuntu-24.04
     steps:
@@ -221,6 +324,8 @@ jobs:
           BASELINE_URL: ${{ needs.detect.outputs.baseline_url }}
           REPORT_RESULT: ${{ needs.execute.outputs.result }}
           VERIFIED_FULL: ${{ needs.execute.outputs.verified_backend_all }}
+          FLUTTER_CHANGED: ${{ needs.detect.outputs.flutter_changed }}
+          FLUTTER_RESULT: ${{ needs.flutter.result }}
         run: |
           {
             echo '## Vocle Functional Regression'
@@ -228,8 +333,10 @@ jobs:
             echo "- Scope: $SCOPE"
             echo "- Detection: $DETECT_RESULT; $REASON"
             echo "- Execution: $EXECUTE_RESULT; report $REPORT_RESULT; full-backend success $VERIFIED_FULL"
+            echo "- Flutter lane: $FLUTTER_RESULT; relevant client change $FLUTTER_CHANGED"
             if [ -n "$BASELINE_URL" ]; then echo "- Matching evidence: $BASELINE_URL"; fi
             if [ "$NEEDS_RUN" = true ]; then echo "- [Diagnostic artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"; fi
           } >> "$GITHUB_STEP_SUMMARY"
           test "$DETECT_RESULT" = success
           if [ "$NEEDS_RUN" = false ]; then test "$BASELINE_URL" != ''; else test "$EXECUTE_RESULT" = success; fi
+          if [ "$FLUTTER_CHANGED" = true ]; then test "$FLUTTER_RESULT" = success; fi

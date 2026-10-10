@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import { catalogCases, completeBackendSuccess, environmentContractVersion, selectBackend, statuses, upstreamRef, upstreamRepository, validateResultSet } from './ci-contracts.mjs';
 import { findBaseline, matchingArtifacts, successfulAttemptJobs, trustedSuccessfulRun, validSuccessEvidence } from './find-baseline.mjs';
-import { affectedModules } from './affected-modules.mjs';
+import { affectedModules, affectsFlutter } from './affected-modules.mjs';
 
 const targetSha = 'a'.repeat(40), harnessSha = 'b'.repeat(40), fingerprint = 'c'.repeat(64);
 const cases = await catalogCases();
@@ -29,6 +29,14 @@ test('fork changes select mapped modules; unknown shared changes select all', ()
   assert.deepEqual(affectedModules(['medcollab-backend/src/features/handoffs/handoff.controller.js']), ['NOT', 'SRCH', 'HOF', 'JRN']);
   assert.equal(affectedModules(['medcollab-backend/src/middleware/auth.js']).length, 19);
   assert.equal(affectedModules(['tests/functional-regression/suites/handoffs.mjs']).length, 19);
+});
+
+test('Flutter lane runs for client and reporter changes, and unknown diffs', () => {
+  assert(affectsFlutter(['medcollab-app/lib/app.dart']));
+  assert(affectsFlutter(['medcollab-app/test/functional_regression/runtime_recovery_test.dart']));
+  assert(affectsFlutter(['tests/functional-regression/scripts/aggregate-flutter.mjs']));
+  assert(affectsFlutter([]));
+  assert(!affectsFlutter(['medcollab-backend/src/features/handoffs/handoff.controller.js']));
 });
 
 test('full success requires exact IDs, status, source and cleanup', () => {
