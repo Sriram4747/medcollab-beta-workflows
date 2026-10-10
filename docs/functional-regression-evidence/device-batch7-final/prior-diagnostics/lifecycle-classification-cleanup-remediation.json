@@ -1,0 +1,10 @@
+{
+  "originalCleanup": "ERROR remains unchanged",
+  "identifiedOwner": "run-owned Flutter ADB logcat readers",
+  "readerProcessIds": [
+    37356,
+    39876
+  ],
+  "targetRemoved": true,
+  "remediatedAt": "2026-10-10T19:19:29.9823219Z"
+}

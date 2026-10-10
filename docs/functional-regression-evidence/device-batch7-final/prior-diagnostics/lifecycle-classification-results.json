@@ -1,0 +1,112 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-MED-08",
+    "FR-NAV-04"
+  ],
+  "planned": 8,
+  "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "harnessSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "executed": 2,
+  "counts": {
+    "PASS": 0,
+    "FAIL": 1,
+    "ERROR": 1,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-MED-08",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "media",
+      "runId": "4ff2f32d-0e0a-45b8-b3c6-72c2fa7dff5a",
+      "processId": 19636,
+      "durationMs": 22029,
+      "evidence": [
+        "Picker cancellation caused zero upload/message requests; exact PDF delivery and native external activity were verified."
+      ],
+      "error": "Expected: at least one matching candidate\n  Actual: _TextWidgetFinder:<Found 0 widgets with text \"synthetic-device.mp4\": []>\n   Which: means none were found but some were expected\n",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-NAV-04",
+      "status": "ERROR",
+      "executed": true,
+      "phase": "resume",
+      "runId": "4ff2f32d-0e0a-45b8-b3c6-72c2fa7dff5a",
+      "processId": 19939,
+      "durationMs": 13507,
+      "evidence": [
+        "Observed native lifecycle: inactive, hidden, paused, hidden, inactive",
+        "Native paused/resumed; transport recovered; exact peer ID persisted and displayed; draft retained."
+      ],
+      "error": "Flutter reported a subsequent failure after the case body; inspect phase diagnostics",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-MED-08",
+      "phase": "media",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-MED-08-media.log",
+      "completed": true,
+      "toolProcessId": 38484,
+      "consoleCleanup": {
+        "status": "PASS",
+        "captured": 4
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "2a540099ce8fc6eeda8c22fce65b653a12c4e9b68ee54acd4870ea0af017674a"
+    },
+    {
+      "id": "FR-NAV-04",
+      "phase": "resume",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-04-resume.log",
+      "completed": true,
+      "toolProcessId": 40448,
+      "consoleCleanup": {
+        "status": "PASS",
+        "captured": 4
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "602f94e1601d152cba635fbd9cf5ee7e5f09a8ea9d4c66222c4ee3d0e150a6b5"
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "ERROR",
+    "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-device-DtIII0\\medcollab-app'"
+  },
+  "infrastructureErrors": [],
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T19:18:09.449Z"
+}

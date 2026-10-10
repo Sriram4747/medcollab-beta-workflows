@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-10T19:34:20.2786613Z",
+  "ownedEmulatorSerial": "emulator-5580",
+  "ownedEmulatorStopped": true,
+  "remainingReadersForOwnedEmulator": [],
+  "adbInventory": [
+    "List of devices attached",
+    ""
+  ],
+  "originalUserAvdDataReused": false,
+  "originalUserSnapshotsWritten": false,
+  "note": "The final runner already verified APK/temporary checkout/backend/Mongo/control cleanup. This records shutdown of the separately owned headless emulator; the shared ADB server is preserved."
+}

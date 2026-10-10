@@ -1,0 +1,71 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-MED-08"
+  ],
+  "planned": 8,
+  "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "harnessSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "executed": 1,
+  "counts": {
+    "PASS": 0,
+    "FAIL": 1,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-MED-08",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "media",
+      "runId": "08b313b2-2836-4829-ba2f-680dbac3127d",
+      "processId": 19368,
+      "durationMs": 12447,
+      "evidence": [],
+      "error": "Expected: at least one matching candidate\n  Actual: _TextWidgetFinder:<Found 0 widgets with text \"synthetic-device.pdf\": []>\n   Which: means none were found but some were expected\nSelected PDF has a visible preview/file entry\n",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-MED-08",
+      "phase": "media",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-MED-08-media.log",
+      "completed": true,
+      "toolProcessId": 32796,
+      "consoleCleanup": {
+        "status": "PASS",
+        "captured": 4
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "d78a64e689f01523f659d04c499a787adea081f91c9e2313886e45846a6b3c1b"
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "ERROR",
+    "error": "EBUSY: resource busy or locked, rmdir 'C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-device-KlMASc\\medcollab-app'"
+  },
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T19:14:06.057Z"
+}

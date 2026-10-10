@@ -1,0 +1,94 @@
+{
+  "checkpoints": [
+    {
+      "phase": "handoff-seed",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 22093,
+      "status": "PASS",
+      "evidence": {
+        "loggedOut": true,
+        "handoffId": "6aca91f16f5a12032d540047"
+      }
+    }
+  ],
+  "controlActions": [
+    {
+      "action": "fixture",
+      "at": "2026-10-10T19:29:48.118Z"
+    },
+    {
+      "action": "handoff-state",
+      "at": "2026-10-10T19:29:49.230Z"
+    },
+    {
+      "action": "checkpoint",
+      "at": "2026-10-10T19:29:50.239Z"
+    },
+    {
+      "action": "fixture",
+      "at": "2026-10-10T19:30:51.512Z"
+    },
+    {
+      "action": "checkpoints",
+      "at": "2026-10-10T19:30:52.872Z"
+    },
+    {
+      "action": "notification-permission",
+      "at": "2026-10-10T19:30:54.538Z"
+    },
+    {
+      "action": "otp",
+      "at": "2026-10-10T19:30:58.579Z"
+    }
+  ],
+  "backendRequests": [
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    },
+    {
+      "method": "POST",
+      "pathname": "/api/auth/request-otp"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    },
+    {
+      "method": "POST",
+      "pathname": "/api/auth/verify-otp"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/spaces"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/handoffs"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/channels/dm"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    },
+    {
+      "method": "GET",
+      "pathname": "/api/notifications/unread-count"
+    }
+  ]
+}

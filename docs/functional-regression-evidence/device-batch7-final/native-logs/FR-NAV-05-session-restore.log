@@ -1,0 +1,236 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AppData\Local\Temp\vocle-device-yPXN37\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             29.8s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        2,514ms
+I/flutter (21359): The Dart VM service is listening on http://127.0.0.1:39769/[redacted-vm-service]/
+D/FLTFireContextHolder(21359): received application context.
+I/ocle.regression(21359): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21359): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21359): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21359): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(21359): Compat change id reported: 309578419; UID 10271; state: ENABLED
+D/CompatChangeReporter(21359): Compat change id reported: 349153669; UID 10271; state: ENABLED
+W/HWUI    (21359): Unknown dataspace 0
+I/WindowExtensionsImpl(21359): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](21359): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(21359): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:17644/[redacted-vm-service]/
+E/libEGL  (21359): called unimplemented OpenGL ES API
+VMServiceFlutterDriver: Isolate found with number: 4105566062933679
+I/ocle.regression(21359): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Isolate 4105566062933679 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/Choreographer(21359): Skipped 79 frames!  The application may be doing too much work on its main thread.
+I/flutter (21359): 00:00 +0: Native session restore and failed API logout prerequisite
+VMServiceFlutterDriver: Connected to Flutter application.
+I/HWUI    (21359): Using FreeType backend (prop=Auto)
+E/libEGL  (21359): called unimplemented OpenGL ES API
+D/WindowLayoutComponentImpl(21359): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@36d93c3
+I/Choreographer(21359): Skipped 54 frames!  The application may be doing too much work on its main thread.
+I/HWUI    (21359): Davey! duration=1049ms; Flags=1, FrameTimelineVsyncId=614931, IntendedVsync=28119990028692, Vsync=28120890028656, InputEventId=0, HandleInputStart=28120903911100, AnimationStart=28120904050300, PerformTraversalsStart=28120904085300, DrawStart=28120951062300, FrameDeadline=28120006695358, FrameStartTime=28120902212000, FrameInterval=16666666, WorkloadTarget=16666666, SyncQueued=28120952107200, SyncStart=28120952462500, IssueDrawCommandsStart=28120952615800, SwapBuffers=28120960881300, FrameCompleted=28121040194500, DequeueBufferDuration=2652800, QueueBufferDuration=553300, GpuCompleted=28121037418100, SwapBuffersCompleted=28121040194500, DisplayPresentTime=0, CommandSubmissionCompleted=28120960881300,
+D/ProfileInstaller(21359): Installing profile for com.vocle.regression
+D/InsetsController(21359): hide(ime())
+I/ImeTracker(21359): com.vocle.regression:62e75d9f: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/ocle.regression(21359): Verification of long androidx.profileinstaller.ProfileVerifier.getPackageLastUpdateTime(android.content.Context) took 115.216ms (286.42 bytecodes/s) (0B arena alloc)
+E/libEGL  (21359): called unimplemented OpenGL ES API
+W/ocle.regression(21359): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+I/ocle.regression(21359): Background concurrent mark compact GC freed 4308KB AllocSpace bytes, 57(1964KB) LOS objects, 49% free, 3547KB/7094KB, paused 2.282ms,57.736ms total 135.450ms
+I/ocle.regression(21359): Background young concurrent mark compact GC freed 1588KB AllocSpace bytes, 55(1980KB) LOS objects, 47% free, 3755KB/7094KB, paused 2.392ms,7.223ms total 40.566ms
+E/libEGL  (21359): called unimplemented OpenGL ES API
+I/flutter (21359): ══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+I/flutter (21359): The following assertion was thrown during performResize():
+I/flutter (21359): Vertical viewport was given unbounded height.
+I/flutter (21359): Viewports expand in the scrolling direction to fill their container. In this case, a vertical
+I/flutter (21359): viewport was given an unlimited amount of vertical space in which to expand. This situation
+I/flutter (21359): typically happens when a scrollable widget is nested inside another scrollable widget.
+I/flutter (21359): If this widget is always nested in a scrollable widget there is no need to use a viewport because
+I/flutter (21359): there will always be enough vertical space for the children. In this case, consider using a Column
+I/flutter (21359): or Wrap instead. Otherwise, consider using a CustomScrollView to concatenate arbitrary slivers into
+I/flutter (21359): a single scrollable.
+I/flutter (21359):
+I/flutter (21359): The relevant error-causing widget was:
+I/flutter (21359):   ListView
+I/flutter (21359):   ListView:file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/lib/shared/presentation/widgets/app_skeleton.dart:42:21
+I/flutter (21359):
+I/flutter (21359): When the exception was thrown, this was the stack:
+I/flutter (21359): #0      debugCheckHasBoundedAxis.<anonymous closure> (package:flutter/src/rendering/debug.dart:358:13)
+I/flutter (21359): #1      debugCheckHasBoundedAxis (package:flutter/src/rendering/debug.dart:417:4)
+I/flutter (21359): #2      RenderViewport.computeDryLayout (package:flutter/src/rendering/viewport.dart:1424:12)
+I/flutter (21359): #3      RenderBox.performResize (package:flutter/src/rendering/box.dart:2861:12)
+I/flutter (21359): #4      RenderObject.layout (package:flutter/src/rendering/object.dart:2694:9)
+I/flutter (21359): #5      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #6      RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #7      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #8      RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #9      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #10     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #11     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #12     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #13     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #14     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #15     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #16     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #17     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #18     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #19     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #20     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+I/flutter (21359): #21     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #22     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #23     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #24     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #25     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #26     RenderSliverMultiBoxAdaptor.insertAndLayoutChild (package:flutter/src/rendering/sliver_multi_box_adaptor.dart:514:13)
+I/flutter (21359): #27     RenderSliverList.performLayout.advance (package:flutter/src/rendering/sliver_list.dart:242:19)
+I/flutter (21359): #28     RenderSliverList.performLayout (package:flutter/src/rendering/sliver_list.dart:283:12)
+I/flutter (21359): #29     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #30     RenderSliverEdgeInsetsPadding.performLayout (package:flutter/src/rendering/sliver_padding.dart:133:12)
+I/flutter (21359): #31     RenderSliverPadding.performLayout (package:flutter/src/rendering/sliver_padding.dart:371:11)
+I/flutter (21359): #32     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #33     RenderViewportBase.layoutChildSequence (package:flutter/src/rendering/viewport.dart:608:13)
+I/flutter (21359): #34     RenderViewport._attemptLayout (package:flutter/src/rendering/viewport.dart:1576:12)
+I/flutter (21359): #35     RenderViewport.performLayout (package:flutter/src/rendering/viewport.dart:1467:20)
+I/flutter (21359): #36     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #37     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #38     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #39     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #40     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #41     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #42     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #43     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #44     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #45     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #46     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #47     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #48     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #49     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #50     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #51     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #52     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+I/flutter (21359): #53     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #54     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:243:12)
+I/flutter (21359): #55     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #56     MultiChildLayoutDelegate.layoutChild (package:flutter/src/rendering/custom_layout.dart:180:12)
+I/flutter (21359): #57     _ScaffoldLayout.performLayout (package:flutter/src/material/scaffold.dart:1118:7)
+I/flutter (21359): #58     MultiChildLayoutDelegate._callPerformLayout (package:flutter/src/rendering/custom_layout.dart:249:7)
+I/flutter (21359): #59     RenderCustomMultiChildLayoutBox.performLayout (package:flutter/src/rendering/custom_layout.dart:419:14)
+I/flutter (21359): #60     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #61     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #62     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #63     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #64     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+I/flutter (21359): #65     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #66     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #67     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #68     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #69     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #70     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #71     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #72     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #73     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #74     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #75     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #76     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #77     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #78     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #79     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #80     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #81     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #82     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #83     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #84     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #85     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3750:13)
+I/flutter (21359): #86     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #87     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #88     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #89     _RenderTheaterMixin.layoutChild (package:flutter/src/widgets/overlay.dart:1076:13)
+I/flutter (21359): #90     _RenderTheater.performLayout (package:flutter/src/widgets/overlay.dart:1422:9)
+I/flutter (21359): #91     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #92     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #93     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #94     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #95     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #96     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #97     RenderOffstage.performLayout (package:flutter/src/rendering/proxy_box.dart:3750:13)
+I/flutter (21359): #98     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #99     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #100    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #101    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #102    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #103    ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
+I/flutter (21359): #104    RenderStack._computeSize (package:flutter/src/rendering/stack.dart:646:43)
+I/flutter (21359): #105    RenderStack.performLayout (package:flutter/src/rendering/stack.dart:673:12)
+I/flutter (21359): #106    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #107    MultiChildLayoutDelegate.layoutChild (package:flutter/src/rendering/custom_layout.dart:180:12)
+I/flutter (21359): #108    _ScaffoldLayout.performLayout (package:flutter/src/material/scaffold.dart:1118:7)
+I/flutter (21359): #109    MultiChildLayoutDelegate._callPerformLayout (package:flutter/src/rendering/custom_layout.dart:249:7)
+I/flutter (21359): #110    RenderCustomMultiChildLayoutBox.performLayout (package:flutter/src/rendering/custom_layout.dart:419:14)
+I/flutter (21359): #111    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #112    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #113    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #114    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #115    _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+I/flutter (21359): #116    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #117    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #118    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #119    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #120    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #121    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #122    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #123    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #124    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #125    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+I/flutter (21359): #126    RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+I/flutter (21359): #127    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+E/libEGL  (21359): called unimplemented OpenGL ES API
+I/flutter (21359): 00:07 +0: Native session restore and failed API logout prerequisite [E]
+I/flutter (21359):   Test failed. See exception logs above.
+I/flutter (21359):   The test description was: Native session restore and failed API logout prerequisite
+I/flutter (21359):
+I/flutter (21359): 00:07 +0 -1: (tearDownAll)
+W/WindowOnBackDispatcher(21359): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(21359): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+Failure Details:
+Failure in method: Native session restore and failed API logout prerequisite
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following TestFailure was thrown running a test:
+Application framework exception: Multiple exceptions (15) were
+detected during the running of the current test, and at least one
+was unexpected.
+
+When the exception was thrown, this was the stack:
+#0      checkFramework (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/device_harness.dart:164:5)
+#1      until (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/device_harness.dart:155:5)
+<asynchronous suspension>
+#2      launch (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/device_harness.dart:141:3)
+<asynchronous suspension>
+#3      main.<anonymous closure> (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/lifecycle_test.dart:86:7)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+<asynchronous suspension>
+
+The test description was:
+  Native session restore and failed API logout prerequisite
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+Leaving the application running.

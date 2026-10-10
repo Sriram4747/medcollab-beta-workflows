@@ -1,0 +1,234 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AppData\Local\Temp\vocle-device-yPXN37\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Running Gradle task 'assembleDebug'...                             55.3s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,082ms
+D/FLTFireContextHolder(20190): received application context.
+I/ocle.regression(20190): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(20190): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(20190): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(20190): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(20190): Compat change id reported: 309578419; UID 10267; state: ENABLED
+D/CompatChangeReporter(20190): Compat change id reported: 349153669; UID 10267; state: ENABLED
+W/HWUI    (20190): Unknown dataspace 0
+I/WindowExtensionsImpl(20190): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](20190): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(20190): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6468209
+E/libEGL  (20190): called unimplemented OpenGL ES API
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:49740/[redacted-vm-service]/
+VMServiceFlutterDriver: Isolate found with number: 8421321432424207
+VMServiceFlutterDriver: Isolate 8421321432424207 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/Choreographer(20190): Skipped 41 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(20190): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@39a4c0e, of which baseContext=android.app.ContextImpl@657cee6
+I/HWUI    (20190): Using FreeType backend (prop=Auto)
+I/ocle.regression(20190): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+I/flutter (20190): 00:00 +0: FR-MED-08: Android media
+VMServiceFlutterDriver: Connected to Flutter application.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+V/Configuration(20190): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(20190): Updating configuration, locales updated from [en] to [en_US]
+D/ProfileInstaller(20190): Installing profile for com.vocle.regression
+D/InsetsController(20190): hide(ime())
+I/ImeTracker(20190): com.vocle.regression:ff3bffb7: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/libEGL  (20190): called unimplemented OpenGL ES API
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/ocle.regression(20190): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+I/ocle.regression(20190): Background young concurrent mark compact GC freed 1644KB AllocSpace bytes, 58(2088KB) LOS objects, 50% free, 3939KB/7966KB, paused 1.309ms,6.865ms total 39.521ms
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+I/ocle.regression(20190): Background young concurrent mark compact GC freed 1633KB AllocSpace bytes, 60(2160KB) LOS objects, 51% free, 3895KB/7982KB, paused 2.588ms,6.282ms total 34.541ms
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+I/ocle.regression(20190): Background concurrent mark compact GC freed 1612KB AllocSpace bytes, 64(2304KB) LOS objects, 49% free, 3871KB/7742KB, paused 7.841ms,2.146ms total 50.540ms
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+D/CompatChangeReporter(20190): Compat change id reported: 312399441; UID 10267; state: ENABLED
+D/VRI[MainActivity](20190): visibilityChanged oldVisibility=true newVisibility=false
+D/VRI[MainActivity](20190): visibilityChanged oldVisibility=false newVisibility=true
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+D/InsetsController(20190): hide(ime())
+I/ImeTracker(20190): com.vocle.regression:bc31ccfb: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+E/libEGL  (20190): called unimplemented OpenGL ES API
+I/ocle.regression(20190): Background concurrent mark compact GC freed 1822KB AllocSpace bytes, 57(2052KB) LOS objects, 49% free, 3707KB/7414KB, paused 5.589ms,16.232ms total 69.096ms
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (20190): called unimplemented OpenGL ES API
+E/libEGL  (20190): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(20190): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(20190): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/flutter (20190): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (20190): The following PlatformException was thrown running a test:
+I/flutter (20190): PlatformException(camera_access_denied, Synthetic permission denial, null, null)
+I/flutter (20190):
+I/flutter (20190): When the exception was thrown, this was the stack:
+I/flutter (20190): #0      DeviceImagePicker._next (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/provider_inputs.dart:104:7)
+I/flutter (20190): #1      DeviceImagePicker.getImageFromSource (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/provider_inputs.dart:120:7)
+I/flutter (20190): #2      ImagePicker.pickImage (package:image_picker/image_picker.dart:89:21)
+I/flutter (20190): #3      MediaPickerService.captureFromCamera (package:medcollab_app/features/media/data/services/media_picker_service.dart:28:37)
+I/flutter (20190): #4      _ChannelChatPageState._sendAttachment (package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart:431:30)
+I/flutter (20190): #5      _ChannelChatPageState.build.<anonymous closure>.<anonymous closure>.<anonymous closure> (package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart:1010:47)
+I/flutter (20190): #6      MessageComposer._showAttachMenu.<anonymous closure>.<anonymous closure> (package:medcollab_app/features/messages/presentation/widgets/message_widgets.dart:67:33)
+I/flutter (20190): #7      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1185:21)
+I/flutter (20190): #8      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:357:24)
+I/flutter (20190): #9      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:653:11)
+I/flutter (20190): #10     BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:307:5)
+I/flutter (20190): #11     BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:277:7)
+I/flutter (20190): #12     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+I/flutter (20190): #13     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:534:20)
+I/flutter (20190): #14     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:499:22)
+I/flutter (20190): #15     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:460:11)
+I/flutter (20190): #16     LiveTestWidgetsFlutterBinding.dispatchEvent (package:flutter_test/src/binding.dart:2046:15)
+I/flutter (20190): #17     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+I/flutter (20190): #18     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+I/flutter (20190): #19     LiveTestWidgetsFlutterBinding.handlePointerEvent (package:flutter_test/src/binding.dart:2018:15)
+I/flutter (20190): #20     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+I/flutter (20190): #21     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+I/flutter (20190): #22     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+I/flutter (20190): #23     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:870:15)
+I/flutter (20190): #26     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+I/flutter (20190): #27     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:869:27)
+I/flutter (20190): #28     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+I/flutter (20190): #31     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+I/flutter (20190): #32     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+I/flutter (20190): #33     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1113:21)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #34     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #35     attach (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/media_test.dart:33:3)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #36     main.<anonymous closure> (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/media_test.dart:160:5)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #37     deviceCase.<anonymous closure> (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/device_harness.dart:220:7)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #38     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #39     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): #40     TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+I/flutter (20190): <asynchronous suspension>
+I/flutter (20190): (elided 4 frames from dart:async)
+I/flutter (20190):
+I/flutter (20190): The test description was:
+I/flutter (20190):   FR-MED-08: Android media
+I/flutter (20190): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (20190): 00:27 +0: FR-MED-08: Android media [E]
+I/flutter (20190):   Test failed. See exception logs above.
+I/flutter (20190):   The test description was: FR-MED-08: Android media
+I/flutter (20190):
+I/flutter (20190): VOCLE_DEVICE_RECORD {"id":"FR-MED-08","status":"FAIL","executed":true,"phase":"media","runId":"0855a873-75d8-470b-9557-9422f8400bee","processId":20190,"durationMs":26831,"evidence":["Picker cancellation caused zero upload/message requests; exact PDF delivery and native external activity were verified."],"error":"'package:flutter_test/src/binding.dart': Failed assertion: line 2063 pos 12: 'inTest': is not true."}
+I/flutter (20190): 00:27 +0 -1: (tearDownAll)
+Failure Details:
+Failure in method: FR-MED-08: Android media
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following PlatformException was thrown running a test:
+PlatformException(camera_access_denied, Synthetic permission
+denial, null, null)
+
+When the exception was thrown, this was the stack:
+#0      DeviceImagePicker._next (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/provider_inputs.dart:104:7)
+#1      DeviceImagePicker.getImageFromSource (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/provider_inputs.dart:120:7)
+#2      ImagePicker.pickImage (package:image_picker/image_picker.dart:89:21)
+#3      MediaPickerService.captureFromCamera (package:medcollab_app/features/media/data/services/media_picker_service.dart:28:37)
+#4      _ChannelChatPageState._sendAttachment (package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart:431:30)
+#5      _ChannelChatPageState.build.<anonymous closure>.<anonymous closure>.<anonymous closure> (package:medcollab_app/features/messages/presentation/pages/channel_chat_page.dart:1010:47)
+#6      MessageComposer._showAttachMenu.<anonymous closure>.<anonymous closure> (package:medcollab_app/features/messages/presentation/widgets/message_widgets.dart:67:33)
+#7      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1185:21)
+#8      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:357:24)
+#9      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:653:11)
+#10     BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:307:5)
+#11     BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:277:7)
+#12     GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)
+#13     GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:534:20)
+#14     GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:499:22)
+#15     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:460:11)
+#16     LiveTestWidgetsFlutterBinding.dispatchEvent (package:flutter_test/src/binding.dart:2046:15)
+#17     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:437:7)
+#18     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:394:5)
+#19     LiveTestWidgetsFlutterBinding.handlePointerEvent (package:flutter_test/src/binding.dart:2018:15)
+#20     TestWidgetsFlutterBinding.handlePointerEventForSource.<anonymous closure> (package:flutter_test/src/binding.dart:678:42)
+#21     TestWidgetsFlutterBinding.withPointerEventSource (package:flutter_test/src/binding.dart:688:11)
+#22     TestWidgetsFlutterBinding.handlePointerEventForSource (package:flutter_test/src/binding.dart:678:5)
+#23     WidgetTester.sendEventToBinding.<anonymous closure> (package:flutter_test/src/widget_tester.dart:870:15)
+#26     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#27     WidgetTester.sendEventToBinding (package:flutter_test/src/widget_tester.dart:869:27)
+#28     TestGesture.up.<anonymous closure> (package:flutter_test/src/test_pointer.dart:538:26)
+#31     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#32     TestGesture.up (package:flutter_test/src/test_pointer.dart:531:27)
+#33     WidgetController.tapAt.<anonymous closure> (package:flutter_test/src/controller.dart:1113:21)
+<asynchronous suspension>
+#34     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#35     attach (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/media_test.dart:33:3)
+<asynchronous suspension>
+#36     main.<anonymous closure> (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/media_test.dart:160:5)
+<asynchronous suspension>
+#37     deviceCase.<anonymous closure> (file:///C:/Users/delll/AppData/Local/Temp/vocle-device-yPXN37/medcollab-app/integration_test/functional_regression/support/device_harness.dart:220:7)
+<asynchronous suspension>
+#38     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:193:15)
+<asynchronous suspension>
+#39     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+<asynchronous suspension>
+#40     TestWidgetsFlutterBinding._createTestCompletionHandler.<anonymous closure> (package:flutter_test/src/binding.dart:814:12)
+<asynchronous suspension>
+(elided 4 frames from dart:async)
+
+The test description was:
+  FR-MED-08: Android media
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+I/flutter (20190): 00:27 +1 -1: Some tests failed.
+Leaving the application running.

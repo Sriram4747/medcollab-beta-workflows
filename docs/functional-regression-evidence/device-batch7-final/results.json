@@ -1,0 +1,444 @@
+{
+  "tier": "D",
+  "platform": "Android emulator",
+  "selected": [
+    "FR-MED-08",
+    "FR-PUSH-05",
+    "FR-PUSH-06",
+    "FR-NAV-04",
+    "FR-NAV-05",
+    "FR-LINK-04",
+    "FR-JRN-05",
+    "FR-JRN-06"
+  ],
+  "planned": 8,
+  "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "harnessSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+  "executed": 8,
+  "counts": {
+    "PASS": 1,
+    "FAIL": 7,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-MED-08",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "media",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 20190,
+      "durationMs": 26831,
+      "evidence": [
+        "Picker cancellation caused zero upload/message requests; exact PDF delivery and native external activity were verified."
+      ],
+      "error": "'package:flutter_test/src/binding.dart': Failed assertion: line 2063 pos 12: 'inTest': is not true.",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-PUSH-05",
+      "status": "PASS",
+      "executed": true,
+      "phase": "notification-grouping",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 20510,
+      "durationMs": 11906,
+      "evidence": [
+        "Native shade has one tag per channel; grouped lines persist; injected tap routes exactly; native-token reply stores one backend message."
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-PUSH-06",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "notification-token",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 20730,
+      "durationMs": 16773,
+      "evidence": [
+        "Native permission deny/grant plus injected token inputs; denial remains usable; registration, refresh, logout removal and relogin verified in disposable DB."
+      ],
+      "error": "Flutter reported a subsequent failure after the case body; inspect phase diagnostics",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-NAV-04",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "resume",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 20954,
+      "durationMs": 14837,
+      "evidence": [
+        "Observed native lifecycle: inactive, hidden, paused, hidden, inactive",
+        "Native paused/resumed; transport recovered; exact peer ID persisted and displayed; draft retained."
+      ],
+      "error": "Flutter reported a subsequent failure after the case body; inspect phase diagnostics",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-NAV-05",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-NAV-05",
+          "phase": "session-seed",
+          "exitCode": 0,
+          "signal": null,
+          "log": "diagnostics\\FR-NAV-05-session-seed.log",
+          "completed": true,
+          "toolProcessId": 34260,
+          "ownedResourceCleanup": {
+            "status": "PASS",
+            "captured": 5,
+            "logcatReaders": 1
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": false,
+          "androidApkSha256": "0019f84b01452411977a08d1ea637222ac0cb8b0865abdbf48125a2bed78ad6f"
+        },
+        {
+          "id": "FR-NAV-05",
+          "phase": "session-restore",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-NAV-05-session-restore.log",
+          "completed": true,
+          "toolProcessId": 39760,
+          "ownedResourceCleanup": {
+            "status": "PASS",
+            "captured": 5,
+            "logcatReaders": 1
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": true,
+          "androidApkSha256": "b7e993a102b341bbb3b75c33c1ef352078d7259ee2529eb19fd81a7aa1063fab"
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-LINK-04",
+      "status": "FAIL",
+      "executed": true,
+      "phase": "invites",
+      "runId": "0855a873-75d8-470b-9557-9422f8400bee",
+      "processId": 21531,
+      "durationMs": 27401,
+      "evidence": [],
+      "error": "Expected: true\n  Actual: <false>\njoined response opens its actual space\n",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-JRN-05",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-JRN-05",
+          "phase": "chat-journey",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-JRN-05-chat-journey.log",
+          "completed": true,
+          "toolProcessId": 33416,
+          "ownedResourceCleanup": {
+            "status": "PASS",
+            "captured": 5,
+            "logcatReaders": 1
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": true,
+          "androidApkSha256": "df8809ecdf7fdf5df1ff6a577fef292e9c963230e9d753e97a26cc15bee4c8b9"
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "id": "FR-JRN-06",
+      "status": "FAIL",
+      "executed": true,
+      "error": "Device phase ended without a complete catalog result; inspect phase diagnostics",
+      "phaseEvidence": [
+        {
+          "id": "FR-JRN-06",
+          "phase": "handoff-seed",
+          "exitCode": 0,
+          "signal": null,
+          "log": "diagnostics\\FR-JRN-06-handoff-seed.log",
+          "completed": true,
+          "toolProcessId": 39968,
+          "ownedResourceCleanup": {
+            "status": "PASS",
+            "captured": 5,
+            "logcatReaders": 1
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": false,
+          "androidApkSha256": "9deef168b42402e1cd2f6809a0609f6cbd0c5e74ed8a9db04457bef716d70f09"
+        },
+        {
+          "id": "FR-JRN-06",
+          "phase": "handoff-cold",
+          "exitCode": 1,
+          "signal": null,
+          "log": "diagnostics\\FR-JRN-06-handoff-cold.log",
+          "completed": true,
+          "toolProcessId": 6852,
+          "ownedResourceCleanup": {
+            "status": "PASS",
+            "captured": 5,
+            "logcatReaders": 1
+          },
+          "infrastructureFailure": false,
+          "assertionFailure": true,
+          "androidApkSha256": "9224ca882698ea64936a9e9313eabf6c2a0eb86d973480ced0f29d059979e413"
+        }
+      ],
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "controlServerStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "phases": [
+    {
+      "id": "FR-MED-08",
+      "phase": "media",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-MED-08-media.log",
+      "completed": true,
+      "toolProcessId": 39584,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "80f854771454a58ba8d5ccfd8acb0ba83da88d6832ea93f4b2e12077a283b10e"
+    },
+    {
+      "id": "FR-PUSH-05",
+      "phase": "notification-grouping",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-PUSH-05-notification-grouping.log",
+      "completed": true,
+      "toolProcessId": 25488,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "4090322ac55c3c233fa6b99d916212d17f9357608e736bed855b00a78bf03958"
+    },
+    {
+      "id": "FR-PUSH-06",
+      "phase": "notification-token",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-PUSH-06-notification-token.log",
+      "completed": true,
+      "toolProcessId": 37336,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "dcb4b9b19e3b0d00df293b2e553c2983b98a3834f2bf1ca1f439b40841d5f4e3"
+    },
+    {
+      "id": "FR-NAV-04",
+      "phase": "resume",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-04-resume.log",
+      "completed": true,
+      "toolProcessId": 39600,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "1656b1adeebf3d079bea3de53ad70935e528c62ef6e216f142a03f226176cba1"
+    },
+    {
+      "id": "FR-NAV-05",
+      "phase": "session-seed",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-05-session-seed.log",
+      "completed": true,
+      "toolProcessId": 34260,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "0019f84b01452411977a08d1ea637222ac0cb8b0865abdbf48125a2bed78ad6f"
+    },
+    {
+      "id": "FR-NAV-05",
+      "phase": "session-restore",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-NAV-05-session-restore.log",
+      "completed": true,
+      "toolProcessId": 39760,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "b7e993a102b341bbb3b75c33c1ef352078d7259ee2529eb19fd81a7aa1063fab"
+    },
+    {
+      "id": "FR-LINK-04",
+      "phase": "invites",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-LINK-04-invites.log",
+      "completed": true,
+      "toolProcessId": 37192,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "dd8bb81575edcd5e8e4aaf1fb640ca748e5c19a8af909a8dd79a9c99b1ffc403"
+    },
+    {
+      "id": "FR-JRN-05",
+      "phase": "chat-journey",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-05-chat-journey.log",
+      "completed": true,
+      "toolProcessId": 33416,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "df8809ecdf7fdf5df1ff6a577fef292e9c963230e9d753e97a26cc15bee4c8b9"
+    },
+    {
+      "id": "FR-JRN-06",
+      "phase": "handoff-seed",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-06-handoff-seed.log",
+      "completed": true,
+      "toolProcessId": 39968,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": false,
+      "androidApkSha256": "9deef168b42402e1cd2f6809a0609f6cbd0c5e74ed8a9db04457bef716d70f09"
+    },
+    {
+      "id": "FR-JRN-06",
+      "phase": "handoff-cold",
+      "exitCode": 1,
+      "signal": null,
+      "log": "diagnostics\\FR-JRN-06-handoff-cold.log",
+      "completed": true,
+      "toolProcessId": 6852,
+      "ownedResourceCleanup": {
+        "status": "PASS",
+        "captured": 5,
+        "logcatReaders": 1
+      },
+      "infrastructureFailure": false,
+      "assertionFailure": true,
+      "androidApkSha256": "9224ca882698ea64936a9e9313eabf6c2a0eb86d973480ced0f29d059979e413"
+    }
+  ],
+  "provenance": {
+    "status": "PASS",
+    "sourceSha": "7d41211d9c198a1b7cb4d90a52e18a8f537607d0",
+    "checkedFiles": 254
+  },
+  "cleanup": {
+    "status": "PASS",
+    "dedicatedTestAppRemoved": true,
+    "isolatedTargetRemoved": true
+  },
+  "infrastructureErrors": [],
+  "fullSuccess": false,
+  "providerDeliveryProven": false,
+  "iosImplemented": false,
+  "transportOutage": "test-owned local gateway; no claim of carrier/radio delivery",
+  "generatedAt": "2026-10-10T19:31:09.610Z"
+}

@@ -125,6 +125,14 @@ node tests/functional-regression/scripts/validate-catalog.mjs
 Consult the implementation progress document for **actual** run results. Presence
 of a test file or a successful build does not establish a passing device case.
 
+The final 11 October 2026 Android run attempted all eight IDs: **PASS 1 / FAIL 7 /
+ERROR 0**, with source provenance and automatic cleanup PASS. Structured reports,
+redacted native logs and failure triage are in
+`docs/functional-regression-evidence/device-batch7-final/`. Release success is
+false. Earlier development cleanup errors are preserved; owned logcat cleanup
+was verified in every final native phase. The session-owned headless emulator was
+stopped after execution.
+
 ## Current platform limitations
 
 Android 36.1 uses `topResumedActivity=` and `ResumedActivity:` in its activity

@@ -1,0 +1,103 @@
+{
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38079444241",
+  "runNumber": 15,
+  "sourceRepository": "Sriram4747/medcollab-beta-workflows",
+  "sourceSha": "7bf088844d4a2c3b8d567cd91958639815999342",
+  "harnessSha": "7bf088844d4a2c3b8d567cd91958639815999342",
+  "event": "push",
+  "sourceMode": "fork-change",
+  "scope": "backend-p0",
+  "conclusion": "failure",
+  "evidenceType": "Case counts and IDs directly read from authenticated rendered run #15 job summaries; corroborated by public REST job/artifact metadata. Archive contents were not downloaded.",
+  "backend": {
+    "implemented": 147,
+    "selected": 147,
+    "executed": 147,
+    "counts": {
+      "PASS": 118,
+      "FAIL": 13,
+      "ERROR": 0,
+      "BLOCKED": 0,
+      "NEEDS_DECISION": 16,
+      "SKIP": 0
+    },
+    "provenance": "PASS",
+    "cleanup": "PASS",
+    "backendAllSuccess": false,
+    "failedIds": [
+      "FR-SPC-06",
+      "FR-CH-02",
+      "FR-MSG-01",
+      "FR-HOF-05",
+      "FR-MED-01",
+      "FR-MED-02",
+      "FR-MED-05",
+      "FR-NOT-01",
+      "FR-NOT-02",
+      "FR-NOT-04",
+      "FR-RT-07",
+      "FR-SUP-03",
+      "FR-JRN-04"
+    ]
+  },
+  "flutter": {
+    "implemented": 32,
+    "executed": 32,
+    "counts": {
+      "PASS": 15,
+      "FAIL": 14,
+      "ERROR": 0,
+      "BLOCKED": 0,
+      "NEEDS_DECISION": 3,
+      "SKIP": 0
+    },
+    "complete": true,
+    "fullSuccess": false,
+    "catalogExit": 1,
+    "retainedExit": 0,
+    "failedIds": [
+      "FR-HOF-13",
+      "FR-HOME-02",
+      "FR-LINK-03",
+      "FR-NAV-01",
+      "FR-NAV-02",
+      "FR-NAV-03",
+      "FR-REQ-06",
+      "FR-RT-04",
+      "FR-RT-06",
+      "FR-RUN-03",
+      "FR-SAVE-02",
+      "FR-SOC-06",
+      "FR-SRCH-04",
+      "FR-SUP-04"
+    ],
+    "decisionIds": [
+      "FR-HOF-12",
+      "FR-LINK-02",
+      "FR-OFF-06"
+    ]
+  },
+  "device": {
+    "hostedLaneExists": false,
+    "hostedExecuted": 0
+  },
+  "successMarkerCreated": false,
+  "artifacts": [
+    {
+      "id": 11680175958,
+      "name": "vocle-flutter-report-38079444241-1",
+      "digest": "sha256:a8664ad7af70876cee78adfefa25f6006198d32a1e5f93ad3a44c5cc622a6bf8"
+    },
+    {
+      "id": 11679668867,
+      "name": "vocle-functional-report-38079444241-1",
+      "digest": "sha256:32ad12b6969fd74c4af120b1233ac8a9023c708a12fe74fe97b82242347c3552"
+    }
+  ],
+  "limitations": [
+    "The configured backend-p0 scope selected all 147 through affected/shared-code selection, but this remains fork-change validation and does not establish upstream or backend-all success.",
+    "Archive download in the previous checkpoint timed out. This checkpoint claims rendered summary/metadata inspection, not ZIP contents.",
+    "iOS has no implemented or executed coverage."
+  ],
+  "observedAt": "2026-10-10T19:28:34.0783567Z"
+}

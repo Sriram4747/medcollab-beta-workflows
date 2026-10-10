@@ -1,0 +1,177 @@
+Running Gradle task 'assembleDebug'...
+Warning: The plugin file_picker requires Android SDK version 36 or higher.
+For more information about build configuration, see https://flutter.dev/to/review-gradle-config.
+Your project is configured to compile against Android SDK 35, but the following plugin(s) require to be compiled against a higher Android SDK version:
+- file_picker compiles against Android SDK 36
+Fix this issue by compiling against the highest Android SDK version (they are backward compatible).
+Add the following to C:\Users\delll\AppData\Local\Temp\vocle-device-yPXN37\medcollab-app\android\app\build.gradle.kts:
+
+    android {
+        compileSdk = 36
+        ...
+    }
+
+Running Gradle task 'assembleDebug'...                             33.3s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,199ms
+I/flutter (21830): The Dart VM service is listening on http://127.0.0.1:41085/[redacted-vm-service]/
+D/FLTFireContextHolder(21830): received application context.
+I/ocle.regression(21830): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21830): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21830): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+I/ocle.regression(21830): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=35) using reflection: allowed
+D/CompatChangeReporter(21830): Compat change id reported: 309578419; UID 10273; state: ENABLED
+D/CompatChangeReporter(21830): Compat change id reported: 349153669; UID 10273; state: ENABLED
+W/HWUI    (21830): Unknown dataspace 0
+I/WindowExtensionsImpl(21830): Initializing Window Extensions, vendor API level=9, activity embedding enabled=true
+D/VRI[MainActivity](21830): WindowInsets changed: 1344x2992 statusBars:[0,159,0,0] navigationBars:[0,0,0,72] mandatorySystemGestures:[0,195,0,96]
+D/WindowOnBackDispatcher(21830): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:7049/[redacted-vm-service]/
+E/libEGL  (21830): called unimplemented OpenGL ES API
+VMServiceFlutterDriver: Isolate found with number: 8948777575047367
+I/ocle.regression(21830): Compiler allocated 5087KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Isolate 8948777575047367 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/Choreographer(21830): Skipped 56 frames!  The application may be doing too much work on its main thread.
+I/flutter (21830): 00:00 +0: FR-JRN-05: Android chat-journey
+I/HWUI    (21830): Using FreeType backend (prop=Auto)
+VMServiceFlutterDriver: Connected to Flutter application.
+D/WindowLayoutComponentImpl(21830): Register WindowLayoutInfoListener on Context=com.example.medcollab_app.MainActivity@6468209, of which baseContext=android.app.ContextImpl@f41f372
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/Choreographer(21830): Skipped 64 frames!  The application may be doing too much work on its main thread.
+D/ProfileInstaller(21830): Installing profile for com.vocle.regression
+V/Configuration(21830): Updating configuration, locales updated from [en_US] to [en]
+V/Configuration(21830): Updating configuration, locales updated from [en] to [en_US]
+D/InsetsController(21830): hide(ime())
+I/ImeTracker(21830): com.vocle.regression:e5db42ad: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+W/ocle.regression(21830): userfaultfd: MOVE ioctl seems unsupported: Try again
+I/ocle.regression(21830): Background concurrent mark compact GC freed 2948KB AllocSpace bytes, 6(224KB) LOS objects, 49% free, 3447KB/6894KB, paused 4.986ms,64.046ms total 167.733ms
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/ocle.regression(21830): Background concurrent mark compact GC freed 1028KB AllocSpace bytes, 45(1684KB) LOS objects, 49% free, 3691KB/7382KB, paused 1.643ms,13.477ms total 87.852ms
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1588KB AllocSpace bytes, 58(2088KB) LOS objects, 47% free, 3839KB/7382KB, paused 1.211ms,6.510ms total 32.761ms
+E/libEGL  (21830): called unimplemented OpenGL ES API
+E/libEGL  (21830): called unimplemented OpenGL ES API
+W/WindowOnBackDispatcher(21830): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(21830): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/ImeTracker(21830): com.vocle.regression:25a36dc7: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21830): show(ime())
+D/InsetsController(21830): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker(21830): com.vocle.regression:45f76d6d: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21830): show(ime())
+I/ImeTracker(21830): com.vocle.regression:45f76d6d: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/ocle.regression(21830): Background concurrent mark compact GC freed 1673KB AllocSpace bytes, 58(2088KB) LOS objects, 49% free, 4259KB/8519KB, paused 1.316ms,3.030ms total 220.060ms
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/AssistStructure(21830): Flattened final assist data: 512 bytes, containing 1 windows, 3 views
+D/InputConnectionAdaptor(21830): The input method toggled cursor monitoring on
+E/libEGL  (21830): called unimplemented OpenGL ES API
+W/ocle.regression(21830): Suspending all threads took: 80.231ms
+D/WindowOnBackDispatcher(21830): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@2b7b763
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1772KB AllocSpace bytes, 60(2192KB) LOS objects, 51% free, 4144KB/8519KB, paused 142.562ms,25.878ms total 384.521ms
+D/VRI[MainActivity](21830): WindowInsets changed: ime:[0,0,0,1008]
+W/InteractionJankMonitor(21830): Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.vocle.regression
+I/ImeTracker(21830): com.vocle.regression:25a36dc7: onShown
+I/ocle.regression(21830): Background concurrent mark compact GC freed 2033KB AllocSpace bytes, 67(2412KB) LOS objects, 49% free, 3915KB/7830KB, paused 1.393ms,1.977ms total 126.862ms
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1644KB AllocSpace bytes, 56(2016KB) LOS objects, 49% free, 3991KB/7830KB, paused 2.469ms,35.927ms total 580.310ms
+I/ImeTracker(21830): system_server:f53597a5: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/WindowOnBackDispatcher(21830): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+I/AutofillManager(21830): onInvisibleForAutofill(): expiringResponse
+W/ocle.regression(21830): Suspending all threads took: 8.767ms
+I/Choreographer(21830): Skipped 52 frames!  The application may be doing too much work on its main thread.
+D/VRI[MainActivity](21830): WindowInsets changed: ime:null
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 472KB AllocSpace bytes, 19(684KB) LOS objects, 42% free, 4367KB/7655KB, paused 6.674ms,20.350ms total 681.445ms
+W/ImeBackCallbackProxy(21830): Ime callback not found. Ignoring unregisterReceivedCallback. callbackId: 50586160 remaining callbacks: 0
+D/InsetsController(21830): hide(ime())
+D/InsetsController(21830): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher(21830): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@2b7b763
+E/libEGL  (21830): called unimplemented OpenGL ES API
+D/WindowOnBackDispatcher(21830): setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda12@6283710
+I/ImeTracker(21830): system_server:82b56ea5: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1660KB AllocSpace bytes, 54(1976KB) LOS objects, 46% free, 4075KB/7630KB, paused 3.554ms,5.011ms total 33.019ms
+I/ImeTracker(21830): com.vocle.regression:867953eb: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+D/InsetsController(21830): hide(ime())
+I/ImeTracker(21830): com.vocle.regression:867953eb: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1592KB AllocSpace bytes, 56(2016KB) LOS objects, 49% free, 3895KB/7774KB, paused 1.645ms,7.748ms total 28.800ms
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/ocle.regression(21830): Background concurrent mark compact GC freed 1633KB AllocSpace bytes, 67(2412KB) LOS objects, 49% free, 3939KB/7878KB, paused 1.666ms,10.486ms total 70.971ms
+I/ocle.regression(21830): Background concurrent mark compact GC freed 1565KB AllocSpace bytes, 64(2304KB) LOS objects, 49% free, 4119KB/8239KB, paused 1.289ms,6.256ms total 61.795ms
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1860KB AllocSpace bytes, 64(2336KB) LOS objects, 52% free, 3947KB/8239KB, paused 1.812ms,6.268ms total 35.202ms
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1580KB AllocSpace bytes, 58(2088KB) LOS objects, 46% free, 4071KB/7654KB, paused 1.645ms,5.753ms total 29.369ms
+W/WindowOnBackDispatcher(21830): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(21830): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+E/libEGL  (21830): called unimplemented OpenGL ES API
+E/libEGL  (21830): call to OpenGL ES API with no current context (logged once per thread)
+W/WindowOnBackDispatcher(21830): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(21830): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/ocle.regression(21830): Background concurrent mark compact GC freed 1820KB AllocSpace bytes, 75(2700KB) LOS objects, 49% free, 3843KB/7686KB, paused 2.189ms,5.167ms total 56.309ms
+I/flutter (21830): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (21830): The following StateError was thrown running a test:
+I/flutter (21830): Bad state: Cannot emit new states after calling close
+I/flutter (21830):
+I/flutter (21830): When the exception was thrown, this was the stack:
+I/flutter (21830): #0      BlocBase.emit (package:bloc/src/bloc_base.dart:100:9)
+I/flutter (21830): #1      ChannelChatCubit.loadMessages (package:medcollab_app/features/messages/presentation/cubit/channel_chat_cubit.dart:106:7)
+I/flutter (21830): <asynchronous suspension>
+I/flutter (21830):
+I/flutter (21830): The test description was:
+I/flutter (21830):   FR-JRN-05: Android chat-journey
+I/flutter (21830): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (21830): 00:22 +0: FR-JRN-05: Android chat-journey [E]
+I/flutter (21830):   Test failed. See exception logs above.
+I/flutter (21830):   The test description was: FR-JRN-05: Android chat-journey
+I/flutter (21830):
+I/flutter (21830):   'package:flutter_test/src/binding.dart': Failed assertion: line 2147 pos 12: '!_expectingFrame': is not true.
+I/ocle.regression(21830): Background young concurrent mark compact GC freed 1608KB AllocSpace bytes, 60(2160KB) LOS objects, 46% free, 4095KB/7686KB, paused 1.671ms,14.642ms total 222.635ms
+I/flutter (21830):   dart:core-patch/errors_patch.dart 63:4            _AssertionError._doThrowNew
+I/flutter (21830):   dart:core-patch/errors_patch.dart 45:5            _AssertionError._throwNew
+I/flutter (21830):   package:flutter_test/src/binding.dart 2147:12     LiveTestWidgetsFlutterBinding.postTest
+I/flutter (21830):   dart:async/future.dart 315:27                     new Future.sync
+I/flutter (21830):   package:test_api/src/backend/invoker.dart 236:18  Invoker.runTearDowns.<fn>.<fn>
+I/flutter (21830):   package:test_api/src/backend/invoker.dart 258:17  Invoker._waitForOutstandingCallbacks.<fn>
+I/flutter (21830):   dart:async/zone.dart 1525:13                      _rootRun
+I/flutter (21830):   dart:async/zone.dart 1422:19                      _CustomZone.run
+I/flutter (21830):   dart:async/zone.dart 2034:6                       _runZoned
+I/flutter (21830):   dart:async/zone.dart 1960:10                      runZoned
+I/flutter (21830):   package:test_api/src/backend/invoker.dart 254:5   Invoker._waitForOutstandingCallbacks
+I/flutter (21830):   package:test_api/src/backend/invoker.dart 235:9   Invoker.runTearDowns.<fn>
+I/flutter (21830):   dart:async/zone.dart 1525:13                      _rootRun
+I/flutter (21830):   dart:async/zone.dart 1422:19
+I/flutter (21830): 00:22 +0 -1: (tearDownAll)
+E/libEGL  (21830): called unimplemented OpenGL ES API
+I/flutter (21830): 00:22 +0 -1: FR-JRN-05: Android chat-journey
+I/flutter (21830): ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+I/flutter (21830): The following StateError was thrown running a test (but after the test had completed):
+I/flutter (21830): Bad state: Cannot emit new states after calling close
+I/flutter (21830):
+I/flutter (21830): When the exception was thrown, this was the stack:
+I/flutter (21830): #0      BlocBase.emit (package:bloc/src/bloc_base.dart:100:9)
+I/flutter (21830): #1      ChannelChatCubit.loadMessages (package:medcollab_app/features/messages/presentation/cubit/channel_chat_cubit.dart:106:7)
+I/flutter (21830): <asynchronous suspension>
+I/flutter (21830): ════════════════════════════════════════════════════════════════════════════════════════════════════
+I/flutter (21830): 00:22 +0 -1: FR-JRN-05: Android chat-journey [E]
+I/flutter (21830):   Test failed. See exception logs above.
+I/flutter (21830):   The test description was: FR-JRN-05: Android chat-journey
+I/flutter (21830):
+Failure Details:
+Failure in method: FR-JRN-05: Android chat-journey
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════
+The following StateError was thrown running a test:
+Bad state: Cannot emit new states after calling close
+
+When the exception was thrown, this was the stack:
+#0      BlocBase.emit (package:bloc/src/bloc_base.dart:100:9)
+#1      ChannelChatCubit.loadMessages (package:medcollab_app/features/messages/presentation/cubit/channel_chat_cubit.dart:106:7)
+<asynchronous suspension>
+
+The test description was:
+  FR-JRN-05: Android chat-journey
+═════════════════════════════════════════════════════════════════
+
+end of failure 1
+
+
+
+Leaving the application running.
