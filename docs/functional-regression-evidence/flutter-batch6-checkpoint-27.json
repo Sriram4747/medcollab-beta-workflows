@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 1,
+  "tier": "F",
+  "input": "flutter-batch6-checkpoint-27.ndjson",
+  "planned": 32,
+  "implementedAndExecuted": 27,
+  "notImplemented": 5,
+  "complete": false,
+  "fullSuccess": false,
+  "flutterReporterSuccess": false,
+  "counts": {
+    "PASS": 15,
+    "FAIL": 9,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 3,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-HOF-11",
+      "status": "PASS",
+      "title": "FR-HOF-11: failed submit retains the draft and retries its ID",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 29,
+      "evidence": ""
+    },
+    {
+      "id": "FR-HOF-12",
+      "status": "NEEDS_DECISION",
+      "title": "FR-HOF-12: local-day labels preserve server status [NEEDS_DECISION Q12]",
+      "priority": "P1",
+      "questionIds": [
+        "Q12"
+      ],
+      "durationMs": 637,
+      "evidence": ""
+    },
+    {
+      "id": "FR-HOF-13",
+      "status": "FAIL",
+      "title": "FR-HOF-13: patient editor validates, cancels and saves selected patient",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 1540,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: true\n  Actual: <false>\nCatalog requires adding and removing a patient attachment\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/patient_editor_test.dart:85:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/patient_editor_test.dart line 85\nThe test description was:\n  FR-HOF-13: patient editor validates, cancels and saves selected patient\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-HOF-13: patient editor validates, cancels and saves selected patient"
+    },
+    {
+      "id": "FR-HOME-01",
+      "status": "PASS",
+      "title": "FR-HOME-01 widget order and visibility survive reload, merge and reset",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 26,
+      "evidence": ""
+    },
+    {
+      "id": "FR-HOME-02",
+      "status": "FAIL",
+      "title": "FR-HOME-02: assigned, shift and task cards follow refreshed handoffs",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 719,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile: ListTile(onTap: Closure: () => void)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown during paint():\nA borderRadius can only be given on borders with uniform colors.\nThe following is not uniform:\nBorderSide.color\n\nThe relevant error-causing widget was:\n  Container\n  Container:file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/lib/features/home/presentation/widgets/doctor_workspace_widgets.dart:321:16\n\nWhen the exception was thrown, this was the stack:\n#0      Border.paint.<anonymous closure> (package:flutter/src/painting/box_border.dart:712:9)\n#1      Border.paint (package:flutter/src/painting/box_border.dart:719:6)\n#2      _BoxDecorationPainter.paint (package:flutter/src/painting/box_decoration.dart:578:25)\n#3      RenderDecoratedBox.paint (package:flutter/src/rendering/proxy_box.dart:2482:17)\n#4      RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#5      PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#6      RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#7      RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#8      PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#9      RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#10     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#11     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#12     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#13     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#14     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#15     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#16     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#17     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#18     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#19     _RenderInkFeatures.paint (package:flutter/src/material/material.dart:634:11)\n#20     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#21     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#22     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#23     RenderPhysicalModel.paint.<anonymous closure> (package:flutter/src/rendering/proxy_box.dart:2252:15)\n#24     PaintingContext.pushClipRRect (package:flutter/src/rendering/object.dart:626:14)\n#25     RenderPhysicalModel.paint (package:flutter/src/rendering/proxy_box.dart:2239:21)\n#26     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#27     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#28     RenderShiftedBox.paint (package:flutter/src/rendering/shifted_box.dart:98:15)\n#29     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#30     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#31     RenderBoxContainerDefaultsMixin.defaultPaint (package:flutter/src/rendering/box.dart:3390:15)\n#32     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1402:7)\n#33     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#34     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#35     RenderBoxContainerDefaultsMixin.defaultPaint (package:flutter/src/rendering/box.dart:3390:15)\n#36     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1402:7)\n#37     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#38     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#39     RenderShiftedBox.paint (package:flutter/src/rendering/shifted_box.dart:98:15)\n#40     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#41     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#42     RenderBoxContainerDefaultsMixin.defaultPaint (package:flutter/src/rendering/box.dart:3390:15)\n#43     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1402:7)\n#44     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#45     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#46     _RenderSingleChildViewport.paint.paintContents (package:flutter/src/widgets/single_child_scroll_view.dart:550:17)\n#47     _RenderSingleChildViewport.paint (package:flutter/src/widgets/single_child_scroll_view.dart:564:9)\n#48     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#49     PaintingContext._repaintCompositedChild (package:flutter/src/rendering/object.dart:180:11)\n#50     PaintingContext.repaintCompositedChild (package:flutter/src/rendering/object.dart:125:5)\n#51     PaintingContext._compositeChild (package:flutter/src/rendering/object.dart:276:7)\n#52     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:257:7)\n#53     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#54     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#55     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#56     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#57     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#58     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#59     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#60     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#61     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#62     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#63     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#64     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#65     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#66     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#67     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#68     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#69     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3580:7)\n#70     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:265:13)\n#71     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:143:13)\n#72     RenderTrans"
+    },
+    {
+      "id": "FR-HOME-03",
+      "status": "PASS",
+      "title": "FR-HOME-03: announcements, emergency, partial failure and retry",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 459,
+      "evidence": ""
+    },
+    {
+      "id": "FR-LINK-01",
+      "status": "PASS",
+      "title": "FR-LINK-01: forwarding retains payload and sheet on failure",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 1046,
+      "evidence": ""
+    },
+    {
+      "id": "FR-LINK-02",
+      "status": "NEEDS_DECISION",
+      "title": "FR-LINK-02: copy exact message link [NEEDS_DECISION Q13]",
+      "priority": "P2",
+      "questionIds": [
+        "Q13"
+      ],
+      "durationMs": 178,
+      "evidence": ""
+    },
+    {
+      "id": "FR-NAV-02",
+      "status": "FAIL",
+      "title": "FR-NAV-02: concurrent 401 refresh and bounded-retry policy [NEEDS_DECISION Q7]",
+      "priority": "P0",
+      "questionIds": [
+        "Q7"
+      ],
+      "durationMs": 100,
+      "evidence": "Expected: <1>\n  Actual: <0>\nA failed refresh must notify the auth UI that its session expired\n"
+    },
+    {
+      "id": "FR-NOT-06",
+      "status": "PASS",
+      "title": "FR-NOT-06: socket/HTTP dedupe and badge mutations recover from errors",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 42,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-01",
+      "status": "PASS",
+      "title": "FR-OFF-01 optimistic text reconciles to one server ID with quote",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 47,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-02",
+      "status": "PASS",
+      "title": "FR-OFF-02 failed send remains visible and composer can send again",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 8,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-03",
+      "status": "PASS",
+      "title": "FR-OFF-03 root and thread drafts restore independently",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 22,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-04",
+      "status": "PASS",
+      "title": "FR-OFF-04 cached transcript survives offline load and refreshes on recovery",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 5,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-05",
+      "status": "PASS",
+      "title": "FR-OFF-05 failed upload creates no message and blocks duplicate busy send",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 8,
+      "evidence": ""
+    },
+    {
+      "id": "FR-OFF-06",
+      "status": "NEEDS_DECISION",
+      "title": "FR-OFF-06: account switch captures local data exposure [NEEDS_DECISION Q11]",
+      "priority": "P0",
+      "questionIds": [
+        "Q11"
+      ],
+      "durationMs": 50,
+      "evidence": ""
+    },
+    {
+      "id": "FR-PRO-05",
+      "status": "PASS",
+      "title": "FR-PRO-05: cancel, failed save, retry and reload profile",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 1656,
+      "evidence": ""
+    },
+    {
+      "id": "FR-REQ-06",
+      "status": "FAIL",
+      "title": "FR-REQ-06: lookup request states, retry and accepted chat route",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 1393,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: true\n  Actual: <false>\nA requestable lookup must show an enabled Send request CTA\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/message_request_lookup_test.dart:156:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/message_request_lookup_test.dart line 156\nThe test description was:\n  FR-REQ-06: lookup request states, retry and accepted chat route\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-REQ-06: lookup request states, retry and accepted chat route"
+    },
+    {
+      "id": "FR-RT-04",
+      "status": "FAIL",
+      "title": "FR-RT-04 typing state handles peers, self, duplicate, expiry and disposal",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 187,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: empty\n  Actual: ['Ben']\nA stale peer typing indicator must expire without a stop event\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/chat_reconciliation_test.dart:221:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/chat_reconciliation_test.dart line 221\nThe test description was:\n  FR-RT-04 typing state handles peers, self, duplicate, expiry and disposal\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-RT-04 typing state handles peers, self, duplicate, expiry and disposal"
+    },
+    {
+      "id": "FR-RT-05",
+      "status": "PASS",
+      "title": "FR-RT-05 reconnect fetches persisted messages and socket duplicates stay one row",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 8,
+      "evidence": ""
+    },
+    {
+      "id": "FR-RT-06",
+      "status": "FAIL",
+      "title": "FR-RT-06: resume refresh reconnects or recovers session",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 592,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: not AuthStatus:<AuthStatus.authenticated>\n  Actual: AuthStatus:<AuthStatus.authenticated>\nDenied refresh on resume must expose session recovery instead of retaining Home\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/resume_reconnect_test.dart:130:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/resume_reconnect_test.dart line 130\nThe test description was:\n  FR-RT-06: resume refresh reconnects or recovers session\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-RT-06: resume refresh reconnects or recovers session"
+    },
+    {
+      "id": "FR-SAVE-01",
+      "status": "PASS",
+      "title": "FR-SAVE-01 bookmarks dedupe, order, route IDs and persist removal",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 13,
+      "evidence": ""
+    },
+    {
+      "id": "FR-SAVE-03",
+      "status": "PASS",
+      "title": "FR-SAVE-03 recent channels and pins enforce independent caps",
+      "priority": "P2",
+      "questionIds": [],
+      "durationMs": 34,
+      "evidence": ""
+    },
+    {
+      "id": "FR-SOC-06",
+      "status": "FAIL",
+      "title": "FR-SOC-06 pending, failed, sent and read states respect receipt preference",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 622,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: exactly one matching candidate\n  Actual: _TextWidgetFinder:<Found 0 widgets with text \"Sending…\": []>\n   Which: means none were found but one was expected\nAn optimistic message needs a visible pending state\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/social_receipts_test.dart:46:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/social_receipts_test.dart line 46\nThe test description was:\n  FR-SOC-06 pending, failed, sent and read states respect receipt preference\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-SOC-06 pending, failed, sent and read states respect receipt preference"
+    },
+    {
+      "id": "FR-SRCH-04",
+      "status": "FAIL",
+      "title": "FR-SRCH-04: newest query owns results and failures recover",
+      "priority": "P1",
+      "questionIds": [],
+      "durationMs": 1298,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: true\n  Actual: <false>\nA failed search needs a visible recoverable error state\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/search_test.dart:105:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/medcollab-app/test/functional_regression/search_test.dart line 105\nThe test description was:\n  FR-SRCH-04: newest query owns results and failures recover\n════════════════════════════════════════════════════════════════════════════════════════════════════\nTest failed. See exception logs above.\nThe test description was: FR-SRCH-04: newest query owns results and failures recover"
+    },
+    {
+      "id": "FR-SUP-04",
+      "status": "FAIL",
+      "title": "FR-SUP-04: support failure/retry, help/legal and contact intent",
+      "priority": "P2",
+      "questionIds": [],
+      "durationMs": 2110,
+      "evidence": "══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a DecoratedBox that has a background color. Because ListTile paints its\nbackground and ink splashes on the nearest Material ancestor, this DecoratedBox will hide those\neffects.\nTo fix this, wrap the ListTile in its own Material widget, or remove the background color from the\nintermediate DecoratedBox.\n\nListTile:\n  ListTile(contentPadding: EdgeInsets(14.0, 2.0, 14.0, 2.0), onTap: Closure: () => void from Function 'expand':., enableFeedback: true)\nDecoratedBox:\n  DecoratedBox(bg: BoxDecoration(color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), border: Border.all(BorderSide(color: Color(alpha: 1.0000, red: 0.8941, green: 0.9098, blue: 0.9373, colorSpace: ColorSpace.sRGB), width: 0.5)), borderRadius: BorderRadius.circular(12.0)))\n════════════════════════════════════════════════════════════════════════════════════════════════════\n══╡ EXCEPTION CAUGHT BY FLUTTER FRAMEWORK ╞═════════════════════════════════════════════════════════\nThe following assertion was thrown:\nListTile background color or ink splashes may be invisible.\nThe ListTile is wrapped in a Deco"
+    },
+    {
+      "id": "FR-THR-05",
+      "status": "PASS",
+      "title": "FR-THR-05 duplicate reply event increments once and HTTP refresh converges",
+      "priority": "P0",
+      "questionIds": [],
+      "durationMs": 12,
+      "evidence": ""
+    }
+  ]
+}
