@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { hash, json } from './evidence.mjs';
 
 export function defects(report, ownership = {}) {
+  const sourceRevision = { sha: report.source.sha, kind: report.source.kind, fingerprint: report.source.fingerprint };
   // Only explicit evidence-backed rootCause keys group failures; matching messages alone do not.
   const groups = new Map();
   for (const row of report.results.filter(r => r.status !== 'PASS' && r.status !== 'SKIP')) {
@@ -15,7 +16,7 @@ export function defects(report, ownership = {}) {
     defectId: 'QA-' + hash(key).slice(0, 12), feature: [...new Set(rows.map(r => r.module || 'TOOLING'))], testcaseIds: rows.map(r => r.id),
     severity: rows.some(r => r.priority === 'P0') ? 'HIGH (suggested; QA review required)' : 'UNASSESSED',
     reproducibility: 'One recorded execution; rerun required', expected: rows.map(r => r.expected || 'Required check completes with valid evidence'),
-    actual: rows.map(r => ({ status: r.status, error: r.error || r.exclusion })), source: report.source,
+    actual: rows.map(r => ({ status: r.status, error: r.error || r.exclusion })), source: sourceRevision,
     reproduction: report.reproduction || 'Use original run command and exact source/harness revisions recorded in provenance',
     artifacts: rows.flatMap(r => r.artifacts || []),
     suggestedOwner: ownership.approved ? [...new Set(rows.map(r => ownership.modules?.[r.module] || 'UNASSIGNED'))] : ['UNASSIGNED'],

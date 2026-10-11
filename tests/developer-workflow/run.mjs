@@ -34,7 +34,8 @@ async function command(id, bin, argv, cwd, required = true, extra = {}) {
   console.log(`Running ${id}`);
   if (bin === 'docker' && argv[0] === 'run') {
     const name = 'vocle-dev-' + randomUUID();
-    ownedContainers.push(name); argv = ['run', '--name', name, ...argv.slice(1)];
+    const user = typeof process.getuid === 'function' ? ['--user', `${process.getuid()}:${process.getgid()}`] : [];
+    ownedContainers.push(name); argv = ['run', '--name', name, ...user, ...argv.slice(1)];
   }
   const log = join(output, 'diagnostics', id + '.log');
   const result = await run(bin, argv, { cwd, env, timeout: 30 * 60 * 1000, log });
