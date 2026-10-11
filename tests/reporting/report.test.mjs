@@ -66,7 +66,7 @@ test('publication excludes binaries/runtime and sanitizes raw logs without alter
 });
 test('invalid result input still writes all five infrastructure reports and signals validation failure',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'vocle-invalid-report-'));
- try{const f=fixture();f.results[0].status='GREEN';const {report,validationFailed}=await generate({inputObject:f,suite:'backend',output:dir});assert(validationFailed);assert.equal(report.attempted,0);for(const name of ['dashboard.html','detailed-report.md','results.json','junit.xml','summary.md'])assert((await readFile(join(dir,'vocle-regression-'+name))).length);}finally{await rm(dir,{recursive:true,force:true});}
+ try{const f=fixture();f.results[0].status='GREEN';const {report,validationFailed}=await generate({inputObject:f,suite:'backend',output:dir});assert(validationFailed);assert.equal(report.counts.FAIL,1);assert.equal(report.results[0].executed,false);assert(report.originalObservations.some(r=>r.status==='FAIL'));assert(report.infrastructure.some(i=>i.category==='REPORT_VALIDATION'));for(const name of ['dashboard.html','detailed-report.md','results.json','junit.xml','summary.md'])assert((await readFile(join(dir,'vocle-regression-'+name))).length);}finally{await rm(dir,{recursive:true,force:true});}
 });
 test('workflow integration generates/uploads after failure and retains original gates',async()=>{
  for(const name of ['vocle-functional-regression.yml','vocle-sanity.yml']){const text=await readFile(join(root,'.github/workflows',name),'utf8');assert(text.includes('if: always()'));assert(text.includes('tests/reporting/report.mjs'));assert(text.includes('tests/reporting/workflow-report.mjs'));assert(text.includes('vocle-regression-dashboard-'));assert(text.includes('success-manifest'));}
@@ -78,4 +78,8 @@ test('CLI optional history import completes without a circular top-level await',
   const out=execFileSync(process.execPath,[join(root,'tests/reporting/report.mjs'),'--suite','flutter','--input',join(root,'docs/functional-regression-evidence/flutter-3.29.3-checkpoint-32.json'),'--output',dir,'--history','true'],{encoding:'utf8',timeout:10000,env:{...process.env,GITHUB_TOKEN:'',GITHUB_RUN_ID:''},windowsHide:true});
   assert(JSON.parse(out).counts.PASS===15);assert((await readFile(join(dir,'vocle-regression-dashboard.html'))).length);
  }finally{await rm(dir,{recursive:true,force:true});}
+});
+test('a broken aggregate tally does not relabel an observed application FAIL as ERROR',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'vocle-count-error-'));
+ try{const f=fixture();f.tally.PASS=40;const {report,validationFailed}=await generate({inputObject:f,suite:'backend',output:dir});assert(validationFailed);assert.equal(report.results.find(r=>r.id===ids[1]).status,'FAIL');assert.equal(report.counts.FAIL,1);assert(report.infrastructure.some(i=>i.category==='REPORT_VALIDATION'));}finally{await rm(dir,{recursive:true,force:true});}
 });

@@ -163,8 +163,25 @@ export async function generate(options) {
   let report;
   try { report = normalize(input, metadata, { ...options, provenance, reason: readError || options.reason }); }
   catch (error) {
-    report = normalize({}, metadata, { ...options, provenance, reason: `Reporting validation error: ${error.message}` });
+    // Preserve independently recorded failures when a different row or tally is
+    // malformed. The separate reporting error prevents any suite success claim.
+    const original = input.results?.results ? input.results : input;
+    const groups = new Map();
+    for (const row of rowsOf(input)) {
+      if (!row?.id || (!metadata.some(c=>c.id===row.id) && options.suite !== 'developer')) continue;
+      const group = groups.get(row.id) || []; group.push(row); groups.set(row.id, group);
+    }
+    const recovered = [...groups].map(([id, group]) => {
+      const failure = group.find(r => (alias[r.status] || r.status) === 'FAIL');
+      if (failure) return failure;
+      if (group.length === 1 && statuses.includes(alias[group[0].status] || group[0].status) && !((alias[group[0].status] || group[0].status) === 'PASS' && group[0].executed === false)) return group[0];
+      return { id, status: 'ERROR', executed: false, errorCategory: 'REPORT_MISSING', error: 'Conflicting or invalid original observations; inspect reporting validation evidence.' };
+    });
+    const selectedIds = original.selectedIds && new Set(original.selectedIds).size === original.selectedIds.length && original.selectedIds.every(id=>metadata.some(c=>c.id===id)) ? [...new Set([...original.selectedIds, ...recovered.map(r=>r.id)])] : undefined;
+    const recovery = { ...original, results: recovered, selectedIds, tally: undefined, counts: undefined, ...(options.suite === 'backend' && !['backend-all','backend-p0'].includes(original.scope) ? {scope:'backend-all'} : {}) };
+    report = normalize(recovery, metadata, { ...options, provenance, reason: `Reporting validation error: ${error.message}` });
     report.infrastructure.push({ status: 'ERROR', category: 'REPORT_VALIDATION', message: sanitize(error.message) });
+    report.originalObservations = sanitize(rowsOf(input));
     options.validationFailed = true;
   }
   try { report.metadataRevision = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8', windowsHide: true }).trim(); }
