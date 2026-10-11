@@ -1,0 +1,340 @@
+{
+  "run": {
+    "id": 38120856995,
+    "headSha": "7763c7742d39b42e184df4a1ef717f924154c89e",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38120856995"
+  },
+  "jobs": [
+    {
+      "id": 114415115029,
+      "name": "Detect",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T07:17:23Z",
+          "completed_at": "2026-10-11T07:17:24Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T07:17:24Z",
+          "completed_at": "2026-10-11T07:17:26Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T07:17:26Z",
+          "completed_at": "2026-10-11T07:17:26Z"
+        },
+        {
+          "name": "Resolve exact upstream master SHA",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T07:17:26Z",
+          "completed_at": "2026-10-11T07:17:26Z"
+        },
+        {
+          "name": "Calculate harness fingerprint",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T07:17:26Z",
+          "completed_at": "2026-10-11T07:17:27Z"
+        },
+        {
+          "name": "Find verified successful baseline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T07:17:27Z",
+          "completed_at": "2026-10-11T07:17:28Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T07:17:28Z",
+          "completed_at": "2026-10-11T07:17:28Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-11T07:17:28Z",
+          "completed_at": "2026-10-11T07:17:28Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-11T07:17:28Z",
+          "completed_at": "2026-10-11T07:17:28Z"
+        }
+      ]
+    },
+    {
+      "id": 114415144029,
+      "name": "Sanity",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T07:17:33Z",
+          "completed_at": "2026-10-11T07:17:34Z"
+        },
+        {
+          "name": "Check out fork harness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T07:17:34Z",
+          "completed_at": "2026-10-11T07:17:35Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T07:17:35Z",
+          "completed_at": "2026-10-11T07:17:36Z"
+        },
+        {
+          "name": "Fetch captured upstream target without credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T07:17:36Z",
+          "completed_at": "2026-10-11T07:17:37Z"
+        },
+        {
+          "name": "Validate Phase 1 harness contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T07:17:37Z",
+          "completed_at": "2026-10-11T07:17:38Z"
+        },
+        {
+          "name": "Prepare isolated runtime images and target dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T07:17:38Z",
+          "completed_at": "2026-10-11T07:18:13Z"
+        },
+        {
+          "name": "Run isolated startup scenario",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 7,
+          "started_at": "2026-10-11T07:18:13Z",
+          "completed_at": "2026-10-11T07:19:10Z"
+        },
+        {
+          "name": "Verify target remained unchanged",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T07:19:10Z",
+          "completed_at": "2026-10-11T07:19:10Z"
+        },
+        {
+          "name": "Publish case-by-case job summary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T07:19:10Z",
+          "completed_at": "2026-10-11T07:19:10Z"
+        },
+        {
+          "name": "Collect sanity logs before generating evidence links",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-11T07:19:10Z",
+          "completed_at": "2026-10-11T07:19:10Z"
+        },
+        {
+          "name": "Generate detailed offline sanity dashboard even after setup failure",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T07:19:10Z",
+          "completed_at": "2026-10-11T07:19:11Z"
+        },
+        {
+          "name": "Stage sanitized sanity diagnostic evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-11T07:19:11Z",
+          "completed_at": "2026-10-11T07:19:11Z"
+        },
+        {
+          "name": "Upload sanity reports and diagnostics",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-11T07:19:11Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        },
+        {
+          "name": "Create verified success manifest",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-11T07:19:12Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        },
+        {
+          "name": "Upload verified success evidence",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-11T07:19:12Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 29,
+          "started_at": "2026-10-11T07:19:12Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        },
+        {
+          "name": "Post Check out fork harness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-11T07:19:12Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-11T07:19:12Z",
+          "completed_at": "2026-10-11T07:19:12Z"
+        }
+      ]
+    },
+    {
+      "id": 114415427524,
+      "name": "Summary",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T07:19:17Z",
+          "completed_at": "2026-10-11T07:19:18Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T07:19:18Z",
+          "completed_at": "2026-10-11T07:19:19Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T07:19:19Z",
+          "completed_at": "2026-10-11T07:19:19Z"
+        },
+        {
+          "name": "Collect detailed sanity evidence including detection failures and skips",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T07:19:19Z",
+          "completed_at": "2026-10-11T07:19:20Z"
+        },
+        {
+          "name": "Upload workflow dashboard including failures and skips",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T07:19:20Z",
+          "completed_at": "2026-10-11T07:19:21Z"
+        },
+        {
+          "name": "Write workflow summary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T07:19:21Z",
+          "completed_at": "2026-10-11T07:19:21Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T07:19:21Z",
+          "completed_at": "2026-10-11T07:19:21Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-11T07:19:21Z",
+          "completed_at": "2026-10-11T07:19:21Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-11T07:19:21Z",
+          "completed_at": "2026-10-11T07:19:21Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11695397029,
+      "name": "vocle-sanity-diagnostics-38120856995-1",
+      "digest": "sha256:9d61778e76171b456ae7cea495ee3d42691b03e454367b71b352cb9274890111",
+      "size": 96005,
+      "expired": false
+    },
+    {
+      "id": 11695366105,
+      "name": "vocle-regression-dashboard-38120856995-1",
+      "digest": "sha256:5281ba1d32b458e0fb02cb04f7267dc6ad30daceff4530a0916e47fd7400d60b",
+      "size": 74504,
+      "expired": false
+    }
+  ]
+}

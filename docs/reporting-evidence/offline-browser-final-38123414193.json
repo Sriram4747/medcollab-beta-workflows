@@ -1,0 +1,23 @@
+{
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "offline": true,
+  "source": {
+    "sha": "29b56e4acee349a0d16b6ccae6e6854d41f72959",
+    "kind": "fork-change"
+  },
+  "harness": {
+    "sha": "29b56e4acee349a0d16b6ccae6e6854d41f72959",
+    "fingerprint": "1651f4d63c8af8c99cbf1e97ab50fd007143082711401beebfbd02d4e5fa72ef"
+  },
+  "caseCount": 147,
+  "pass": true,
+  "checks": [
+    "all IDs",
+    "search",
+    "status/module/priority filters",
+    "expand/lazy details",
+    "hostile markup inert",
+    "run/artifact link when present",
+    "no external resource requests"
+  ]
+}

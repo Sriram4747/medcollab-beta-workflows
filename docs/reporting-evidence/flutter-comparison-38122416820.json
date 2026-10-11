@@ -1,0 +1,228 @@
+{
+  "runId": 38122416820,
+  "suite": "flutter",
+  "comparison": {
+    "available": true,
+    "oldSource": {
+      "sha": "8d2d0623f99172690f711d57210e2aeeadbd89fa",
+      "kind": "commit"
+    },
+    "newSource": {
+      "sha": "43392d5d01250c2ae104d8114ca5f7590208b192",
+      "kind": "commit"
+    },
+    "oldHarness": {
+      "sha": "8d2d0623f99172690f711d57210e2aeeadbd89fa",
+      "fingerprint": "6d95255763fab982d9e2086dcc775db055eadc6d863e857530c4aec7f2f5500e"
+    },
+    "newHarness": {
+      "sha": "43392d5d01250c2ae104d8114ca5f7590208b192",
+      "fingerprint": "6d95255763fab982d9e2086dcc775db055eadc6d863e857530c4aec7f2f5500e"
+    },
+    "rows": [
+      {
+        "id": "FR-HOF-11",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-HOF-12",
+        "oldStatus": "NEEDS_DECISION",
+        "newStatus": "NEEDS_DECISION",
+        "classification": "UNCHANGED_NONPASS",
+        "reason": "The same non-passing status remains; no fix or new functional regression is inferred."
+      },
+      {
+        "id": "FR-HOF-13",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-HOME-01",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-HOME-02",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-HOME-03",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-LINK-01",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-LINK-02",
+        "oldStatus": "NEEDS_DECISION",
+        "newStatus": "NEEDS_DECISION",
+        "classification": "UNCHANGED_NONPASS",
+        "reason": "The same non-passing status remains; no fix or new functional regression is inferred."
+      },
+      {
+        "id": "FR-LINK-03",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-NAV-01",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-NAV-02",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-NAV-03",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-NOT-06",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-01",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-02",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-03",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-04",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-05",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-OFF-06",
+        "oldStatus": "NEEDS_DECISION",
+        "newStatus": "NEEDS_DECISION",
+        "classification": "UNCHANGED_NONPASS",
+        "reason": "The same non-passing status remains; no fix or new functional regression is inferred."
+      },
+      {
+        "id": "FR-PRO-05",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-REQ-06",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-RT-04",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-RT-05",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-RT-06",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-RUN-03",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-SAVE-01",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-SAVE-02",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-SAVE-03",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      },
+      {
+        "id": "FR-SOC-06",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-SRCH-04",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-SUP-04",
+        "oldStatus": "FAIL",
+        "newStatus": "FAIL",
+        "classification": "STILL_FAILING"
+      },
+      {
+        "id": "FR-THR-05",
+        "oldStatus": "PASS",
+        "newStatus": "PASS",
+        "classification": "STILL_PASSING"
+      }
+    ],
+    "baselineRunId": 38120757524,
+    "baselineArtifactId": 11695162188
+  },
+  "classificationCounts": {
+    "STILL_PASSING": 15,
+    "UNCHANGED_NONPASS": 3,
+    "STILL_FAILING": 14
+  },
+  "note": "Original outcomes preserved; NEEDS_DECISION is not a fix or a new regression."
+}

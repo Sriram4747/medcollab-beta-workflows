@@ -1,0 +1,74 @@
+{
+  "run": {
+    "id": 38122416820,
+    "headSha": "43392d5d01250c2ae104d8114ca5f7590208b192",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38122416820"
+  },
+  "artifactsVerified": [
+    {
+      "artifact": "vocle-flutter-report-38122416820-1",
+      "digest": "sha256:d62d779d6b983b7d299e5a9dab7c69f95ab3890abe00dda9f7b441d830a1c707",
+      "suite": "flutter",
+      "caseCount": 32,
+      "attempted": 32,
+      "counts": {
+        "PASS": 15,
+        "FAIL": 14,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 3,
+        "SKIP": 0
+      },
+      "originalGate": "NON_SUCCESS",
+      "comparisonAvailable": true,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "vocle-functional-report-38122416820-1",
+      "digest": "sha256:5d06e003dcdd981bc84b0b2a7b71a39c0e3e02aa8217257c6ef3948c50396851",
+      "suite": "backend",
+      "caseCount": 147,
+      "attempted": 147,
+      "counts": {
+        "PASS": 118,
+        "FAIL": 13,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 16,
+        "SKIP": 0
+      },
+      "originalGate": "FAIL",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "vocle-regression-dashboard-38122416820-1",
+      "digest": "sha256:61453472db67b1bcf65545328ea33de676a81f5440895fc1330917e79ba67b41",
+      "suite": "workflow",
+      "caseCount": 179,
+      "attempted": 179,
+      "counts": {
+        "PASS": 133,
+        "FAIL": 27,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 19,
+        "SKIP": 0
+      },
+      "originalGate": "FAILURE",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    }
+  ],
+  "secretScan": "PASS",
+  "note": "This checks reporting fidelity and publication, not application correctness or full-suite success."
+}
