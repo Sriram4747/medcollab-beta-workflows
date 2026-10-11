@@ -12,7 +12,12 @@ const names = ['vocle-regression-dashboard.html', 'vocle-regression-detailed-rep
 const escape = value => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const md = value => escape(value).replaceAll('|', '\\|');
 const json = value => JSON.stringify(value, null, 2) + '\n';
-export const safePath = path => typeof path === 'string' && !/^(?:[a-z]+:|[\\/])/i.test(path) && !path.split(/[\\/]/).includes('..') && !/[\u0000-\u001f]/.test(path);
+export const safePath = path => {
+  if (typeof path !== 'string' || /[\u0000-\u001f<>"'`()\[\]]/.test(path)) return false;
+  let decoded;
+  try { decoded = decodeURIComponent(path); } catch { return false; }
+  return !/^(?:[a-z]+:|[\\/])/i.test(decoded) && !decoded.split(/[\\/]/).includes('..');
+};
 
 export function sanitize(value) {
   if (Array.isArray(value)) return value.map(sanitize);
@@ -190,7 +195,7 @@ export async function generate(options) {
     const evidenceDirectory = resolve(options.evidenceDir);
     if (evidenceDirectory.startsWith(output + sep)) throw new Error('Evidence directory cannot be a descendant of report output');
     const available = await logs(evidenceDirectory, output);
-    for (const r of report.results) r.evidenceFiles = available; // Available run logs, not claimed per-case correlation.
+    for (const r of report.results) r.evidenceFiles = available.filter(safePath); // Available run logs, not claimed per-case correlation.
   }
   await writeReports(output, report, options);
   if (options.stepSummary) await writeFile(options.stepSummary, summary(report, options.artifact), { flag: 'a' });

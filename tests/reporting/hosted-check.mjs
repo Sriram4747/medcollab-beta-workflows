@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { sanitize, root } from './report.mjs';
+import { hash } from './scenarios.mjs';
 const repository = 'Sriram4747/medcollab-beta-workflows';
 if (execFileSync('git',['-C',root,'remote','get-url','origin'],{encoding:'utf8'}).trim() !== `https://github.com/${repository}.git`) throw new Error('Authorized fork origin required');
 const [action,arg,directory] = process.argv.slice(2);
@@ -29,7 +30,7 @@ if(action==='dispatch-sanity'){
   if(action==='download'){
    if(!directory)throw new Error('Output directory required');
    for(const a of artifacts.artifacts.filter(a=>!a.expired&&/^(vocle-functional-report-|vocle-flutter-report-|vocle-sanity-diagnostics-|vocle-regression-dashboard-|developer-qa-)/.test(a.name))){
-    const response=await request('/actions/artifacts/'+a.id+'/zip');if(response.status!==302)throw new Error('Artifact redirect required');const u=new URL(response.headers.get('location'));if(u.protocol!=='https:')throw new Error('Unsafe artifact redirect');const r=await fetch(u,{signal:AbortSignal.timeout(60000)});if(!r.ok)throw new Error('Artifact storage read failed');await writeFile(join(directory,a.name+'.zip'),Buffer.from(await r.arrayBuffer()));
+    const response=await request('/actions/artifacts/'+a.id+'/zip');if(response.status!==302)throw new Error('Artifact redirect required');const u=new URL(response.headers.get('location'));if(u.protocol!=='https:')throw new Error('Unsafe artifact redirect');const r=await fetch(u,{signal:AbortSignal.timeout(60000)});if(!r.ok)throw new Error('Artifact storage read failed');const bytes=Buffer.from(await r.arrayBuffer());if(a.digest&&a.digest!=='sha256:'+hash(bytes))throw new Error('Downloaded artifact digest mismatch');await writeFile(join(directory,a.name+'.zip'),bytes);
    }
   }
   console.log(JSON.stringify({run:metadata.run,jobs:metadata.jobs.map(j=>({id:j.id,name:j.name,status:j.status,conclusion:j.conclusion,attention:j.steps.filter(s=>s.status==='in_progress'||s.conclusion==='failure').map(s=>s.name)})),artifacts:metadata.artifacts},null,2));

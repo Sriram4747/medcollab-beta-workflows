@@ -1,0 +1,14 @@
+{
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "offline": true,
+  "caseCount": 147,
+  "pass": true,
+  "checks": [
+    "all IDs",
+    "search",
+    "status/module/priority filters",
+    "expand/lazy details",
+    "hostile markup inert",
+    "no external resource requests"
+  ]
+}

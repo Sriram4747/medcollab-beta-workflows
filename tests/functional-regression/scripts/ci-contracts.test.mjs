@@ -35,6 +35,7 @@ test('Flutter lane runs for client and reporter changes, and unknown diffs', () 
   assert(affectsFlutter(['medcollab-app/lib/app.dart']));
   assert(affectsFlutter(['medcollab-app/test/functional_regression/runtime_recovery_test.dart']));
   assert(affectsFlutter(['tests/functional-regression/scripts/aggregate-flutter.mjs']));
+  assert(affectsFlutter(['tests/reporting/report.mjs']));
   assert(affectsFlutter([]));
   assert(!affectsFlutter(['medcollab-backend/src/features/handoffs/handoff.controller.js']));
 });

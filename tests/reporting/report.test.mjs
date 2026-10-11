@@ -40,7 +40,7 @@ test('secrets and signed links are redacted recursively, including opaque creden
  const out=JSON.stringify(sanitize(input));for(const value of ['opaque-secret-value','123456','private','987654','abcdefghij'])assert(!out.includes(value),value);assert(out.includes('REDACTED'));
 });
 test('links cannot use javascript, absolute paths or traversal',()=>{
- for(const p of ['javascript:alert(1)','//evil','../outside','logs/../../outside','C:\\outside','logs/line\nfeed'])assert(!safePath(p));assert(safePath('logs/backend.log'));
+ for(const p of ['javascript:alert(1)','//evil','../outside','logs/../../outside','C:\\outside','logs/line\nfeed','logs/%2e%2e/outside','logs/x) [injected](javascript:evil)','%2f%2fevil'])assert(!safePath(p));assert(safePath('logs/backend.log'));
 });
 test('comparison reuses strict contract for FIXED, NEW_REGRESSION, STILL_FAILING, STILL_PASSING',()=>{
  const before=normalize(fixture(),metadata);const after=structuredClone(before);after.results[0].status='FAIL';after.results[1].status='PASS';after.results[2].status='FAIL';before.results[2].status='FAIL';after.results[3].status='PASS';before.results[3].status='PASS';before.results[3].executed=true;after.results[3].executed=true;

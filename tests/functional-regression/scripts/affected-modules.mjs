@@ -30,6 +30,7 @@ export function affectedModules(paths) {
 export function affectsFlutter(paths) {
   if (!paths.length) return true; // Unknown diff: validate conservatively.
   return paths.some((path) => path.startsWith('medcollab-app/') ||
+      path.startsWith('tests/reporting/') ||
     path === 'tests/functional-regression/scripts/aggregate-flutter.mjs' ||
     path === '.github/workflows/vocle-functional-regression.yml' ||
     path === 'tests/functional-regression/scripts/affected-modules.mjs');

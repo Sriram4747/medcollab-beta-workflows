@@ -1,0 +1,54 @@
+{
+  "run": {
+    "id": 38120454586,
+    "headSha": "7c969b33068f811e006aac4cd130d5d95f0777f0",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38120454586"
+  },
+  "artifactsVerified": [
+    {
+      "artifact": "vocle-regression-dashboard-38120454586-1",
+      "digest": "sha256:bfc40a0680d93ad913919ceb8dc1f572255b84b6c13bbdaa1a6720fe15fcce86",
+      "suite": "workflow",
+      "caseCount": 48,
+      "attempted": 44,
+      "counts": {
+        "PASS": 42,
+        "FAIL": 2,
+        "ERROR": 0,
+        "BLOCKED": 4,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0
+      },
+      "originalGate": "FAILURE",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "vocle-sanity-diagnostics-38120454586-1",
+      "digest": "sha256:092a9ed70f65e5399307378e1b2c390c423ff629ec31d08b7aaced836fd46d68",
+      "suite": "sanity",
+      "caseCount": 48,
+      "attempted": 44,
+      "counts": {
+        "PASS": 42,
+        "FAIL": 2,
+        "ERROR": 0,
+        "BLOCKED": 4,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0
+      },
+      "originalGate": "failed",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    }
+  ],
+  "secretScan": "PASS",
+  "note": "This checks reporting fidelity and publication, not application correctness or full-suite success."
+}
