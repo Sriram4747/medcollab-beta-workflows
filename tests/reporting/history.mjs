@@ -3,7 +3,6 @@ import { execFileSync } from 'node:child_process';
 import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { compare } from './report.mjs';
 
 export async function api(path, token = process.env.GITHUB_TOKEN) {
   const response = await fetch('https://api.github.com/repos/Sriram4747/medcollab-beta-workflows' + path, { headers: { Accept: 'application/vnd.github+json', ...(token ? { Authorization: `Bearer ${token}` } : {}), 'X-GitHub-Api-Version': '2022-11-28' }, signal: AbortSignal.timeout(15000), redirect: 'manual' });
@@ -26,7 +25,7 @@ export async function artifactReports(id) {
     return JSON.parse(execFileSync(process.platform === 'win32' ? 'python' : 'python3', ['-c', code, zip], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, windowsHide: true }));
   } finally { await rm(dir, { recursive: true, force: true }); }
 }
-export async function priorCompatible(current) {
+export async function priorCompatible(current, compare) {
   if (!process.env.GITHUB_TOKEN || !process.env.GITHUB_RUN_ID) return null;
   const artifacts = await api('/actions/artifacts?per_page=100');
   const prefix = current.suite === 'sanity' ? 'vocle-sanity-diagnostics-' : current.suite === 'flutter' ? 'vocle-flutter-report-' : 'vocle-functional-report-';

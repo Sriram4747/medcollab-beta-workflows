@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { normalize, sanitize, compare, generate, writeReports, root, safePath, junit } from './report.mjs';
 import { scenarioMetadata } from './scenarios.mjs';
 import { stage } from './stage.mjs';
+import { execFileSync } from 'node:child_process';
 
 const metadata = await scenarioMetadata(root);
 const ids = metadata.filter(c=>c.tier==='B').slice(0,6).map(c=>c.id);
@@ -44,7 +45,7 @@ test('links cannot use javascript, absolute paths or traversal',()=>{
 test('comparison reuses strict contract for FIXED, NEW_REGRESSION, STILL_FAILING, STILL_PASSING',()=>{
  const before=normalize(fixture(),metadata);const after=structuredClone(before);after.results[0].status='FAIL';after.results[1].status='PASS';after.results[2].status='FAIL';before.results[2].status='FAIL';after.results[3].status='PASS';before.results[3].status='PASS';before.results[3].executed=true;after.results[3].executed=true;
  const c=compare(after,before);assert(c.available);assert.deepEqual(c.rows.slice(0,4).map(r=>r.classification),['NEW_REGRESSION','FIXED','STILL_FAILING','STILL_PASSING']);
- after.environmentFingerprint=null;assert.equal(compare(after,before).available,false);after.environmentFingerprint=before.environmentFingerprint;after.definitionSet='changed';assert.equal(compare(after,before).available,false);
+ after.environmentFingerprint=null;assert.equal(compare(after,before).available,false);after.environmentFingerprint=before.environmentFingerprint;after.sourceKind='working-tree';assert.equal(compare(after,before).available,false);after.sourceKind=before.sourceKind;after.definitionSet='changed';assert.equal(compare(after,before).available,false);
 });
 test('HTML and Markdown safely handle hostile markup, multiline logs, and missing diagnostics',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'vocle-report-test-'));
@@ -70,4 +71,11 @@ test('invalid result input still writes all five infrastructure reports and sign
 test('workflow integration generates/uploads after failure and retains original gates',async()=>{
  for(const name of ['vocle-functional-regression.yml','vocle-sanity.yml']){const text=await readFile(join(root,'.github/workflows',name),'utf8');assert(text.includes('if: always()'));assert(text.includes('tests/reporting/report.mjs'));assert(text.includes('tests/reporting/workflow-report.mjs'));assert(text.includes('vocle-regression-dashboard-'));assert(text.includes('success-manifest'));}
  const workflow=await readFile(join(root,'.github/workflows/vocle-functional-regression.yml'),'utf8');assert(workflow.includes('test "$REPORT_RESULT" = PASS'));assert(workflow.includes('test "$CATALOG_EXIT" = 0'));assert(workflow.includes('test "$RETAINED_EXIT" = 0'));
+});
+test('CLI optional history import completes without a circular top-level await',async()=>{
+ const dir=await mkdtemp(join(tmpdir(),'vocle-history-cli-'));
+ try{
+  const out=execFileSync(process.execPath,[join(root,'tests/reporting/report.mjs'),'--suite','flutter','--input',join(root,'docs/functional-regression-evidence/flutter-3.29.3-checkpoint-32.json'),'--output',dir,'--history','true'],{encoding:'utf8',timeout:10000,env:{...process.env,GITHUB_TOKEN:'',GITHUB_RUN_ID:''},windowsHide:true});
+  assert(JSON.parse(out).counts.PASS===15);assert((await readFile(join(dir,'vocle-regression-dashboard.html'))).length);
+ }finally{await rm(dir,{recursive:true,force:true});}
 });

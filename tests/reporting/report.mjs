@@ -97,7 +97,8 @@ export function normalize(input, metadata, options = {}) {
 }
 
 export function compare(current, previous) {
-  const compatible = previous?.reportingContractVersion === current.reportingContractVersion && previous.suite === current.suite && previous.scope === current.scope && previous.sourceKind === current.sourceKind && previous.definitionSet === current.definitionSet && current.environmentFingerprint && previous.environmentFingerprint === current.environmentFingerprint && current.harness.fingerprint && previous.harness?.fingerprint === current.harness.fingerprint && [current.source.sha, previous.source?.sha, current.harness.sha, previous.harness?.sha].every(v => /^[a-f0-9]{40}$/.test(v || ''));
+  const committed = r => ['upstream-read-only', 'fork-change'].includes(r.sourceKind) || (r.source.kind === 'commit' && r.source.verified === true);
+  const compatible = previous?.reportingContractVersion === current.reportingContractVersion && committed(current) && committed(previous) && ![...current.infrastructure, ...previous.infrastructure].some(e=>e.status==='ERROR') && previous.suite === current.suite && previous.scope === current.scope && previous.sourceKind === current.sourceKind && previous.definitionSet === current.definitionSet && current.environmentFingerprint && previous.environmentFingerprint === current.environmentFingerprint && current.harness.fingerprint && previous.harness?.fingerprint === current.harness.fingerprint && [current.source.sha, previous.source?.sha, current.harness.sha, previous.harness?.sha].every(v => /^[a-f0-9]{40}$/.test(v || ''));
   if (!compatible) return { available: false, reason: 'Baseline has incompatible or missing suite/scope, definitions, source kind, harness fingerprint or environment evidence.' };
   // Reuse the repository's existing conservative comparison contract.
   const adapt = r => ({ ...r, source: { ...r.source, kind: 'commit' }, results: r.results.map(x => ({ ...x, required: true, environmentFingerprint: r.environmentFingerprint })) });
@@ -174,7 +175,7 @@ export async function generate(options) {
   if (options.history === 'true' && !options.baseline) {
     try {
       const { priorCompatible } = await import('./history.mjs');
-      const previous = await priorCompatible(report);
+      const previous = await priorCompatible(report, compare);
       report.comparison = previous ? { ...compare(report, previous.report), baselineRunId: previous.runId, baselineArtifactId: previous.artifactId } : { available: false, reason: 'No compatible normalized baseline among the three most recent matching artifacts. This does not change existing workflow history/skip behavior.' };
       if (report.comparison.available) for (const r of report.results) r.change = report.comparison.rows.find(x => x.id === r.id)?.classification;
     } catch (error) { report.comparison = { available: false, reason: `Optional baseline lookup unavailable: ${sanitize(error.message)}. No change classification inferred.` }; }
