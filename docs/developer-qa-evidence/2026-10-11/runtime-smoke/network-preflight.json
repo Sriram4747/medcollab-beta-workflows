@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "fakeProviderIntercepted": true,
+  "unexpectedProviderRequestBlocked": true,
+  "loopbackOnlyInterfaces": true,
+  "outboundNetworkDenied": true
+}

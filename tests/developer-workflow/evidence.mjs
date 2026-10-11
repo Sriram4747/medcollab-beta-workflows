@@ -14,17 +14,18 @@ export async function writeEvidence(directory, report) {
   report.schemaVersion = 1;
   report.generatedAt ||= new Date().toISOString();
   report.gate = gate(report.results);
+  report.releaseGate = report.scope === 'full' ? report.gate === 'PASS' ? 'NEEDS_DECISION' : report.gate : 'NOT_EVALUATED';
   const bytes = json(report);
   const reportChecksum = hash(bytes);
   const manifest = { schemaVersion: 1, scope: report.scope, source: report.source, harness: report.harness, environment: report.environment,
     executedIds: report.results.filter(r => r.executed).map(r => r.id),
     coverage: report.results.map(({ id, required, status, executed, exclusion }) => ({ id, required, status, executed, exclusion })),
-    timestamp: report.generatedAt, gate: report.gate, reportChecksum,
+    timestamp: report.generatedAt, gate: report.gate, releaseGate: report.releaseGate, reportChecksum,
     commitEvidence: report.source.kind === 'commit' && report.source.verified && report.integrity === 'PASS',
     integrity: report.integrity,
     note: 'Checksums detect changed artifacts; independent hosted CI establishes trust.' };
   const junit = report.results.map(r => `<testcase classname="${xml(r.module || 'TOOLING')}" name="${xml(r.id)}">${r.status === 'PASS' ? '' : r.status === 'SKIP' ? `<skipped message="${xml(r.exclusion)}"/>` : `<${r.status === 'ERROR' ? 'error' : 'failure'} message="${xml(r.status)}">${xml(r.error || r.exclusion || r.status)}</${r.status === 'ERROR' ? 'error' : 'failure'}>`}</testcase>`).join('\n');
-  const markdown = `# Vocle developer regression\n\nGate: **${report.gate}**; integrity: **${report.integrity}**.\nApplication: ${report.source.sha}; kind: ${report.source.kind}; fingerprint: ${report.source.fingerprint}.\nHarness: ${report.harness.sha}; fingerprint: ${report.harness.fingerprint}.\nTimestamp: ${report.generatedAt}.\n\nA working-tree report certifies only the recorded bytes. Required omissions prevent PASS. Optional coverage remains explicit.\n\n| ID | Requirement | Status | Executed | Diagnostic/exclusion |\n| --- | --- | --- | --- | --- |\n${report.results.map(r => `| ${r.id} | ${r.required ? 'required' : 'optional'} | ${r.status} | ${Boolean(r.executed)} | ${String(r.error || r.exclusion || '').replaceAll('|', '/').replaceAll('\n', ' ').slice(0, 600)} |`).join('\n')}\n`;
+  const markdown = `# Vocle developer regression\n\nLocal gate: **${report.gate}**; release gate: **${report.releaseGate}**; integrity: **${report.integrity}**.\nApplication: ${report.source.sha}; kind: ${report.source.kind}; fingerprint: ${report.source.fingerprint}.\nHarness: ${report.harness.sha}; fingerprint: ${report.harness.fingerprint}.\nTimestamp: ${report.generatedAt}.\n\nA working-tree report certifies only the recorded bytes. Required omissions prevent PASS. Optional coverage remains explicit. A local PASS still requires independent hosted CI and applicable QA approval for release.\n\n| ID | Requirement | Status | Executed | Diagnostic/exclusion |\n| --- | --- | --- | --- | --- |\n${report.results.map(r => `| ${r.id} | ${r.required ? 'required' : 'optional'} | ${r.status} | ${Boolean(r.executed)} | ${String(r.error || r.exclusion || '').replaceAll('|', '/').replaceAll('\n', ' ').slice(0, 600)} |`).join('\n')}\n`;
   await Promise.all([
     writeFile(join(directory, 'results.json'), bytes), writeFile(join(directory, 'manifest.json'), json(manifest)),
     writeFile(join(directory, 'report.md'), markdown),
@@ -41,6 +42,7 @@ export async function verifyEvidence(directory) {
   const report = JSON.parse(bytes);
   const manifest = JSON.parse(await readFile(join(directory, 'manifest.json'), 'utf8'));
   if (hash(bytes) !== manifest.reportChecksum) throw new Error('Report checksum mismatch');
+  if (manifest.releaseGate !== report.releaseGate || (report.releaseGate && report.releaseGate !== (report.scope === 'full' ? report.gate === 'PASS' ? 'NEEDS_DECISION' : report.gate : 'NOT_EVALUATED'))) throw new Error('Release gate mismatch');
   if (report.schemaVersion !== 1 || manifest.schemaVersion !== 1 || !report.results?.length || report.integrity !== 'PASS' || !report.source.verified || !report.harness.verified) throw new Error('Unverified report provenance/integrity');
   if (!/^[a-f0-9]{40}$/.test(report.source.sha) || !/^[a-f0-9]{40}$/.test(report.harness.sha) || !/^[a-f0-9]{64}$/.test(report.source.fingerprint) || !/^[a-f0-9]{64}$/.test(report.harness.fingerprint)) throw new Error('Invalid provenance identifiers');
   const ids = report.results.map(r => r.id);

@@ -44,7 +44,8 @@ async function command(id, bin, argv, cwd, required = true, extra = {}) {
   return result;
 }
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const flutter = options['flutter-bin'] || (process.platform === 'win32' ? 'flutter.bat' : 'flutter');
+const flutterOption = options['flutter-bin'] || (process.platform === 'win32' ? 'flutter.bat' : 'flutter');
+const flutter = /[\\/]/.test(flutterOption) ? resolve(flutterOption) : flutterOption;
 async function overlay(directory, paths, destination) {
   for (const file of paths) {
     if (/(^|\/)\.env(?:\.|$)/.test(file) && !file.endsWith('.env.example')) throw new Error('Credential file cannot enter test workspace');

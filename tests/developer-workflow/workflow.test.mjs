@@ -38,11 +38,15 @@ test('real assertion failure and successful fixture produce verifiable reports a
     const manifest = await writeEvidence(join(dir, 'new'), next);
     assert.equal(manifest.gate, 'PASS');
     assert.equal(manifest.scope, 'synthetic-fixture');
+    assert.equal(manifest.releaseGate, 'NOT_EVALUATED');
     assert.equal((await verifyEvidence(join(dir, 'old'))).gate, 'FAIL');
     assert.equal((await compareEvidence(join(dir, 'old'), join(dir, 'new'), join(dir, 'compare'))).rows[0].classification, 'FIXED');
     assert((await readFile(join(dir, 'old', 'junit.xml'), 'utf8')).includes('<failure'));
     assert((await readFile(join(dir, 'compare', 'comparison.md'), 'utf8')).includes('FIXED'));
     await stat(join(dir, 'new', 'pass-manifest.json'));
+    next.scope = 'full';
+    await writeEvidence(join(dir, 'new'), next);
+    assert.equal((await verifyEvidence(join(dir, 'new'))).releaseGate, 'NEEDS_DECISION');
     next.source.kind = 'working-tree';
     await writeEvidence(join(dir, 'new'), next);
     await assert.rejects(stat(join(dir, 'new', 'pass-manifest.json')));

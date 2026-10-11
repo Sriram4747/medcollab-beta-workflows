@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "scope": "harness-smoke",
+  "targetSha": null,
+  "harnessSha": null,
+  "selectedIds": [
+    "harness-smoke"
+  ],
+  "complete": true,
+  "success": true,
+  "tally": {
+    "PASS": 1,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "results": [
+    {
+      "id": "harness-smoke",
+      "module": "HARNESS",
+      "status": "PASS",
+      "durationMs": 344,
+      "error": ""
+    }
+  ],
+  "cleanup": {
+    "status": "PASS",
+    "backendStopped": true,
+    "mongoStopped": true,
+    "runtimeRemoved": true
+  },
+  "provenance": {
+    "status": "PASS",
+    "targetRoot": "/target",
+    "backendRoot": "/target/medcollab-backend",
+    "sourceKind": "local-checkout"
+  }
+}

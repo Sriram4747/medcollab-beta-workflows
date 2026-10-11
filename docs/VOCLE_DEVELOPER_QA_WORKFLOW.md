@@ -65,6 +65,9 @@ the full 147-case suite. It cannot supply full submission/release evidence.
 
 Required FAIL, ERROR, BLOCKED, NEEDS_DECISION and SKIP prevent PASS. Cases keep their
 original IDs and outcome statuses; counts are not repaired to make a gate green.
+Reports distinguish the local gate from release readiness. Tooling/smoke profiles leave
+release readiness NOT_EVALUATED. Even a full local PASS leaves the release gate
+NEEDS_DECISION until independent hosted verification and applicable QA approval exist.
 An optional lane never supplies a required case's PASS. Missing reports become explicit
 errors/blocks. Reports include every functional catalog ID in full mode, even when a
 prerequisite is unavailable. The tooling profile deliberately has a different scope.
@@ -182,6 +185,13 @@ detect every missing scenario or determine whether a change is truly a new featu
 Declare and review that judgment; no automatic completeness claim is made.
 
 ## Upstream integration
+
+Examples and measured outcomes are saved in
+[`developer-qa-evidence/2026-10-11/`](developer-qa-evidence/2026-10-11/), with the detailed
+validation record in [VOCLE_DEVELOPER_QA_PROGRESS.md](VOCLE_DEVELOPER_QA_PROGRESS.md).
+The snapshots include a verified tooling pass manifest, a dirty-source blocked report,
+pinned Flutter failure evidence, rejected comparison, hosted owner-aware findings and
+a real Docker smoke PASS. Every example retains its scope and exact tested revision.
 
 Review the testing-fork commits and artifacts. Sriram will separately approve and handle
 upstream integration. Transfer only reviewed workflow/tooling/docs changes, configure

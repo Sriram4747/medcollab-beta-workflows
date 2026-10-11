@@ -86,10 +86,27 @@ submission/comparison/ownership and PR integration; test deliberate red/green/ta
 
 ## Phase 7 and remaining limits
 
+Final runtime verification: [38116541443](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38116541443)
+on `4ed68d863ce3e63182fe2c4e519c3bc9bf8947d2` completed **SUCCESS**, Windows/Ubuntu
+tooling PASS, Ubuntu portable `backend-smoke` **17 required checks PASS**. The existing
+smoke asserted real backend health, synthetic OTP/auth identity and persisted MongoDB state
+inside network-none Docker. Provider/network preflight, immutable source/harness and full
+disposable workspace cleanup PASS. Saved under `runtime-smoke/`. The initial smoke on
+`ec456d409641ab7d9253d259b6f4e0aa1cb2003d` had real assertions PASS but cleanup ERROR
+because root-owned Docker dependency files could not be removed; the host UID/GID fix was
+verified in the subsequent run. Initial error evidence remains in CI; it was not promoted.
+
+Final reporting explicitly separates local PASS from release readiness. A full local PASS
+requires independent CI/QA approval and remains release NEEDS_DECISION; tooling/smoke
+release status is NOT_EVALUATED. Original evidence snapshots retain their original schemas
+and checksums. Derived QA findings now reference compact source revision records, preserving
+all testcase outcomes and avoiding repeated full hash maps per finding.
+
 Onboarding and QA operations are in VOCLE_DEVELOPER_QA_WORKFLOW.md. Implementation is
 complete for the missing workflow layer; current application/release gates remain red.
-Local Docker backend/security runtime could not be executed on this host; their reused
-backend runners were independently executed in CI. The new security Docker orchestrator
+Full local Docker backend/security runtime could not be executed on this Windows host;
+portable Docker orchestration was verified with real assertions in the hosted smoke check,
+and all reused backend regression runners were independently executed in CI. The security Docker orchestrator
 still needs an available Linux Docker host for end-to-end execution. Android's existing
 committed-archive runner was contract-validated and historical complete native evidence
 reused; no expensive duplicate native run was needed for this wrapper task. Arbitrary APK
