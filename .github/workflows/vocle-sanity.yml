@@ -192,6 +192,12 @@ jobs:
             echo 'No complete case report was produced; see the step logs and diagnostics artifact.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: Collect sanity logs before generating evidence links
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/vocle-sanity-output"
+          if [ -f "$RUNNER_TEMP/vocle-backend.log" ]; then cp "$RUNNER_TEMP/vocle-backend.log" "$RUNNER_TEMP/vocle-sanity-output/backend.log"; fi
+          if [ -f "$RUNNER_TEMP/vocle-provenance.txt" ]; then cp "$RUNNER_TEMP/vocle-provenance.txt" "$RUNNER_TEMP/vocle-sanity-output/source-provenance.txt"; fi
       - name: Generate detailed offline sanity dashboard even after setup failure
         if: always()
         env:
@@ -209,9 +215,6 @@ jobs:
       - name: Stage sanitized sanity diagnostic evidence
         if: always()
         run: |
-          mkdir -p "$RUNNER_TEMP/vocle-sanity-output"
-          if [ -f "$RUNNER_TEMP/vocle-backend.log" ]; then cp "$RUNNER_TEMP/vocle-backend.log" "$RUNNER_TEMP/vocle-sanity-output/backend.log"; fi
-          if [ -f "$RUNNER_TEMP/vocle-provenance.txt" ]; then cp "$RUNNER_TEMP/vocle-provenance.txt" "$RUNNER_TEMP/vocle-sanity-output/source-provenance.txt"; fi
           node harness/tests/reporting/stage.mjs "$RUNNER_TEMP/vocle-sanity-output" "$RUNNER_TEMP/vocle-sanity-publication"
       - name: Upload sanity reports and diagnostics
         if: always()
