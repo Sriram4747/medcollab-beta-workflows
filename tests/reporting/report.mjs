@@ -10,7 +10,7 @@ export const statuses = ['PASS', 'FAIL', 'ERROR', 'BLOCKED', 'NEEDS_DECISION', '
 export const root = resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const names = ['vocle-regression-dashboard.html', 'vocle-regression-detailed-report.md', 'vocle-regression-results.json', 'vocle-regression-junit.xml', 'vocle-regression-summary.md'];
 const escape = value => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
-const md = value => escape(value).replaceAll('|', '\\|');
+const md = value => escape(value).replace(/[\\`*_{}\[\]()!#|]/g, '\\$&');
 const json = value => JSON.stringify(value, null, 2) + '\n';
 export const safePath = path => {
   if (typeof path !== 'string' || /[\u0000-\u001f<>"'`()\[\]]/.test(path)) return false;
