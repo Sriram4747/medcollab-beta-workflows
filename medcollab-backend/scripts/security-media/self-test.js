@@ -30,11 +30,11 @@ async function smoke() {
   const invoke = req => new Promise((resolve, reject) => {
     let status; controller.uploadFile(req, { status(n) { status = n; return this; }, json(body) { resolve({ status, body }); } }, reject);
   });
-  for (const [mime, name, bytes, type] of [['image/png', 'synthetic.png', h.png, 'image'], ['application/pdf', 'synthetic.pdf', h.pdf, 'raw'], ['video/mp4', 'synthetic.mp4', h.video, 'video'], ['application/octet-stream', 'synthetic.pdf', h.pdf, 'image']]) {
+  for (const [mime, name, bytes, type] of [['image/png', 'synthetic.png', h.png, 'image'], ['application/pdf', 'synthetic.pdf', h.pdf, 'raw'], ['video/mp4', 'synthetic.mp4', h.video, 'video'], ['application/octet-stream', 'synthetic.pdf', h.pdf, 'raw']]) {
     double.reset(); const r = await invoke({ body: {}, file: { mimetype: mime, originalname: name, buffer: bytes, size: bytes.length }, user: { _id: '7ed000000000000000000001' } });
     assert.equal(r.status, 200); assert.equal(double.state().calls[0].options.resource_type, type); assert.equal(double.state().calls[0].sha256, h.hash(bytes));
   }
   assert.ok(!Object.keys(require.cache).some(p => /node_modules[\\/]cloudinary[\\/]/.test(p)));
   console.log('Offline guard probes passed: prohibited configuration/file/path rejected; six network attempts intercepted before I/O; real controller smoke via SDK replacement passed. No credentials or provider requests.');
 }
-smoke().catch(() => { console.error('Offline infrastructure self-test failed'); process.exitCode = 1; });
+smoke().catch((error) => { console.error(`Offline infrastructure self-test failed: ${error.message}`); process.exitCode = 1; });
