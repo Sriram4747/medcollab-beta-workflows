@@ -1,0 +1,35 @@
+{
+  "run": {
+    "id": 38132656677,
+    "headSha": "9c228471a9d3d741ff70cdc56e750443d3f8d9d2",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132656677"
+  },
+  "artifactsVerified": [
+    {
+      "artifact": "vocle-qa-dashboard-vocle-data-security.yml-38132656677-1",
+      "digest": "sha256:216d72bd0519cffb2f6aa8b9585501dc193ecfee906ae3edada4fdc7510acfbb",
+      "suite": "security",
+      "caseCount": 31,
+      "attempted": 31,
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0,
+        "OBSERVATION": 8
+      },
+      "originalGate": "SUCCESS",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    }
+  ],
+  "secretScan": "PASS",
+  "note": "This checks reporting fidelity and publication, not application correctness or full-suite success."
+}

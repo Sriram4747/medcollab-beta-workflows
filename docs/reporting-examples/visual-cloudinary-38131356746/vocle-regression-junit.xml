@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites><testsuite name="Vocle.security" tests="34" failures="0" errors="0" skipped="8">
+<testcase classname="configuration" name="VOCLE-752"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-753"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-754"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-755"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-756"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-757"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-758"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-759"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-760"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-761"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-762"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 403,
+  &quot;videoRetained&quot;: true,
+  &quot;dispatch&quot;: []
+}</skipped></testcase>
+<testcase classname="video" name="VOCLE-763"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-764"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-765"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;contentType&quot;: &quot;video/mp4&quot;,
+  &quot;bytes&quot;: 1509,
+  &quot;sha256&quot;: &quot;d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7&quot;,
+  &quot;redirected&quot;: false,
+  &quot;appInvalidateOmitted&quot;: true,
+  &quot;independentTestDeletionInvalidate&quot;: false
+}</skipped></testcase>
+<testcase classname="video" name="VOCLE-766"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-767"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-768"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-769"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-770"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-771"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-772"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 403,
+  &quot;exists&quot;: true,
+  &quot;identityMatched&quot;: true,
+  &quot;bytes&quot;: 344,
+  &quot;format&quot;: null
+}</skipped></testcase>
+<testcase classname="raw" name="VOCLE-773"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;exists&quot;: true,
+  &quot;identityMatched&quot;: true,
+  &quot;bytes&quot;: 344,
+  &quot;format&quot;: null,
+  &quot;delivery&quot;: {
+    &quot;status&quot;: 200,
+    &quot;contentType&quot;: &quot;application/octet-stream&quot;,
+    &quot;bytes&quot;: 344,
+    &quot;sha256&quot;: &quot;b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78&quot;,
+    &quot;redirected&quot;: false
+  },
+  &quot;originAbsenceIndependentOfCDN&quot;: true
+}</skipped></testcase>
+<testcase classname="raw" name="VOCLE-774"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;result&quot;: &quot;ok&quot;
+}</skipped></testcase>
+<testcase classname="image" name="VOCLE-775"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 403,
+  &quot;exists&quot;: true,
+  &quot;identityMatched&quot;: true,
+  &quot;bytes&quot;: 70,
+  &quot;format&quot;: &quot;png&quot;
+}</skipped></testcase>
+<testcase classname="image" name="VOCLE-776"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;exists&quot;: true,
+  &quot;identityMatched&quot;: true,
+  &quot;bytes&quot;: 70,
+  &quot;format&quot;: &quot;png&quot;,
+  &quot;result&quot;: &quot;ok&quot;,
+  &quot;delivery&quot;: {
+    &quot;status&quot;: 200,
+    &quot;contentType&quot;: &quot;image/png&quot;,
+    &quot;bytes&quot;: 70,
+    &quot;sha256&quot;: &quot;abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f&quot;,
+    &quot;redirected&quot;: false
+  },
+  &quot;originAbsenceIndependentOfCDN&quot;: true
+}</skipped></testcase>
+<testcase classname="naming" name="VOCLE-777"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="naming" name="VOCLE-778"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="naming" name="VOCLE-779"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="naming" name="VOCLE-780"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="naming" name="VOCLE-781"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="raw" name="VOCLE-782"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="video" name="VOCLE-783"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="image" name="VOCLE-784"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 403,
+  &quot;retained&quot;: true,
+  &quot;originalFolder&quot;: &quot;medcollab/handoffs&quot;
+}</skipped></testcase>
+<testcase classname="cleanup" name="VOCLE-785"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+</testsuite><testsuite name="Vocle.infrastructure" tests="0" errors="0"></testsuite></testsuites>

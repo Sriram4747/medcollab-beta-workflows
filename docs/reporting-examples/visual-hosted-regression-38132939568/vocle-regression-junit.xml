@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites><testsuite name="Vocle.workflow" tests="179" failures="45" errors="0" skipped="0">
+<testcase classname="HOF" name="FR-HOF-11" time="0.059"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-12" time="0.731"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Pending Q12. No additional observed values recorded.</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-13" time="1.85"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: &lt;false&gt;
+Catalog requires adding and removing a patient attachment
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/patient_editor_test.dart:85:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/patient_editor_test.dart line 85
+The test description was:
+  FR-HOF-13: patient editor validates, cancels and saves selected patient
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-HOF-13: patient editor validates, cancels and saves selected patient</failure></testcase>
+<testcase classname="HOME" name="FR-HOME-01" time="0.037"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOME" name="FR-HOME-02" time="0.946"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Application card rendering failed:
+A borderRadius can only be given on borders with uniform colors.
+The following is not uniform:
+BorderSide.color
+#0      Border.paint.&lt;anonymous closure&gt; (package:flutter/src/painting/box_border.dart:713:9)
+#1      Border.paint (package:flutter/src/painting/box_border.dart:720:6)
+#2      _BoxDecorationPainter.paint (package:flutter/src/painting/box_decoration.dart:570:25)
+#3      RenderDecoratedBox.paint (package:flutter/src/rendering/proxy_box.dart:2313:17)
+#4      RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#5      PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#6      RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#7      RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#8      PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#9      RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#10     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#11     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#12     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#13     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#14     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#15     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#16     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#17     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#18     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#19     _RenderInkFeatures.paint (package:flutter/src/material/material.dart:632:11)
+#20     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#21     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#22     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#23     RenderPhysicalModel.paint.&lt;anonymous closure&gt;
+(package:flutter/src/rendering/proxy_box.dart:2083:15)
+#24     PaintingContext.pushClipRRect (package:flutter/src/rendering/object.dart:610:14)
+#25     RenderPhysicalModel.paint (package:flutter/src/rendering/proxy_box.dart:2070:21)
+#26     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#27     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#28     RenderShiftedBox.paint (package:flutter/src/rendering/shifted_box.dart:81:15)
+#29     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#30     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#31     RenderBoxContainerDefaultsMixin.defaultPaint
+(package:flutter/src/rendering/box.dart:3360:15)
+#32     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1315:7)
+#33     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#34     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#35     RenderBoxContainerDefaultsMixin.defaultPaint
+(package:flutter/src/rendering/box.dart:3360:15)
+#36     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1315:7)
+#37     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#38     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#39     RenderShiftedBox.paint (package:flutter/src/rendering/shifted_box.dart:81:15)
+#40     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#41     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#42     RenderBoxContainerDefaultsMixin.defaultPaint
+(package:flutter/src/rendering/box.dart:3360:15)
+#43     RenderFlex.paint (package:flutter/src/rendering/flex.dart:1315:7)
+#44     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#45     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#46     _RenderSingleChildViewport.paint.paintContents
+(package:flutter/src/widgets/single_child_scroll_view.dart:541:17)
+#47     _RenderSingleChildViewport.paint
+(package:flutter/src/widgets/single_child_scroll_view.dart:555:9)
+#48     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#49     PaintingContext._repaintCompositedChild (package:flutter/src/rendering/object.dart:175:11)
+#50     PaintingContext.repaintCompositedChild (package:flutter/src/rendering/object.dart:120:5)
+#51     PaintingContext._compositeChild (package:flutter/src/rendering/object.dart:271:7)
+#52     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:252:7)
+#53     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#54     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#55     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#56     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#57     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#58     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#59     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#60     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#61     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#62     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#63     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#64     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#65     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#66     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#67     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#68     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#69     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#70     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#71     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#72     RenderTransform.paint (package:flutter/src/rendering/proxy_box.dart:2587:17)
+#73     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#74     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#75     RenderClipRect.paint (package:flutter/src/rendering/proxy_box.dart:1585:17)
+#76     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#77     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#78     RenderBoxContainerDefaultsMixin.defaultPaint
+(package:flutter/src/rendering/box.dart:3360:15)
+#79     RenderCustomMultiChildLayoutBox.paint
+(package:flutter/src/rendering/custom_layout.dart:424:5)
+#80     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#81     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#82     RenderProxyBoxMixin.paint (package:flutter/src/rendering/proxy_box.dart:140:13)
+#83     _RenderInkFeatures.paint (package:flutter/src/material/material.dart:632:11)
+#84     RenderObject._paintWithContext (package:flutter/src/rendering/object.dart:3371:7)
+#85     PaintingContext.paintChild (package:flutter/src/rendering/object.dart:260:13)
+#86     RenderProxyBoxMi</failure></testcase>
+<testcase classname="HOME" name="FR-HOME-03" time="0.653"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="LINK" name="FR-LINK-01" time="1.272"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="LINK" name="FR-LINK-02" time="0.172"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Pending Q13. No additional observed values recorded.</failure></testcase>
+<testcase classname="LINK" name="FR-LINK-03" time="1.64"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: contains &#39;/api/handoffs/handoff-missing&#39;
+  Actual: [
+            &#39;/api/notifications/unread-count&#39;,
+            &#39;/api/channels/channel-synthetic/messages&#39;,
+            &#39;/api/channels/dm-synthetic/messages&#39;,
+            &#39;/api/users/me&#39;,
+            &#39;/api/handoffs/handoff-synthetic&#39;,
+            &#39;/api/channels/channel-synthetic/messages&#39;,
+            &#39;/api/channels/dm-synthetic/messages&#39;,
+            &#39;/api/spaces/space-synthetic/handoffs&#39;,
+            &#39;/api/handoffs&#39;
+          ]
+   Which: does not contain &#39;/api/handoffs/handoff-missing&#39;
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/push_routing_test.dart:108:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/push_routing_test.dart line 108
+The test description was:
+  FR-LINK-03: push routes debounce, queue through auth and recover missing target
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-LINK-03: push routes debounce, queue through auth and recover missing target</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-01" time="1.959"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during performResize():
+Vertical viewport was given unbounded height.
+Viewports expand in the scrolling direction to fill their container. In this case, a vertical
+viewport was given an unlimited amount of vertical space in which to expand. This situation
+typically happens when a scrollable widget is nested inside another scrollable widget.
+If this widget is always nested in a scrollable widget there is no need to use a viewport because
+there will always be enough vertical space for the children. In this case, consider using a Column
+or Wrap instead. Otherwise, consider using a CustomScrollView to concatenate arbitrary slivers into
+a single scrollable.
+
+The relevant error-causing widget was:
+  ListView
+  ListView:file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/lib/shared/presentation/widgets/app_skeleton.dart:42:21
+
+When the exception was thrown, this was the stack:
+#0      debugCheckHasBoundedAxis.&lt;anonymous closure&gt; (package:flutter/src/rendering/debug.dart:358:13)
+#1      debugCheckHasBoundedAxis (package:flutter/src/rendering/debug.dart:417:4)
+#2      RenderViewport.computeDryLayout (package:flutter/src/rendering/viewport.dart:1424:12)
+#3      RenderBox.performResize (package:flutter/src/rendering/box.dart:2861:12)
+#4      RenderObject.layout (package:flutter/src/rendering/object.dart:2694:9)
+#5      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#6      RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#7      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#8      RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#9      RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#10     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#11     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#12     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#13     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#14     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#15     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#16     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#17     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#18     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#19     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#20     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+#21     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#22     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#23     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#24     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#25     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#26     RenderSliverMultiBoxAdaptor.insertAndLayoutChild (package:flutter/src/rendering/sliver_multi_box_adaptor.dart:514:13)
+#27     RenderSliverList.performLayout.advance (package:flutter/src/rendering/sliver_list.dart:242:19)
+#28     RenderSliverList.performLayout (package:flutter/src/rendering/sliver_list.dart:283:12)
+#29     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#30     RenderSliverEdgeInsetsPadding.performLayout (package:flutter/src/rendering/sliver_padding.dart:133:12)
+#31     RenderSliverPadding.performLayout (package:flutter/src/rendering/sliver_padding.dart:371:11)
+#32     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#33     RenderViewportBase.layoutChildSequence (package:flutter/src/rendering/viewport.dart:608:13)
+#34     RenderViewport._attemptLayout (package:flutter/src/rendering/viewport.dart:1576:12)
+#35     RenderViewport.performLayout (package:flutter/src/rendering/viewport.dart:1467:20)
+#36     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#37     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#38     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#39     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#40     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#41     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#42     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#43     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#44     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#45     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#46     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#47     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#48     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#49     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#50     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#51     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#52     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+#53     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#54     RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:243:12)
+#55     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#56     MultiChildLayoutDelegate.layoutChild (package:flutter/src/rendering/custom_layout.dart:180:12)
+#57     _ScaffoldLayout.performLayout (package:flutter/src/material/scaffold.dart:1118:7)
+#58     MultiChildLayoutDelegate._callPerformLayout (package:flutter/src/rendering/custom_layout.dart:249:7)
+#59     RenderCustomMultiChildLayoutBox.performLayout (package:flutter/src/rendering/custom_layout.dart:419:14)
+#60     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#61     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#62     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#63     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#64     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1483:11)
+#65     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#66     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#67     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#68     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#69     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#70     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#71     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#72     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#73     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#74     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#75     RenderObject.layout (package:flutter/src/rendering/object.dart:2715:7)
+#76     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#77     RenderObject.layout (</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-02" time="0.143"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Expected: &lt;1&gt;
+  Actual: &lt;0&gt;
+A failed refresh must notify the auth UI that its session expired
+</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-03" time="1.454"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: [&#39;/messages&#39;, &#39;/home&#39;]
+  Actual: [&#39;/handoffs&#39;, &#39;/handoffs&#39;, &#39;/handoffs&#39;]
+   Which: at location [0] is &#39;/handoffs&#39; instead of &#39;/messages&#39;
+Each Back from a shell tab must restore exactly one prior tab
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/tab_history_test.dart:96:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/tab_history_test.dart line 96
+The test description was:
+  FR-NAV-03: nested detail pops before tab visit history
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-NAV-03: nested detail pops before tab visit history</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-06" time="0.057"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-01" time="0.084"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-02" time="0.011"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-03" time="0.041"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-04" time="0.008"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-05" time="0.011"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="OFF" name="FR-OFF-06" time="0.076"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Pending Q11. No additional observed values recorded.</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-05" time="2.394"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-06" time="1.59"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: &lt;false&gt;
+A requestable lookup must show an enabled Send request CTA
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/message_request_lookup_test.dart:156:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/message_request_lookup_test.dart line 156
+The test description was:
+  FR-REQ-06: lookup request states, retry and accepted chat route
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-REQ-06: lookup request states, retry and accepted chat route</failure></testcase>
+<testcase classname="RT" name="FR-RT-04" time="0.254"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [&#39;Ben&#39;]
+A stale peer typing indicator must expire without a stop event
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/chat_reconciliation_test.dart:221:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/chat_reconciliation_test.dart line 221
+The test description was:
+  FR-RT-04 typing state handles peers, self, duplicate, expiry and disposal
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-RT-04 typing state handles peers, self, duplicate, expiry and disposal</failure></testcase>
+<testcase classname="RT" name="FR-RT-05" time="0.016"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="FR-RT-06" time="0.785"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: not AuthStatus:&lt;AuthStatus.authenticated&gt;
+  Actual: AuthStatus:&lt;AuthStatus.authenticated&gt;
+Denied refresh on resume must expose session recovery instead of retaining Home
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/resume_reconnect_test.dart:130:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/resume_reconnect_test.dart line 130
+The test description was:
+  FR-RT-06: resume refresh reconnects or recovers session
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-RT-06: resume refresh reconnects or recovers session</failure></testcase>
+<testcase classname="RUN" name="FR-RUN-03" time="1.001"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:&lt;Found 0 widgets with text &quot;Retry&quot;: []&gt;
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/runtime_recovery_test.dart:130:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/runtime_recovery_test.dart line 130
+The test description was:
+  FR-RUN-03: list and detail recover after timeout, 5xx and malformed data
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-RUN-03: list and detail recover after timeout, 5xx and malformed data</failure></testcase>
+<testcase classname="SAVE" name="FR-SAVE-01" time="0.028"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SAVE" name="FR-SAVE-02" time="1.258"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:&lt;Found 0 widgets with text &quot;Retry&quot;: []&gt;
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/bookmark_recovery_test.dart:92:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/bookmark_recovery_test.dart line 92
+The test description was:
+  FR-SAVE-02: corrupt bookmarks recover and missing target is actionable
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-SAVE-02: corrupt bookmarks recover and missing target is actionable</failure></testcase>
+<testcase classname="SAVE" name="FR-SAVE-03" time="0.021"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SOC" name="FR-SOC-06" time="0.87"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:&lt;Found 0 widgets with text &quot;Sending…&quot;: []&gt;
+   Which: means none were found but one was expected
+An optimistic message needs a visible pending state
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/social_receipts_test.dart:46:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/social_receipts_test.dart line 46
+The test description was:
+  FR-SOC-06 pending, failed, sent and read states respect receipt preference
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-SOC-06 pending, failed, sent and read states respect receipt preference</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-04" time="1.853"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: &lt;false&gt;
+A failed search needs a visible recoverable error state
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/search_test.dart:105:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/search_test.dart line 105
+The test description was:
+  FR-SRCH-04: newest query owns results and failures recover
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-SRCH-04: newest query owns results and failures recover</failure></testcase>
+<testcase classname="SUP" name="FR-SUP-04" time="3.301"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: empty
+  Actual: [
+            &#39;/report-bug discarded inputs after API error&#39;,
+            &#39;/feature-request discarded inputs after API error&#39;,
+            &#39;/feedback discarded inputs after API error&#39;
+          ]
+Ticket retry and bundled support pages must remain functional
+
+When the exception was thrown, this was the stack:
+#4      main.&lt;anonymous closure&gt; (file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/support_forms_test.dart:186:5)
+&lt;asynchronous suspension&gt;
+#5      testWidgets.&lt;anonymous closure&gt;.&lt;anonymous closure&gt; (package:flutter_test/src/widget_tester.dart:193:15)
+&lt;asynchronous suspension&gt;
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1064:5)
+&lt;asynchronous suspension&gt;
+&lt;asynchronous suspension&gt;
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/runner/work/medcollab-beta-workflows/medcollab-beta-workflows/medcollab-app/test/functional_regression/support_forms_test.dart line 186
+The test description was:
+  FR-SUP-04: support failure/retry, help/legal and contact intent
+════════════════════════════════════════════════════════════════════════════════════════════════════
+Test failed. See exception logs above.
+The test description was: FR-SUP-04: support failure/retry, help/legal and contact intent</failure></testcase>
+<testcase classname="THR" name="FR-THR-05" time="0.022"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-01" time="0.277"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-02" time="0.177"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-03" time="0.265"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-04" time="0.005"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PRO" name="authentication-and-profiles-05" time="0.018"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-06" time="0.011"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-07" time="0.027"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-01" time="0.015"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-02" time="0.034"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-03" time="0.011"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-04" time="0.019"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-05" time="0.031"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="channels-01" time="0.024"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="channels-02" time="0.016"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="channels-03" time="0.047"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="messaging-and-needl-01" time="0.045"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="messaging-and-needl-02" time="0.068"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="messaging-and-needl-03" time="0.014"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="THR" name="messaging-and-needl-04" time="0.053"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="messaging-and-needl-05" time="0.044"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SOC" name="messaging-and-needl-06" time="0.052"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="messaging-and-needl-07" time="0.02"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="message-requests-01" time="0.08"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="message-requests-02" time="0.026"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="message-requests-03" time="0.034"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-01" time="0.014"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-02" time="0.028"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-03" time="0.042"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-04" time="0.056"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-05" time="0.057"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="handoffs-01" time="0.031"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="handoffs-02" time="0.023"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="handoffs-03" time="0.05"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="handoffs-04" time="0.116"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="handoffs-05" time="0.03"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MED" name="media-01" time="0.036"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MED" name="media-02" time="0.043"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MED" name="media-03" time="0.062"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="NOT" name="notifications-01" time="0.04"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="NOT" name="notifications-02" time="0.041"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="NOT" name="notifications-03" time="0.047"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="realtime-and-availability-01" time="0.054"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="realtime-and-availability-02" time="0.002"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="realtime-and-availability-03" time="0.029"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SRCH" name="search-01" time="0.021"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SRCH" name="search-02" time="0.037"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SUP" name="support-01" time="0.052"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RUN" name="startup-01" time="0"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-01" time="0.516"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-02" time="0.427"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-03" time="0.344"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-04" time="0.971"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-05" time="0.613"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-06" time="0.066"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="AUTH" name="FR-AUTH-07" time="0.445"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PRO" name="FR-PRO-01" time="0.605"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PRO" name="FR-PRO-02" time="0.323"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PRO" name="FR-PRO-03" time="0.032"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PRO" name="FR-PRO-04" time="0.256"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DISC" name="FR-DISC-01" time="1.236"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DISC" name="FR-DISC-02" time="0.046"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DISC" name="FR-DISC-03" time="0.131"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DISC" name="FR-DISC-04" time="0.037"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="FR-SPC-01" time="0.475"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="FR-SPC-02" time="0.678"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="FR-SPC-03" time="0.494"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q14: pending-join client state and approval completion need product decision</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-04" time="0.691"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="FR-SPC-05" time="1.638"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SPC" name="FR-SPC-06" time="2.289"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Explicit room sync left revoked users subscribed to a space room
++ actual - expected
+
+  [
++   true,
++   true
+-   false,
+-   false
+  ]
+</failure></testcase>
+<testcase classname="CH" name="FR-CH-01" time="0.485"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="FR-CH-02" time="0.306"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="FR-CH-03" time="0.082"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="FR-CH-04" time="0.092"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="CH" name="FR-CH-05" time="0.15"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-01" time="0.67"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-02" time="0.698"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-03" time="0.975"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-04" time="0.75"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="REQ" name="FR-REQ-05" time="0.509"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q7: recovery or atomic rollback contract for accepted-without-DM state requires product decision</failure></testcase>
+<testcase classname="DM" name="FR-DM-01" time="0.894"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="FR-DM-02" time="2.053"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="FR-DM-03" time="0.736"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="FR-DM-04" time="0.708"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="FR-DM-05" time="0.669"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q2: intended client timezone for today expansion needs product decision</failure></testcase>
+<testcase classname="DM" name="FR-DM-06" time="0.96"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q2: 500-item oldest-first cap and source-ID destination preview require product decision</failure></testcase>
+<testcase classname="DM" name="FR-DM-07" time="0.771"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q2: copied thread and quote graph remapping requires product decision</failure></testcase>
+<testcase classname="DM" name="FR-DM-08" time="0.716"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="DM" name="FR-DM-09" time="0.726"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q7: concurrent group exact-membership guarantee unresolved; observed 1 matching group record(s)</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-01" time="0.512"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">POST /api/channels/6acb69595036ea16b0a73835/messages expected 201, got 400</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-02" time="0.379"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="FR-MSG-03" time="0.577"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="FR-MSG-04" time="0.586"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="FR-MSG-05" time="0.649"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-06" time="0.579"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="FR-MSG-07" time="0.553"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MSG" name="FR-MSG-08" time="0.302"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q7: automatic duplicate prevention after a lost successful response needs product decision</failure></testcase>
+<testcase classname="THR" name="FR-THR-01" time="0.765"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="THR" name="FR-THR-02" time="0.587"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="THR" name="FR-THR-03" time="0.318"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="THR" name="FR-THR-04" time="0.575"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-01" time="0.724"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Switching emoji must replace B prior reaction
++ actual - expected
+
+  [
++   &#39;👍&#39;,
+    &#39;❤️&#39;
+  ]
+</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-02" time="0.533"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SOC" name="FR-SOC-03" time="0.662"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SOC" name="FR-SOC-04" time="0.433"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SOC" name="FR-SOC-05" time="0.796"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-01" time="0.856"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-02" time="0.173"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-03" time="0.112"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-04" time="0.111"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-05" time="0.086"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q3: draft audience policy pending; receiver search includes current draft false</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-06" time="0.167"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-07" time="0.109"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q4: shiftDate sort with ID cursor; expected [&quot;6acb69c2d5aadb233f088aae&quot;,&quot;6acb69c2d5aadb233f088ab8&quot;,&quot;6acb69c2d5aadb233f088abd&quot;,&quot;6acb69c2d5aadb233f088ab3&quot;], observed [&quot;6acb69c2d5aadb233f088aae&quot;,&quot;6acb69c2d5aadb233f088ab8&quot;,&quot;6acb69c2d5aadb233f088aae&quot;,&quot;6acb69c2d5aadb233f088ab3&quot;]</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-08" time="0.101"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-09" time="0.118"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="HOF" name="FR-HOF-10" time="0.258"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MED" name="FR-MED-01" time="0.579"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Unsupported files must be client errors, not HTTP 500
++ actual - expected
+
+  [
++   500,
++   500
+-   400,
+-   400
+  ]
+</failure></testcase>
+<testcase classname="MED" name="FR-MED-02" time="0.011"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q5: octet-stream upload format/MIME contract pending; synthetic-octet.pdf:pdf/application/octet-stream, synthetic-octet.mp4:video/application/octet-stream</failure></testcase>
+<testcase classname="MED" name="FR-MED-03" time="0.383"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q5: local upload URL is rejected by image-message policy; full upload→message pipeline has no successful local path</failure></testcase>
+<testcase classname="MED" name="FR-MED-04" time="0.041"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q5: video upload succeeds, but video message type is rejected by the pinned source</failure></testcase>
+<testcase classname="MED" name="FR-MED-05" time="0.027"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="MED" name="FR-MED-06" time="0.031"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q6: profile points to replacement avatar; old file was deleted explicitly, automatic old-file lifecycle remains undecided</failure></testcase>
+<testcase classname="MED" name="FR-MED-07" time="0.077"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q6: referenced local image/video bytes delete, handoff-context deletion is unsupported, and handoff attachment references remain</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-01" time="0.557"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Expected values to be strictly deep-equal:
++ actual - expected
+
++ Set(3) {
++   &#39;6acb6989f44a1b9fcff90116&#39;,
+- Set(2) {
+    &#39;6acb6989f44a1b9fcff90118&#39;,
+    &#39;6acb6989f44a1b9fcff9011a&#39;
+  }
+</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-02" time="0.522"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">The expression evaluated to a falsy value:
+
+  assert.ok(!inbox.data.notifications.some((item) =&gt; item.referenceId === viewed._id))
+</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-03" time="0.296"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="NOT" name="FR-NOT-04" time="0.258"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Expected values to be strictly equal:
+
+1 !== 2
+</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-05" time="0.69"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PUSH" name="FR-PUSH-01" time="0.491"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PUSH" name="FR-PUSH-02" time="0.755"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="PUSH" name="FR-PUSH-03" time="0.755"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q9: client/device timezone policy for quiet hours needs product decision</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-04" time="0.518"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="FR-RT-01" time="0.702"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="FR-RT-02" time="0.507"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RT" name="FR-RT-03" time="0.498"><properties><property name="vocle.status" value="NEEDS_DECISION"/><property name="vocle.attempted" value="true"/></properties><failure message="NEEDS_DECISION">Q8: intended socket availability note/until convergence needs product decision</failure></testcase>
+<testcase classname="RT" name="FR-RT-07" time="5.03"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Recovered socket must keep typing, room sync, availability handlers and persisted state
++ actual - expected
+
+  {
++   availabilityOk: false,
++   persistedStatus: &#39;available&#39;,
++   syncOk: false,
++   typingOk: false
+-   availabilityOk: true,
+-   persistedStatus: &#39;on_call&#39;,
+-   syncOk: true,
+-   typingOk: true
+  }
+</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-01" time="0.816"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SRCH" name="FR-SRCH-02" time="0.393"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SRCH" name="FR-SRCH-03" time="0.548"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SUP" name="FR-SUP-01" time="0.464"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SUP" name="FR-SUP-02" time="0.023"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="SUP" name="FR-SUP-03" time="0.702"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Dev notification seeding must create three valid inbox records
+
+400 !== 200
+</failure></testcase>
+<testcase classname="RUN" name="FR-RUN-01" time="1.405"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="RUN" name="FR-RUN-02" time="11.134"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="JRN" name="FR-JRN-01" time="1.118"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="JRN" name="FR-JRN-02" time="0.336"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="JRN" name="FR-JRN-03" time="0.307"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="JRN" name="FR-JRN-04" time="0.216"><properties><property name="vocle.status" value="FAIL"/><property name="vocle.attempted" value="true"/></properties><failure message="FAIL">Explicit room sync left the departed user receiving a correlated space event
+
+true !== false
+</failure></testcase>
+</testsuite><testsuite name="Vocle.infrastructure" tests="0" errors="0"></testsuite></testsuites>

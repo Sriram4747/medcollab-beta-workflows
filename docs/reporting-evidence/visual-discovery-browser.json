@@ -1,0 +1,26 @@
+{
+  "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "offline": true,
+  "source": {
+    "sha": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e",
+    "kind": "commit"
+  },
+  "harness": {
+    "sha": "4eb4c2a57bb0f47bb771321a44c2a283e546ef3e"
+  },
+  "caseCount": 691,
+  "pass": true,
+  "checks": [
+    "all IDs",
+    "outcome/module charts",
+    "chart drilldown/reset",
+    "five local download links",
+    "validated artifact hyperlinks",
+    "search",
+    "status/module/priority filters",
+    "expand/lazy details",
+    "hostile markup inert",
+    "run/artifact link when present",
+    "no external resource requests"
+  ]
+}

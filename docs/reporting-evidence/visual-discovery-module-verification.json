@@ -1,0 +1,19 @@
+{
+  "runId": 38132947030,
+  "source": {
+    "sha": "75ac368dd7fff062f3867bbe86d4cc0fadccfb0a",
+    "kind": "commit"
+  },
+  "rowsCompared": 691,
+  "moduleLabelsMatch": true,
+  "originalPassedFlagsMatch": true,
+  "counts": {
+    "PASS": 635,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0,
+    "OBSERVATION": 56
+  }
+}

@@ -1,0 +1,491 @@
+{
+  "run": {
+    "id": 38132630150,
+    "headSha": "9c228471a9d3d741ff70cdc56e750443d3f8d9d2",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132630150"
+  },
+  "jobs": [
+    {
+      "id": 114449927810,
+      "name": "Detect",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:37:52Z",
+          "completed_at": "2026-10-11T10:37:52Z"
+        },
+        {
+          "name": "Check out exact fork harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:37:52Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Validate catalog and CI contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Resolve exact read-only target",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Fingerprint exact harness and assertions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Select affected fork modules with shared-code fallback",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Check validated full-backend success history",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Post Check out exact fork harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-11T10:37:56Z",
+          "completed_at": "2026-10-11T10:37:56Z"
+        }
+      ]
+    },
+    {
+      "id": 114449961920,
+      "name": "Execute",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:38:03Z",
+          "completed_at": "2026-10-11T10:38:04Z"
+        },
+        {
+          "name": "Check out exact harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:38:04Z",
+          "completed_at": "2026-10-11T10:38:06Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:38:06Z",
+          "completed_at": "2026-10-11T10:38:10Z"
+        },
+        {
+          "name": "Fetch captured source without credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:38:10Z",
+          "completed_at": "2026-10-11T10:38:12Z"
+        },
+        {
+          "name": "Prepare pinned runtime dependencies and Mongo binary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:38:12Z",
+          "completed_at": "2026-10-11T10:38:44Z"
+        },
+        {
+          "name": "Run retained sanity and backend modules with loopback-only providers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:38:44Z",
+          "completed_at": "2026-10-11T10:43:56Z"
+        },
+        {
+          "name": "Verify provenance, cleanup, exact IDs and write reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:43:56Z",
+          "completed_at": "2026-10-11T10:43:56Z"
+        },
+        {
+          "name": "Generate detailed offline backend dashboard even after setup failure",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T10:43:56Z",
+          "completed_at": "2026-10-11T10:44:00Z"
+        },
+        {
+          "name": "Stage sanitized diagnostic evidence without changing runner gates",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T10:44:00Z",
+          "completed_at": "2026-10-11T10:44:00Z"
+        },
+        {
+          "name": "Upload full diagnostic evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-11T10:44:00Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Create validated success marker after diagnostic upload",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Upload validated full-backend success marker",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Enforce verified regression gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 13,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 25,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Post Check out exact harness revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-11T10:44:02Z",
+          "completed_at": "2026-10-11T10:44:02Z"
+        }
+      ]
+    },
+    {
+      "id": 114449961958,
+      "name": "Flutter",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:38:04Z",
+          "completed_at": "2026-10-11T10:38:06Z"
+        },
+        {
+          "name": "Check out exact fork revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:38:06Z",
+          "completed_at": "2026-10-11T10:38:07Z"
+        },
+        {
+          "name": "Verify source provenance and prepare report directory",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:38:07Z",
+          "completed_at": "2026-10-11T10:38:07Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:38:07Z",
+          "completed_at": "2026-10-11T10:38:08Z"
+        },
+        {
+          "name": "Set up pinned Flutter SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:38:08Z",
+          "completed_at": "2026-10-11T10:38:47Z"
+        },
+        {
+          "name": "Resolve exact locked dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:38:47Z",
+          "completed_at": "2026-10-11T10:39:05Z"
+        },
+        {
+          "name": "Run catalog and retained Flutter tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:39:05Z",
+          "completed_at": "2026-10-11T10:39:49Z"
+        },
+        {
+          "name": "Aggregate exact Flutter catalog and coverage gate",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T10:39:49Z",
+          "completed_at": "2026-10-11T10:39:49Z"
+        },
+        {
+          "name": "Generate detailed offline Flutter dashboard even after setup failure",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T10:39:49Z",
+          "completed_at": "2026-10-11T10:39:50Z"
+        },
+        {
+          "name": "Stage sanitized Flutter diagnostic evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-11T10:39:50Z",
+          "completed_at": "2026-10-11T10:39:51Z"
+        },
+        {
+          "name": "Upload Flutter reports and provenance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T10:39:51Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        },
+        {
+          "name": "Enforce Flutter functional gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 12,
+          "started_at": "2026-10-11T10:39:52Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        },
+        {
+          "name": "Post Set up pinned Flutter SDK",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-11T10:39:52Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23,
+          "started_at": "2026-10-11T10:39:52Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        },
+        {
+          "name": "Post Check out exact fork revision",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-10-11T10:39:52Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-11T10:39:52Z",
+          "completed_at": "2026-10-11T10:39:52Z"
+        }
+      ]
+    },
+    {
+      "id": 114451039065,
+      "name": "Summary",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:44:08Z",
+          "completed_at": "2026-10-11T10:44:09Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:44:09Z",
+          "completed_at": "2026-10-11T10:44:11Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:44:11Z",
+          "completed_at": "2026-10-11T10:44:11Z"
+        },
+        {
+          "name": "Collect case evidence and report skipped or failed setup lanes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:44:11Z",
+          "completed_at": "2026-10-11T10:44:13Z"
+        },
+        {
+          "name": "Upload workflow dashboard including detection failures and skips",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:44:13Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        },
+        {
+          "name": "Publish clickable report download",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:44:15Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        },
+        {
+          "name": "Summarize detection, coverage gate and artifacts",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 7,
+          "started_at": "2026-10-11T10:44:15Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13,
+          "started_at": "2026-10-11T10:44:15Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-11T10:44:15Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-11T10:44:15Z",
+          "completed_at": "2026-10-11T10:44:15Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11700245817,
+      "name": "vocle-regression-dashboard-38132630150-1",
+      "digest": "sha256:a060af4c88c036fdbeb8d34bc503aa79dc84fde70f37b218c35ce55cc3c2be0d",
+      "size": 400332,
+      "expired": false
+    },
+    {
+      "id": 11700235446,
+      "name": "vocle-flutter-report-38132630150-1",
+      "digest": "sha256:b3c13a6e392c63bca092a4c150a198146b36fe93e7bc7455680e3aa98fd155de",
+      "size": 180259,
+      "expired": false
+    },
+    {
+      "id": 11700230885,
+      "name": "vocle-functional-report-38132630150-1",
+      "digest": "sha256:a251e6ffa5973b716a9ddffe839f0ba91afef61f3a9f0d6e9015559f670fb24b",
+      "size": 760887,
+      "expired": false
+    }
+  ]
+}

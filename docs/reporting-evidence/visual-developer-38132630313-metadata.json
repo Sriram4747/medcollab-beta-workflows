@@ -1,0 +1,323 @@
+{
+  "run": {
+    "id": 38132630313,
+    "headSha": "9c228471a9d3d741ff70cdc56e750443d3f8d9d2",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132630313"
+  },
+  "jobs": [
+    {
+      "id": 114449927961,
+      "name": "integration (windows-2022)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:37:51Z",
+          "completed_at": "2026-10-11T10:37:52Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:37:52Z",
+          "completed_at": "2026-10-11T10:37:59Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:37:59Z",
+          "completed_at": "2026-10-11T10:38:03Z"
+        },
+        {
+          "name": "Evidence, comparison, ownership and coverage contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:38:03Z",
+          "completed_at": "2026-10-11T10:38:04Z"
+        },
+        {
+          "name": "Detailed report normalization and escaping contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:38:04Z",
+          "completed_at": "2026-10-11T10:38:06Z"
+        },
+        {
+          "name": "Enforce stable IDs and feature declaration",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-11T10:38:06Z",
+          "completed_at": "2026-10-11T10:38:06Z"
+        },
+        {
+          "name": "Independently verify candidate tooling with existing offline suites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:38:06Z",
+          "completed_at": "2026-10-11T10:40:05Z"
+        },
+        {
+          "name": "Verify portable Docker orchestration with disposable real backend assertions",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-11T10:40:05Z",
+          "completed_at": "2026-10-11T10:40:05Z"
+        },
+        {
+          "name": "Preserve submission and QA evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T10:40:05Z",
+          "completed_at": "2026-10-11T10:40:06Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-11T10:40:06Z",
+          "completed_at": "2026-10-11T10:40:06Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-11T10:40:06Z",
+          "completed_at": "2026-10-11T10:40:08Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-11T10:40:08Z",
+          "completed_at": "2026-10-11T10:40:08Z"
+        }
+      ]
+    },
+    {
+      "id": 114449928089,
+      "name": "integration (ubuntu-24.04)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:37:51Z",
+          "completed_at": "2026-10-11T10:37:52Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:37:52Z",
+          "completed_at": "2026-10-11T10:37:53Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:37:53Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Evidence, comparison, ownership and coverage contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Detailed report normalization and escaping contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Enforce stable IDs and feature declaration",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:54Z"
+        },
+        {
+          "name": "Independently verify candidate tooling with existing offline suites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:37:54Z",
+          "completed_at": "2026-10-11T10:37:59Z"
+        },
+        {
+          "name": "Verify portable Docker orchestration with disposable real backend assertions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T10:37:59Z",
+          "completed_at": "2026-10-11T10:38:36Z"
+        },
+        {
+          "name": "Preserve submission and QA evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T10:38:36Z",
+          "completed_at": "2026-10-11T10:38:38Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-11T10:38:38Z",
+          "completed_at": "2026-10-11T10:38:38Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-11T10:38:38Z",
+          "completed_at": "2026-10-11T10:38:38Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-11T10:38:38Z",
+          "completed_at": "2026-10-11T10:38:38Z"
+        }
+      ]
+    },
+    {
+      "id": 114450339043,
+      "name": "Visual QA report / Visual QA report",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:40:12Z",
+          "completed_at": "2026-10-11T10:40:13Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:40:13Z",
+          "completed_at": "2026-10-11T10:40:14Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:40:14Z",
+          "completed_at": "2026-10-11T10:40:15Z"
+        },
+        {
+          "name": "Generate visual evidence including failed prerequisites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:40:15Z",
+          "completed_at": "2026-10-11T10:40:16Z"
+        },
+        {
+          "name": "Upload offline dashboard and detailed reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:40:16Z",
+          "completed_at": "2026-10-11T10:40:17Z"
+        },
+        {
+          "name": "Publish clickable report download",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:40:17Z",
+          "completed_at": "2026-10-11T10:40:17Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T10:40:17Z",
+          "completed_at": "2026-10-11T10:40:17Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-11T10:40:17Z",
+          "completed_at": "2026-10-11T10:40:17Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-11T10:40:17Z",
+          "completed_at": "2026-10-11T10:40:17Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11699881198,
+      "name": "developer-qa-ubuntu-24.04-38132630313-1",
+      "digest": "sha256:f3783319ac09b53d00f4993ab97aab1ccd2c5131fc3f5dfe74b35357644b8932",
+      "size": 2248753,
+      "expired": false
+    },
+    {
+      "id": 11699343327,
+      "name": "vocle-qa-dashboard-vocle-developer-qa.yml-38132630313-1",
+      "digest": "sha256:8b6555237727ad2d00a3db1035ea406d18213b1195d227c9adf4086c3d49dc58",
+      "size": 18455,
+      "expired": false
+    },
+    {
+      "id": 11699184146,
+      "name": "developer-qa-windows-2022-38132630313-1",
+      "digest": "sha256:c3b55e22022b02c3174f96b246eb0b8d37826778566a52dd224ebeba8ae7e829",
+      "size": 999776,
+      "expired": false
+    }
+  ]
+}

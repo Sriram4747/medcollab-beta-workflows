@@ -1,0 +1,2130 @@
+{
+  "schemaVersion": 1,
+  "reportingContractVersion": 1,
+  "suite": "security",
+  "scope": "cloudinary",
+  "sourceKind": "commit",
+  "source": {
+    "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+    "kind": "commit"
+  },
+  "harness": {
+    "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+  },
+  "environmentFingerprint": null,
+  "definitionSet": "28b75c6a6ebb29c5d44de8672910e180ce3436fd5f3c4c3665f1c3a1672600bd",
+  "generatedAt": null,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38131356746",
+  "originalGate": "SUCCESS",
+  "selected": 34,
+  "recorded": 34,
+  "attempted": 34,
+  "counts": {
+    "PASS": 26,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0,
+    "OBSERVATION": 8
+  },
+  "originalCounts": {
+    "PASS": 26,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0,
+    "OBSERVATION": 8
+  },
+  "infrastructure": [],
+  "results": [
+    {
+      "id": "VOCLE-752",
+      "title": "Positive test-cloud binding and signed synthetic smoke",
+      "module": "configuration",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Positive test-cloud binding and signed synthetic smoke. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact positive allowlist match and signed PNG accepted only within this run",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Positive test-cloud binding and signed synthetic smoke",
+          "expected": "Exact positive allowlist match and signed PNG accepted only within this run"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"allowlistMatched\": true,\n  \"signedUploadAccepted\": true,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  }\n}",
+      "comparisonExpected": "Exact positive allowlist match and signed PNG accepted only within this run",
+      "comparisonActual": "{\n  \"allowlistMatched\": true,\n  \"signedUploadAccepted\": true,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  }\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"allowlistMatched\": true,\n  \"signedUploadAccepted\": true,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  }\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-753",
+      "title": "Application PNG upload resource identity",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application PNG upload resource identity. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Real controller PNG stored as image/upload under broker run namespace",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application PNG upload resource identity",
+          "expected": "Real controller PNG stored as image/upload under broker run namespace"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"brokerFolderAdaptation\": true\n}",
+      "comparisonExpected": "Real controller PNG stored as image/upload under broker run namespace",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"brokerFolderAdaptation\": true\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"brokerFolderAdaptation\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-754",
+      "title": "Image exact authenticated resource read",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Image exact authenticated resource read. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact provider metadata matches recorded public ID, asset ID and resource type",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Image exact authenticated resource read",
+          "expected": "Exact provider metadata matches recorded public ID, asset ID and resource type"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "comparisonExpected": "Exact provider metadata matches recorded public ID, asset ID and resource type",
+      "comparisonActual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-755",
+      "title": "Image HTTPS original retrieval",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Image HTTPS original retrieval. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Approved-cloud HTTPS original returns image bytes",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Image HTTPS original retrieval",
+          "expected": "Approved-cloud HTTPS original returns image bytes"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false\n}",
+      "comparisonExpected": "Approved-cloud HTTPS original returns image bytes",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-756",
+      "title": "Application safe image thumbnail transformation",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application safe image thumbnail transformation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Controller 400x400 limit WebP thumbnail retrieves successfully",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application safe image thumbnail transformation",
+          "expected": "Controller 400x400 limit WebP thumbnail retrieves successfully"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"image/webp\",\n  \"bytes\": 44,\n  \"sha256\": \"83e0c98111545b7c1ab12c028c63b12f2785c917c75e10bf75077e329633cd43\",\n  \"redirected\": false\n}",
+      "comparisonExpected": "Controller 400x400 limit WebP thumbnail retrieves successfully",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"image/webp\",\n  \"bytes\": 44,\n  \"sha256\": \"83e0c98111545b7c1ab12c028c63b12f2785c917c75e10bf75077e329633cd43\",\n  \"redirected\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"image/webp\",\n  \"bytes\": 44,\n  \"sha256\": \"83e0c98111545b7c1ab12c028c63b12f2785c917c75e10bf75077e329633cd43\",\n  \"redirected\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-757",
+      "title": "Image anonymous delivery characterization",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Image anonymous delivery characterization. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Measure unsigned synthetic delivery; public access does not establish clinical policy",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Image anonymous delivery characterization",
+          "expected": "Measure unsigned synthetic delivery; public access does not establish clinical policy"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false,\n  \"unsignedDelivery\": true,\n  \"anonymouslyRetrievable\": true,\n  \"policyApproval\": false\n}",
+      "comparisonExpected": "Measure unsigned synthetic delivery; public access does not establish clinical policy",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false,\n  \"unsignedDelivery\": true,\n  \"anonymouslyRetrievable\": true,\n  \"policyApproval\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"image/png\",\n  \"bytes\": 70,\n  \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n  \"redirected\": false,\n  \"unsignedDelivery\": true,\n  \"anonymouslyRetrievable\": true,\n  \"policyApproval\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-758",
+      "title": "Application MP4 upload resource identity",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application MP4 upload resource identity. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Real controller synthetic MP4 stored as video/upload",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application MP4 upload resource identity",
+          "expected": "Real controller synthetic MP4 stored as video/upload"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n    \"resourceType\": \"video\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"mp4\",\n    \"bytes\": 1509,\n    \"width\": 16,\n    \"height\": 16,\n    \"secureURLApproved\": true\n  }\n}",
+      "comparisonExpected": "Real controller synthetic MP4 stored as video/upload",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n    \"resourceType\": \"video\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"mp4\",\n    \"bytes\": 1509,\n    \"width\": 16,\n    \"height\": 16,\n    \"secureURLApproved\": true\n  }\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n    \"resourceType\": \"video\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"mp4\",\n    \"bytes\": 1509,\n    \"width\": 16,\n    \"height\": 16,\n    \"secureURLApproved\": true\n  }\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-759",
+      "title": "Video exact authenticated resource read",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Video exact authenticated resource read. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact video metadata exists and matches this run",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Video exact authenticated resource read",
+          "expected": "Exact video metadata exists and matches this run"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 1509,\n  \"format\": \"mp4\"\n}",
+      "comparisonExpected": "Exact video metadata exists and matches this run",
+      "comparisonActual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 1509,\n  \"format\": \"mp4\"\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 1509,\n  \"format\": \"mp4\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-760",
+      "title": "Video HTTPS original retrieval",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Video HTTPS original retrieval. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Synthetic video delivery returns video bytes",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Video HTTPS original retrieval",
+          "expected": "Synthetic video delivery returns video bytes"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false\n}",
+      "comparisonExpected": "Synthetic video delivery returns video bytes",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-761",
+      "title": "Application video JPG thumbnail transformation",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application video JPG thumbnail transformation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Controller video frame transformation retrieves image bytes",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application video JPG thumbnail transformation",
+          "expected": "Controller video frame transformation retrieves image bytes"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"image/jpeg\",\n  \"bytes\": 158,\n  \"sha256\": \"63927fcaf17b5ebee9ae1991c0fdeaf8d69bec0440a4456ff7cd010e47361f9f\",\n  \"redirected\": false\n}",
+      "comparisonExpected": "Controller video frame transformation retrieves image bytes",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"image/jpeg\",\n  \"bytes\": 158,\n  \"sha256\": \"63927fcaf17b5ebee9ae1991c0fdeaf8d69bec0440a4456ff7cd010e47361f9f\",\n  \"redirected\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"image/jpeg\",\n  \"bytes\": 158,\n  \"sha256\": \"63927fcaf17b5ebee9ae1991c0fdeaf8d69bec0440a4456ff7cd010e47361f9f\",\n  \"redirected\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-762",
+      "title": "Application owner video deletion limitation",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application owner video deletion limitation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Owner deletion should remove video; preserve existing VOCLE-736 finding if retained",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application owner video deletion limitation",
+          "expected": "Owner deletion should remove video; preserve existing VOCLE-736 finding if retained"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 403,\n  \"videoRetained\": true,\n  \"dispatch\": []\n}",
+      "comparisonExpected": "Owner deletion should remove video; preserve existing VOCLE-736 finding if retained",
+      "comparisonActual": "{\n  \"status\": 403,\n  \"videoRetained\": true,\n  \"dispatch\": []\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described video scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 403,\n  \"videoRetained\": true,\n  \"dispatch\": []\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "existing application deletion defect",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-763",
+      "title": "Independent explicit video deletion",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Independent explicit video deletion. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Correct video resource type destroy returns ok",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Independent explicit video deletion",
+          "expected": "Correct video resource type destroy returns ok"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"result\": \"ok\"\n}",
+      "comparisonExpected": "Correct video resource type destroy returns ok",
+      "comparisonActual": "{\n  \"result\": \"ok\"\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"result\": \"ok\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-764",
+      "title": "Video origin disappearance",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Video origin disappearance. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact authenticated video lookup returns 404 after deletion",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Video origin disappearance",
+          "expected": "Exact authenticated video lookup returns 404 after deletion"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": false\n}",
+      "comparisonExpected": "Exact authenticated video lookup returns 404 after deletion",
+      "comparisonActual": "{\n  \"exists\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-765",
+      "title": "Video post-delete delivery behavior",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Video post-delete delivery behavior. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Fresh original delivery should stop; report CDN persistence separately from origin absence",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Video post-delete delivery behavior",
+          "expected": "Fresh original delivery should stop; report CDN persistence separately from origin absence"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false,\n  \"appInvalidateOmitted\": true,\n  \"independentTestDeletionInvalidate\": false\n}",
+      "comparisonExpected": "Fresh original delivery should stop; report CDN persistence separately from origin absence",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false,\n  \"appInvalidateOmitted\": true,\n  \"independentTestDeletionInvalidate\": false\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described video scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"video/mp4\",\n  \"bytes\": 1509,\n  \"sha256\": \"d52c25883ebab2b9d7a9f416f4a7e7d118ff429eb68e85bbf295f34d99c70ae7\",\n  \"redirected\": false,\n  \"appInvalidateOmitted\": true,\n  \"independentTestDeletionInvalidate\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider CDN/cache behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-766",
+      "title": "Repeated video deletion semantics",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Repeated video deletion semantics. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Repeated exact video destroy returns not found",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Repeated video deletion semantics",
+          "expected": "Repeated exact video destroy returns not found"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"result\": \"not found\"\n}",
+      "comparisonExpected": "Repeated exact video destroy returns not found",
+      "comparisonActual": "{\n  \"result\": \"not found\"\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"result\": \"not found\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-767",
+      "title": "Application PDF raw upload resource identity",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application PDF raw upload resource identity. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Real controller synthetic PDF stored as raw/upload",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application PDF raw upload resource identity",
+          "expected": "Real controller synthetic PDF stored as raw/upload"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n    \"resourceType\": \"raw\",\n    \"deliveryType\": \"upload\",\n    \"format\": null,\n    \"bytes\": 344,\n    \"width\": null,\n    \"height\": null,\n    \"secureURLApproved\": true\n  }\n}",
+      "comparisonExpected": "Real controller synthetic PDF stored as raw/upload",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n    \"resourceType\": \"raw\",\n    \"deliveryType\": \"upload\",\n    \"format\": null,\n    \"bytes\": 344,\n    \"width\": null,\n    \"height\": null,\n    \"secureURLApproved\": true\n  }\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n    \"resourceType\": \"raw\",\n    \"deliveryType\": \"upload\",\n    \"format\": null,\n    \"bytes\": 344,\n    \"width\": null,\n    \"height\": null,\n    \"secureURLApproved\": true\n  }\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-768",
+      "title": "Raw PDF exact authenticated resource read",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Raw PDF exact authenticated resource read. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact raw PDF metadata exists and matches this run",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Raw PDF exact authenticated resource read",
+          "expected": "Exact raw PDF metadata exists and matches this run"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "comparisonExpected": "Exact raw PDF metadata exists and matches this run",
+      "comparisonActual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-769",
+      "title": "Raw PDF HTTPS original delivery",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Raw PDF HTTPS original delivery. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Original synthetic PDF delivery returns exact fixture bytes",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Raw PDF HTTPS original delivery",
+          "expected": "Original synthetic PDF delivery returns exact fixture bytes"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false\n}",
+      "comparisonExpected": "Original synthetic PDF delivery returns exact fixture bytes",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-770",
+      "title": "Application raw PDF attachment delivery",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application raw PDF attachment delivery. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Controller attachment URL returns exact PDF bytes where account allows delivery",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application raw PDF attachment delivery",
+          "expected": "Controller attachment URL returns exact PDF bytes where account allows delivery"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false,\n  \"plainAttachmentControl\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"plainAttachmentSupported\": true\n}",
+      "comparisonExpected": "Controller attachment URL returns exact PDF bytes where account allows delivery",
+      "comparisonActual": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false,\n  \"plainAttachmentControl\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"plainAttachmentSupported\": true\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 200,\n  \"contentType\": \"application/octet-stream\",\n  \"bytes\": 344,\n  \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n  \"redirected\": false,\n  \"plainAttachmentControl\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"plainAttachmentSupported\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-771",
+      "title": "Application raw PDF image preview compatibility",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application raw PDF image preview compatibility. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Measure actual image preview; URL construction alone cannot establish support",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application raw PDF image preview compatibility",
+          "expected": "Measure actual image preview; URL construction alone cannot establish support"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"appThumbnailProvided\": false,\n  \"appPreview\": null,\n  \"uploadedResourceType\": \"raw\",\n  \"previewResourceType\": \"image\",\n  \"previewSupported\": false,\n  \"imagePDFControl\": {\n    \"identity\": {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"deliveryType\": \"upload\",\n      \"format\": \"pdf\",\n      \"bytes\": 344,\n      \"width\": 10,\n      \"height\": 10,\n      \"secureURLApproved\": true\n    },\n    \"metadata\": {\n      \"exists\": true,\n      \"identityMatched\": true,\n      \"bytes\": 344,\n      \"format\": \"pdf\"\n    },\n    \"preview\": {\n      \"status\": 200,\n      \"contentType\": \"image/webp\",\n      \"bytes\": 38,\n      \"sha256\": \"a1e2f6dbda847380d13af6bd388778fe2d5c2a3b127c38a3924cbe31e1dd8de2\",\n      \"redirected\": false\n    },\n    \"previewSupported\": true\n  }\n}",
+      "comparisonExpected": "Measure actual image preview; URL construction alone cannot establish support",
+      "comparisonActual": "{\n  \"appThumbnailProvided\": false,\n  \"appPreview\": null,\n  \"uploadedResourceType\": \"raw\",\n  \"previewResourceType\": \"image\",\n  \"previewSupported\": false,\n  \"imagePDFControl\": {\n    \"identity\": {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"deliveryType\": \"upload\",\n      \"format\": \"pdf\",\n      \"bytes\": 344,\n      \"width\": 10,\n      \"height\": 10,\n      \"secureURLApproved\": true\n    },\n    \"metadata\": {\n      \"exists\": true,\n      \"identityMatched\": true,\n      \"bytes\": 344,\n      \"format\": \"pdf\"\n    },\n    \"preview\": {\n      \"status\": 200,\n      \"contentType\": \"image/webp\",\n      \"bytes\": 38,\n      \"sha256\": \"a1e2f6dbda847380d13af6bd388778fe2d5c2a3b127c38a3924cbe31e1dd8de2\",\n      \"redirected\": false\n    },\n    \"previewSupported\": true\n  }\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"appThumbnailProvided\": false,\n  \"appPreview\": null,\n  \"uploadedResourceType\": \"raw\",\n  \"previewResourceType\": \"image\",\n  \"previewSupported\": false,\n  \"imagePDFControl\": {\n    \"identity\": {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"deliveryType\": \"upload\",\n      \"format\": \"pdf\",\n      \"bytes\": 344,\n      \"width\": 10,\n      \"height\": 10,\n      \"secureURLApproved\": true\n    },\n    \"metadata\": {\n      \"exists\": true,\n      \"identityMatched\": true,\n      \"bytes\": 344,\n      \"format\": \"pdf\"\n    },\n    \"preview\": {\n      \"status\": 200,\n      \"contentType\": \"image/webp\",\n      \"bytes\": 38,\n      \"sha256\": \"a1e2f6dbda847380d13af6bd388778fe2d5c2a3b127c38a3924cbe31e1dd8de2\",\n      \"redirected\": false\n    },\n    \"previewSupported\": true\n  }\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-772",
+      "title": "Application owner raw deletion",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application owner raw deletion. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Unchanged controller image-then-raw deletion removes owned PDF",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application owner raw deletion",
+          "expected": "Unchanged controller image-then-raw deletion removes owned PDF"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "comparisonExpected": "Unchanged controller image-then-raw deletion removes owned PDF",
+      "comparisonActual": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described raw scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider/configuration behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-773",
+      "title": "Raw origin disappearance and post-delete retrieval",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Raw origin disappearance and post-delete retrieval. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Raw origin disappearance and post-delete retrieval",
+          "expected": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "comparisonExpected": "Exact authenticated raw lookup returns 404; measure original delivery separately for cache persistence",
+      "comparisonActual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described raw scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 344,\n  \"format\": null,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"application/octet-stream\",\n    \"bytes\": 344,\n    \"sha256\": \"b58465abb13d34419dd15dc13a9cbcae5f8bca34057416111b66ccd2a5755a78\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider CDN/cache behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-774",
+      "title": "Repeated raw deletion semantics",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Repeated raw deletion semantics. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Repeated exact raw destroy returns not found",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Repeated raw deletion semantics",
+          "expected": "Repeated exact raw destroy returns not found"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"result\": \"ok\"\n}",
+      "comparisonExpected": "Repeated exact raw destroy returns not found",
+      "comparisonActual": "{\n  \"result\": \"ok\"\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described raw scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"result\": \"ok\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider/configuration behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-775",
+      "title": "Application owner image deletion",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application owner image deletion. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Unchanged controller removes owned image",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application owner image deletion",
+          "expected": "Unchanged controller removes owned image"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "comparisonExpected": "Unchanged controller removes owned image",
+      "comparisonActual": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described image scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 403,\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider/configuration behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-776",
+      "title": "Image origin disappearance, retrieval and repeated deletion",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Image origin disappearance, retrieval and repeated deletion. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Image exact lookup absent, repeated destroy not found; measure original delivery separately",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Image origin disappearance, retrieval and repeated deletion",
+          "expected": "Image exact lookup absent, repeated destroy not found; measure original delivery separately"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\",\n  \"result\": \"ok\",\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "comparisonExpected": "Image exact lookup absent, repeated destroy not found; measure original delivery separately",
+      "comparisonActual": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\",\n  \"result\": \"ok\",\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described image scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"exists\": true,\n  \"identityMatched\": true,\n  \"bytes\": 70,\n  \"format\": \"png\",\n  \"result\": \"ok\",\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  },\n  \"originAbsenceIndependentOfCDN\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "provider CDN/cache behavior",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-777",
+      "title": "Same-folder duplicate filenames and generated IDs",
+      "module": "naming",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Same-folder duplicate filenames and generated IDs. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Provider generates distinct IDs for duplicate synthetic filenames without overwriting",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Same-folder duplicate filenames and generated IDs",
+          "expected": "Provider generates distinct IDs for duplicate synthetic filenames without overwriting"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"distinctIds\": true,\n  \"first\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"second\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"filenameOverrideControlsID\": true\n}",
+      "comparisonExpected": "Provider generates distinct IDs for duplicate synthetic filenames without overwriting",
+      "comparisonActual": "{\n  \"distinctIds\": true,\n  \"first\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"second\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"filenameOverrideControlsID\": true\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"distinctIds\": true,\n  \"first\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"second\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"filenameOverrideControlsID\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-778",
+      "title": "Explicit overwrite false preserves original",
+      "module": "naming",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Explicit overwrite false preserves original. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Second same-ID upload with overwrite false preserves original exact resource",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Explicit overwrite false preserves original",
+          "expected": "Second same-ID upload with overwrite false preserves original exact resource"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"secondRejected\": false,\n  \"existingReturned\": true,\n  \"identityPreserved\": true,\n  \"versionPreserved\": true,\n  \"differentSyntheticBytesAttempted\": true,\n  \"originalBytesPreserved\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  }\n}",
+      "comparisonExpected": "Second same-ID upload with overwrite false preserves original exact resource",
+      "comparisonActual": "{\n  \"secondRejected\": false,\n  \"existingReturned\": true,\n  \"identityPreserved\": true,\n  \"versionPreserved\": true,\n  \"differentSyntheticBytesAttempted\": true,\n  \"originalBytesPreserved\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  }\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"secondRejected\": false,\n  \"existingReturned\": true,\n  \"identityPreserved\": true,\n  \"versionPreserved\": true,\n  \"differentSyntheticBytesAttempted\": true,\n  \"originalBytesPreserved\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"abc58d5127d7cdf313beb9ec8ee839860a9c6bfbc48c8b8eb6a3f7d8bb63de6f\",\n    \"redirected\": false\n  }\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-779",
+      "title": "Explicit overwrite true characterization",
+      "module": "naming",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Explicit overwrite true characterization. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Bounded owned same-ID overwrite is accepted; record actual version and bytes",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Explicit overwrite true characterization",
+          "expected": "Bounded owned same-ID overwrite is accepted; record actual version and bytes"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"accepted\": true,\n  \"previousVersion\": 1791713807,\n  \"returnedVersion\": 1791713808,\n  \"differentSyntheticBytesOnly\": true,\n  \"replacementBytesVerified\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"d5a51b6aed15684ec8c123e30fe5703155359d6543b6d7b47cb5766ef44939de\",\n    \"redirected\": false\n  },\n  \"productionOverwritePolicyVerified\": false\n}",
+      "comparisonExpected": "Bounded owned same-ID overwrite is accepted; record actual version and bytes",
+      "comparisonActual": "{\n  \"accepted\": true,\n  \"previousVersion\": 1791713807,\n  \"returnedVersion\": 1791713808,\n  \"differentSyntheticBytesOnly\": true,\n  \"replacementBytesVerified\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"d5a51b6aed15684ec8c123e30fe5703155359d6543b6d7b47cb5766ef44939de\",\n    \"redirected\": false\n  },\n  \"productionOverwritePolicyVerified\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"accepted\": true,\n  \"previousVersion\": 1791713807,\n  \"returnedVersion\": 1791713808,\n  \"differentSyntheticBytesOnly\": true,\n  \"replacementBytesVerified\": true,\n  \"delivery\": {\n    \"status\": 200,\n    \"contentType\": \"image/png\",\n    \"bytes\": 70,\n    \"sha256\": \"d5a51b6aed15684ec8c123e30fe5703155359d6543b6d7b47cb5766ef44939de\",\n    \"redirected\": false\n  },\n  \"productionOverwritePolicyVerified\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-780",
+      "title": "Same public ID resource-type separation",
+      "module": "naming",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Same public ID resource-type separation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Image/raw same public ID remain independently typed resources",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Same public ID resource-type separation",
+          "expected": "Image/raw same public ID remain independently typed resources"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"samePublicId\": true,\n  \"independentResourceTypes\": [\n    \"image\",\n    \"raw\"\n  ]\n}",
+      "comparisonExpected": "Image/raw same public ID remain independently typed resources",
+      "comparisonActual": "{\n  \"samePublicId\": true,\n  \"independentResourceTypes\": [\n    \"image\",\n    \"raw\"\n  ]\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"samePublicId\": true,\n  \"independentResourceTypes\": [\n    \"image\",\n    \"raw\"\n  ]\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-781",
+      "title": "Namespace and forged filename isolation",
+      "module": "naming",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Namespace and forged filename isolation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Controller unsafe original filename cannot escape the broker run namespace",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Namespace and forged filename isolation",
+          "expected": "Controller unsafe original filename cannot escape the broker run namespace"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"originalFilenameSanitized\": \".._.._synthetic-(canary)\",\n  \"normalAppFolderPreservedUnderRunRoot\": true,\n  \"expectedFolderMatched\": true,\n  \"canonicalSegmentsSafe\": true\n}",
+      "comparisonExpected": "Controller unsafe original filename cannot escape the broker run namespace",
+      "comparisonActual": "{\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"originalFilenameSanitized\": \".._.._synthetic-(canary)\",\n  \"normalAppFolderPreservedUnderRunRoot\": true,\n  \"expectedFolderMatched\": true,\n  \"canonicalSegmentsSafe\": true\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"identity\": {\n    \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n    \"resourceType\": \"image\",\n    \"deliveryType\": \"upload\",\n    \"format\": \"png\",\n    \"bytes\": 70,\n    \"width\": 1,\n    \"height\": 1,\n    \"secureURLApproved\": true\n  },\n  \"originalFilenameSanitized\": \".._.._synthetic-(canary)\",\n  \"normalAppFolderPreservedUnderRunRoot\": true,\n  \"expectedFolderMatched\": true,\n  \"canonicalSegmentsSafe\": true\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-782",
+      "title": "Application octet-PDF provider dispatch",
+      "module": "raw",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application octet-PDF provider dispatch. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Octet-PDF should select raw; actual image intent remains VOCLE-724 observation",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application octet-PDF provider dispatch",
+          "expected": "Octet-PDF should select raw; actual image intent remains VOCLE-724 observation"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"requestedType\": \"raw\",\n  \"expectedType\": \"raw\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"raw\",\n  \"providerRejectionStatus\": null\n}",
+      "comparisonExpected": "Octet-PDF should select raw; actual image intent remains VOCLE-724 observation",
+      "comparisonActual": "{\n  \"requestedType\": \"raw\",\n  \"expectedType\": \"raw\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"raw\",\n  \"providerRejectionStatus\": null\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"requestedType\": \"raw\",\n  \"expectedType\": \"raw\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"raw\",\n  \"providerRejectionStatus\": null\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-783",
+      "title": "Application octet-MP4 provider dispatch",
+      "module": "video",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application octet-MP4 provider dispatch. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Octet-MP4 should select video; actual image intent remains VOCLE-725 observation",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application octet-MP4 provider dispatch",
+          "expected": "Octet-MP4 should select video; actual image intent remains VOCLE-725 observation"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"requestedType\": \"video\",\n  \"expectedType\": \"video\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"video\",\n  \"providerRejectionStatus\": null\n}",
+      "comparisonExpected": "Octet-MP4 should select video; actual image intent remains VOCLE-725 observation",
+      "comparisonActual": "{\n  \"requestedType\": \"video\",\n  \"expectedType\": \"video\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"video\",\n  \"providerRejectionStatus\": null\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"requestedType\": \"video\",\n  \"expectedType\": \"video\",\n  \"appStatus\": 200,\n  \"providerAccepted\": true,\n  \"storedType\": \"video\",\n  \"providerRejectionStatus\": null\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": "bounded provider characterization",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-784",
+      "title": "Application shared handoff deletion limitation",
+      "module": "image",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Application shared handoff deletion limitation. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "Uploader should remove handoff asset; existing VOCLE-740 observation if forbidden",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Application shared handoff deletion limitation",
+          "expected": "Uploader should remove handoff asset; existing VOCLE-740 observation if forbidden"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "OBSERVATION",
+      "originalStatus": "OBSERVATION",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"status\": 403,\n  \"retained\": true,\n  \"originalFolder\": \"medcollab/handoffs\"\n}",
+      "comparisonExpected": "Uploader should remove handoff asset; existing VOCLE-740 observation if forbidden",
+      "comparisonActual": "{\n  \"status\": 403,\n  \"retained\": true,\n  \"originalFolder\": \"medcollab/handoffs\"\n}",
+      "failingStep": "Exact step index not captured by the original runner; inspect diagnostic and definition.",
+      "category": "SECURITY_OBSERVATION_REQUIRES_REVIEW",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "Inferred consequence, not an observed production/UI incident: the described image scenario is not fully verified. The diagnostic identifies the observed failure; its wider impact requires investigation.",
+      "outcome": "The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"status\": 403,\n  \"retained\": true,\n  \"originalFolder\": \"medcollab/handoffs\"\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "OBSERVATION",
+      "originalSecurityClassification": "existing application handoff lifecycle limitation",
+      "originalPassed": null
+    },
+    {
+      "id": "VOCLE-785",
+      "title": "Independent manifest cleanup and exact absence verification",
+      "module": "cleanup",
+      "priority": "UNSPECIFIED",
+      "tier": "SECURITY",
+      "scenario": "Independent manifest cleanup and exact absence verification. Execute the documented isolated security probe.",
+      "prerequisites": "Use only deterministic synthetic fixtures in the owning suite. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "reproduction": "API/environment procedure; no UI or production incident is claimed. Use the owning workflow at the recorded source revision.",
+      "expected": "All recorded image/video/raw resources removed; no unresolved upload intents",
+      "steps": [
+        {
+          "number": 1,
+          "action": "Prepare the owning suite fixtures and safety prerequisites.",
+          "expected": "Isolation and prerequisites verified before the action."
+        },
+        {
+          "number": 2,
+          "action": "Independent manifest cleanup and exact absence verification",
+          "expected": "All recorded image/video/raw resources removed; no unresolved upload intents"
+        },
+        {
+          "number": 3,
+          "action": "Independently inspect the recorded database, transport/provider and cleanup evidence.",
+          "expected": "Recorded semantic checks and resource cleanup satisfy the unchanged suite contract."
+        }
+      ],
+      "limitations": "Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage.",
+      "definitions": [],
+      "questionIds": [],
+      "sourceReferences": [],
+      "status": "PASS",
+      "originalStatus": "PASS",
+      "errorCategory": null,
+      "executed": true,
+      "durationMs": null,
+      "source": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+        "kind": "commit"
+      },
+      "harness": {
+        "sha": "b0471ba76f8efc28f3ee9add87cda0a12ec26526"
+      },
+      "actual": "{\n  \"attempted\": true,\n  \"resources\": [\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/overwrite/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-14/medcollab/messages/7ec000000000000000000001/synthetic_u1dpnu\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-15/medcollab/messages/7ec000000000000000000001/synthetic_kgcdrg\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-16/medcollab/handoffs/synthetic_lazv9o\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    }\n  ],\n  \"pendingUnresolved\": 0,\n  \"proven\": true,\n  \"broadDeletionUsed\": false\n}",
+      "comparisonExpected": "All recorded image/video/raw resources removed; no unresolved upload intents",
+      "comparisonActual": "{\n  \"attempted\": true,\n  \"resources\": [\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/overwrite/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-14/medcollab/messages/7ec000000000000000000001/synthetic_u1dpnu\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-15/medcollab/messages/7ec000000000000000000001/synthetic_kgcdrg\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-16/medcollab/handoffs/synthetic_lazv9o\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    }\n  ],\n  \"pendingUnresolved\": 0,\n  \"proven\": true,\n  \"broadDeletionUsed\": false\n}",
+      "failingStep": "None reported",
+      "category": "PASS",
+      "rootCause": "UNKNOWN. This report does not infer a root cause from a status or similar message.",
+      "userImpact": "This recorded execution protects the described scenario within its stated scope.",
+      "outcome": "The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.",
+      "verifiedSubassertions": [],
+      "prerequisiteSeed": null,
+      "diagnostic": "{\n  \"attempted\": true,\n  \"resources\": [\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-001/file_qzfvnq\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-2/medcollab/messages/7ec000000000000000000001/synthetic_e6jal9\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-3/medcollab/messages/7ec000000000000000000001/synthetic_qugpiq\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-4/medcollab/messages/7ec000000000000000000001/synthetic_kpweul\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"not found\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/op-005/file_vyeuwm\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_bhemsa\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/duplicate-names/synthetic-duplicate_tw74iz\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/overwrite/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/type-separation/synthetic\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-13/medcollab/messages/7ec000000000000000000001/.._._fjzll2\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-14/medcollab/messages/7ec000000000000000000001/synthetic_u1dpnu\",\n      \"resourceType\": \"raw\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-15/medcollab/messages/7ec000000000000000000001/synthetic_kgcdrg\",\n      \"resourceType\": \"video\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    },\n    {\n      \"publicId\": \"medcollab/security-test/38131356746-1-48904a8c-8743-4a8c-b777-0680ea12caae/app-16/medcollab/handoffs/synthetic_lazv9o\",\n      \"resourceType\": \"image\",\n      \"destroyResult\": \"ok\",\n      \"originAbsent\": true\n    }\n  ],\n  \"pendingUnresolved\": 0,\n  \"proven\": true,\n  \"broadDeletionUsed\": false\n}",
+      "evidenceFiles": [],
+      "owner": "UNASSIGNED",
+      "originalSecurityStatus": "PASS",
+      "originalSecurityClassification": null,
+      "originalPassed": null
+    }
+  ],
+  "comparison": {
+    "available": false,
+    "reason": "No compatible baseline was supplied."
+  },
+  "note": "OBSERVATION preserves the original security outcome; it is neither an accepted expectation nor a confirmed vulnerability. Original non-blocking security gate behavior is unchanged. Only existing recorded provider evidence is reported. No provider operations are performed by reporting. Controller-level evidence does not prove route/auth/database coverage. Presentation refreshed without a new test execution.",
+  "statuses": [
+    "PASS",
+    "FAIL",
+    "ERROR",
+    "BLOCKED",
+    "NEEDS_DECISION",
+    "SKIP",
+    "OBSERVATION"
+  ],
+  "title": "Cloudinary security · Historical evidence",
+  "inventoryKind": "security cases",
+  "observationsAreNonBlocking": true,
+  "originalSecurityCounts": {
+    "planned": 34,
+    "executed": 34,
+    "passed": 26,
+    "observations": 8
+  },
+  "lanes": [
+    {
+      "suite": "Original Cloudinary run",
+      "artifact": {
+        "name": "vocle-real-cloudinary-security",
+        "id": 11698563804,
+        "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38131356746"
+      },
+      "counts": {
+        "PASS": 26,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0,
+        "OBSERVATION": 8
+      }
+    }
+  ],
+  "presentation": {
+    "style": "Vocle quality analytics",
+    "reportingRevision": "75ac368dd7fff062f3867bbe86d4cc0fadccfb0a",
+    "note": "Read-only re-render of existing GitHub case evidence. No provider calls or new provider execution."
+  }
+}

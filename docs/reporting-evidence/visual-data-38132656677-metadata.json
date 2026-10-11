@@ -1,0 +1,220 @@
+{
+  "run": {
+    "id": 38132656677,
+    "headSha": "9c228471a9d3d741ff70cdc56e750443d3f8d9d2",
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132656677"
+  },
+  "jobs": [
+    {
+      "id": 114450011508,
+      "name": "disposable-data",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:38:20Z",
+          "completed_at": "2026-10-11T10:38:21Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:38:21Z",
+          "completed_at": "2026-10-11T10:38:23Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:38:23Z",
+          "completed_at": "2026-10-11T10:38:24Z"
+        },
+        {
+          "name": "Install dependencies before isolated execution",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:38:24Z",
+          "completed_at": "2026-10-11T10:38:29Z"
+        },
+        {
+          "name": "Syntax manifests and safety guards",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:38:29Z",
+          "completed_at": "2026-10-11T10:38:30Z"
+        },
+        {
+          "name": "Prepare disposable network-none MongoDB",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:38:30Z",
+          "completed_at": "2026-10-11T10:39:07Z"
+        },
+        {
+          "name": "Execute focused data security without external network",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-11T10:39:07Z",
+          "completed_at": "2026-10-11T10:39:20Z"
+        },
+        {
+          "name": "Verify sanitized data artifacts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-11T10:39:20Z",
+          "completed_at": "2026-10-11T10:39:20Z"
+        },
+        {
+          "name": "Preserve sanitized data evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-11T10:39:20Z",
+          "completed_at": "2026-10-11T10:39:21Z"
+        },
+        {
+          "name": "Stop disposable MongoDB",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-11T10:39:21Z",
+          "completed_at": "2026-10-11T10:39:21Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-11T10:39:21Z",
+          "completed_at": "2026-10-11T10:39:21Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-11T10:39:21Z",
+          "completed_at": "2026-10-11T10:39:21Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-11T10:39:21Z",
+          "completed_at": "2026-10-11T10:39:21Z"
+        }
+      ]
+    },
+    {
+      "id": 114450205246,
+      "name": "Visual QA report / Visual QA report",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-11T10:39:28Z",
+          "completed_at": "2026-10-11T10:39:29Z"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-11T10:39:29Z",
+          "completed_at": "2026-10-11T10:39:31Z"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-11T10:39:31Z",
+          "completed_at": "2026-10-11T10:39:31Z"
+        },
+        {
+          "name": "Generate visual evidence including failed prerequisites",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-11T10:39:31Z",
+          "completed_at": "2026-10-11T10:39:33Z"
+        },
+        {
+          "name": "Upload offline dashboard and detailed reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-11T10:39:33Z",
+          "completed_at": "2026-10-11T10:39:34Z"
+        },
+        {
+          "name": "Publish clickable report download",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-11T10:39:34Z",
+          "completed_at": "2026-10-11T10:39:34Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-11T10:39:34Z",
+          "completed_at": "2026-10-11T10:39:34Z"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-11T10:39:34Z",
+          "completed_at": "2026-10-11T10:39:34Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-11T10:39:34Z",
+          "completed_at": "2026-10-11T10:39:34Z"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11700120618,
+      "name": "vocle-qa-dashboard-vocle-data-security.yml-38132656677-1",
+      "digest": "sha256:216d72bd0519cffb2f6aa8b9585501dc193ecfee906ae3edada4fdc7510acfbb",
+      "size": 31752,
+      "expired": false
+    },
+    {
+      "id": 11699308277,
+      "name": "vocle-mongodb-data-security",
+      "digest": "sha256:eb80d7a70c6ef66c9abca80742b7d702aeae44a7c318108a7c6197406663fd19",
+      "size": 8224,
+      "expired": false
+    }
+  ]
+}

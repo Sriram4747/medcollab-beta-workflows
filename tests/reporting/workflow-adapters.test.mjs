@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { profiles, catalogFor, adaptSecurity, jobEvidence } from './workflow-adapters.mjs';
 import { summary, junit, sanitize } from './report.mjs';
+import { execFileSync } from 'node:child_process';
 
 test('included workflow inventory excludes Security Environment Test',()=>{
   assert.equal(Object.keys(profiles).length,6);
@@ -38,3 +39,15 @@ test('every included workflow keeps its original jobs and adds always reporting/
 });
 
 test('expanded security reports redact device token arrays, cookies and OTP hashes',()=>{const r=sanitize({fcmTokens:['opaque-sensitive'],cookie:'opaque-cookie',otpHash:'opaque-hash',log:'fcmTokens=opaque-log'});assert(!JSON.stringify(r).includes('opaque'));});
+
+test('publication audit accepts escaped mask markers and still rejects exposed bearer values',()=>{
+ const code = `import ast,re,sys
+tree=ast.parse(open(sys.argv[1],encoding='utf-8').read())
+patterns=[n.args[0].value for n in ast.walk(tree) if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='search' and n.args and isinstance(n.args[0],ast.Constant) and isinstance(n.args[0].value,str) and n.args[0].value.startswith('Bearer')]
+assert len(patterns)==1
+p=patterns[0]
+for value in ['Bearer [REDACTED]',r'Bearer \\[REDACTED\\]','Bearer ***']: assert not re.search(p,value)
+for value in ['Bearer synthetic-unmasked-value',r'Bearer \\[not-a-mask\\]']: assert re.search(p,value)
+print('PASS')`;
+ assert.equal(execFileSync(process.platform==='win32'?'python':'python3',['-c',code,'tests/reporting/verify-artifacts.py'],{encoding:'utf8',windowsHide:true}).trim(),'PASS');
+});

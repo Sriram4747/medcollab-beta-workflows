@@ -1,0 +1,94 @@
+{
+  "run": {
+    "id": 38132630313,
+    "headSha": "9c228471a9d3d741ff70cdc56e750443d3f8d9d2",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132630313"
+  },
+  "artifactsVerified": [
+    {
+      "artifact": "developer-qa-ubuntu-24.04-38132630313-1",
+      "digest": "sha256:f3783319ac09b53d00f4993ab97aab1ccd2c5131fc3f5dfe74b35357644b8932",
+      "suite": "developer",
+      "caseCount": 13,
+      "attempted": 13,
+      "counts": {
+        "PASS": 13,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0
+      },
+      "originalGate": "PASS",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "developer-qa-ubuntu-24.04-38132630313-1",
+      "digest": "sha256:f3783319ac09b53d00f4993ab97aab1ccd2c5131fc3f5dfe74b35357644b8932",
+      "suite": "developer",
+      "caseCount": 17,
+      "attempted": 17,
+      "counts": {
+        "PASS": 17,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0
+      },
+      "originalGate": "PASS",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "developer-qa-windows-2022-38132630313-1",
+      "digest": "sha256:c3b55e22022b02c3174f96b246eb0b8d37826778566a52dd224ebeba8ae7e829",
+      "suite": "developer",
+      "caseCount": 13,
+      "attempted": 13,
+      "counts": {
+        "PASS": 13,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 0
+      },
+      "originalGate": "PASS",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    },
+    {
+      "artifact": "vocle-qa-dashboard-vocle-developer-qa.yml-38132630313-1",
+      "digest": "sha256:8b6555237727ad2d00a3db1035ea406d18213b1195d227c9adf4086c3d49dc58",
+      "suite": "workflow-checks",
+      "caseCount": 18,
+      "attempted": 15,
+      "counts": {
+        "PASS": 15,
+        "FAIL": 0,
+        "ERROR": 0,
+        "BLOCKED": 0,
+        "NEEDS_DECISION": 0,
+        "SKIP": 3
+      },
+      "originalGate": "SUCCESS",
+      "comparisonAvailable": false,
+      "fiveFiles": true,
+      "junitValid": true,
+      "htmlCountsMatch": true
+    }
+  ],
+  "secretScan": "PASS",
+  "note": "This checks reporting fidelity and publication, not application correctness or full-suite success."
+}

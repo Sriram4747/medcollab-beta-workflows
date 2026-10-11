@@ -1,0 +1,22 @@
+{
+  "originalRunId": 38131356746,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38131356746",
+  "source": "b0471ba76f8efc28f3ee9add87cda0a12ec26526",
+  "artifact": {
+    "name": "vocle-real-cloudinary-security",
+    "id": 11698563804,
+    "digest": "sha256:a055af1abbe56d6e1e3ec3eeb005c40001ea5ab6d60bf608e3b33d909065a85a"
+  },
+  "counts": {
+    "PASS": 26,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0,
+    "OBSERVATION": 8
+  },
+  "attempted": 34,
+  "reportingRevision": "75ac368dd7fff062f3867bbe86d4cc0fadccfb0a",
+  "providerCallsByReporter": 0
+}

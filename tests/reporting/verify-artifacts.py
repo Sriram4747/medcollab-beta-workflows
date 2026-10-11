@@ -66,7 +66,7 @@ for archive in sorted(directory.glob('*.zip')):
                 continue
             text = z.read(name).decode('utf-8', errors='replace')
             assert not re.search(r'eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', text), 'JWT leak in ' + name
-            assert not re.search(r'Bearer\s+(?!\[REDACTED\]|\*{3})[^\s"<>]+', text, re.I), 'Bearer leak in ' + name
+            assert not re.search(r'Bearer\s+(?!\[REDACTED\]|\\\[REDACTED\\\]|\*{3})[^\s"<>]+', text, re.I), 'Bearer leak in ' + name
             assert not re.search(r'https?://[^\s"<>]+[?&](?:sig|access_token)=', text, re.I), 'Signed URL leak in ' + name
 result = {'run': metadata['run'], 'artifactsVerified': outputs, 'secretScan': 'PASS', 'note': 'This checks reporting fidelity and publication, not application correctness or full-suite success.'}
 (directory / 'artifact-verification.json').write_text(json.dumps(result, indent=2) + '\n')

@@ -17,3 +17,13 @@ These are real historical execution reports: 42 PASS, 2 FAIL, 4 BLOCKED, with ze
 Open `vocle-regression-dashboard.html` locally in Chrome or Edge after downloading/extracting the directory. It has no server/CDN dependency. This initial sanity example has no linked run logs; the original artifact contains the sanitized backend log separately. The updated sanity workflow collects logs before generation so later dashboards link their sanitized copies.
 
 The later sanity [38120856995](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38120856995) was downloaded and verified with both backend/provenance log links present. Exact verification records are in `docs/reporting-evidence/`.
+
+
+## Enhanced visual presentation
+
+`visual-regression-38123414193/` refreshes the same 179 recorded functional results into the new visual dashboard: 133 PASS, 27 FAIL, 19 NEEDS_DECISION. `visual-discovery-37361855710/` refreshes historical API security evidence: 691 executed, 611 PASS, 80 OBSERVATION. These are presentation refreshes, not new test runs; their recorded execution revisions remain visible. Original uploaded snapshots above remain intact. Click a chart or card to drill into results, reset filters, or download the local Markdown/JSON/JUnit files. Lane artifact links are actual GitHub download URLs where recorded IDs are available.
+
+
+`visual-hosted-regression-38132939568/` contains the five exact members downloaded from the final enhanced hosted run at `75ac368`: 179 attempts, 134 PASS, 24 FAIL, 21 NEEDS_DECISION. Reporting passed and original functional gates failed. This is actual uploaded output, unlike the explicitly historical presentation refreshes. Download directly from [artifact 11700271157](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38132939568/artifacts/11700271157).
+
+`visual-cloudinary-38131356746/` refreshes existing recorded Cloudinary evidence (source `b0471ba`): 34 attempts, 26 PASS, 8 OBSERVATION. It was rendered by reading GitHub data only; the reporter made zero provider calls and did not execute a new provider workflow.

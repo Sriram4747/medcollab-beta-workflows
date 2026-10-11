@@ -1,0 +1,1791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites><testsuite name="Vocle.security" tests="691" failures="0" errors="0" skipped="80">
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-001"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-002"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-003"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-004"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-005"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-006"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-007"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-008"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-009"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-010"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-011"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-012"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-013"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-014"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-015"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-016"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-017"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-018"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-019"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-020"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-021"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-022"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-023"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-024"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-025"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-026"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-027"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-028"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-029"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-030"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-031"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-032"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-033"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-034"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-035"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-036"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-037"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-038"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-039"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-040"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-041"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-042"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-043"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-044"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-045"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-046"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-047"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-048"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-049"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-050"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-051"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-052"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-053"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-054"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-055"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-056"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-057"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-058"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-059"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-060"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-061"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-062"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-063"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-064"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-065"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-066"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-067"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-068"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-069"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-070"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-071"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-072"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-073"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-074"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-075"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-076"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-077"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-078"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-079"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-080"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-081"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-082"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-083"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-084"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-085"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-086"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-087"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-088"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-089"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-090"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-091"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-092"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-093"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-094"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-095"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-096"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-097"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-098"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-099"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-100"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-101"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-102"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-103"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-104"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-105"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-106"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-107"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-108"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-109"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-110"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-111"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-112"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-113"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-114"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-115"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-116"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-117"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-118"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-119"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-120"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-121"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-122"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-123"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-124"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-125"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-126"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-127"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-128"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-129"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-130"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-131"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-132"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-133"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-134"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-135"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-136"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-137"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-138"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-139"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-140"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-141"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-142"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-143"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-144"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-145"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Baseline group, space, and handoff security" name="VOCLE-146"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-147"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-148"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-149"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-150"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-151"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-152"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-153"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-154"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-155"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-156"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-157"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-158"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-159"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedMemberIds&quot;: [
+      &quot;6ac3f720d1d8be318052c18f&quot;,
+      &quot;6ac3f720d1d8be318052c198&quot;
+    ],
+    &quot;returnedMemberFields&quot;: [
+      &quot;_id&quot;,
+      &quot;availability&quot;,
+      &quot;avatarUrl&quot;,
+      &quot;name&quot;,
+      &quot;role&quot;,
+      &quot;speciality&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Direct Messages" name="VOCLE-160"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-161"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-162"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-163"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-164"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-165"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-166"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-167"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-168"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-169"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-170"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-171"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Direct Messages" name="VOCLE-172"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-173"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-174"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-175"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-176"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-177"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-178"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-179"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-180"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-181"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-182"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-183"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-184"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-185"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-186"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-187"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-188"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-189"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-190"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-191"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-192"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-193"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Direct Messages" name="VOCLE-194"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-195"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-196"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-197"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Direct Messages" name="VOCLE-198"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-199"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-200"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-201"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-202"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-203"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-204"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-205"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-206"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Direct Messages" name="VOCLE-207"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-208"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-209"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-210"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-211"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-212"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-213"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-214"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-215"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-216"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-217"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-218"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-219"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-220"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-221"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-222"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-223"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-224"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-225"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-226"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-227"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-228"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-229"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-230"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-231"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-232"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-233"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-234"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-235"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-236"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-237"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-238"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-239"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-240"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-241"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-242"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Message Requests" name="VOCLE-243"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-244"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-245"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-246"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-247"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-248"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-249"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-250"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-251"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-252"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-253"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-254"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-255"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-256"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-257"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-258"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-259"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-260"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-261"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-262"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-263"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-264"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-265"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-266"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-267"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;draftDisclosed&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-268"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedHandoffId&quot;: &quot;7ec000000000000000000008&quot;,
+    &quot;returnedHandoffFields&quot;: [
+      &quot;__v&quot;,
+      &quot;_id&quot;,
+      &quot;acknowledgedAt&quot;,
+      &quot;acknowledgementNote&quot;,
+      &quot;assignmentHistory&quot;,
+      &quot;channelId&quot;,
+      &quot;createdAt&quot;,
+      &quot;fromUserId&quot;,
+      &quot;patients&quot;,
+      &quot;shiftDate&quot;,
+      &quot;shiftSummary&quot;,
+      &quot;shiftType&quot;,
+      &quot;spaceId&quot;,
+      &quot;status&quot;,
+      &quot;submittedAt&quot;,
+      &quot;toUserId&quot;,
+      &quot;updatedAt&quot;,
+      &quot;writeBackNotes&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-269"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-270"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;draftDisclosed&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-271"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;draftDisclosed&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-272"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedChannelId&quot;: &quot;7ec000000000000000000003&quot;,
+    &quot;returnedChannelFields&quot;: [
+      &quot;__v&quot;,
+      &quot;_id&quot;,
+      &quot;createdAt&quot;,
+      &quot;createdBy&quot;,
+      &quot;description&quot;,
+      &quot;directKey&quot;,
+      &quot;isArchived&quot;,
+      &quot;isPrivate&quot;,
+      &quot;members&quot;,
+      &quot;name&quot;,
+      &quot;onlyAdminsCanPost&quot;,
+      &quot;pinnedMessages&quot;,
+      &quot;position&quot;,
+      &quot;spaceId&quot;,
+      &quot;type&quot;,
+      &quot;updatedAt&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-273"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedMemberIds&quot;: [
+      &quot;6ac3f720d1d8be318052c18f&quot;
+    ],
+    &quot;returnedMemberFields&quot;: [
+      &quot;_id&quot;,
+      &quot;availability&quot;,
+      &quot;avatarUrl&quot;,
+      &quot;name&quot;,
+      &quot;role&quot;,
+      &quot;speciality&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-274"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-275"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;foreignBindingPersisted&quot;: true,
+    &quot;foreignParentReplyCount&quot;: 1
+  }
+}</skipped></testcase>
+<testcase classname="Cross-module" name="VOCLE-276"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;foreignBindingPersisted&quot;: true,
+    &quot;foreignParentReplyCount&quot;: 1
+  }
+}</skipped></testcase>
+<testcase classname="Extended API" name="VOCLE-277"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-278"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-279"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-280"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-281"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-282"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-283"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-284"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-285"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-286"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-287"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-288"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-289"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-290"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-291"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-292"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-293"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Extended API" name="VOCLE-294"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-295"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-296"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-297"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-298"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-299"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-300"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-301"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 0,
+    &quot;uploadStatus&quot;: 500
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-302"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 0,
+    &quot;uploadStatus&quot;: 500
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-303"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 0,
+    &quot;uploadStatus&quot;: 500
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-304"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 0,
+    &quot;uploadStatus&quot;: 500
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-305"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-306"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 1,
+    &quot;uploadStatus&quot;: 200
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-307"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 1,
+    &quot;uploadStatus&quot;: 200
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-308"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-309"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-310"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-311"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-312"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-313"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 1,
+    &quot;uploadStatus&quot;: 200,
+    &quot;foreignFileSurvived&quot;: false
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-314"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 1,
+    &quot;uploadStatus&quot;: 200,
+    &quot;foreignFileSurvived&quot;: false
+  }
+}</skipped></testcase>
+<testcase classname="Media" name="VOCLE-315"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-316"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-317"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-318"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-319"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-320"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-321"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-322"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-323"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 400,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;filesAdded&quot;: 1,
+    &quot;uploadStatus&quot;: 200
+  }
+}</skipped></testcase>
+<testcase classname="Cross-module" name="VOCLE-324"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-325"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-326"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-327"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-328"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Cross-module" name="VOCLE-329"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-330"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Media" name="VOCLE-331"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-332"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-333"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-334"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-335"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-336"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-337"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-338"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-339"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 1,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: true,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-340"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 1,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: true,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-341"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-342"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 2,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: true,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-343"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 2,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: true,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-344"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-345"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 2,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-346"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 2,
+    &quot;serverAttributedAttacker&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-347"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 1,
+    &quot;fullCanaryDisclosed&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-348"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 1,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-349"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;quietWindowMs&quot;: 1500,
+    &quot;unauthorizedEvents&quot;: 1,
+    &quot;authorizedControl&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime" name="VOCLE-350"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-351"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime" name="VOCLE-352"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 0 Repair Controls" name="VOCLE-353"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 0 Repair Controls" name="VOCLE-354"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 0 Repair Controls" name="VOCLE-355"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 403,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-356"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-357"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-358"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-359"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-360"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-361"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-362"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-363"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-364"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-365"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-366"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-367"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-368"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-369"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-370"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-371"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-372"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-373"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-374"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-375"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-376"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-377"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-378"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-379"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-380"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-381"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-382"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-383"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-384"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-385"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 1 Authentication and Session Lifecycle" name="VOCLE-386"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-387"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-388"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-389"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-390"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-391"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-392"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-393"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-394"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-395"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-396"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-397"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-398"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedFields&quot;: [
+      &quot;_id&quot;,
+      &quot;availability&quot;,
+      &quot;avatarUrl&quot;,
+      &quot;bio&quot;,
+      &quot;institution&quot;,
+      &quot;isOnboarded&quot;,
+      &quot;isVerified&quot;,
+      &quot;lastSeenAt&quot;,
+      &quot;name&quot;,
+      &quot;notifications&quot;,
+      &quot;role&quot;,
+      &quot;speciality&quot;
+    ],
+    &quot;identityMatched&quot;: true,
+    &quot;preferenceFieldsExposed&quot;: [
+      &quot;allowMessageRequestsFromAnyone&quot;,
+      &quot;emergencyAlerts&quot;,
+      &quot;handoffs&quot;,
+      &quot;mentions&quot;,
+      &quot;newMessages&quot;,
+      &quot;quietHoursEnd&quot;,
+      &quot;quietHoursStart&quot;,
+      &quot;readReceiptsEnabled&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-399"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-400"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-401"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-402"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-403"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-404"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-405"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-406"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-407"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-408"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-409"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-410"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-411"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-412"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-413"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-414"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-415"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-416"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-417"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-418"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-419"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-420"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-421"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedIds&quot;: [
+      &quot;6ac3f720d1d8be318052c19e&quot;
+    ]
+  }
+}</skipped></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-422"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-423"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-424"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-425"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-426"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-427"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-428"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-429"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedCanary&quot;: true,
+    &quot;privateMessageReadDenied&quot;: true,
+    &quot;privateRootReturned&quot;: true,
+    &quot;previewMatched&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-430"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-431"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-432"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-433"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-434"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedCanary&quot;: true,
+    &quot;privateMessageReadDenied&quot;: true,
+    &quot;privateRootReturned&quot;: true,
+    &quot;previewMatched&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-435"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-436"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-437"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-438"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-439"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-440"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-441"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-442"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-443"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-444"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-445"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-446"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-447"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-448"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-449"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-450"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-451"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-452"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-453"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-454"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-455"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-456"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-457"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-458"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-459"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-460"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 2 Users and Profiles" name="VOCLE-461"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-462"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-463"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-464"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-465"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-466"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-467"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-468"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-469"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-470"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-471"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-472"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-473"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-474"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-475"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-476"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-477"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-478"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-479"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-480"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-481"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-482"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-483"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-484"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-485"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-486"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-487"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-488"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-489"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-490"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-491"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-492"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-493"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-494"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-495"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-496"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-497"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-498"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-499"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-500"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-501"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-502"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-503"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;postRevocationMessageReadDenied&quot;: true,
+    &quot;ownerNeedlCanaryObserved&quot;: true,
+    &quot;revokedPrivateRootReturned&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-504"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-505"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-506"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-507"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-508"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-509"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;postRevocationMessageReadDenied&quot;: true,
+    &quot;ownerNeedlCanaryObserved&quot;: true,
+    &quot;revokedPrivateRootReturned&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-510"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-511"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-512"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-513"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Space Lifecycle" name="VOCLE-514"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-515"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-516"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-517"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-518"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-519"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-520"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-521"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-522"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-523"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-524"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-525"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-526"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-527"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedGroupId&quot;: &quot;6ac3f88b9807c41c7085d2de&quot;,
+    &quot;unavailableTargetPersisted&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-528"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;returnedGroupId&quot;: &quot;6ac3f88c9807c41c7085d2df&quot;,
+    &quot;unavailableTargetPersisted&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-529"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;unacceptedGroupSendStatus&quot;: 201,
+    &quot;unacceptedGroupReadStatus&quot;: 200,
+    &quot;pendingRequestUnchanged&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-530"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;pendingRequestBefore&quot;: &quot;pending&quot;
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-531"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-532"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-533"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-534"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-535"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-536"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-537"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-538"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-539"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-540"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-541"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-542"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-543"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-544"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-545"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-546"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-547"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-548"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-549"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-550"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-551"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-552"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-553"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-554"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-555"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-556"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-557"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-558"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-559"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-560"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-561"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-562"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-563"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-564"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-565"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-566"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-567"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-568"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-569"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-570"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-571"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-572"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;inactiveAssigneePersisted&quot;: true,
+    &quot;assignmentHistoryCount&quot;: 1,
+    &quot;inactiveRecipientNotified&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-573"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-574"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;removedPartyWriteAccepted&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-575"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;removedPartyWriteAccepted&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-576"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-577"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-578"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 3 Consent and Handoffs" name="VOCLE-579"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-580"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-581"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-582"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-583"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-584"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-585"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-586"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-587"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-588"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-589"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-590"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-591"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-592"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-593"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-594"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-595"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedPinPersisted&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-596"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-597"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-598"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-599"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: false,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-600"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-601"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-602"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-603"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedMentionRecipientObserved&quot;: true,
+    &quot;mentionRecipients&quot;: [
+      &quot;6ac3f720d1d8be318052c19e&quot;
+    ],
+    &quot;mentionPreviewMatched&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-604"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedMentionRecipientObserved&quot;: true,
+    &quot;mentionRecipients&quot;: [
+      &quot;6ac3f720d1d8be318052c198&quot;
+    ],
+    &quot;mentionPreviewMatched&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-605"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 201,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;authorizedMentionRecipientObserved&quot;: true,
+    &quot;mentionRecipients&quot;: [
+      &quot;6ac3f720d1d8be318052c1af&quot;
+    ],
+    &quot;mentionPreviewMatched&quot;: true
+  }
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-606"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-607"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-608"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-609"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-610"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-611"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-612"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-613"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-614"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-615"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-616"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-617"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-618"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-619"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-620"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-621"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-622"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-623"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-624"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-625"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 500,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: true,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {}
+}</skipped></testcase>
+<testcase classname="Phase 4 Bounded HTTP" name="VOCLE-626"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-627"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-628"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-629"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-630"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-631"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-632"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-633"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-634"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-635"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-636"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-637"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-638"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-639"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-640"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-641"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 400,
+  &quot;success&quot;: false,
+  &quot;stateUnchanged&quot;: true,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;responseValidationFields&quot;: [
+      &quot;referenceId&quot;,
+      &quot;referenceType&quot;
+    ],
+    &quot;notificationRecipients&quot;: []
+  }
+}</skipped></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-642"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-643"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-644"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-645"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-646"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-647"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Developer and Platform HTTP" name="VOCLE-648"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-649"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-650"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-651"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-652"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-653"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Record documented handshake-only token expiry: expired tokens reject REST and fresh sockets; ongoing event writes require a session-expiry policy decision.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;expiredRestRejected&quot;: true,
+    &quot;freshHandshakeRejected&quot;: true,
+    &quot;eventsAfterExpiry&quot;: 1,
+    &quot;writeAfterExpiry&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-654"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Deactivated users must lose protected socket actions even on an existing connection.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;restAndFreshHandshakeRejected&quot;: true,
+    &quot;inactiveWritePersisted&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-655"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Deactivated users must lose protected socket actions even on an existing connection.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;restAndFreshHandshakeRejected&quot;: true,
+    &quot;inactiveJoinAcknowledged&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-656"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-657"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-658"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-659"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Removed members must not receive subsequent space presence, including after explicit room sync.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;removedRecipientEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-660"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Removed members must not receive subsequent space presence, including after explicit room sync.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;removedRecipientEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-661"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-662"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;A member removed from a private channel must not receive future edits through a previously joined room.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;eventsAfterRevocation&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-663"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Typing personal-room recipient caches must not deliver to a removed DM participant after channel leave.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;personalRoomCacheControl&quot;: true,
+    &quot;authorizedControl&quot;: true,
+    &quot;removedPeerEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-664"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-665"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-666"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-667"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-668"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-669"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-670"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-671"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-672"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;processExited&quot;: false,
+    &quot;exitCode&quot;: [REDACTED],
+    &quot;diagnostics&quot;: {
+      &quot;uncaughtExceptions&quot;: 0,
+      &quot;unhandledRejections&quot;: 1
+    },
+    &quot;fixtureAvailabilityPreserved&quot;: true,
+    &quot;childHealthStatus&quot;: 200,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-673"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;processExited&quot;: true,
+    &quot;exitCode&quot;: [REDACTED],
+    &quot;diagnostics&quot;: {
+      &quot;uncaughtExceptions&quot;: 1,
+      &quot;unhandledRejections&quot;: 0
+    },
+    &quot;fixtureAvailabilityPreserved&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-674"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;processExited&quot;: true,
+    &quot;exitCode&quot;: [REDACTED],
+    &quot;diagnostics&quot;: {
+      &quot;uncaughtExceptions&quot;: 1,
+      &quot;unhandledRejections&quot;: 0
+    },
+    &quot;fixtureAvailabilityPreserved&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-675"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;processExited&quot;: true,
+    &quot;exitCode&quot;: [REDACTED],
+    &quot;diagnostics&quot;: {
+      &quot;uncaughtExceptions&quot;: 1,
+      &quot;unhandledRejections&quot;: 0
+    },
+    &quot;fixtureAvailabilityPreserved&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-676"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Malformed authenticated socket payloads must preserve process availability and be handled without uncaught exceptions/rejections.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;processExited&quot;: false,
+    &quot;exitCode&quot;: [REDACTED],
+    &quot;diagnostics&quot;: {
+      &quot;uncaughtExceptions&quot;: 0,
+      &quot;unhandledRejections&quot;: 1
+    },
+    &quot;fixtureAvailabilityPreserved&quot;: true,
+    &quot;childHealthStatus&quot;: 200,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-677"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-678"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;recovery&quot;: {
+      &quot;authenticated&quot;: true,
+      &quot;recovered&quot;: true,
+      &quot;identityMatches&quot;: false
+    },
+    &quot;deniedFreshControl&quot;: true,
+    &quot;replayedProtectedEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-679"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;recovery&quot;: {
+      &quot;authenticated&quot;: true,
+      &quot;recovered&quot;: true,
+      &quot;identityMatches&quot;: false
+    },
+    &quot;deniedFreshControl&quot;: true,
+    &quot;replayedProtectedEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Realtime Lifecycle Regression" name="VOCLE-680"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Recovering a transport session must revalidate authorization before replaying protected events; fresh connection denial is an independent control.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;recovery&quot;: {
+      &quot;authenticated&quot;: true,
+      &quot;recovered&quot;: true,
+      &quot;identityMatches&quot;: false
+    },
+    &quot;deniedFreshControl&quot;: true,
+    &quot;replayedProtectedEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-681"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;A synthetic invite join then leave must remove future protected channel event delivery from the existing connection.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;revokedDeliveryEvents&quot;: 1,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-682"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-683"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-684"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-685"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Private message mentions must not bypass audience authorization through notification previews.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;unauthorizedPreviewEvents&quot;: 1,
+    &quot;matchingMessageReference&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Lifecycle Cross-module Regression" name="VOCLE-686"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: null,
+  &quot;httpStatus&quot;: &quot;not applicable&quot;,
+  &quot;healthStatus&quot;: 200,
+  &quot;invariant&quot;: false,
+  &quot;authenticatedControl&quot;: true,
+  &quot;eventEvidence&quot;: {
+    &quot;requirement&quot;: &quot;Private message mentions must not bypass audience authorization through notification previews.&quot;,
+    &quot;quietWindowMs&quot;: 1000,
+    &quot;authorizedControl&quot;: true,
+    &quot;unauthorizedPreviewEvents&quot;: 2,
+    &quot;matchingMessageReference&quot;: true,
+    &quot;invariantHeld&quot;: false
+  },
+  &quot;stateUnchanged&quot;: false,
+  &quot;semanticCheckPassed&quot;: false
+}</skipped></testcase>
+<testcase classname="Optional Authentication Hardening" name="VOCLE-687"><properties><property name="vocle.status" value="OBSERVATION"/><property name="vocle.attempted" value="true"/></properties><skipped message="OBSERVATION">{
+  &quot;status&quot;: 200,
+  &quot;success&quot;: true,
+  &quot;stateUnchanged&quot;: false,
+  &quot;deniedResponseDataAbsent&quot;: true,
+  &quot;semanticCheckPassed&quot;: false,
+  &quot;jsonResponse&quot;: true,
+  &quot;evidence&quot;: {
+    &quot;concurrentStatuses&quot;: [
+      200,
+      200
+    ],
+    &quot;usableSessionResponses&quot;: 2,
+    &quot;identityControls&quot;: 2,
+    &quot;sequentialReplayStatus&quot;: 400,
+    &quot;storedOtpsAfter&quot;: 0,
+    &quot;concurrency&quot;: &quot;two overlapping real HTTP requests; no handler interception&quot;
+  }
+}</skipped></testcase>
+<testcase classname="Optional Authentication Hardening" name="VOCLE-688"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Optional Authentication Hardening" name="VOCLE-689"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Optional Authentication Hardening" name="VOCLE-690"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+<testcase classname="Optional Authentication Hardening" name="VOCLE-691"><properties><property name="vocle.status" value="PASS"/><property name="vocle.attempted" value="true"/></properties></testcase>
+</testsuite><testsuite name="Vocle.infrastructure" tests="0" errors="0"></testsuite></testsuites>
