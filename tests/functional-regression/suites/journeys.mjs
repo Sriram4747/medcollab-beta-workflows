@@ -167,11 +167,15 @@ const cases = [{
     const socketB = await connectSocket(null, origin, f.B.token);
     try {
       const sync = async (count) => {
-        const ack = waitFor(socketB, 'sync_space_rooms', (event) => event?.success === true && event?.spaceCount === count);
+        const ack = waitFor(socketB, 'sync_space_rooms', (event) => event?.success === true);
         socketB.emit('sync_space_rooms');
-        return ack;
+        const response = await ack;
+        assert.equal(response.spaceCount, count, 'Socket room count must match current space membership');
+        return response;
       };
-      await sync(1);
+      const spacesBeforeLeave = (await request('/api/spaces', { token: f.B.token })).data.spaces;
+      assert.ok(spacesBeforeLeave.some((item) => item._id === f.space._id));
+      await sync(spacesBeforeLeave.length);
       const beforeNeedl = (await request('/api/users/me/needl', { token: f.B.token })).data.threads;
       assert.ok(beforeNeedl.some((item) => item.rootMessageId === root._id));
       const beforeSearch = (await request('/api/search?q=journey%20search%20root&type=messages', { token: f.B.token })).data.messages;
@@ -183,7 +187,7 @@ const cases = [{
       assert.ok(!searchAfterLeave.some((item) => item._id === root._id));
       const needlAfterLeave = (await request('/api/users/me/needl', { token: f.B.token })).data.threads;
       assert.ok(!needlAfterLeave.some((item) => item.rootMessageId === root._id));
-      await sync(0);
+      await sync(spacesAfterLeave.length);
       const note = 'synthetic-journey-after-sync';
       const predicate = (event) => event?.userId === f.A.userId && event?.availability?.note === note;
       const ownerEvent = waitFor(socketA, 'presence_update', predicate, 3000);
@@ -193,9 +197,9 @@ const cases = [{
       const staleAfterSync = await leaked;
       const invite = (await request(`/api/spaces/${f.space._id}`, { token: f.A.token })).data.space.inviteCode;
       await request('/api/spaces/join', { method: 'POST', token: f.B.token, body: { inviteCode: invite } });
-      await sync(1);
       const spacesAfterJoin = (await request('/api/spaces', { token: f.B.token })).data.spaces;
       assert.ok(spacesAfterJoin.some((item) => item._id === f.space._id));
+      await sync(spacesAfterJoin.length);
       const searchAfterJoin = (await request('/api/search?q=journey%20search%20root&type=messages', { token: f.B.token })).data.messages;
       assert.ok(searchAfterJoin.some((item) => item._id === root._id));
       const needlAfterJoin = (await request('/api/users/me/needl', { token: f.B.token })).data.threads;
