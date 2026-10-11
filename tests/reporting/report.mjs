@@ -107,7 +107,11 @@ export function compare(current, previous) {
   if (!compatible) return { available: false, reason: 'Baseline has incompatible or missing suite/scope, definitions, source kind, harness fingerprint or environment evidence.' };
   // Reuse the repository's existing conservative comparison contract.
   const adapt = r => ({ ...r, source: { ...r.source, kind: 'commit' }, results: r.results.map(x => ({ ...x, required: true, environmentFingerprint: r.environmentFingerprint })) });
-  return { available: true, ...compareReports(adapt(previous), adapt(current)) };
+  const comparison = compareReports(adapt(previous), adapt(current));
+  // The existing comparator's catch-all label also covers identical non-pass
+  // statuses. Make that stable uncertainty explicit without changing outcomes.
+  comparison.rows = comparison.rows.map(r=>r.classification === 'STATUS_CHANGED' && r.oldStatus === r.newStatus ? {...r, classification:'UNCHANGED_NONPASS', reason:'The same non-passing status remains; no fix or new functional regression is inferred.'} : r);
+  return { available: true, ...comparison };
 }
 
 export function summary(report, artifact = 'Vocle report artifact') {

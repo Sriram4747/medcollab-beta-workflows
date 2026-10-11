@@ -44,7 +44,7 @@ test('links cannot use javascript, absolute paths or traversal',()=>{
 });
 test('comparison reuses strict contract for FIXED, NEW_REGRESSION, STILL_FAILING, STILL_PASSING',()=>{
  const before=normalize(fixture(),metadata);const after=structuredClone(before);after.results[0].status='FAIL';after.results[1].status='PASS';after.results[2].status='FAIL';before.results[2].status='FAIL';after.results[3].status='PASS';before.results[3].status='PASS';before.results[3].executed=true;after.results[3].executed=true;
- const c=compare(after,before);assert(c.available);assert.deepEqual(c.rows.slice(0,4).map(r=>r.classification),['NEW_REGRESSION','FIXED','STILL_FAILING','STILL_PASSING']);
+ const c=compare(after,before);assert(c.available);assert.deepEqual(c.rows.slice(0,4).map(r=>r.classification),['NEW_REGRESSION','FIXED','STILL_FAILING','STILL_PASSING']);assert.equal(c.rows.find(r=>r.id===ids[4]).classification,'UNCHANGED_NONPASS');
  after.environmentFingerprint=null;assert.equal(compare(after,before).available,false);after.environmentFingerprint=before.environmentFingerprint;after.sourceKind='working-tree';assert.equal(compare(after,before).available,false);after.sourceKind=before.sourceKind;after.definitionSet='changed';assert.equal(compare(after,before).available,false);
 });
 test('HTML and Markdown safely handle hostile markup, multiline logs, and missing diagnostics',async()=>{
