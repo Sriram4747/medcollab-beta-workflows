@@ -15,7 +15,7 @@ for(const [file,fixture,count,pass,observations] of [
 ])test('real recorded '+file+' outcomes remain observations, not passes/failures',async()=>{
   const input=JSON.parse(await readFile(`docs/security-evidence/${fixture}/results.json`));
   const profile=profiles[file],catalog=await catalogFor(profile),report=adaptSecurity(input,catalog,profile,{sha:'a'.repeat(40),gate:'SUCCESS'});
-  assert.equal(report.results.length,count);assert.equal(report.counts.PASS,pass);assert.equal(report.counts.OBSERVATION,observations);assert.equal(report.counts.FAIL,0);assert.equal(report.originalGate,'SUCCESS');
+  assert.equal(report.results.length,count);if(input.results[0].module)assert.equal(report.results[0].module,input.results[0].module);assert.equal(report.counts.PASS,pass);assert.equal(report.counts.OBSERVATION,observations);assert.equal(report.counts.FAIL,0);assert.equal(report.originalGate,'SUCCESS');
   assert(report.results.every(r=>typeof r.expected==='string'&&typeof r.actual==='string'&&r.steps.length));
   assert(summary(report).includes('OBSERVATION'));assert(junit(report).includes('message="OBSERVATION"'));assert(junit(report).includes('failures="0"'));
   const missing=adaptSecurity({},catalog,profile,{sha:'a'.repeat(40),gate:'FAILURE'});assert.equal(missing.attempted,0);assert.equal(missing.counts.ERROR,count);assert.equal(missing.counts.PASS,0);
