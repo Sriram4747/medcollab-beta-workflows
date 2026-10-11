@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { git, tracked, applicationFile, fingerprint, run, cleanEnvironment } from './process.mjs';
 import { hash, writeEvidence, compareEvidence } from './evidence.mjs';
 import { writeQA } from './qa.mjs';
+import { generate as generateDetailedReport } from '../reporting/report.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2), options = {};
@@ -245,6 +246,7 @@ for (const row of rows) {
 const report = { scope: options.profile || 'full', source: sourceInfo, harness: harnessInfo, environment, integrity, reproduction: commandLine, results: rows };
 const manifest = await writeEvidence(output, report);
 await writeQA(output, report, JSON.parse(await readFile(join(root, 'tests/developer-workflow/ownership.json'))));
+await generateDetailedReport({ inputObject: report, output: join(output, 'detailed'), suite: 'developer', artifact: 'developer-qa evidence (detailed directory)' });
 if (options.previous) { try { await compareEvidence(resolve(options.previous), output, join(output, 'comparison')); } catch (error) { await writeFile(join(output, 'comparison-error.md'), 'Comparison rejected: ' + error.message); console.error('Comparison rejected: ' + error.message); process.exitCode = 1; } }
 console.log(JSON.stringify({ output, gate: manifest.gate, scope: report.scope, executed: manifest.executedIds.length, source: sourceInfo.sha, kind: sourceInfo.kind }, null, 2));
 if (manifest.gate !== 'PASS') process.exitCode = 1;

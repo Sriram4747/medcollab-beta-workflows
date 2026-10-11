@@ -192,15 +192,34 @@ jobs:
             echo 'No complete case report was produced; see the step logs and diagnostics artifact.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
+      - name: Generate detailed offline sanity dashboard even after setup failure
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.upstream_sha }}
+          VOCLE_TARGET_KIND: upstream-read-only
+          VOCLE_HARNESS_SHA: ${{ github.sha }}
+        run: >-
+          node harness/tests/reporting/report.mjs
+          --input "$RUNNER_TEMP/vocle-sanity-output/sanity-report.json"
+          --evidence-dir "$RUNNER_TEMP/vocle-sanity-output"
+          --output "$RUNNER_TEMP/vocle-sanity-output/detailed"
+          --suite sanity --history true
+          --artifact "vocle-sanity-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}"
+      - name: Stage sanitized sanity diagnostic evidence
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/vocle-sanity-output"
+          if [ -f "$RUNNER_TEMP/vocle-backend.log" ]; then cp "$RUNNER_TEMP/vocle-backend.log" "$RUNNER_TEMP/vocle-sanity-output/backend.log"; fi
+          if [ -f "$RUNNER_TEMP/vocle-provenance.txt" ]; then cp "$RUNNER_TEMP/vocle-provenance.txt" "$RUNNER_TEMP/vocle-sanity-output/source-provenance.txt"; fi
+          node harness/tests/reporting/stage.mjs "$RUNNER_TEMP/vocle-sanity-output" "$RUNNER_TEMP/vocle-sanity-publication"
       - name: Upload sanity reports and diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: vocle-sanity-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            ${{ runner.temp }}/vocle-sanity-output/
-            ${{ runner.temp }}/vocle-provenance.txt
-            ${{ runner.temp }}/vocle-backend.log
+            ${{ runner.temp }}/vocle-sanity-publication/
           if-no-files-found: warn
           retention-days: 90
 
@@ -229,7 +248,31 @@ jobs:
     needs: [detect, sanity]
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Collect detailed sanity evidence including detection failures and skips
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_REPORT_WORKFLOW: sanity
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.upstream_sha }}
+          VOCLE_REPORT_NEEDS_RUN: ${{ needs.detect.outputs.needs_run }}
+          VOCLE_REPORT_JOBS: '{"detect":"${{ needs.detect.result }}","sanity":"${{ needs.sanity.result }}"}'
+        run: node tests/reporting/workflow-report.mjs vocle-report-output
+      - name: Upload workflow dashboard including failures and skips
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: vocle-regression-dashboard-${{ github.run_id }}-${{ github.run_attempt }}
+          path: vocle-report-output/
+          if-no-files-found: error
+          retention-days: 90
       - name: Write workflow summary
+        if: always()
         shell: bash
         run: |
           {

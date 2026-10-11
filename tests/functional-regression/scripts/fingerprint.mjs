@@ -4,7 +4,7 @@ import { join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repo = resolve(fileURLToPath(new URL('../../../', import.meta.url)));
-const roots = ['tests/functional-regression', 'tests/sanity', '.github/workflows/vocle-functional-regression.yml'];
+const roots = ['tests/functional-regression', 'tests/sanity', 'tests/reporting', '.github/workflows/vocle-functional-regression.yml'];
 async function files(path) {
   const entries = await readdir(path, { withFileTypes: true });
   const found = [];

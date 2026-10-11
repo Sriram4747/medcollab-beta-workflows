@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Vocle functional regression evidence</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#192735;background:#f4f6f8}body{margin:0}header,main{max-width:1280px;margin:auto;padding:24px}header{padding-bottom:0}h1{font-size:28px;margin:0 0 8px}h2{font-size:19px}p{line-height:1.5}.muted{color:#52606e;font-size:14px}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.card,details,.panel{background:white;border:1px solid #d4dce5;border-radius:9px;padding:16px}.card strong{display:block;font-size:28px}.filters{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.filters label{display:grid;gap:5px;font-size:13px}input,select,button{font:inherit;padding:9px;border:1px solid #a9b7c6;border-radius:5px}input{min-width:320px}.PASS{color:#146437}.FAIL{color:#a11d28}.ERROR{color:#944107}.BLOCKED,.NEEDS_DECISION{color:#78570a}.SKIP{color:#54616b}.tag{font-size:12px;font-weight:700;background:#eef1f5;padding:5px 8px;border-radius:5px}.FIXED,.STILL_PASSING{background:#d9efdf}.NEW_REGRESSION,.STILL_FAILING{background:#ffe1e2}details{margin:12px 0}summary{cursor:pointer;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:650}summary .title{flex:1}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.body h3{font-size:16px;margin-bottom:8px}.body{padding-top:12px;overflow-wrap:anywhere}pre{background:#eef1f5;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:400px;overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;border-bottom:1px solid #d4dce5;padding:8px}a{color:#135ead}li{margin-bottom:9px}.infrastructure{border-left:4px solid #a11d28}.notice{padding:12px;background:#fff2ce;border-radius:5px}footer{padding:20px;color:#52606e}@media(max-width:700px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}input{min-width:220px}}@media print{.filters,button{display:none}details{break-inside:avoid}pre{max-height:none}}
+</style></head><body>
+<header><h1>Vocle functional regression</h1><p id="revision" class="muted"></p><p id="gate"></p></header>
+<main><section id="cards" class="cards" aria-label="Status counts"></section>
+<p id="scope" class="muted"></p><div id="infra"></div><p id="comparison" class="notice"></p>
+<section class="panel"><h2>Results by module</h2><table id="modules"></table></section>
+<div class="filters"><label>Search ID, feature, scenario or diagnostic<input id="search" type="search" placeholder="e.g. FR-REQ-05 or handoff"></label><label>Status<select id="status"></select></label><label>Module<select id="module"></select></label><label>Priority<select id="priority"></select></label><label>Change<select id="change"></select></label><button id="expand">Expand visible cases</button><button id="collapse">Collapse cases</button></div>
+<p id="visible" class="muted" role="status"></p><section id="cases"></section><footer id="note"></footer></main>
+<script id="report-data" type="application/json">REPORT_JSON_PLACEHOLDER</script>
+<script>
+'use strict';
+const report=JSON.parse(document.getElementById('report-data').textContent);
+const statuses=['PASS','FAIL','ERROR','BLOCKED','NEEDS_DECISION','SKIP'];
+const $=id=>document.getElementById(id);
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n;}
+function paragraph(parent,title,text){parent.append(node('h3',title),node('p',text||'Not recorded.'));}
+function safeLink(path){return typeof path==='string' && !/^(?:[a-z]+:|[\\/])/i.test(path) && !path.split(/[\\/]/).includes('..') && !/[\u0000-\u001f]/.test(path);}
+$('revision').textContent='Source '+(report.source.sha||'UNKNOWN')+' • Harness '+(report.harness.sha||'UNKNOWN');
+$('gate').textContent='Suite '+report.suite+' / '+report.scope+' • Original gate: '+report.originalGate;
+$('scope').textContent='Selected '+report.selected+'; recorded '+report.recorded+'; attempted '+report.attempted+'. A failed case can leave later steps unreached. Missing evidence never means PASS.';
+$('note').textContent=report.note;
+for(const s of statuses){const c=node('div',s,'card '+s);c.append(node('strong',report.counts[s]));$('cards').append(c);}
+for(const e of report.infrastructure){const p=node('p',e.status+' '+e.category+': '+e.message,'panel infrastructure');$('infra').append(p);}
+$('comparison').textContent=report.comparison.available?'Compatible baseline comparison available. FIXED and NEW_REGRESSION require matching executed definitions and environment evidence.':report.comparison.reason;
+const modules=[...new Set(report.results.map(r=>r.module))].sort();
+const head=node('tr');for(const h of ['Module',...statuses])head.append(node('th',h));$('modules').append(head);
+for(const m of modules){const tr=node('tr');tr.append(node('td',m));for(const s of statuses)tr.append(node('td',report.results.filter(r=>r.module===m&&r.status===s).length));$('modules').append(tr);}
+function options(id,values){$(id).append(new Option('All',''));for(const v of values)$(id).append(new Option(v,v));}
+options('status',statuses);options('module',modules);options('priority',[...new Set(report.results.map(r=>r.priority))].sort());options('change',['FIXED','NEW_REGRESSION','STILL_FAILING','STILL_PASSING','STATUS_CHANGED','NOT_COMPARABLE']);
+const rendered=[];
+for(const r of report.results){
+ const d=node('details'),s=node('summary');s.append(node('span',r.status,'tag '+r.status),node('span',r.id),node('span',r.title,'title'),node('span',r.module+' / '+r.priority,'muted'));if(r.change)s.append(node('span',r.change,'tag '+r.change));d.append(s);
+ let built=false;d.addEventListener('toggle',()=>{if(!d.open||built)return;built=true;const b=node('div',undefined,'body');d.append(b);
+ paragraph(b,'Real-life scenario',r.scenario);paragraph(b,'Prerequisites and synthetic roles/data',r.prerequisites);paragraph(b,'Reproduction scope',r.reproduction);if(r.prerequisiteSeed)paragraph(b,'Component prerequisite (not credited as behavior)',r.prerequisiteSeed);
+ b.append(node('h3','Ordered reproduction steps (definition, not execution trace)'));const list=node('ol');for(const step of r.steps){const li=node('li',step.action);li.append(node('p','Expected: '+step.expected,'muted'));list.append(li);}b.append(list);
+ const grid=node('div',undefined,'grid'),expected=node('div'),actual=node('div');paragraph(expected,'Expected contract',r.expected);paragraph(actual,'Actual recorded result',r.actual);grid.append(expected,actual);b.append(grid);
+ paragraph(b,'Failing operation / step',r.failingStep);paragraph(b,'Assertion expected versus actual',r.comparisonExpected+' → '+r.comparisonActual);paragraph(b,'Classification and root-cause certainty',r.category+'. '+r.rootCause);paragraph(b,'Outcome',r.outcome);paragraph(b,'Potential user impact',r.userImpact);paragraph(b,'Explicit subassertion evidence',JSON.stringify(r.verifiedSubassertions));paragraph(b,'Scope and limitations',r.limitations);paragraph(b,'Product decisions',(r.questionIds||[]).join(', ')||'None linked.');paragraph(b,'Revision, duration and owner','Source '+r.source.sha+'; harness '+r.harness.sha+'; duration '+(r.durationMs===null?'not recorded':r.durationMs+' ms')+'; owner '+r.owner+'; attempted '+r.executed+'.');
+ b.append(node('h3','Sanitized diagnostic'),node('pre',r.diagnostic||'No additional diagnostic captured.'));
+ b.append(node('h3','Available run evidence files (not necessarily correlated to this case)'));for(const f of r.evidenceFiles||[]){if(!safeLink(f))continue;const p=node('p'),a=node('a',f);a.href=f;a.rel='noopener';p.append(a);b.append(p);}
+ b.append(node('h3','Executable procedure / assertions — not observed values'));for(const def of r.definitions||[]){b.append(node('p',def.path+':'+def.line+' • definition SHA-256 '+def.fileHash),node('pre',def.excerpt));}
+ });
+ $('cases').append(d);rendered.push({r,d,search:JSON.stringify([r.id,r.title,r.module,r.scenario,r.actual,r.expected]).toLowerCase()});
+}
+function filter(){const q=$('search').value.toLowerCase();let count=0;for(const {r,d,search} of rendered){const show=(!q||search.includes(q))&&(!$('status').value||r.status===$('status').value)&&(!$('module').value||r.module===$('module').value)&&(!$('priority').value||r.priority===$('priority').value)&&(!$('change').value||r.change===$('change').value);d.hidden=!show;if(show)count++;}$('visible').textContent=count+' of '+rendered.length+' cases shown';}
+for(const id of ['search','status','module','priority','change'])$(id).addEventListener('input',filter);
+$('expand').addEventListener('click',()=>{for(const {d} of rendered)if(!d.hidden)d.open=true;});$('collapse').addEventListener('click',()=>{for(const {d} of rendered)d.open=false;});filter();
+</script></body></html>

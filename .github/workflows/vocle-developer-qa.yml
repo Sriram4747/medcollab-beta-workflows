@@ -6,6 +6,7 @@ on:
     branches: [master]
     paths:
       - 'tests/developer-workflow/**'
+      - 'tests/reporting/**'
       - 'scripts/Test-Vocle.ps1'
       - '.github/workflows/vocle-developer-qa.yml'
       - '.github/regression-*.json'
@@ -32,6 +33,8 @@ jobs:
           node-version: '22'
       - name: Evidence, comparison, ownership and coverage contracts
         run: node --test tests/developer-workflow/workflow.test.mjs
+      - name: Detailed report normalization and escaping contracts
+        run: node --test tests/reporting/report.test.mjs
       - name: Enforce stable IDs and feature declaration
         if: github.event_name == 'pull_request'
         env:

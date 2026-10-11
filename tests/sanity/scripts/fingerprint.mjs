@@ -3,7 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join, relative, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..', '..', '..');
-const included = [join(root, 'tests', 'sanity'), join(root, '.github', 'workflows', 'vocle-sanity.yml')];
+const included = [join(root, 'tests', 'sanity'), join(root, 'tests', 'reporting'), join(root, '.github', 'workflows', 'vocle-sanity.yml')];
 
 async function filesAt(path) {
   const entries = await readdir(path, { withFileTypes: true });

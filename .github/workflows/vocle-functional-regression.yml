@@ -27,6 +27,7 @@ on:
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
       - 'tests/developer-workflow/**'
+      - 'tests/reporting/**'
       - 'medcollab-app/lib/**'
       - 'medcollab-app/test/**'
       - 'medcollab-app/pubspec.yaml'
@@ -39,6 +40,7 @@ on:
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
       - 'tests/developer-workflow/**'
+      - 'tests/reporting/**'
       - 'medcollab-app/lib/**'
       - 'medcollab-app/test/**'
       - 'medcollab-app/pubspec.yaml'
@@ -82,6 +84,7 @@ jobs:
         run: |
           node tests/functional-regression/scripts/validate-catalog.mjs
           node --test tests/functional-regression/scripts/ci-contracts.test.mjs
+          node --test tests/reporting/report.test.mjs
       - id: target
         name: Resolve exact read-only target
         env:
@@ -184,6 +187,25 @@ jobs:
           node harness/tests/functional-regression/scripts/manifest.mjs
           node harness/tests/developer-workflow/qa.mjs "$VOCLE_OUTPUT_DIR/results.json" "$VOCLE_OUTPUT_DIR"
           cat "$VOCLE_OUTPUT_DIR/report.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Generate detailed offline backend dashboard even after setup failure
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+          VOCLE_TARGET_KIND: ${{ needs.detect.outputs.targetKind }}
+          VOCLE_HARNESS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          VOCLE_SCOPE: ${{ needs.detect.outputs.scope }}
+          VOCLE_AFFECTED_MODULES: ${{ needs.detect.outputs.affected_modules }}
+        run: >-
+          node harness/tests/reporting/report.mjs
+          --input "$RUNNER_TEMP/vocle-functional-output/results.json"
+          --evidence-dir "$RUNNER_TEMP/vocle-functional-output"
+          --output "$RUNNER_TEMP/vocle-functional-output/detailed"
+          --suite backend --history true
+          --artifact "vocle-functional-report-${{ github.run_id }}-${{ github.run_attempt }}"
+      - name: Stage sanitized diagnostic evidence without changing runner gates
+        if: always()
+        run: node harness/tests/reporting/stage.mjs "$RUNNER_TEMP/vocle-functional-output" "$RUNNER_TEMP/vocle-functional-publication"
       - id: upload
         name: Upload full diagnostic evidence
         if: always()
@@ -191,19 +213,18 @@ jobs:
         with:
           name: vocle-functional-report-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
-            ${{ runner.temp }}/vocle-functional-output/
-            !${{ runner.temp }}/vocle-functional-output/mongo-binaries/
+            ${{ runner.temp }}/vocle-functional-publication/
           if-no-files-found: error
           retention-days: 90
       - name: Create validated success marker after diagnostic upload
         if: steps.report.outputs.verified_backend_all == 'true' && needs.detect.outputs.targetKind == 'upstream-read-only' && steps.upload.outcome == 'success'
-        run: node harness/tests/functional-regression/scripts/write-success-manifest.mjs "$RUNNER_TEMP/vocle-functional-output" '${{ steps.upload.outputs.artifact-digest }}'
+        run: node harness/tests/functional-regression/scripts/write-success-manifest.mjs "$RUNNER_TEMP/vocle-functional-publication" '${{ steps.upload.outputs.artifact-digest }}'
       - name: Upload validated full-backend success marker
         if: steps.report.outputs.verified_backend_all == 'true' && needs.detect.outputs.targetKind == 'upstream-read-only' && steps.upload.outcome == 'success'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: vocle-functional-success-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/vocle-functional-output/success-manifest.json
+          path: ${{ runner.temp }}/vocle-functional-publication/success-manifest.json
           if-no-files-found: error
           retention-days: 90
       - name: Enforce verified regression gate
@@ -291,13 +312,30 @@ jobs:
           node tests/developer-workflow/qa.mjs "$VOCLE_FLUTTER_OUTPUT/report.json" "$VOCLE_FLUTTER_OUTPUT"
           node -e 'const r=require(process.argv[1]); if (!r.complete || r.implementedAndExecuted !== 32) process.exit(1)' "$VOCLE_FLUTTER_OUTPUT/report.json"
           echo "catalog_exit=${CATALOG_EXIT:-missing}; retained_exit=${RETAINED_EXIT:-missing}" >> "$GITHUB_STEP_SUMMARY"
+      - name: Generate detailed offline Flutter dashboard even after setup failure
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+          VOCLE_TARGET_KIND: fork-change
+          VOCLE_HARNESS_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: >-
+          node tests/reporting/report.mjs
+          --input "$VOCLE_FLUTTER_OUTPUT/report.json"
+          --evidence-dir "$VOCLE_FLUTTER_OUTPUT"
+          --output "$VOCLE_FLUTTER_OUTPUT/detailed"
+          --suite flutter --history true
+          --artifact "vocle-flutter-report-${{ github.run_id }}-${{ github.run_attempt }}"
+      - name: Stage sanitized Flutter diagnostic evidence
+        if: always()
+        run: node tests/reporting/stage.mjs "$VOCLE_FLUTTER_OUTPUT" "${{ runner.temp }}/vocle-flutter-publication"
       - id: upload
         name: Upload Flutter reports and provenance
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: vocle-flutter-report-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ github.workspace }}/vocle-flutter-output/
+          path: ${{ runner.temp }}/vocle-flutter-publication/
           if-no-files-found: error
           retention-days: 90
       - name: Enforce Flutter functional gate
@@ -320,7 +358,33 @@ jobs:
     if: always()
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Collect case evidence and report skipped or failed setup lanes
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VOCLE_REPORT_WORKFLOW: functional-regression
+          VOCLE_TARGET_SHA: ${{ needs.detect.outputs.targetSha }}
+          VOCLE_TARGET_KIND: ${{ needs.detect.outputs.targetKind }}
+          VOCLE_REPORT_NEEDS_RUN: ${{ needs.detect.outputs.needs_run }}
+          VOCLE_REPORT_JOBS: '{"detect":"${{ needs.detect.result }}","execute":"${{ needs.execute.result }}","flutter":"${{ needs.flutter.result }}"}'
+        run: node tests/reporting/workflow-report.mjs vocle-report-output
+      - name: Upload workflow dashboard including detection failures and skips
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: vocle-regression-dashboard-${{ github.run_id }}-${{ github.run_attempt }}
+          path: vocle-report-output/
+          if-no-files-found: error
+          retention-days: 90
       - name: Summarize detection, coverage gate and artifacts
+        if: always()
         env:
           DETECT_RESULT: ${{ needs.detect.result }}
           EXECUTE_RESULT: ${{ needs.execute.result }}
