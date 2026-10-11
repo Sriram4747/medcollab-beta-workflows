@@ -168,15 +168,23 @@ const searchUsers = asyncHandler(async (req, res) => {
     return respond.ok(res, 'Search results', { users: [] });
   }
 
+  const digitQuery = q.trim().replace(/\D/g, '');
+  const orClauses = [
+    { name: searchRegex },
+    { displayTitle: searchRegex },
+    { speciality: searchRegex },
+  ];
+  // Allow finding known colleagues by partial/full mobile digits too.
+  if (digitQuery.length >= 4) {
+    orClauses.push({ phone: new RegExp(escapeRegex(digitQuery) + '$') });
+    orClauses.push({ phone: new RegExp(escapeRegex(digitQuery)) });
+  }
+
   const users = await User.find({
     _id: { $in: filteredIds },
     isActive: true,
     isOnboarded: true,
-    $or: [
-      { name: searchRegex },
-      { displayTitle: searchRegex },
-      { speciality: searchRegex },
-    ],
+    $or: orClauses,
   })
     .select('name displayTitle role speciality institution avatarUrl availability')
     .limit(20)
@@ -197,8 +205,22 @@ const lookupByPhone = asyncHandler(async (req, res) => {
     return respond.badRequest(res, 'Enter a valid mobile number');
   }
 
+  const digits = normalized.replace(/\D/g, '');
+  const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
+  const phoneVariants = [
+    ...new Set(
+      [
+        normalized,
+        digits,
+        last10,
+        last10.length === 10 ? `+91${last10}` : null,
+        last10.length === 10 ? `91${last10}` : null,
+      ].filter(Boolean)
+    ),
+  ];
+
   const user = await User.findOne({
-    phone: normalized,
+    phone: { $in: phoneVariants },
     isActive: true,
     isOnboarded: true,
   });
@@ -271,6 +293,7 @@ const getNeedl = asyncHandler(async (req, res) => {
   const Message = require('../messages/message.model');
   const Channel = require('../channels/channel.model');
   const Space = require('../spaces/space.model');
+  const { canAccessChannel } = require('../../utils/channelAccess');
 
   const spaces = await Space.find(
     { 'members.userId': req.user._id, isActive: true },
@@ -278,15 +301,24 @@ const getNeedl = asyncHandler(async (req, res) => {
   ).lean();
   const spaceIds = spaces.map((s) => s._id);
 
-  const channels = await Channel.find({
+  // Candidate set (may include private channels caller cannot read).
+  const candidates = await Channel.find({
     isArchived: false,
     $or: [
       { members: req.user._id },
       { spaceId: { $in: spaceIds } },
     ],
   })
-    .select('_id spaceId type name')
+    .select('_id spaceId type name isPrivate members')
     .lean();
+
+  // Live access policy — drop private/revoked channels (VR-N1).
+  const channels = [];
+  for (const ch of candidates) {
+    if (await canAccessChannel(req.user._id, ch._id)) {
+      channels.push(ch);
+    }
+  }
   const channelIds = channels.map((c) => c._id);
   const channelById = Object.fromEntries(
     channels.map((c) => [c._id.toString(), c])

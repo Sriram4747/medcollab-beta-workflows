@@ -28,9 +28,25 @@ const uploadFile = asyncHandler(async (req, res) => {
   }
 
   const { context = 'message' } = req.body;
-  const isImage = req.file.mimetype.startsWith('image/');
-  const isVideo = req.file.mimetype.startsWith('video/');
-  const isPDF = req.file.mimetype === 'application/pdf';
+  const mime = (req.file.mimetype || '').toLowerCase();
+  const original = (req.file.originalname || '').toLowerCase();
+  const isOctet = mime === 'application/octet-stream' || mime === 'binary/octet-stream';
+  const isPDF =
+    mime === 'application/pdf' || (isOctet && original.endsWith('.pdf'));
+  const isVideo =
+    mime.startsWith('video/') ||
+    (isOctet &&
+      ['.mp4', '.mov', '.webm', '.mkv', '.m4v'].some((ext) =>
+        original.endsWith(ext)
+      ));
+  const isImage =
+    !isPDF &&
+    !isVideo &&
+    (mime.startsWith('image/') ||
+      (isOctet &&
+        ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.heic'].some((ext) =>
+          original.endsWith(ext)
+        )));
   const userId = req.user._id.toString();
 
   // ── Local fallback (no Cloudinary credentials) ─────────────────────────────
@@ -100,26 +116,10 @@ const uploadFile = asyncHandler(async (req, res) => {
         secure: true,
       });
     } else if (isPDF) {
-      // Attachment flag suggests the original filename to browsers / downloaders.
-      const attachName = (req.file.originalname || 'document.pdf')
-        .replace(/[^\w.\-]+/g, '_');
-      deliveryUrl = cloudinary.url(result.public_id, {
-        resource_type: 'raw',
-        flags: `attachment:${attachName}`,
-        secure: true,
-      });
-      try {
-        thumbnailUrl = cloudinary.url(result.public_id, {
-          resource_type: 'image',
-          format: 'webp',
-          width: 400,
-          height: 300,
-          crop: 'fill',
-          page: 1,
-        });
-      } catch (_) {
-        thumbnailUrl = null;
-      }
+      // Raw secure_url downloads reliably; fl_attachment:name often breaks clients
+      // into the Cloudinary error portal (VR-CLOUDINARY-PDF-ATTACHMENT).
+      deliveryUrl = result.secure_url;
+      thumbnailUrl = null;
     }
 
     return respond.ok(res, 'File uploaded', {
@@ -141,16 +141,46 @@ const uploadFile = asyncHandler(async (req, res) => {
 });
 
 /**
+ * Normalize media public IDs and require an exact owner namespace prefix (VR-S6).
+ * Rejects traversal / substring spoofing like foreign/.../messages/<me>/...
+ */
+const normalizeOwnedMediaPublicId = (rawPublicId, userId) => {
+  let id = String(rawPublicId || '');
+  try {
+    id = decodeURIComponent(id);
+  } catch {
+    return null;
+  }
+  id = id.replace(/\\/g, '/').replace(/^\/+/, '');
+  // Collapse redundant segments without allowing escape.
+  const parts = [];
+  for (const part of id.split('/')) {
+    if (!part || part === '.') continue;
+    if (part === '..') return null;
+    parts.push(part);
+  }
+  const normalized = parts.join('/');
+  const allowed = [
+    `medcollab/messages/${userId}/`,
+    `medcollab/avatars/${userId}/`,
+  ];
+  const owns = allowed.some(
+    (prefix) =>
+      normalized.startsWith(prefix) &&
+      normalized.length > prefix.length &&
+      !normalized.slice(prefix.length).includes('..')
+  );
+  return owns ? normalized : null;
+};
+
+/**
  * DELETE /api/media/:publicId
  */
 const deleteFile = asyncHandler(async (req, res) => {
-  const publicId = decodeURIComponent(req.params.publicId);
   const userId = req.user._id.toString();
-  const ownsFile =
-    publicId.includes(`/messages/${userId}/`) ||
-    publicId.includes(`/avatars/${userId}/`);
+  const publicId = normalizeOwnedMediaPublicId(req.params.publicId, userId);
 
-  if (!ownsFile) {
+  if (!publicId) {
     return respond.forbidden(res, 'You can only delete your own files');
   }
 
@@ -162,9 +192,18 @@ const deleteFile = asyncHandler(async (req, res) => {
   }
 
   try {
-    let result = await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+    let result = await cloudinary.uploader.destroy(publicId, {
+      resource_type: 'image',
+    });
     if (result.result === 'not found') {
-      result = await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
+      result = await cloudinary.uploader.destroy(publicId, {
+        resource_type: 'raw',
+      });
+    }
+    if (result.result === 'not found') {
+      result = await cloudinary.uploader.destroy(publicId, {
+        resource_type: 'video',
+      });
     }
 
     if (result.result === 'ok') {
