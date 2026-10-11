@@ -10,7 +10,7 @@ const browser = process.argv[2] || (existsSync('C:/Program Files/Google/Chrome/A
 if (!existsSync(browser)) throw new Error('Pass the path to a compatible Chromium/Chrome/Edge binary');
 const output = resolve('tests/reporting/output/browser-check');
 await mkdir(output,{recursive:true});
-const {report}=await generate({input:'docs/functional-regression-evidence/upstream-da2baff-batch5-local-full-147.json',suite:'backend',output});
+const report=process.argv[3] ? JSON.parse(await readFile(process.argv[3],'utf8')) : (await generate({input:'docs/functional-regression-evidence/upstream-da2baff-batch5-local-full-147.json',suite:'backend',output})).report;
 // A controlled hostile diagnostic verifies text-only rendering in a real engine.
 report.results[0].diagnostic='</script><img src=x onerror="window.reportXss=true">\nmultiline & diagnostic';
 await (await import('./report.mjs')).writeReports(output,report);
@@ -22,7 +22,8 @@ setTimeout(()=>{
  document.getElementById('search').value='FR-REQ-05';document.getElementById('search').dispatchEvent(new Event('input'));
  check(document.querySelectorAll('#cases details:not([hidden])').length===1,'ID search');
  document.getElementById('search').value='';document.getElementById('status').value='FAIL';document.getElementById('status').dispatchEvent(new Event('input'));
- check(document.querySelectorAll('#cases details:not([hidden])').length===17,'status counts');
+ check(document.querySelectorAll('#cases details:not([hidden])').length===report.counts.FAIL,'status counts');
+ if(report.runUrl)check(document.querySelectorAll('#artifact-links a').length===1,'run artifact link');
  document.getElementById('status').value='';document.getElementById('module').value='AUTH';document.getElementById('priority').value='P0';document.getElementById('module').dispatchEvent(new Event('input'));
  check(document.querySelectorAll('#cases details:not([hidden])').length>0,'module and priority filters');
  document.getElementById('module').value='';document.getElementById('priority').value='';document.getElementById('module').dispatchEvent(new Event('input'));
@@ -36,7 +37,7 @@ const common=['--headless','--disable-gpu','--no-first-run','--disable-backgroun
 const dom=execFileSync(browser,[...common,'--dump-dom',pathToFileURL(probe).href],{encoding:'utf8',maxBuffer:24*1024*1024,timeout:45000,windowsHide:true,stdio:['ignore','pipe','pipe']});
 await writeFile(join(output,'offline-dom.html'),dom);
 const pass=dom.includes('data-browser-check="PASS"');
-await writeFile(join(output,'browser-check.json'),JSON.stringify({browser,offline:true,caseCount:147,pass,checks:['all IDs','search','status/module/priority filters','expand/lazy details','hostile markup inert','no external resource requests']},null,2)+'\n');
+await writeFile(join(output,'browser-check.json'),JSON.stringify({browser,offline:true,source:report.source,harness:report.harness,caseCount:147,pass,checks:['all IDs','search','status/module/priority filters','expand/lazy details','hostile markup inert','run/artifact link when present','no external resource requests']},null,2)+'\n');
 if(!pass)throw new Error('Offline dashboard browser check failed: '+dom.match(/data-browser-errors="([^"]*)"/)?.[1]);
 execFileSync(browser,[...common,'--window-size=1440,1000','--screenshot='+join(output,'dashboard.png'),pathToFileURL(join(output,'vocle-regression-dashboard.html')).href],{timeout:45000,windowsHide:true,stdio:['ignore','pipe','pipe']});
 console.log('Offline Edge/Chromium dashboard PASS; evidence '+output);
