@@ -26,6 +26,7 @@ on:
       - 'medcollab-backend/**'
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
+      - 'tests/developer-workflow/**'
       - 'medcollab-app/lib/**'
       - 'medcollab-app/test/**'
       - 'medcollab-app/pubspec.yaml'
@@ -37,6 +38,7 @@ on:
       - 'medcollab-backend/**'
       - 'tests/functional-regression/**'
       - 'tests/sanity/**'
+      - 'tests/developer-workflow/**'
       - 'medcollab-app/lib/**'
       - 'medcollab-app/test/**'
       - 'medcollab-app/pubspec.yaml'
@@ -180,6 +182,7 @@ jobs:
           VOCLE_REQUIRE_PREFLIGHT: 'true'
         run: |
           node harness/tests/functional-regression/scripts/manifest.mjs
+          node harness/tests/developer-workflow/qa.mjs "$VOCLE_OUTPUT_DIR/results.json" "$VOCLE_OUTPUT_DIR"
           cat "$VOCLE_OUTPUT_DIR/report.md" >> "$GITHUB_STEP_SUMMARY"
       - id: upload
         name: Upload full diagnostic evidence
@@ -285,6 +288,7 @@ jobs:
             echo '<testsuite name="Vocle Flutter" tests="1" errors="1"><testcase name="infrastructure"><error message="missing report"/></testcase></testsuite>' > "$VOCLE_FLUTTER_OUTPUT/report.xml"
           fi
           cat "$VOCLE_FLUTTER_OUTPUT/report.md" >> "$GITHUB_STEP_SUMMARY"
+          node tests/developer-workflow/qa.mjs "$VOCLE_FLUTTER_OUTPUT/report.json" "$VOCLE_FLUTTER_OUTPUT"
           node -e 'const r=require(process.argv[1]); if (!r.complete || r.implementedAndExecuted !== 32) process.exit(1)' "$VOCLE_FLUTTER_OUTPUT/report.json"
           echo "catalog_exit=${CATALOG_EXIT:-missing}; retained_exit=${RETAINED_EXIT:-missing}" >> "$GITHUB_STEP_SUMMARY"
       - id: upload
