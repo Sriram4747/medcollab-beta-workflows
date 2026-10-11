@@ -87,6 +87,7 @@ This task does not change repository protection or create issues/notifications.
 
 ```sh
 node tests/developer-workflow/compare.mjs reports/old reports/new reports/comparison
+node tests/developer-workflow/verify-submission.mjs reports/new EXACT_PR_HEAD_SHA
 ```
 
 Both report/manifest pairs must pass integrity/checksum/result-set validation, even
@@ -162,7 +163,10 @@ The original functional selection/gates remain authoritative for runtime coverag
 
 Self-declared exceptions are rejected. Any exception must already have an authorized
 approver and unexpired metadata in the trusted base `.github/regression-exceptions.json`.
-Exceptions are recorded for review; they do not waive required execution failures.
+To waive missing feature coverage, trusted metadata must additionally set
+`allowMissingCoverage` true and list every changed application file in `paths`; the PR
+declaration references its `exceptionId` and a review reason. Stable IDs and execution
+failures remain enforced. No exceptions are currently authorized.
 
 Reviewers must check: complete feature scenarios and negative boundaries; security impact;
 actual assertions and relevant local/CI runners; dependency/cross-feature effects; exact

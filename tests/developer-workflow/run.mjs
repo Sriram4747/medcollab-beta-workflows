@@ -114,6 +114,7 @@ try {
       const prep = await command('docker-prepare', 'docker', ['run', '--rm', ...mounts, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; cd /harness/tests/sanity && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root);
       if (prep.code !== 0) unavailable(backend, 'Docker dependency/Mongo preparation failed', true);
       else {
+        environment.mongoBinaries = await fingerprint(join(backendOut, 'mongo-binaries'), (await readdir(join(backendOut, 'mongo-binaries'))).filter(f => !f.endsWith('.lock')));
         await command('backend-driver', 'docker', ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${backendOut},target=/output`, '-e', 'HOME=/tmp', '-e', 'TZ=UTC', '-e', 'VOCLE_TARGET_DIR=/target', '-e', 'VOCLE_OUTPUT_DIR=/output', '-e', 'VOCLE_SCOPE=backend-all', image, 'sh', '-ec', 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/scripts/run-backend.mjs'], root);
         const execution = JSON.parse(await readFile(join(backendOut, 'execution.json')));
         const reports = [];
@@ -140,7 +141,11 @@ try {
       add('flutter-analysis', 'BLOCKED', true, { exclusion: 'Pinned Flutter SDK unavailable' });
     } else {
       const deps = await command('flutter-locked-dependencies', flutter, ['pub', 'get', '--enforce-lockfile'], app);
-      if (deps.code !== 0) unavailable(catalog.filter(c => c.tier === 'F'), 'Locked Flutter dependencies unavailable', true);
+      if (deps.code !== 0) {
+        unavailable(catalog.filter(c => c.tier === 'F'), 'Locked Flutter dependencies unavailable', true);
+        add('flutter-retained', 'BLOCKED', true, { exclusion: 'Locked Flutter dependencies unavailable' });
+        add('flutter-analysis', 'BLOCKED', true, { exclusion: 'Locked Flutter dependencies unavailable' });
+      }
       else {
         await command('flutter-analysis', flutter, ['analyze', '--no-pub'], app);
         const tests = await run(flutter, ['test', '--no-pub', '--reporter', 'json', 'test/functional_regression'], { cwd: app, env, timeout: 12 * 60 * 1000, log: join(output, 'diagnostics/flutter-catalog.log') });
@@ -199,6 +204,8 @@ try {
   const after = await fingerprint(target, sourcePaths);
   if (after.fingerprint !== before.fingerprint) { integrity = 'ERROR'; add('source-integrity', 'ERROR', true, { executed: true, error: 'Selected application source/lockfile changed during testing' }); }
   else add('source-integrity', 'PASS', true, { executed: true });
+  if ((await fingerprint(harness, harnessPaths)).fingerprint !== harnessInfo.fingerprint) { integrity = 'ERROR'; add('harness-integrity', 'ERROR', true, { executed: true, error: 'Test definitions changed during execution' }); }
+  else add('harness-integrity', 'PASS', true, { executed: true });
 } catch (error) {
   integrity = 'ERROR'; add('workflow-infrastructure', 'ERROR', true, { error: error.message });
   if ((options.profile || 'full') === 'full') unavailable(catalog.filter(c => !rows.some(r => r.id === c.id)), 'Orchestration/setup failed; no testcase execution evidence', true);

@@ -10,6 +10,8 @@ export function validateCoverage({ oldCases, newCases, changedFiles, declaration
   const appChanged = changedFiles.some(f => /^medcollab-(backend\/src|app\/lib)\//.test(f));
   if (!appChanged) return errors;
   if (!declaration) return [...errors, 'Application change requires .github/regression-coverage.json'];
+  const exception = authorizedExceptions.find(e => e.id === declaration.exceptionId && e.approvedBy && Date.parse(e.expiresAt) > Date.now());
+  if (exception?.allowMissingCoverage === true && declaration.reviewReason && changedFiles.filter(f => /^medcollab-(backend\/src|app\/lib)\//.test(f)).every(f => exception.paths?.includes(f))) return errors;
   if (declaration.schemaVersion !== 1 || typeof declaration.newFeature !== 'boolean' || typeof declaration.securityRelevant !== 'boolean' || !declaration.reviewReason) errors.push('Coverage declaration requires schemaVersion, newFeature, securityRelevant and reviewReason');
   const selected = declaration.testcaseIds || [];
   if (!selected.length || selected.some(id => !byId.has(id))) errors.push('Coverage declaration needs registered functional testcase IDs');
@@ -18,7 +20,7 @@ export function validateCoverage({ oldCases, newCases, changedFiles, declaration
   if (declaration.securityRelevant && (!(declaration.securityTestcaseIds || []).length || !declaration.securityWorkflow)) errors.push('Security-relevant change requires security testcase IDs and a workflow');
   if (!declaration.securityRelevant && !declaration.securityReason) errors.push('Explain why security coverage is unaffected');
   // A declaration alone cannot authorize an exception. Trusted base metadata is the authority.
-  if (declaration.exceptionId && !authorizedExceptions.some(e => e.id === declaration.exceptionId && e.approvedBy && Date.parse(e.expiresAt) > Date.now())) errors.push('Exception lacks current authorization in the trusted base revision');
+  if (declaration.exceptionId && !exception) errors.push('Exception lacks current authorization in the trusted base revision');
   return errors;
 }
 
@@ -31,11 +33,14 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   let declaration; try { declaration = JSON.parse(await readFile(resolve(root, '.github/regression-coverage.json'))); } catch { /* mandatory only for application changes */ }
   let authorizedExceptions = []; try { authorizedExceptions = JSON.parse(git(root, ['show', base + ':.github/regression-exceptions.json'])).exceptions; } catch { /* no pre-existing authorization */ }
   const errors = validateCoverage({ oldCases, newCases, changedFiles, declaration, authorizedExceptions });
-  if (declaration && changedFiles.some(f => /^medcollab-(backend\/src|app\/lib)\//.test(f))) {
-    const implementation = git(root, ['grep', '-n', '-E', (declaration.testcaseIds || []).join('|') || 'NEVER_MATCH', '--', 'tests/sanity/src', 'tests/functional-regression/suites', 'medcollab-app/test', 'medcollab-app/integration_test']);
+  if (declaration?.testcaseIds?.length && changedFiles.some(f => /^medcollab-(backend\/src|app\/lib)\//.test(f))) {
+    let implementation = '';
+    // The registered IDs are validated above; no shell interpolation is used.
+    try { implementation = git(root, ['grep', '-n', '-E', declaration.testcaseIds.filter(id => /^[A-Za-z0-9_-]+$/.test(id)).join('|') || 'NEVER_MATCH', '--', 'tests/sanity/src', 'tests/functional-regression/suites', 'medcollab-app/test', 'medcollab-app/integration_test']); } catch { /* explicit per-ID failure */ }
     for (const id of declaration.testcaseIds || []) if (!implementation.includes(id)) errors.push('No executable test source reference: ' + id);
-    if (declaration.securityRelevant) {
-      const registry = git(root, ['grep', '-n', '-E', declaration.securityTestcaseIds.join('|'), '--', 'medcollab-backend/scripts', 'docs/SECURITY_REGRESSION_GATES.json']);
+    if (declaration.securityRelevant && declaration.securityTestcaseIds?.length) {
+      let registry = '';
+      try { registry = git(root, ['grep', '-n', '-E', declaration.securityTestcaseIds.filter(id => /^VOCLE-\d+$/.test(id)).join('|') || 'NEVER_MATCH', '--', 'medcollab-backend/scripts', 'docs/SECURITY_REGRESSION_GATES.json']); } catch { /* explicit per-ID failure */ }
       for (const id of declaration.securityTestcaseIds) if (!registry.includes(id)) errors.push('Security testcase not registered: ' + id);
     }
   }

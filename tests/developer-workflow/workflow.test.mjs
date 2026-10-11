@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { writeEvidence, verifyEvidence, compareEvidence, compareReports, gate, hash } from './evidence.mjs';
 import { defects } from './qa.mjs';
 import { validateCoverage } from './coverage-policy.mjs';
+import { validateSubmission } from './verify-submission.mjs';
 
 const caseRow = (id, status, extra = {}) => ({ id, status, required: true, executed: true, module: 'AUTH', expected: 'Synthetic request returns authorized identity', definitionFingerprint: 'definition-v1', environmentFingerprint: 'environment-v1', ...extra });
 function report(results, sha = 'a'.repeat(40)) {
@@ -66,6 +67,18 @@ test('required red statuses gate; optional omissions remain visible', () => {
   assert.equal(gate([caseRow('x', 'PASS'), caseRow('optional', 'BLOCKED', { required: false, executed: false })]), 'PASS');
 });
 
+test('submission rejects wrong candidate, omitted required coverage and tooling-only success', () => {
+  const r = report([caseRow('functional', 'PASS')]);
+  const catalog = [{ id: 'functional', tier: 'B' }];
+  assert.throws(() => validateSubmission(r, r.source.sha, catalog), /Full/);
+  r.scope = 'full';
+  assert.equal(validateSubmission(r, r.source.sha, catalog).status, 'PASS');
+  assert.throws(() => validateSubmission(r, 'f'.repeat(40), catalog), /exact/);
+  assert.throws(() => validateSubmission(r, r.source.sha, [...catalog, { id: 'missing', tier: 'F' }]), /omitted/);
+  r.results[0].required = false;
+  assert.throws(() => validateSubmission(r, r.source.sha, catalog), /Required/);
+});
+
 test('owners stay UNASSIGNED until approval and root causes group only with evidence', () => {
   const r = report([caseRow('a', 'FAIL'), caseRow('b', 'FAIL')]);
   assert.equal(defects(r, { approved: false, modules: { AUTH: '@unapproved' } }).length, 2);
@@ -85,6 +98,9 @@ test('coverage requires registered new IDs, security justification and trusted e
   declaration.exceptionId = 'self-approved';
   assert.match(validateCoverage({ ...base, declaration }).join(' '), /trusted base/);
   assert.match(validateCoverage({ ...base, newCases: [], changedFiles: [] }).join(' '), /removed/);
+  const exception = { id: 'approved-coverage-gap', approvedBy: 'authorized-fixture-maintainer', expiresAt: '2099-01-01', allowMissingCoverage: true, paths: base.changedFiles };
+  assert.deepEqual(validateCoverage({ ...base, declaration: { exceptionId: exception.id, reviewReason: 'Approved scoped fixture waiver' }, authorizedExceptions: [exception] }), []);
+  assert(validateCoverage({ ...base, changedFiles: ['medcollab-app/lib/unapproved.dart'], declaration: { exceptionId: exception.id, reviewReason: 'Out of scope' }, authorizedExceptions: [exception] }).length > 0);
 });
 
 test('baseline catalog and workflow integration remain connected to exact candidate and isolation', async () => {

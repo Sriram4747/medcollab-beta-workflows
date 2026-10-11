@@ -10,7 +10,7 @@ export const json = value => JSON.stringify(value, null, 2) + '\n';
 
 export async function writeEvidence(directory, report) {
   await mkdir(directory, { recursive: true });
-  if (!report.results.length || new Set(report.results.map(r => r.id)).size !== report.results.length || report.results.some(r => !statuses.includes(r.status))) throw new Error('Invalid result IDs/statuses');
+  if (!report.results.length || new Set(report.results.map(r => r.id)).size !== report.results.length || report.results.some(r => !statuses.includes(r.status) || (r.status === 'PASS' && !r.executed))) throw new Error('Invalid result IDs/statuses or unexecuted PASS');
   report.schemaVersion = 1;
   report.generatedAt ||= new Date().toISOString();
   report.gate = gate(report.results);
@@ -44,7 +44,7 @@ export async function verifyEvidence(directory) {
   if (report.schemaVersion !== 1 || manifest.schemaVersion !== 1 || !report.results?.length || report.integrity !== 'PASS' || !report.source.verified || !report.harness.verified) throw new Error('Unverified report provenance/integrity');
   if (!/^[a-f0-9]{40}$/.test(report.source.sha) || !/^[a-f0-9]{40}$/.test(report.harness.sha) || !/^[a-f0-9]{64}$/.test(report.source.fingerprint) || !/^[a-f0-9]{64}$/.test(report.harness.fingerprint)) throw new Error('Invalid provenance identifiers');
   const ids = report.results.map(r => r.id);
-  if (new Set(ids).size !== ids.length || report.results.some(r => !r.id || !statuses.includes(r.status) || typeof r.required !== 'boolean' || typeof r.executed !== 'boolean' || !r.definitionFingerprint)) throw new Error('Invalid result set');
+  if (new Set(ids).size !== ids.length || report.results.some(r => !r.id || !statuses.includes(r.status) || (r.status === 'PASS' && !r.executed) || typeof r.required !== 'boolean' || typeof r.executed !== 'boolean' || !r.definitionFingerprint)) throw new Error('Invalid result set');
   if (gate(report.results) !== report.gate || manifest.gate !== report.gate || manifest.scope !== report.scope || JSON.stringify(manifest.environment) !== JSON.stringify(report.environment) || JSON.stringify(manifest.source) !== JSON.stringify(report.source) || JSON.stringify(manifest.harness) !== JSON.stringify(report.harness) || JSON.stringify(manifest.coverage) !== JSON.stringify(report.results.map(({ id, required, status, executed, exclusion }) => ({ id, required, status, executed, exclusion }))) || JSON.stringify(manifest.executedIds) !== JSON.stringify(report.results.filter(r => r.executed).map(r => r.id))) throw new Error('Manifest/report mismatch');
   return report;
 }
