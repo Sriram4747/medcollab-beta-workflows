@@ -1,0 +1,881 @@
+{
+  "source": {
+    "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+  },
+  "harness": {
+    "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+    "fingerprint": "601ab321981d3c1f4569aaea2c3b0a50701d151d9dc01c0e895b58463630fc7d"
+  },
+  "findings": [
+    {
+      "defectId": "QA-36ff1883b8a1",
+      "feature": [
+        "SPC"
+      ],
+      "testcaseIds": [
+        "FR-SPC-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "One pending request, no membership; UI must not assume channels/join success; approval completion unsupported"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q14: pending-join client state and approval completion need product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-d5e105b05a17",
+      "feature": [
+        "SPC"
+      ],
+      "testcaseIds": [
+        "FR-SPC-06"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Lists no longer include S; room membership after sync reflects current DB; immediate eviction guarantee needs decision"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Explicit room sync left revoked users subscribed to a space room\n+ actual - expected\n\n  [\n+   true,\n+   true\n-   false,\n-   false\n  ]\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-d8455ab9f297",
+      "feature": [
+        "CH"
+      ],
+      "testcaseIds": [
+        "FR-CH-02"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Public X in both; private Y in creator lists only; compare IDs across three list surfaces"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "GET /api/channels/6acb233dca522472806f9740 expected 403, got 200"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-6ce6bb05b9c6",
+      "feature": [
+        "REQ"
+      ],
+      "testcaseIds": [
+        "FR-REQ-05"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Record partial accepted-without-DM possibility; desired recovery/atomicity must be agreed, never count initial 2xx alone"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q7: recovery or atomic rollback contract for accepted-without-DM state requires product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-d2f7ff37366c",
+      "feature": [
+        "DM"
+      ],
+      "testcaseIds": [
+        "FR-DM-05"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Current code selects >= server midnight; agree intended timezone before gate; source untouched"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q2: intended client timezone for today expansion needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-0d25ea1e5ef2",
+      "feature": [
+        "DM"
+      ],
+      "testcaseIds": [
+        "FR-DM-06"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Characterize oldest-500 cap and excluded deleted records; require decision on cap and source-ID preview mismatch"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q2: 500-item oldest-first cap and source-ID destination preview require product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-0fd0cad7dcd4",
+      "feature": [
+        "DM"
+      ],
+      "testcaseIds": [
+        "FR-DM-07"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Source graph unchanged; destination graph behavior needs decision because threadId not copied and quote IDs reference source"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q2: copied thread and quote graph remapping requires product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-8994a9c818bb",
+      "feature": [
+        "DM"
+      ],
+      "testcaseIds": [
+        "FR-DM-09"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Pair intent one conversation; group concurrency guarantee unresolved; classify target-specific failure without copying fork fix"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q7: concurrent group exact-membership guarantee unresolved; observed 1 matching group record(s)"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-02fd224000de",
+      "feature": [
+        "MSG"
+      ],
+      "testcaseIds": [
+        "FR-MSG-01"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Invalid 400 no message; supported text persists without unexpected content loss"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "POST /api/channels/6acb2368495a9badc433bda2/messages expected 201, got 400"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-ddfea22a7a92",
+      "feature": [
+        "MSG"
+      ],
+      "testcaseIds": [
+        "FR-MSG-05"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Message state verified; preview/snapshot propagation policy unresolved; capture mismatches"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-e15043bc870b",
+      "feature": [
+        "MSG"
+      ],
+      "testcaseIds": [
+        "FR-MSG-08"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Fetch reveals committed record; automatic exactly-once resend not assumed; product decision on duplicate prevention"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q7: automatic duplicate prevention after a lost successful response needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-237428b00aef",
+      "feature": [
+        "THR"
+      ],
+      "testcaseIds": [
+        "FR-THR-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Thread content reflects action; aggregate correction policy Q1 required"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-df20f51ba577",
+      "feature": [
+        "HOF"
+      ],
+      "testcaseIds": [
+        "FR-HOF-05"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Record cross-view difference; Q3 decides accepted audience before gate"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "GET /api/handoffs/6acb23c6b97004ac388839d5 expected 403, got 200"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-e12c4d3f15ee",
+      "feature": [
+        "HOF"
+      ],
+      "testcaseIds": [
+        "FR-HOF-07"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Intended no missing/repeated items needs cursor/sort decision; save ordered IDs to demonstrate gap"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q4: shiftDate sort with ID cursor; expected [\"6acb23c6b97004ac388839f8\",\"6acb23c6b97004ac38883a02\",\"6acb23c6b97004ac38883a07\",\"6acb23c6b97004ac388839fd\"], observed [\"6acb23c6b97004ac388839f8\",\"6acb23c6b97004ac38883a02\",\"6acb23c6b97004ac388839f8\",\"6acb23c6b97004ac388839fd\"]"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-637ae12aba82",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-01"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Missing/unsupported/oversize reject; supported bytes/metadata retained; exact limit from MEDIA.MAX_FILE_SIZE_BYTES"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Unsupported files must be client errors, not HTTP 500\n+ actual - expected\n\n  [\n+   500,\n+   500\n-   400,\n-   400\n  ]\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-2ceedccc3565",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-02"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Extension fallback accepted by filter; MIME-derived format mismatch characterized; Q5 decides normalized type contract"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Expected values to be strictly equal:\n\nnull !== 'pdf'\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-f3348af5340e",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-03"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Current local URL rejected by send policy; Q5 must resolve full pipeline, never substitute inert URL and call E2E passed"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q5: local upload URL is rejected by image-message policy; full upload→message pipeline has no successful local path"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-9994b129c0eb",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Upload supported but validator rejects; Q5 required to enable successful send expectation"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q5: video upload succeeds, but video message type is rejected by the pinned source"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-6a14b59e0fe7",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-05"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "image/raw/video resource type, folders, filename/size, thumbnail/delivery mapping; provider error returns upload failure, no message created"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Expected values to be strictly equal:\n\nfalse !== true\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-9cd9e3b147b4",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-06"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Profile points to B; old-file lifecycle and dangling references Q6; no invented automatic deletion"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q6: profile points to replacement avatar; old file was deleted explicitly, automatic old-file lifecycle remains undecided"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-fdbe3ae134f2",
+      "feature": [
+        "MED"
+      ],
+      "testcaseIds": [
+        "FR-MED-07"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Local bytes removed when supported; references not auto-cleared; Q6 defines retention/error UX and missing video destroy support"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q6: referenced local image/video bytes delete, handoff-context deletion is unsupported, and handoff attachment references remain"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-8b139327dea5",
+      "feature": [
+        "NOT"
+      ],
+      "testcaseIds": [
+        "FR-NOT-01"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Ordinary suppressed while viewing; emergency still stored; later ordinary stored; sender excluded"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ Set(3) {\n+   '6acb2393c31dc230c49a6654',\n- Set(2) {\n    '6acb2393c31dc230c49a6656',\n    '6acb2393c31dc230c49a6658'\n  }\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-05b284243a45",
+      "feature": [
+        "NOT"
+      ],
+      "testcaseIds": [
+        "FR-NOT-02"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Self mention excluded; viewed B mention suppressed; non-viewed B gets mention; ordinary and mention may both exist by type"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "The expression evaluated to a falsy value:\n\n  assert.ok(!inbox.data.notifications.some((item) => item.referenceId === viewed._id))\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-0756e2a1b8e4",
+      "feature": [
+        "NOT"
+      ],
+      "testcaseIds": [
+        "FR-NOT-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Both representations read, unrelated unchanged, repeat modifiedCount=0; count reconciles"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Expected values to be strictly equal:\n\n1 !== 2\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-ebf63b42780c",
+      "feature": [
+        "PUSH"
+      ],
+      "testcaseIds": [
+        "FR-PUSH-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "start inclusive/end exclusive, equal disabled; current emergency bypass only after preference check; timezone Q9"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q9: client/device timezone policy for quiet hours needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-1c6c11540bac",
+      "feature": [
+        "RT"
+      ],
+      "testcaseIds": [
+        "FR-RT-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Persistence matches; socket note/until broadcast discrepancy Q8 must resolve"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION",
+          "error": "Q8: intended socket availability note/until convergence needs product decision"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-3e26b34d31d8",
+      "feature": [
+        "RT"
+      ],
+      "testcaseIds": [
+        "FR-RT-07"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Configured recovery restores missed events/rooms; recovered connection must still have functional handlers and presence; compare fresh reconnect control. Source skips handler registration when recovered, so flag any runtime failure rather than assuming listeners survive"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Recovered socket must keep typing, room sync, availability handlers and persisted state\n+ actual - expected\n\n  {\n+   availabilityOk: false,\n+   persistedStatus: 'available',\n+   syncOk: false,\n+   typingOk: false\n-   availabilityOk: true,\n-   persistedStatus: 'on_call',\n-   syncOk: true,\n-   typingOk: true\n  }\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-0c3e1844b557",
+      "feature": [
+        "SUP"
+      ],
+      "testcaseIds": [
+        "FR-SUP-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "No-space gives actionable error; joined fixtures created with correct IDs/content; disabled mode rejects seed"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Dev notification seeding must create three valid inbox records\n\n400 !== 200\n"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-b72a7a27e9cb",
+      "feature": [
+        "JRN"
+      ],
+      "testcaseIds": [
+        "FR-JRN-04"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Supported lists recover membership; no stale active rooms after sync; immediate transition semantics Q10"
+      ],
+      "actual": [
+        {
+          "status": "FAIL",
+          "error": "Socket event sync_space_rooms timed out"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    }
+  ]
+}

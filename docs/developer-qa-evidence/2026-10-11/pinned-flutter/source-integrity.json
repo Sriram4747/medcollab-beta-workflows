@@ -1,0 +1,21 @@
+{
+  "changedSourceFiles": [
+    "medcollab-app/linux/flutter/generated_plugin_registrant.cc",
+    "medcollab-app/linux/flutter/generated_plugin_registrant.h",
+    "medcollab-app/linux/flutter/generated_plugins.cmake",
+    "medcollab-app/windows/flutter/generated_plugin_registrant.cc",
+    "medcollab-app/windows/flutter/generated_plugin_registrant.h",
+    "medcollab-app/windows/flutter/generated_plugins.cmake"
+  ],
+  "generatedBuildOutputs": [
+    "medcollab-app/linux/flutter/generated_plugin_registrant.cc",
+    "medcollab-app/linux/flutter/generated_plugin_registrant.h",
+    "medcollab-app/linux/flutter/generated_plugins.cmake",
+    "medcollab-app/windows/flutter/generated_plugin_registrant.cc",
+    "medcollab-app/windows/flutter/generated_plugin_registrant.h",
+    "medcollab-app/windows/flutter/generated_plugins.cmake"
+  ],
+  "immutableSourceChanges": [],
+  "before": "51f165d1c24b69309da5ac408a801b641864a9ffe8d8032a292aba713423e3d5",
+  "after": "774db2db2e8343e17bd90559cbe24cbd55e54ab82d47d663a0a01b896d9dd1de"
+}

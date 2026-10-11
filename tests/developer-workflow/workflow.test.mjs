@@ -21,6 +21,9 @@ test('all comparison transitions, including omission and harness/environment dri
   assert.equal(compareReports(old, next).rows.find(r => r.id === 'fixed').classification, 'NOT_COMPARABLE');
   next.harness.fingerprint = old.harness.fingerprint; next.source.kind = 'working-tree';
   assert.equal(compareReports(old, next).rows.find(r => r.id === 'passed').classification, 'NOT_COMPARABLE');
+  assert.equal(compareReports(old, next).rows.find(r => r.id === 'new').classification, 'NOT_COMPARABLE');
+  next.source.kind = 'commit'; next.scope = 'different-profile';
+  assert(compareReports(old, next).rows.every(r => r.classification === 'NOT_COMPARABLE'));
 });
 
 test('real assertion failure and successful fixture produce verifiable reports and comparison', async () => {

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<testsuite name="Vocle developer" tests="12" failures="0" errors="0" skipped="0">
+<testcase classname="TOOLING" name="catalog-validation"></testcase>
+<testcase classname="TOOLING" name="ci-device-contracts"></testcase>
+<testcase classname="TOOLING" name="functional-classification"></testcase>
+<testcase classname="TOOLING" name="backend-locked-dependencies"></testcase>
+<testcase classname="TOOLING" name="security-security-manifest-check"></testcase>
+<testcase classname="TOOLING" name="security-security-media-self-test"></testcase>
+<testcase classname="TOOLING" name="security-security-data-self-test"></testcase>
+<testcase classname="TOOLING" name="security-security-cloudinary-self-test"></testcase>
+<testcase classname="TOOLING" name="sanity-locked-dependencies"></testcase>
+<testcase classname="TOOLING" name="sanity-self-check"></testcase>
+<testcase classname="TOOLING" name="source-integrity"></testcase>
+<testcase classname="TOOLING" name="workspace-cleanup"></testcase>
+</testsuite>

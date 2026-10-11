@@ -51,12 +51,14 @@ export async function verifyEvidence(directory) {
 
 export function compareReports(old, current) {
   const a = new Map(old.results.map(r => [r.id, r])), b = new Map(current.results.map(r => [r.id, r]));
+  const sourceComparable = old.scope === current.scope && old.source.kind === 'commit' && current.source.kind === 'commit';
   const rows = [...new Set([...a.keys(), ...b.keys()])].sort().map(id => {
     const before = a.get(id), after = b.get(id);
     let classification, reason;
-    if (!before) classification = 'NEW_TEST';
+    if (!sourceComparable) { classification = 'NOT_COMPARABLE'; reason = 'Changed report scope or working-tree source provenance'; }
+    else if (!before) classification = 'NEW_TEST';
     else if (!after) classification = 'REMOVED_TEST';
-    else if (old.scope !== current.scope || old.source.kind !== 'commit' || current.source.kind !== 'commit' || !before.executed || !after.executed || old.harness.fingerprint !== current.harness.fingerprint || before.definitionFingerprint !== after.definitionFingerprint || before.environmentFingerprint !== after.environmentFingerprint || before.required !== after.required) {
+    else if (!before.executed || !after.executed || old.harness.fingerprint !== current.harness.fingerprint || before.definitionFingerprint !== after.definitionFingerprint || before.environmentFingerprint !== after.environmentFingerprint || before.required !== after.required) {
       classification = 'NOT_COMPARABLE'; reason = 'Dirty source, omitted execution, changed harness/definition/environment/coverage';
     } else if (before.status === 'FAIL' && after.status === 'PASS') classification = 'FIXED';
     else if (before.status === 'PASS' && after.status === 'FAIL') classification = 'NEW_REGRESSION';

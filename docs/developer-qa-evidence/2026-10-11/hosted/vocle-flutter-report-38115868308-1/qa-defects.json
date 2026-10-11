@@ -1,0 +1,503 @@
+{
+  "source": {
+    "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+  },
+  "harness": {
+    "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+  },
+  "findings": [
+    {
+      "defectId": "QA-1ed2d3c6b615",
+      "feature": [
+        "HOF"
+      ],
+      "testcaseIds": [
+        "FR-HOF-12"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Client lifecycle label changes per model, backend status unchanged; timezone/wording Q12"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-d5175244954f",
+      "feature": [
+        "HOF"
+      ],
+      "testcaseIds": [
+        "FR-HOF-13"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Cancel leaves form unchanged; save updates selected patient only; validation shown before submit"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-8da9f78a08f2",
+      "feature": [
+        "HOME"
+      ],
+      "testcaseIds": [
+        "FR-HOME-02"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Assigned/shift/task cards reflect current assignee/status; no separate roster state fabricated"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-5956187329ea",
+      "feature": [
+        "LINK"
+      ],
+      "testcaseIds": [
+        "FR-LINK-02"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Copied vocle://c/<id>/m/<id> string exact; opening target currently incomplete, Q13 required"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-fce633d44e53",
+      "feature": [
+        "LINK"
+      ],
+      "testcaseIds": [
+        "FR-LINK-03"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Latest debounced route wins; auth queues intended destination; missing target falls back to notification/handoff list"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-68ba597c572d",
+      "feature": [
+        "NAV"
+      ],
+      "testcaseIds": [
+        "FR-NAV-01"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Login/profile setup/home respectively, no transient wrong destination; stored identity loaded"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-946e233ea9c4",
+      "feature": [
+        "NAV"
+      ],
+      "testcaseIds": [
+        "FR-NAV-02"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Success retries request with new token; failure clears session; bounded retry desired, recursion/concurrency behavior recorded for clarification"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-bf35f0c1962a",
+      "feature": [
+        "NAV"
+      ],
+      "testcaseIds": [
+        "FR-NAV-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Detail then documented tab history restored; no duplicate route stack or lost selected tab"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-7821bb2d9619",
+      "feature": [
+        "OFF"
+      ],
+      "testcaseIds": [
+        "FR-OFF-06"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Decide retained/account-scoped data Q11; capture leak/stale UX without presuming implemented cleanup"
+      ],
+      "actual": [
+        {
+          "status": "NEEDS_DECISION"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-e751d0efc598",
+      "feature": [
+        "REQ"
+      ],
+      "testcaseIds": [
+        "FR-REQ-06"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Correct send/wait/accept/open state; errors preserve retry UI; acceptance navigates returned channel"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-505217da6143",
+      "feature": [
+        "RT"
+      ],
+      "testcaseIds": [
+        "FR-RT-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Correct peer/channel typing state; no self indicator; timeout clears stale typing; disposed listeners do not update closed state"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-0fd5a1cf0da2",
+      "feature": [
+        "RT"
+      ],
+      "testcaseIds": [
+        "FR-RT-06"
+      ],
+      "severity": "HIGH (suggested; QA review required)",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Valid refresh reconnects with new token; failure yields session recovery UI without endless connection loop"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-23dca0d75e6c",
+      "feature": [
+        "RUN"
+      ],
+      "testcaseIds": [
+        "FR-RUN-03"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Error state distinct from empty result; loading terminates; retry restores correct data"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-9863f669c923",
+      "feature": [
+        "SAVE"
+      ],
+      "testcaseIds": [
+        "FR-SAVE-02"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Corrupt data returns empty safely; unavailable target shows recoverable error, not crash"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-f8e4a533ae7a",
+      "feature": [
+        "SOC"
+      ],
+      "testcaseIds": [
+        "FR-SOC-06"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "UI labels reflect model; no claim sent=delivered; opt-out hides receipt UI"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-74aa410f11ea",
+      "feature": [
+        "SRCH"
+      ],
+      "testcaseIds": [
+        "FR-SRCH-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Latest visible query owns results, no stale overwrite; error state recoverable; correct result route selected"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    },
+    {
+      "defectId": "QA-7e4fad24dd94",
+      "feature": [
+        "SUP"
+      ],
+      "testcaseIds": [
+        "FR-SUP-04"
+      ],
+      "severity": "UNASSESSED",
+      "reproducibility": "One recorded execution; rerun required",
+      "expected": [
+        "Input retained on error, success acknowledgement matches ticket; routes and bundled content render; external contact intent captured only"
+      ],
+      "actual": [
+        {
+          "status": "FAIL"
+        }
+      ],
+      "source": {
+        "sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+      },
+      "reproduction": "Use original run command and exact source/harness revisions recorded in provenance",
+      "artifacts": [],
+      "suggestedOwner": [
+        "UNASSIGNED"
+      ],
+      "verificationStatus": "RECORDED; independent QA verification pending",
+      "ownerRequest": "Authorized maintainer must confirm owner and routing before assignment/notification"
+    }
+  ]
+}

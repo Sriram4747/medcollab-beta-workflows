@@ -16,7 +16,7 @@ for (let i = 0; i < args.length; i++) {
   else if (values.has(key) && args[i + 1] && !args[i + 1].startsWith('--')) options[key] = args[++i];
   else throw new Error('Unknown or incomplete argument: ' + args[i]);
 }
-if (!['full', 'tooling'].includes(options.profile || 'full')) throw new Error('Profile must be full or tooling');
+if (!['full', 'tooling', 'backend-smoke'].includes(options.profile || 'full')) throw new Error('Profile must be full, tooling or backend-smoke');
 const source = resolve(options.source || root);
 const output = resolve(options.output || join(root, 'tests/developer-workflow/output', new Date().toISOString().replace(/[:.]/g, '-') + '-' + randomUUID().slice(0, 8)));
 // Fresh outputs prevent stale reports or pass markers being reused.
@@ -27,7 +27,7 @@ const catalog = JSON.parse(await readFile(join(root, 'tests/functional-regressio
 const rows = [], commandLine = 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
 let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, integrity = 'PASS', environment = {};
 const ownedContainers = [];
-const env = { ...cleanEnvironment(), TZ: 'UTC', CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true' };
+const env = { ...cleanEnvironment(), TZ: 'UTC', CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true', DART_SUPPRESS_ANALYTICS: 'true' };
 const image = 'node:22.20.0-bookworm@sha256:915acd9e9b885ead0c620e27e37c81b74c226e0e1c8177f37a60217b6eabb0d7';
 const add = (id, status, required, extra = {}) => rows.push({ id, status, required, executed: false, module: 'TOOLING', ...extra });
 async function command(id, bin, argv, cwd, required = true, extra = {}) {
@@ -38,7 +38,7 @@ async function command(id, bin, argv, cwd, required = true, extra = {}) {
   }
   const log = join(output, 'diagnostics', id + '.log');
   const result = await run(bin, argv, { cwd, env, timeout: 30 * 60 * 1000, log });
-  add(id, result.error || result.timedOut ? 'ERROR' : result.code === 0 ? 'PASS' : extra.infrastructure ? 'ERROR' : 'FAIL', required,
+  add(id, result.error || result.timedOut ? 'ERROR' : result.code === 0 ? 'PASS' : extra.infrastructure || (extra.failureCodes && !extra.failureCodes.includes(result.code)) ? 'ERROR' : 'FAIL', required,
     { executed: !result.error, error: result.code === 0 ? undefined : (result.error || (result.timedOut ? 'Command deadline exceeded' : result.stderr.slice(-1500) || 'Nonzero exit ' + result.code)), artifacts: ['diagnostics/' + id + '.log'], ...extra });
   return result;
 }
@@ -102,11 +102,12 @@ try {
   const sanityInstall = await command('sanity-locked-dependencies', npm, ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], join(harness, 'tests/sanity'), true, { infrastructure: true });
   if (sanityInstall.code === 0) await command('sanity-self-check', process.execPath, [join(harness, 'tests/sanity/src/runner.js'), '--self-check'], harness);
   else add('sanity-self-check', 'BLOCKED', true, { exclusion: 'Pinned sanity dependencies unavailable' });
-  if ((options.profile || 'full') === 'full') {
+  if (['full', 'backend-smoke'].includes(options.profile || 'full')) {
     // Backend runtime uses precisely the existing CI network-none preparation and runners.
     const docker = await run('docker', ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
     environment.docker = docker.code === 0 ? docker.stdout.trim() : 'unavailable';
-    const backend = catalog.filter(c => c.tier === 'B');
+    const smoke = options.profile === 'backend-smoke';
+    const backend = smoke ? [{ id: 'harness-smoke', module: 'HARNESS', tier: 'B' }] : catalog.filter(c => c.tier === 'B');
     if (docker.code !== 0 || docker.stdout.trim() !== 'linux') unavailable(backend, 'Linux Docker engine unavailable; network-none isolation is required', true);
     else {
       const backendOut = join(output, 'backend'); await mkdir(backendOut);
@@ -115,11 +116,12 @@ try {
       if (prep.code !== 0) unavailable(backend, 'Docker dependency/Mongo preparation failed', true);
       else {
         environment.mongoBinaries = await fingerprint(join(backendOut, 'mongo-binaries'), (await readdir(join(backendOut, 'mongo-binaries'))).filter(f => !f.endsWith('.lock')));
-        await command('backend-driver', 'docker', ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${backendOut},target=/output`, '-e', 'HOME=/tmp', '-e', 'TZ=UTC', '-e', 'VOCLE_TARGET_DIR=/target', '-e', 'VOCLE_OUTPUT_DIR=/output', '-e', 'VOCLE_SCOPE=backend-all', image, 'sh', '-ec', 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/scripts/run-backend.mjs'], root);
-        const execution = JSON.parse(await readFile(join(backendOut, 'execution.json')));
+        await command('backend-driver', 'docker', ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${backendOut},target=/output`, '-e', 'HOME=/tmp', '-e', 'TZ=UTC', '-e', 'VOCLE_TARGET_DIR=/target', '-e', 'VOCLE_OUTPUT_DIR=/output', '-e', 'VOCLE_SCOPE=backend-all', image, 'sh', '-ec', 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/' + (smoke ? 'src/runner.mjs --smoke' : 'scripts/run-backend.mjs')], root);
+        const execution = smoke ? null : JSON.parse(await readFile(join(backendOut, 'execution.json')));
         const reports = [];
+        if (smoke) reports.push(JSON.parse(await readFile(join(backendOut, 'smoke/results.json'))));
         for (const entry of await readdir(backendOut, { withFileTypes: true })) {
-          if (entry.isDirectory() && entry.name.endsWith('-' + execution.runId) && !entry.name.startsWith('sanity-original')) reports.push(JSON.parse(await readFile(join(backendOut, entry.name, 'results.json'))));
+          if (!smoke && entry.isDirectory() && entry.name.endsWith('-' + execution.runId) && !entry.name.startsWith('sanity-original')) reports.push(JSON.parse(await readFile(join(backendOut, entry.name, 'results.json'))));
         }
         const observed = reports.flatMap(r => r.results);
         if (new Set(observed.map(r => r.id)).size !== observed.length || observed.some(r => !backend.some(c => c.id === r.id))) throw new Error('Backend report IDs duplicated or unexpected');
@@ -127,13 +129,14 @@ try {
           const actual = observed.find(r => r.id === c.id);
           add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: Boolean(actual), artifacts: ['backend/'], error: actual?.error || (!actual ? 'No result for selected ID' : undefined) });
         }
-        const clean = reports.length > 0 && reports.every(r => r.cleanup?.status === 'PASS' && r.complete && r.targetSha === sha && r.harnessSha === harnessInfo.sha) && (await readdir(join(backendOut, 'runtime')).catch(() => [])).length === 0;
+        const clean = reports.length > 0 && reports.every(r => r.cleanup?.status === 'PASS' && r.complete && (smoke || (r.targetSha === sha && r.harnessSha === harnessInfo.sha))) && (await readdir(join(backendOut, 'runtime')).catch(() => [])).length === 0;
         add('backend-evidence-integrity', clean ? 'PASS' : 'ERROR', true, { executed: true, error: clean ? undefined : 'Incomplete module report, source mismatch or cleanup failure' });
       }
     }
+    if (!smoke) {
     const app = join(target, 'medcollab-app');
     const version = await run(flutter, ['--version', '--machine'], { cwd: app, env, timeout: 60000 });
-    let sdk; try { sdk = JSON.parse(version.stdout).frameworkVersion; } catch { /* report unavailable */ }
+    let sdk, flutterRoot; try { const info = JSON.parse(version.stdout); sdk = info.frameworkVersion; flutterRoot = info.flutterRoot; } catch { /* report unavailable */ }
     environment.flutter = sdk || 'unavailable';
     if (sdk !== '3.29.3') {
       unavailable(catalog.filter(c => c.tier === 'F'), 'Pinned Flutter 3.29.3 unavailable; actual SDK ' + (sdk || 'unknown'), true);
@@ -147,7 +150,10 @@ try {
         add('flutter-analysis', 'BLOCKED', true, { exclusion: 'Locked Flutter dependencies unavailable' });
       }
       else {
-        await command('flutter-analysis', flutter, ['analyze', '--no-pub'], app);
+        // Use this Flutter SDK's analyzer directly. Flutter 3.29.3's wrapper scans
+        // SDK development examples even for a single app, which fails on some Windows archives.
+        const dart = join(flutterRoot, 'bin/cache/dart-sdk/bin', process.platform === 'win32' ? 'dart.exe' : 'dart');
+        await command('flutter-analysis', dart, ['analyze', '--format', 'machine'], app, true, { failureCodes: [1, 2, 3] });
         const tests = await run(flutter, ['test', '--no-pub', '--reporter', 'json', 'test/functional_regression'], { cwd: app, env, timeout: 12 * 60 * 1000, log: join(output, 'diagnostics/flutter-catalog.log') });
         await writeFile(join(output, 'flutter.ndjson'), tests.stdout);
         const aggregate = await command('flutter-aggregation', process.execPath, [join(harness, 'tests/functional-regression/scripts/aggregate-flutter.mjs'), join(output, 'flutter.ndjson'), join(output, 'flutter')], harness);
@@ -200,9 +206,13 @@ try {
       const apkPath = resolve(options.apk);
       add('submitted-apk', 'BLOCKED', false, { exclusion: 'Arbitrary APK cannot establish source binding or execute instrumented Flutter assertions. Use the existing Android runner to build from the exact SHA.', apk: { sha256: hash(await readFile(apkPath)), bytes: (await lstat(apkPath)).size } });
     }
+    }
   }
   const after = await fingerprint(target, sourcePaths);
-  if (after.fingerprint !== before.fingerprint) { integrity = 'ERROR'; add('source-integrity', 'ERROR', true, { executed: true, error: 'Selected application source/lockfile changed during testing' }); }
+  const changedSourceFiles = sourcePaths.filter(file => before.hashes[file] !== after.hashes[file]);
+  const generated = file => /^medcollab-app\/(linux|windows)\/flutter\/(generated_plugin_registrant\.(cc|h)|generated_plugins\.cmake)$/.test(file);
+  await writeFile(join(output, 'source-integrity.json'), JSON.stringify({ changedSourceFiles, generatedBuildOutputs: changedSourceFiles.filter(generated), immutableSourceChanges: changedSourceFiles.filter(file => !generated(file)), before: before.fingerprint, after: after.fingerprint }, null, 2));
+  if (changedSourceFiles.some(file => !generated(file))) { integrity = 'ERROR'; add('source-integrity', 'ERROR', true, { executed: true, error: 'Selected application source/lockfile changed during testing: ' + changedSourceFiles.filter(file => !generated(file)).join(', '), artifacts: ['source-integrity.json'] }); }
   else add('source-integrity', 'PASS', true, { executed: true });
   if ((await fingerprint(harness, harnessPaths)).fingerprint !== harnessInfo.fingerprint) { integrity = 'ERROR'; add('harness-integrity', 'ERROR', true, { executed: true, error: 'Test definitions changed during execution' }); }
   else add('harness-integrity', 'PASS', true, { executed: true });

@@ -43,11 +43,20 @@ jobs:
           TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
         run: node tests/developer-workflow/run.mjs --source . --commit "$TARGET_SHA" --profile tooling --output developer-qa-output
+      - name: Verify portable Docker orchestration with disposable real backend assertions
+        if: runner.os == 'Linux'
+        env:
+          TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: node tests/developer-workflow/run.mjs --source . --commit "$TARGET_SHA" --profile backend-smoke --output developer-runtime-output
       - name: Preserve submission and QA evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: developer-qa-${{ matrix.os }}-${{ github.run_id }}-${{ github.run_attempt }}
-          path: developer-qa-output/
+          path: |
+            developer-qa-output/
+            developer-runtime-output/
+            !developer-runtime-output/backend/mongo-binaries/
           if-no-files-found: error
           retention-days: 90

@@ -1,0 +1,47 @@
+{
+  "planned": {
+    "total": 187,
+    "backend": 147,
+    "flutter": 32,
+    "device": 8
+  },
+  "scope": "backend-p0",
+  "selected": 147,
+  "executed": 147,
+  "tally": {
+    "PASS": 118,
+    "FAIL": 13,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 16,
+    "SKIP": 0
+  },
+  "byTier": {
+    "B": {
+      "selected": 147,
+      "executed": 147
+    },
+    "F": {
+      "selected": 0,
+      "executed": 0
+    },
+    "D": {
+      "selected": 0,
+      "executed": 0
+    }
+  },
+  "byPriority": {
+    "P0": {
+      "selected": 79,
+      "executed": 79
+    },
+    "P1": {
+      "selected": 62,
+      "executed": 62
+    },
+    "P2": {
+      "selected": 6,
+      "executed": 6
+    }
+  }
+}

@@ -36,10 +36,17 @@ changes. It copies uncommitted application files into the source snapshot; exclu
 dependencies, ignored credentials and build output never become source evidence.
 Test overlays come from the recorded harness and are explicitly separate from source.
 Both application and harness content hashes are recorded, including dirty harness files.
+Locked Flutter resolution may regenerate the six tracked Windows/Linux plugin build
+outputs. Their changed names and before/after fingerprints are recorded in
+`source-integrity.json`; application libraries/configuration/lockfiles must stay unchanged.
 
 `--profile tooling` runs only catalog/contracts/offline security and sanity self-checks.
 Its PASS manifest names that scope; it is **not full functional or release evidence**.
 `full` is the default. Missing required prerequisites produce non-success reports.
+`--profile backend-smoke` also validates Docker preparation, network isolation, real
+synthetic authentication and database assertions via the existing smoke runner. The
+Ubuntu integration job runs this limited check to verify orchestration without repeating
+the full 147-case suite. It cannot supply full submission/release evidence.
 
 ## Coverage and requirements
 
@@ -49,7 +56,7 @@ Its PASS manifest names that scope; it is **not full functional or release evide
 | Backend functional | Existing run-backend.mjs: all 147, including concurrency, recovery and journeys | Required; Linux Docker/network-none and pinned dependencies |
 | Flutter | All 32 catalog cases plus discovered retained top-level unit/widget tests | Required; pinned SDK, locked pub dependencies and existing fakes |
 | Catalog / provenance / dependency installs | Existing catalog/contracts; source hashes before/after; lock-enforced npm/pub installs | Required |
-| Static analysis | Existing Flutter analyzer with --no-pub | Required; issues remain red, no application changes |
+| Static analysis | The pinned Flutter SDK's Dart analyzer, using the locked package configuration | Required; issues remain red, no application changes |
 | Offline security | Existing frozen manifest and media/data/Cloudinary self-tests | Required; real guard and controller assertions, no provider calls |
 | Full media/data/discovery security | `--security`: existing run.js and fixture/auth/discovery scripts | Optional by default; requesting the lane makes runtime execution/infrastructure required. Observations stay visible and existing runner gates apply. No observation is silently promoted to PASS |
 | Android 8 | `--android`: existing run-device.mjs, exact committed archive | Optional; one online Android emulator, no physical devices; source commit must exist in the harness checkout |

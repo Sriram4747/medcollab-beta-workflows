@@ -1,0 +1,627 @@
+{
+  "status": "PASS",
+  "reportCleanup": [
+    {
+      "directory": "auth-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-06-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "auth-07-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "channels-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-06-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-07-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-08-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "conversations-09-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "discovery-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "handoffs-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "journeys-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "media-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-06-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-07-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "messages-08-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "notifications-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "notifications-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "notifications-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "notifications-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "notifications-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "profile-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "push-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "push-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "push-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "push-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "realtime-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "realtime-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "realtime-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "realtime-07-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "requests-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "requests-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "requests-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "requests-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "requests-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "runtime-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "sanity-adapted-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "search-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "search-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "search-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "social-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "social-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "social-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "social-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "social-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-05-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "spaces-06-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "support-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "threads-01-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "threads-02-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "threads-03-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    },
+    {
+      "directory": "threads-04-cib7af6b16c18649698dd084",
+      "cleanup": {
+        "status": "PASS",
+        "backendStopped": true,
+        "mongoStopped": true,
+        "runtimeRemoved": true
+      }
+    }
+  ],
+  "remainingRuntimeEntries": []
+}

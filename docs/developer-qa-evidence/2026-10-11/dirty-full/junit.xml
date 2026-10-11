@@ -1,0 +1,208 @@
+<?xml version="1.0"?>
+<testsuite name="Vocle developer" tests="205" failures="193" errors="0" skipped="0">
+<testcase classname="TOOLING" name="catalog-validation"></testcase>
+<testcase classname="TOOLING" name="ci-device-contracts"></testcase>
+<testcase classname="TOOLING" name="functional-classification"></testcase>
+<testcase classname="TOOLING" name="backend-locked-dependencies"></testcase>
+<testcase classname="TOOLING" name="security-security-manifest-check"></testcase>
+<testcase classname="TOOLING" name="security-security-media-self-test"></testcase>
+<testcase classname="TOOLING" name="security-security-data-self-test"></testcase>
+<testcase classname="TOOLING" name="security-security-cloudinary-self-test"></testcase>
+<testcase classname="TOOLING" name="sanity-locked-dependencies"></testcase>
+<testcase classname="TOOLING" name="sanity-self-check"></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="authentication-and-profiles-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="authentication-and-profiles-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="spaces-and-invitations-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="channels-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="channels-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="channels-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="messaging-and-needl-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="messaging-and-needl-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="messaging-and-needl-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="THR" name="messaging-and-needl-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="messaging-and-needl-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="messaging-and-needl-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="messaging-and-needl-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="message-requests-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="message-requests-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="message-requests-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="direct-and-group-conversations-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="handoffs-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="handoffs-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="handoffs-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="handoffs-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="handoffs-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="media-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="media-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="media-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="notifications-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="notifications-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="notifications-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="realtime-and-availability-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="realtime-and-availability-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="realtime-and-availability-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SRCH" name="search-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SRCH" name="search-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SUP" name="support-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RUN" name="startup-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="AUTH" name="FR-AUTH-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DISC" name="FR-DISC-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DISC" name="FR-DISC-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DISC" name="FR-DISC-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DISC" name="FR-DISC-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SPC" name="FR-SPC-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="FR-CH-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="FR-CH-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="FR-CH-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="FR-CH-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="CH" name="FR-CH-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-08"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="DM" name="FR-DM-09"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MSG" name="FR-MSG-08"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="THR" name="FR-THR-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="THR" name="FR-THR-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="THR" name="FR-THR-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="THR" name="FR-THR-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-08"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-09"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-10"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-06"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="MED" name="FR-MED-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-05"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="FR-RT-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="FR-RT-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="FR-RT-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RT" name="FR-RT-07"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SUP" name="FR-SUP-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SUP" name="FR-SUP-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="SUP" name="FR-SUP-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RUN" name="FR-RUN-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="RUN" name="FR-RUN-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-01"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-02"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-03"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-04"><failure message="BLOCKED">Linux Docker engine unavailable; network-none isolation is required</failure></testcase>
+<testcase classname="PRO" name="FR-PRO-05"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="REQ" name="FR-REQ-06"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="THR" name="FR-THR-05"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SOC" name="FR-SOC-06"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-11"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-12"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOF" name="FR-HOF-13"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="NOT" name="FR-NOT-06"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="RT" name="FR-RT-04"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="RT" name="FR-RT-05"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="RT" name="FR-RT-06"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SRCH" name="FR-SRCH-04"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SUP" name="FR-SUP-04"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-01"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-02"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-01"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-02"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-04"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-05"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="OFF" name="FR-OFF-06"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SAVE" name="FR-SAVE-01"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SAVE" name="FR-SAVE-02"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="SAVE" name="FR-SAVE-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOME" name="FR-HOME-01"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOME" name="FR-HOME-02"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="HOME" name="FR-HOME-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="LINK" name="FR-LINK-01"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="LINK" name="FR-LINK-02"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="LINK" name="FR-LINK-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="RUN" name="FR-RUN-03"><failure message="BLOCKED">Pinned Flutter 3.29.3 unavailable; actual SDK 3.47.2</failure></testcase>
+<testcase classname="TOOLING" name="flutter-retained"><failure message="BLOCKED">Pinned Flutter SDK unavailable</failure></testcase>
+<testcase classname="TOOLING" name="flutter-analysis"><failure message="BLOCKED">Pinned Flutter SDK unavailable</failure></testcase>
+<testcase classname="MED" name="FR-MED-08"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-05"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="PUSH" name="FR-PUSH-06"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-04"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="NAV" name="FR-NAV-05"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="LINK" name="FR-LINK-04"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-05"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="JRN" name="FR-JRN-06"><failure message="BLOCKED">Optional Android lane: rerun with --android on an isolated emulator</failure></testcase>
+<testcase classname="TOOLING" name="backend-legacy-jest"><failure message="BLOCKED">Two retained Jest files exist, but Jest and a Jest runner are absent from the lockfile; backend npm test is a placeholder. No assertion execution claimed.</failure></testcase>
+<testcase classname="TOOLING" name="security-runtime"><failure message="BLOCKED">Optional: --security reuses existing media, data and 691-case discovery runners in network-none Docker. Provider account integration stays QA-only.</failure></testcase>
+<testcase classname="TOOLING" name="provider-accounts"><failure message="BLOCKED">QA-only: approved isolated test account credentials and resource cleanup; existing Cloudinary workflow</failure></testcase>
+<testcase classname="TOOLING" name="ios-physical-device"><failure message="BLOCKED">QA-only: platform hardware/runner required; existing coverage makes no iOS claim</failure></testcase>
+<testcase classname="TOOLING" name="source-integrity"></testcase>
+<testcase classname="TOOLING" name="workspace-cleanup"></testcase>
+</testsuite>

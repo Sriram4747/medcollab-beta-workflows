@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="vocle-functional-regression" tests="147" failures="29" errors="0" skipped="0">
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-01" time="0.286"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-02" time="0.176"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-03" time="0.281"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-04" time="0.004"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-05" time="0.017"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-06" time="0.009"></testcase>
+  <testcase classname="authentication-and-profiles" name="authentication-and-profiles-07" time="0.025"></testcase>
+  <testcase classname="spaces-and-invitations" name="spaces-and-invitations-01" time="0.015"></testcase>
+  <testcase classname="spaces-and-invitations" name="spaces-and-invitations-02" time="0.035"></testcase>
+  <testcase classname="spaces-and-invitations" name="spaces-and-invitations-03" time="0.011"></testcase>
+  <testcase classname="spaces-and-invitations" name="spaces-and-invitations-04" time="0.017"></testcase>
+  <testcase classname="spaces-and-invitations" name="spaces-and-invitations-05" time="0.035"></testcase>
+  <testcase classname="channels" name="channels-01" time="0.024"></testcase>
+  <testcase classname="channels" name="channels-02" time="0.014"></testcase>
+  <testcase classname="channels" name="channels-03" time="0.047"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-01" time="0.043"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-02" time="0.066"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-03" time="0.013"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-04" time="0.044"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-05" time="0.041"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-06" time="0.048"></testcase>
+  <testcase classname="messaging-and-needl" name="messaging-and-needl-07" time="0.017"></testcase>
+  <testcase classname="message-requests" name="message-requests-01" time="0.092"></testcase>
+  <testcase classname="message-requests" name="message-requests-02" time="0.026"></testcase>
+  <testcase classname="message-requests" name="message-requests-03" time="0.035"></testcase>
+  <testcase classname="direct-and-group-conversations" name="direct-and-group-conversations-01" time="0.015"></testcase>
+  <testcase classname="direct-and-group-conversations" name="direct-and-group-conversations-02" time="0.028"></testcase>
+  <testcase classname="direct-and-group-conversations" name="direct-and-group-conversations-03" time="0.042"></testcase>
+  <testcase classname="direct-and-group-conversations" name="direct-and-group-conversations-04" time="0.052"></testcase>
+  <testcase classname="direct-and-group-conversations" name="direct-and-group-conversations-05" time="0.062"></testcase>
+  <testcase classname="handoffs" name="handoffs-01" time="0.029"></testcase>
+  <testcase classname="handoffs" name="handoffs-02" time="0.022"></testcase>
+  <testcase classname="handoffs" name="handoffs-03" time="0.057"></testcase>
+  <testcase classname="handoffs" name="handoffs-04" time="0.012"></testcase>
+  <testcase classname="handoffs" name="handoffs-05" time="0.028"></testcase>
+  <testcase classname="media" name="media-01" time="0.033"></testcase>
+  <testcase classname="media" name="media-02" time="0.034"></testcase>
+  <testcase classname="media" name="media-03" time="0.067"></testcase>
+  <testcase classname="notifications" name="notifications-01" time="0.036"></testcase>
+  <testcase classname="notifications" name="notifications-02" time="0.035"></testcase>
+  <testcase classname="notifications" name="notifications-03" time="0.049"></testcase>
+  <testcase classname="realtime-and-availability" name="realtime-and-availability-01" time="0.069"></testcase>
+  <testcase classname="realtime-and-availability" name="realtime-and-availability-02" time="0.002"></testcase>
+  <testcase classname="realtime-and-availability" name="realtime-and-availability-03" time="0.026"></testcase>
+  <testcase classname="search" name="search-01" time="0.017"></testcase>
+  <testcase classname="search" name="search-02" time="0.031"></testcase>
+  <testcase classname="support" name="support-01" time="0.057"></testcase>
+  <testcase classname="startup" name="startup-01" time="0.000"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-01" time="0.595"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-02" time="0.454"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-03" time="0.393"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-04" time="1.005"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-05" time="0.650"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-06" time="0.105"></testcase>
+  <testcase classname="AUTH" name="FR-AUTH-07" time="0.515"></testcase>
+  <testcase classname="PRO" name="FR-PRO-01" time="0.666"></testcase>
+  <testcase classname="PRO" name="FR-PRO-02" time="0.321"></testcase>
+  <testcase classname="PRO" name="FR-PRO-03" time="0.029"></testcase>
+  <testcase classname="PRO" name="FR-PRO-04" time="0.246"></testcase>
+  <testcase classname="DISC" name="FR-DISC-01" time="1.296"></testcase>
+  <testcase classname="DISC" name="FR-DISC-02" time="0.045"></testcase>
+  <testcase classname="DISC" name="FR-DISC-03" time="0.122"></testcase>
+  <testcase classname="DISC" name="FR-DISC-04" time="0.037"></testcase>
+  <testcase classname="SPC" name="FR-SPC-01" time="0.573"></testcase>
+  <testcase classname="SPC" name="FR-SPC-02" time="0.720"></testcase>
+  <testcase classname="SPC" name="FR-SPC-03" time="0.514"><failure message="NEEDS_DECISION: Q14: pending-join client state and approval completion need product decision"/></testcase>
+  <testcase classname="SPC" name="FR-SPC-04" time="0.705"></testcase>
+  <testcase classname="SPC" name="FR-SPC-05" time="1.667"></testcase>
+  <testcase classname="SPC" name="FR-SPC-06" time="2.330"><failure message="FAIL: Explicit room sync left revoked users subscribed to a space room
++ actual - expected
+
+  [
++   true,
++   true
+-   false,
+-   false
+  ]
+"/></testcase>
+  <testcase classname="CH" name="FR-CH-01" time="0.580"></testcase>
+  <testcase classname="CH" name="FR-CH-02" time="0.292"><failure message="FAIL: GET /api/channels/6acb233dca522472806f9740 expected 403, got 200"/></testcase>
+  <testcase classname="CH" name="FR-CH-03" time="0.080"></testcase>
+  <testcase classname="CH" name="FR-CH-04" time="0.083"></testcase>
+  <testcase classname="CH" name="FR-CH-05" time="0.141"></testcase>
+  <testcase classname="REQ" name="FR-REQ-01" time="0.726"></testcase>
+  <testcase classname="REQ" name="FR-REQ-02" time="0.726"></testcase>
+  <testcase classname="REQ" name="FR-REQ-03" time="1.004"></testcase>
+  <testcase classname="REQ" name="FR-REQ-04" time="0.790"></testcase>
+  <testcase classname="REQ" name="FR-REQ-05" time="0.546"><failure message="NEEDS_DECISION: Q7: recovery or atomic rollback contract for accepted-without-DM state requires product decision"/></testcase>
+  <testcase classname="DM" name="FR-DM-01" time="0.951"></testcase>
+  <testcase classname="DM" name="FR-DM-02" time="2.035"></testcase>
+  <testcase classname="DM" name="FR-DM-03" time="0.784"></testcase>
+  <testcase classname="DM" name="FR-DM-04" time="0.733"></testcase>
+  <testcase classname="DM" name="FR-DM-05" time="0.718"><failure message="NEEDS_DECISION: Q2: intended client timezone for today expansion needs product decision"/></testcase>
+  <testcase classname="DM" name="FR-DM-06" time="1.044"><failure message="NEEDS_DECISION: Q2: 500-item oldest-first cap and source-ID destination preview require product decision"/></testcase>
+  <testcase classname="DM" name="FR-DM-07" time="0.838"><failure message="NEEDS_DECISION: Q2: copied thread and quote graph remapping requires product decision"/></testcase>
+  <testcase classname="DM" name="FR-DM-08" time="0.760"></testcase>
+  <testcase classname="DM" name="FR-DM-09" time="0.766"><failure message="NEEDS_DECISION: Q7: concurrent group exact-membership guarantee unresolved; observed 1 matching group record(s)"/></testcase>
+  <testcase classname="MSG" name="FR-MSG-01" time="0.584"><failure message="FAIL: POST /api/channels/6acb2368495a9badc433bda2/messages expected 201, got 400"/></testcase>
+  <testcase classname="MSG" name="FR-MSG-02" time="0.436"></testcase>
+  <testcase classname="MSG" name="FR-MSG-03" time="0.608"></testcase>
+  <testcase classname="MSG" name="FR-MSG-04" time="0.612"></testcase>
+  <testcase classname="MSG" name="FR-MSG-05" time="0.677"><failure message="NEEDS_DECISION: Q1: derived quote snapshot and channel preview propagation after edit/delete needs product decision"/></testcase>
+  <testcase classname="MSG" name="FR-MSG-06" time="0.618"></testcase>
+  <testcase classname="MSG" name="FR-MSG-07" time="0.578"></testcase>
+  <testcase classname="MSG" name="FR-MSG-08" time="0.332"><failure message="NEEDS_DECISION: Q7: automatic duplicate prevention after a lost successful response needs product decision"/></testcase>
+  <testcase classname="THR" name="FR-THR-01" time="0.818"></testcase>
+  <testcase classname="THR" name="FR-THR-02" time="0.606"></testcase>
+  <testcase classname="THR" name="FR-THR-03" time="0.357"></testcase>
+  <testcase classname="THR" name="FR-THR-04" time="0.591"><failure message="NEEDS_DECISION: Q1: expected thread aggregate correction after editing/deleting the latest reply needs product decision"/></testcase>
+  <testcase classname="SOC" name="FR-SOC-01" time="0.798"></testcase>
+  <testcase classname="SOC" name="FR-SOC-02" time="0.559"></testcase>
+  <testcase classname="SOC" name="FR-SOC-03" time="0.730"></testcase>
+  <testcase classname="SOC" name="FR-SOC-04" time="0.463"></testcase>
+  <testcase classname="SOC" name="FR-SOC-05" time="0.846"></testcase>
+  <testcase classname="HOF" name="FR-HOF-01" time="0.941"></testcase>
+  <testcase classname="HOF" name="FR-HOF-02" time="0.177"></testcase>
+  <testcase classname="HOF" name="FR-HOF-03" time="0.116"></testcase>
+  <testcase classname="HOF" name="FR-HOF-04" time="0.104"></testcase>
+  <testcase classname="HOF" name="FR-HOF-05" time="0.050"><failure message="FAIL: GET /api/handoffs/6acb23c6b97004ac388839d5 expected 403, got 200"/></testcase>
+  <testcase classname="HOF" name="FR-HOF-06" time="0.159"></testcase>
+  <testcase classname="HOF" name="FR-HOF-07" time="0.101"><failure message="NEEDS_DECISION: Q4: shiftDate sort with ID cursor; expected [&quot;6acb23c6b97004ac388839f8&quot;,&quot;6acb23c6b97004ac38883a02&quot;,&quot;6acb23c6b97004ac38883a07&quot;,&quot;6acb23c6b97004ac388839fd&quot;], observed [&quot;6acb23c6b97004ac388839f8&quot;,&quot;6acb23c6b97004ac38883a02&quot;,&quot;6acb23c6b97004ac388839f8&quot;,&quot;6acb23c6b97004ac388839fd&quot;]"/></testcase>
+  <testcase classname="HOF" name="FR-HOF-08" time="0.097"></testcase>
+  <testcase classname="HOF" name="FR-HOF-09" time="0.105"></testcase>
+  <testcase classname="HOF" name="FR-HOF-10" time="0.255"></testcase>
+  <testcase classname="MED" name="FR-MED-01" time="0.589"><failure message="FAIL: Unsupported files must be client errors, not HTTP 500
++ actual - expected
+
+  [
++   500,
++   500
+-   400,
+-   400
+  ]
+"/></testcase>
+  <testcase classname="MED" name="FR-MED-02" time="0.005"><failure message="FAIL: Expected values to be strictly equal:
+
+null !== 'pdf'
+"/></testcase>
+  <testcase classname="MED" name="FR-MED-03" time="0.422"><failure message="NEEDS_DECISION: Q5: local upload URL is rejected by image-message policy; full upload→message pipeline has no successful local path"/></testcase>
+  <testcase classname="MED" name="FR-MED-04" time="0.035"><failure message="NEEDS_DECISION: Q5: video upload succeeds, but video message type is rejected by the pinned source"/></testcase>
+  <testcase classname="MED" name="FR-MED-05" time="0.009"><failure message="FAIL: Expected values to be strictly equal:
+
+false !== true
+"/></testcase>
+  <testcase classname="MED" name="FR-MED-06" time="0.034"><failure message="NEEDS_DECISION: Q6: profile points to replacement avatar; old file was deleted explicitly, automatic old-file lifecycle remains undecided"/></testcase>
+  <testcase classname="MED" name="FR-MED-07" time="0.072"><failure message="NEEDS_DECISION: Q6: referenced local image/video bytes delete, handoff-context deletion is unsupported, and handoff attachment references remain"/></testcase>
+  <testcase classname="NOT" name="FR-NOT-01" time="0.597"><failure message="FAIL: Expected values to be strictly deep-equal:
++ actual - expected
+
++ Set(3) {
++   '6acb2393c31dc230c49a6654',
+- Set(2) {
+    '6acb2393c31dc230c49a6656',
+    '6acb2393c31dc230c49a6658'
+  }
+"/></testcase>
+  <testcase classname="NOT" name="FR-NOT-02" time="0.556"><failure message="FAIL: The expression evaluated to a falsy value:
+
+  assert.ok(!inbox.data.notifications.some((item) =&gt; item.referenceId === viewed._id))
+"/></testcase>
+  <testcase classname="NOT" name="FR-NOT-03" time="0.340"></testcase>
+  <testcase classname="NOT" name="FR-NOT-04" time="0.295"><failure message="FAIL: Expected values to be strictly equal:
+
+1 !== 2
+"/></testcase>
+  <testcase classname="NOT" name="FR-NOT-05" time="0.771"></testcase>
+  <testcase classname="PUSH" name="FR-PUSH-01" time="0.522"></testcase>
+  <testcase classname="PUSH" name="FR-PUSH-02" time="0.772"></testcase>
+  <testcase classname="PUSH" name="FR-PUSH-03" time="0.861"><failure message="NEEDS_DECISION: Q9: client/device timezone policy for quiet hours needs product decision"/></testcase>
+  <testcase classname="PUSH" name="FR-PUSH-04" time="0.570"></testcase>
+  <testcase classname="RT" name="FR-RT-01" time="0.782"></testcase>
+  <testcase classname="RT" name="FR-RT-02" time="0.562"></testcase>
+  <testcase classname="RT" name="FR-RT-03" time="0.547"><failure message="NEEDS_DECISION: Q8: intended socket availability note/until convergence needs product decision"/></testcase>
+  <testcase classname="RT" name="FR-RT-07" time="5.074"><failure message="FAIL: Recovered socket must keep typing, room sync, availability handlers and persisted state
++ actual - expected
+
+  {
++   availabilityOk: false,
++   persistedStatus: 'available',
++   syncOk: false,
++   typingOk: false
+-   availabilityOk: true,
+-   persistedStatus: 'on_call',
+-   syncOk: true,
+-   typingOk: true
+  }
+"/></testcase>
+  <testcase classname="SRCH" name="FR-SRCH-01" time="0.868"></testcase>
+  <testcase classname="SRCH" name="FR-SRCH-02" time="0.448"></testcase>
+  <testcase classname="SRCH" name="FR-SRCH-03" time="0.579"></testcase>
+  <testcase classname="SUP" name="FR-SUP-01" time="0.551"></testcase>
+  <testcase classname="SUP" name="FR-SUP-02" time="0.022"></testcase>
+  <testcase classname="SUP" name="FR-SUP-03" time="0.700"><failure message="FAIL: Dev notification seeding must create three valid inbox records
+
+400 !== 200
+"/></testcase>
+  <testcase classname="RUN" name="FR-RUN-01" time="1.536"></testcase>
+  <testcase classname="RUN" name="FR-RUN-02" time="10.849"></testcase>
+  <testcase classname="JRN" name="FR-JRN-01" time="1.157"></testcase>
+  <testcase classname="JRN" name="FR-JRN-02" time="0.331"></testcase>
+  <testcase classname="JRN" name="FR-JRN-03" time="0.296"></testcase>
+  <testcase classname="JRN" name="FR-JRN-04" time="10.052"><failure message="FAIL: Socket event sync_space_rooms timed out"/></testcase>
+</testsuite>

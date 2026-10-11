@@ -1,0 +1,724 @@
+{
+  "run": {
+    "id": 38115868308,
+    "name": "Vocle Functional Regression",
+    "node_id": "WFR_kwLOT7cnhc8AAAAI3-H-lA",
+    "head_branch": "master",
+    "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+    "path": ".github/workflows/vocle-functional-regression.yml",
+    "display_title": "Add developer regression evidence comparison and QA integration tooling",
+    "run_number": 16,
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "workflow_id": 379966858,
+    "check_suite_id": 103270312955,
+    "check_suite_node_id": "CS_kwDOT7cnhc8AAAAYC2Pr-w",
+    "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+    "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+    "pull_requests": [],
+    "created_at": "2026-10-11T05:46:21Z",
+    "updated_at": "2026-10-11T05:52:09Z",
+    "actor": {
+      "login": "Sriram4747",
+      "id": 56625062,
+      "node_id": "MDQ6VXNlcjU2NjI1MDYy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56625062?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Sriram4747",
+      "html_url": "https://github.com/Sriram4747",
+      "followers_url": "https://api.github.com/users/Sriram4747/followers",
+      "following_url": "https://api.github.com/users/Sriram4747/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Sriram4747/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Sriram4747/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Sriram4747/subscriptions",
+      "organizations_url": "https://api.github.com/users/Sriram4747/orgs",
+      "repos_url": "https://api.github.com/users/Sriram4747/repos",
+      "events_url": "https://api.github.com/users/Sriram4747/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Sriram4747/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "run_attempt": 1,
+    "referenced_workflows": [],
+    "run_started_at": "2026-10-11T05:46:21Z",
+    "triggering_actor": {
+      "login": "Sriram4747",
+      "id": 56625062,
+      "node_id": "MDQ6VXNlcjU2NjI1MDYy",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56625062?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Sriram4747",
+      "html_url": "https://github.com/Sriram4747",
+      "followers_url": "https://api.github.com/users/Sriram4747/followers",
+      "following_url": "https://api.github.com/users/Sriram4747/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Sriram4747/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Sriram4747/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Sriram4747/subscriptions",
+      "organizations_url": "https://api.github.com/users/Sriram4747/orgs",
+      "repos_url": "https://api.github.com/users/Sriram4747/repos",
+      "events_url": "https://api.github.com/users/Sriram4747/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Sriram4747/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "jobs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/jobs",
+    "logs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/logs",
+    "check_suite_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/check-suites/103270312955",
+    "artifacts_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/artifacts",
+    "cancel_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/cancel",
+    "rerun_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/rerun",
+    "previous_attempt_url": null,
+    "workflow_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/workflows/379966858",
+    "head_commit": {
+      "id": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+      "tree_id": "a313ab4100bbd0add29e3a48a6a20623436d7ffc",
+      "message": "Add developer regression evidence comparison and QA integration tooling",
+      "timestamp": "2026-10-11T05:46:18Z",
+      "author": {
+        "name": "Sriram4747",
+        "email": "shriram107200@gmail.com"
+      },
+      "committer": {
+        "name": "Sriram4747",
+        "email": "shriram107200@gmail.com"
+      }
+    },
+    "repository": {
+      "id": 1337403269,
+      "node_id": "R_kgDOT7cnhQ",
+      "name": "medcollab-beta-workflows",
+      "full_name": "Sriram4747/medcollab-beta-workflows",
+      "private": false,
+      "owner": {
+        "login": "Sriram4747",
+        "id": 56625062,
+        "node_id": "MDQ6VXNlcjU2NjI1MDYy",
+        "avatar_url": "https://avatars.githubusercontent.com/u/56625062?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/Sriram4747",
+        "html_url": "https://github.com/Sriram4747",
+        "followers_url": "https://api.github.com/users/Sriram4747/followers",
+        "following_url": "https://api.github.com/users/Sriram4747/following{/other_user}",
+        "gists_url": "https://api.github.com/users/Sriram4747/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/Sriram4747/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/Sriram4747/subscriptions",
+        "organizations_url": "https://api.github.com/users/Sriram4747/orgs",
+        "repos_url": "https://api.github.com/users/Sriram4747/repos",
+        "events_url": "https://api.github.com/users/Sriram4747/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/Sriram4747/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows",
+      "description": "Beta version of medcollab new app for medical people",
+      "fork": true,
+      "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows",
+      "forks_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/forks",
+      "keys_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/teams",
+      "hooks_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/hooks",
+      "issue_events_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/events",
+      "assignees_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/tags",
+      "blobs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/languages",
+      "stargazers_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/stargazers",
+      "contributors_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/contributors",
+      "subscribers_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/subscribers",
+      "subscription_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/subscription",
+      "commits_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/merges",
+      "archive_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/downloads",
+      "issues_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/labels{/name}",
+      "releases_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/deployments"
+    },
+    "head_repository": {
+      "id": 1337403269,
+      "node_id": "R_kgDOT7cnhQ",
+      "name": "medcollab-beta-workflows",
+      "full_name": "Sriram4747/medcollab-beta-workflows",
+      "private": false,
+      "owner": {
+        "login": "Sriram4747",
+        "id": 56625062,
+        "node_id": "MDQ6VXNlcjU2NjI1MDYy",
+        "avatar_url": "https://avatars.githubusercontent.com/u/56625062?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/Sriram4747",
+        "html_url": "https://github.com/Sriram4747",
+        "followers_url": "https://api.github.com/users/Sriram4747/followers",
+        "following_url": "https://api.github.com/users/Sriram4747/following{/other_user}",
+        "gists_url": "https://api.github.com/users/Sriram4747/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/Sriram4747/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/Sriram4747/subscriptions",
+        "organizations_url": "https://api.github.com/users/Sriram4747/orgs",
+        "repos_url": "https://api.github.com/users/Sriram4747/repos",
+        "events_url": "https://api.github.com/users/Sriram4747/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/Sriram4747/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows",
+      "description": "Beta version of medcollab new app for medical people",
+      "fork": true,
+      "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows",
+      "forks_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/forks",
+      "keys_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/teams",
+      "hooks_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/hooks",
+      "issue_events_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/events",
+      "assignees_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/tags",
+      "blobs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/languages",
+      "stargazers_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/stargazers",
+      "contributors_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/contributors",
+      "subscribers_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/subscribers",
+      "subscription_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/subscription",
+      "commits_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/merges",
+      "archive_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/downloads",
+      "issues_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/labels{/name}",
+      "releases_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/deployments"
+    }
+  },
+  "jobs": {
+    "total_count": 4,
+    "jobs": [
+      {
+        "id": 114400521528,
+        "run_id": 38115868308,
+        "workflow_name": "Vocle Functional Regression",
+        "head_branch": "master",
+        "run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOT7cnhc8AAAAaos1tOA",
+        "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/jobs/114400521528",
+        "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/job/114400521528",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-11T05:46:22Z",
+        "started_at": "2026-10-11T05:46:24Z",
+        "completed_at": "2026-10-11T05:46:31Z",
+        "name": "Detect",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-11T05:46:25Z",
+            "completed_at": "2026-10-11T05:46:26Z"
+          },
+          {
+            "name": "Check out exact fork harness revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-11T05:46:26Z",
+            "completed_at": "2026-10-11T05:46:27Z"
+          },
+          {
+            "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-11T05:46:27Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Validate catalog and CI contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Resolve exact read-only target",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Fingerprint exact harness and assertions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Select affected fork modules with shared-code fallback",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Check validated full-backend success history",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Post Check out exact fork harness revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17,
+            "started_at": "2026-10-11T05:46:28Z",
+            "completed_at": "2026-10-11T05:46:28Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/check-runs/114400521528",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000000496,
+        "runner_name": "GitHub Actions 1000000496",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 114400545941,
+        "run_id": 38115868308,
+        "workflow_name": "Vocle Functional Regression",
+        "head_branch": "master",
+        "run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOT7cnhc8AAAAaos3MlQ",
+        "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/jobs/114400545941",
+        "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/job/114400545941",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-10-11T05:46:31Z",
+        "started_at": "2026-10-11T05:46:34Z",
+        "completed_at": "2026-10-11T05:47:55Z",
+        "name": "Flutter",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-11T05:46:34Z",
+            "completed_at": "2026-10-11T05:46:37Z"
+          },
+          {
+            "name": "Check out exact fork revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-11T05:46:37Z",
+            "completed_at": "2026-10-11T05:46:38Z"
+          },
+          {
+            "name": "Verify source provenance and prepare report directory",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-11T05:46:38Z",
+            "completed_at": "2026-10-11T05:46:38Z"
+          },
+          {
+            "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-11T05:46:38Z",
+            "completed_at": "2026-10-11T05:46:38Z"
+          },
+          {
+            "name": "Set up pinned Flutter SDK",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-11T05:46:38Z",
+            "completed_at": "2026-10-11T05:47:07Z"
+          },
+          {
+            "name": "Resolve exact locked dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-11T05:47:07Z",
+            "completed_at": "2026-10-11T05:47:20Z"
+          },
+          {
+            "name": "Run catalog and retained Flutter tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-11T05:47:20Z",
+            "completed_at": "2026-10-11T05:47:52Z"
+          },
+          {
+            "name": "Aggregate exact Flutter catalog and coverage gate",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-11T05:47:52Z",
+            "completed_at": "2026-10-11T05:47:52Z"
+          },
+          {
+            "name": "Upload Flutter reports and provenance",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-11T05:47:52Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          },
+          {
+            "name": "Enforce Flutter functional gate",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 10,
+            "started_at": "2026-10-11T05:47:53Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          },
+          {
+            "name": "Post Set up pinned Flutter SDK",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18,
+            "started_at": "2026-10-11T05:47:53Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 19,
+            "started_at": "2026-10-11T05:47:53Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          },
+          {
+            "name": "Post Check out exact fork revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-11T05:47:53Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-11T05:47:53Z",
+            "completed_at": "2026-10-11T05:47:53Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/check-runs/114400545941",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000000498,
+        "runner_name": "GitHub Actions 1000000498",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 114400545948,
+        "run_id": 38115868308,
+        "workflow_name": "Vocle Functional Regression",
+        "head_branch": "master",
+        "run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOT7cnhc8AAAAaos3MnA",
+        "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/jobs/114400545948",
+        "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/job/114400545948",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-10-11T05:46:31Z",
+        "started_at": "2026-10-11T05:46:34Z",
+        "completed_at": "2026-10-11T05:52:02Z",
+        "name": "Execute",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-11T05:46:34Z",
+            "completed_at": "2026-10-11T05:46:35Z"
+          },
+          {
+            "name": "Check out exact harness revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-11T05:46:35Z",
+            "completed_at": "2026-10-11T05:46:36Z"
+          },
+          {
+            "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-11T05:46:36Z",
+            "completed_at": "2026-10-11T05:46:37Z"
+          },
+          {
+            "name": "Fetch captured source without credentials",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-11T05:46:37Z",
+            "completed_at": "2026-10-11T05:46:37Z"
+          },
+          {
+            "name": "Prepare pinned runtime dependencies and Mongo binary",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-11T05:46:37Z",
+            "completed_at": "2026-10-11T05:47:03Z"
+          },
+          {
+            "name": "Run retained sanity and backend modules with loopback-only providers",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-11T05:47:03Z",
+            "completed_at": "2026-10-11T05:51:59Z"
+          },
+          {
+            "name": "Verify provenance, cleanup, exact IDs and write reports",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-11T05:51:59Z",
+            "completed_at": "2026-10-11T05:51:59Z"
+          },
+          {
+            "name": "Upload full diagnostic evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-11T05:51:59Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Create validated success marker after diagnostic upload",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 9,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Upload validated full-backend success marker",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 10,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Enforce verified regression gate",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 11,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 21,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Post Check out exact harness revision",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-11T05:52:00Z",
+            "completed_at": "2026-10-11T05:52:00Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/check-runs/114400545948",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000000499,
+        "runner_name": "GitHub Actions 1000000499",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      {
+        "id": 114401398594,
+        "run_id": 38115868308,
+        "workflow_name": "Vocle Functional Regression",
+        "head_branch": "master",
+        "run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOT7cnhc8AAAAaotrPQg",
+        "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966",
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/jobs/114401398594",
+        "html_url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/38115868308/job/114401398594",
+        "status": "completed",
+        "conclusion": "failure",
+        "created_at": "2026-10-11T05:52:02Z",
+        "started_at": "2026-10-11T05:52:05Z",
+        "completed_at": "2026-10-11T05:52:08Z",
+        "name": "Summary",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-11T05:52:06Z",
+            "completed_at": "2026-10-11T05:52:06Z"
+          },
+          {
+            "name": "Summarize detection, coverage gate and artifacts",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 2,
+            "started_at": "2026-10-11T05:52:06Z",
+            "completed_at": "2026-10-11T05:52:06Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-11T05:52:06Z",
+            "completed_at": "2026-10-11T05:52:06Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/check-runs/114401398594",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "runner_id": 1000000503,
+        "runner_name": "GitHub Actions 1000000503",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      }
+    ]
+  },
+  "artifacts": {
+    "total_count": 2,
+    "artifacts": [
+      {
+        "id": 11693610342,
+        "node_id": "MDg6QXJ0aWZhY3QxMTY5MzYxMDM0Mg==",
+        "name": "vocle-functional-report-38115868308-1",
+        "size_in_bytes": 309933,
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/artifacts/11693610342",
+        "archive_download_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/artifacts/11693610342/zip",
+        "expired": false,
+        "digest": "sha256:098d9135760fdd47fa2b23252f2b1e12dd346091d0d961f2532872aeaea91ffb",
+        "created_at": "2026-10-11T05:52:00Z",
+        "updated_at": "2026-10-11T05:52:00Z",
+        "expires_at": "2027-01-09T05:46:22Z",
+        "workflow_run": {
+          "id": 38115868308,
+          "repository_id": 1337403269,
+          "head_repository_id": 1337403269,
+          "head_branch": "master",
+          "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+        }
+      },
+      {
+        "id": 11692849740,
+        "node_id": "MDg6QXJ0aWZhY3QxMTY5Mjg0OTc0MA==",
+        "name": "vocle-flutter-report-38115868308-1",
+        "size_in_bytes": 36242,
+        "url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/artifacts/11692849740",
+        "archive_download_url": "https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/artifacts/11692849740/zip",
+        "expired": false,
+        "digest": "sha256:3d9d372c8108688d54518952a43c057e1a4564bd5667829c8bd5003a44b861d4",
+        "created_at": "2026-10-11T05:47:53Z",
+        "updated_at": "2026-10-11T05:47:53Z",
+        "expires_at": "2027-01-09T05:46:22Z",
+        "workflow_run": {
+          "id": 38115868308,
+          "repository_id": 1337403269,
+          "head_repository_id": 1337403269,
+          "head_branch": "master",
+          "head_sha": "f5bcc29244d624b2445fbdf7d78b038b1806c966"
+        }
+      }
+    ]
+  }
+}

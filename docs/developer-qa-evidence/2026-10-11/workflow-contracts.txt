@@ -1,0 +1,16 @@
+✔ all comparison transitions, including omission and harness/environment drift (1.5612ms)
+✔ real assertion failure and successful fixture produce verifiable reports and comparison (24.4708ms)
+✔ tampered manifest, duplicate IDs and unverified source are rejected (12.2206ms)
+✔ required red statuses gate; optional omissions remain visible (0.2294ms)
+✔ submission rejects wrong candidate, omitted required coverage and tooling-only success (0.3071ms)
+✔ owners stay UNASSIGNED until approval and root causes group only with evidence (0.2992ms)
+✔ coverage requires registered new IDs, security justification and trusted exceptions (0.4031ms)
+✔ baseline catalog and workflow integration remain connected to exact candidate and isolation (1.8337ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.5847

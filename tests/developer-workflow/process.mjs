@@ -20,7 +20,7 @@ export async function fingerprint(root, paths) {
   return { fingerprint: hash(JSON.stringify(hashes)), hashes };
 }
 export function cleanEnvironment() {
-  return Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|USERPROFILE|LOCALAPPDATA|APPDATA|HOME|LANG|LC_ALL)$/i.test(key)));
+  return Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|SYSTEMROOT|SYSTEMDRIVE|WINDIR|COMSPEC|PROGRAMFILES|PROGRAMFILES\(X86\)|PROGRAMW6432|TEMP|TMP|USERPROFILE|LOCALAPPDATA|APPDATA|HOME|LANG|LC_ALL|JAVA_HOME|ANDROID_HOME|ANDROID_SDK_ROOT)$/i.test(key)));
 }
 export async function run(bin, args, { cwd, env = cleanEnvironment(), timeout = 120000, log } = {}) {
   const batch = process.platform === 'win32' && /\.(bat|cmd)$/i.test(bin);
