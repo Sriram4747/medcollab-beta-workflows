@@ -21,11 +21,11 @@ export const safePath = path => {
 
 export function sanitize(value) {
   if (Array.isArray(value)) return value.map(sanitize);
-  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, /(?:password|secret|authorization|api[_-]?key|auth[_-]?key|^(?:access|refresh|device|widget|id)?[_-]?token$|^otp$|signedUrl)/i.test(k) ? '[REDACTED]' : sanitize(v)]));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, /(?:password|secret|authorization|api[_-]?key|auth[_-]?key|^(?:access|refresh|device|widget|id|fcm|push|session)?[_-]?tokens?$|^otp(?:Hash)?$|^(?:set[-_]?)?cookie$|signedUrl)/i.test(k) ? '[REDACTED]' : sanitize(v)]));
   if (typeof value !== 'string') return value;
   return value.replace(/Bearer\s+[^\s'"<>]+/gi, 'Bearer [REDACTED]')
     .replace(/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g, '[JWT REDACTED]')
-    .replace(/((?:password|secret|authorization|api[_-]?key|auth[_-]?key|(?:access|refresh|device|widget)?[_-]?token|otp|code)['"]?\s*[:=]\s*['"]?)[^\s'",;\n}]+/gi, '$1[REDACTED]')
+    .replace(/((?:password|secret|authorization|api[_-]?key|auth[_-]?key|(?:access|refresh|device|widget|fcm|push|session)?[_-]?tokens?|otp(?:Hash)?|(?:set[-_]?)?cookie|code)['"]?\s*[:=]\s*['"]?)[^\s'",;\n}]+/gi, '$1[REDACTED]')
     .replace(/\b(?:synthetic|dummy|sanity|test)[-_](?:access[-_]|refresh[-_]|device[-_]|widget[-_])?(?:secret|token|key)[A-Za-z0-9_-]*/gi, '[SYNTHETIC CREDENTIAL REDACTED]')
     .replace(/\b\d{6}\b/g, '[SIX-DIGIT CODE REDACTED]')
     .replace(/https?:\/\/[^\s<>"']+/g, raw => {
@@ -36,9 +36,10 @@ function rowsOf(input) {
   return Array.isArray(input.results) ? input.results : input.results?.results || input.cases || input.scenarios || [];
 }
 const alias = { passed: 'PASS', failed: 'FAIL', blocked: 'BLOCKED', planned: 'SKIP', skipped: 'SKIP', error: 'ERROR' };
-const tally = rows => Object.fromEntries(statuses.map(s => [s, rows.filter(r => r.status === s).length]));
+const tally = (rows, outcomes = statuses) => Object.fromEntries(outcomes.map(s => [s, rows.filter(r => r.status === s).length]));
 
 export function normalize(input, metadata, options = {}) {
+  const outcomes = options.statuses || statuses;
   const original = input.results?.results ? input.results : input;
   const provenance = input.provenance || options.provenance || original.provenance || {};
   const suite = options.suite || (original.tier === 'F' ? 'flutter' : original.tier === 'D' ? 'device' : original.scenarios ? 'sanity' : 'backend');
@@ -61,7 +62,7 @@ export function normalize(input, metadata, options = {}) {
   const results = all.map(row => {
     if (!row.id) throw new Error('Missing testcase ID');
     const status = alias[row.status] || row.status;
-    if (!statuses.includes(status)) throw new Error(`Unknown status for ${row.id}`);
+    if (!outcomes.includes(status)) throw new Error(`Unknown status for ${row.id}`);
     const definition = byId.get(row.id);
     if (!definition && ['backend', 'flutter', 'device', 'sanity'].includes(suite)) throw new Error(`Unknown catalog ID ${row.id}`);
     if (requiredIds.length && !requiredIds.includes(row.id)) throw new Error(`Unselected evidence ID ${row.id}`);
@@ -70,14 +71,14 @@ export function normalize(input, metadata, options = {}) {
     const diagnostic = row.error || row.evidence || row.exclusion || '';
     const text = typeof diagnostic === 'string' ? diagnostic : JSON.stringify(diagnostic, null, 2);
     const http = /((?:GET|POST|PUT|DELETE|PATCH)\s+\S+) expected (\d+), got (\d+)/.exec(text);
-    const type = status === 'FAIL' ? 'APPLICATION_DEFECT_RECORDED' : status === 'ERROR' ? /HARNESS|INVALID_CASE/.test(row.errorCategory || '') ? 'TEST_HARNESS_PROBLEM' : 'INFRASTRUCTURE_OR_HARNESS_ERROR' : status === 'BLOCKED' ? 'BLOCKED_DEPENDENCY' : status === 'NEEDS_DECISION' ? 'UNRESOLVED_PRODUCT_DECISION' : status;
+    const type = row.category || (status === 'FAIL' ? 'APPLICATION_DEFECT_RECORDED' : status === 'ERROR' ? /HARNESS|INVALID_CASE/.test(row.errorCategory || '') ? 'TEST_HARNESS_PROBLEM' : 'INFRASTRUCTURE_OR_HARNESS_ERROR' : status === 'BLOCKED' ? 'BLOCKED_DEPENDENCY' : status === 'NEEDS_DECISION' ? 'UNRESOLVED_PRODUCT_DECISION' : status);
     const outcome = status === 'PASS' ? 'The runner reports that this case completed successfully. The executable checks below define its verified scope; individual intermediate values were not recorded unless shown in the evidence.' : status === 'NEEDS_DECISION' ? 'The full expectation is undecided. Only explicitly recorded safe subassertions receive credit; the disputed expectation has not passed.' : !executed ? 'No execution is claimed. Resolve the missing evidence or prerequisite before judging application behavior.' : 'The runner recorded a non-passing case. Later actions may not have been reached; diagnostic evidence is shown without changing its classification.';
     return {
       ...definition, id: row.id, title: definition?.title || row.title || row.name || row.id, module: definition?.module || row.module || 'TOOLING', priority: definition?.priority || row.priority || 'UNSPECIFIED', tier: definition?.tier || 'TOOLING',
       status, originalStatus: row.status, errorCategory: row.errorCategory || null, executed, durationMs: Number.isFinite(row.durationMs) ? row.durationMs : null, source, harness,
       scenario: definition?.scenario || `Automated environment/tooling check: ${row.title || row.id}.`, prerequisites: definition?.prerequisites || 'Use the original reproduction command and isolated environment recorded by the runner.',
       steps: definition?.steps || [{ number: 1, action: input.reproduction || 'Use the recorded tooling command; no UI reproduction is claimed.', expected: row.expected || 'Required tooling check completes with valid evidence.' }],
-      expected: row.expected || definition?.expected || 'See the original check definition.', actual: status === 'PASS' ? outcome : text || (status === 'NEEDS_DECISION' ? `Pending ${definition?.questionIds?.join(', ') || 'product clarification'}. No additional observed values recorded.` : 'No diagnostic detail was captured; inspect original runner output.'),
+      expected: row.expected || definition?.expected || 'See the original check definition.', actual: row.actual != null ? (typeof row.actual === 'string' ? row.actual : JSON.stringify(row.actual, null, 2)) : status === 'PASS' ? outcome : text || (status === 'NEEDS_DECISION' ? `Pending ${definition?.questionIds?.join(', ') || 'product clarification'}. No additional observed values recorded.` : 'No diagnostic detail was captured; inspect original runner output.'),
       comparisonExpected: http ? `${http[1]} HTTP ${http[2]}` : row.assertionExpected ?? 'Individual assertion expected value not captured; use the case contract and definition.',
       comparisonActual: http ? `HTTP ${http[3]}` : row.assertionActual ?? 'Individual actual value not captured beyond the diagnostic above.',
       failingStep: row.failingStep || (http ? http[1] : status === 'PASS' ? 'None reported' : 'Exact step index not captured by the original runner; inspect diagnostic and definition.'),
@@ -87,17 +88,18 @@ export function normalize(input, metadata, options = {}) {
       diagnostic: text, evidenceFiles: (row.evidenceFiles || []).filter(safePath), owner: 'UNASSIGNED',
     };
   });
-  const rawCounts = tally(results.filter(r => present.has(r.id)));
+  const rawCounts = tally(results.filter(r => present.has(r.id)), outcomes);
   const declaredCounts = original.tally || original.counts;
-  if (declaredCounts && statuses.some(s => (declaredCounts[s] || 0) !== rawCounts[s])) throw new Error('Original status counts disagree with rows');
+  if (declaredCounts && outcomes.some(s => (declaredCounts[s] || 0) !== rawCounts[s])) throw new Error('Original status counts disagree with rows');
   const definitionSet = hash(JSON.stringify(results.map(r => [r.id, r.definitionFingerprint || null]).sort()));
   const environmentFingerprint = original.environmentFingerprint || (original.environmentContractVersion ? hash(JSON.stringify({ version: original.environmentContractVersion, suite, platform: original.platform || null })) : options.environmentFingerprint || null);
   const report = { schemaVersion: 1, reportingContractVersion: 1, suite, scope, sourceKind: original.sourceKind || source.kind || options.sourceKind || 'UNKNOWN', source, harness, environmentFingerprint,
     definitionSet, generatedAt: original.generatedAt || original.createdAt || options.generatedAt || null, runUrl: /^https:\/\/github\.com\/Sriram4747\/medcollab-beta-workflows\/actions\/runs\/\d+$/.test(options.runUrl || '') ? options.runUrl : null,
     originalGate: original.result || original.gate || (original.fullSuccess === true ? 'PASS' : original.fullSuccess === false ? 'NON_SUCCESS' : 'UNKNOWN'),
-    selected: requiredIds.length || rows.length, recorded: rows.length, attempted: results.filter(r => r.executed).length, counts: tally(results), originalCounts: rawCounts,
+    selected: requiredIds.length || rows.length, recorded: rows.length, attempted: results.filter(r => r.executed).length, counts: tally(results, outcomes), originalCounts: rawCounts,
     infrastructure: infra, results, comparison: { available: false, reason: 'No compatible baseline was supplied.' },
     note: 'Reporting does not change test exit codes, success-history evidence, assertions or original classifications. Definition/procedure text is not a per-step execution trace. Ownership requires an approved mapping.' };
+  if (options.statuses) report.statuses = outcomes;
   return sanitize(report);
 }
 
@@ -115,7 +117,7 @@ export function compare(current, previous) {
 }
 
 export function summary(report, artifact = 'Vocle report artifact') {
-  return `# Vocle regression report\n\nArtifact: **${md(artifact)}**. Download and extract it, then open \`vocle-regression-dashboard.html\` locally.\n\n${report.runUrl ? `[GitHub Actions run](${report.runUrl})\n\n` : ''}Suite: ${md(report.suite)}; scope: ${md(report.scope)}; original gate: **${md(report.originalGate)}**.\n\nSource: \`${md(report.source.sha)}\`; harness: \`${md(report.harness.sha)}\`.\n\n| PASS | FAIL | ERROR | BLOCKED | NEEDS_DECISION | SKIP |\n| --- | --- | --- | --- | --- | --- |\n| ${statuses.map(s => report.counts[s]).join(' | ')} |\n\nSelected ${report.selected}; recorded rows ${report.recorded}; attempted ${report.attempted}. Missing evidence never means PASS.\n\n${report.infrastructure.map(e => `- ${e.status} ${md(e.category)}: ${md(e.message)}`).join('\n')}\n\n${report.comparison.available ? 'Compatible baseline comparison included; changes are evidence classifications, not root-cause confirmation.' : md(report.comparison.reason)}\n\n${md(report.note)}\n`;
+  return `# Vocle regression report\n\nArtifact: **${md(artifact)}**. Download and extract it, then open \`vocle-regression-dashboard.html\` locally.\n\n${report.runUrl ? `[GitHub Actions run](${report.runUrl})\n\n` : ''}Suite: ${md(report.suite)}; scope: ${md(report.scope)}; original gate: **${md(report.originalGate)}**.\n\nSource: \`${md(report.source.sha)}\`; harness: \`${md(report.harness.sha)}\`.\n\n| ${(report.statuses || statuses).join(' | ')} |\n| ${(report.statuses || statuses).map(()=>'---').join(' | ')} |\n| ${(report.statuses || statuses).map(s => report.counts[s]).join(' | ')} |\n\nSelected ${report.selected}; recorded rows ${report.recorded}; attempted ${report.attempted}. Missing evidence never means PASS.\n\n${report.infrastructure.map(e => `- ${e.status} ${md(e.category)}: ${md(e.message)}`).join('\n')}\n\n${report.comparison.available ? 'Compatible baseline comparison included; changes are evidence classifications, not root-cause confirmation.' : md(report.comparison.reason)}\n\n${md(report.note)}\n`;
 }
 export function detailed(report) {
   return `${summary(report)}\n${report.results.map(r => `## ${md(r.id)} — ${md(r.title)}\n\n**${r.status}**; module ${md(r.module)}; tier ${r.tier}; priority ${r.priority}; owner ${md(r.owner)}; attempted ${r.executed}; duration ${r.durationMs ?? 'not recorded'} ms.\n\nSource ${md(r.source.sha)}; harness ${md(r.harness.sha)}.\n\n### Real-life scenario\n\n${md(r.scenario)}\n\n### Prerequisites and reproduction\n\n${md(r.prerequisites)}\n\n${md(r.reproduction || '')}\n\n${r.prerequisiteSeed ? `Component prerequisite: ${md(r.prerequisiteSeed)}\n\n` : ''}${r.steps.map(s => `${s.number}. ${md(s.action)}\n   Expected: ${md(s.expected)}`).join('\n')}\n\n### Expected and observed results\n\nContract: ${md(r.expected)}\n\nObserved: ${md(r.actual)}\n\nFailing step: ${md(r.failingStep)}\n\nAssertion expected: ${md(r.comparisonExpected)}\n\nAssertion actual: ${md(r.comparisonActual)}\n\nClassification: ${md(r.category)}\n\nRoot cause: ${md(r.rootCause)}\n\n${md(r.outcome)}\n\n${md(r.userImpact)}\n\nExplicit subassertion evidence: ${md(JSON.stringify(r.verifiedSubassertions))}\n\nScope/limitations: ${md(r.limitations || 'See original runner scope.')}\n\nProduct questions: ${md((r.questionIds || []).join(', ') || 'none linked')}\n\nEvidence files: ${r.evidenceFiles.map(f => `[${md(f)}](${encodeURI(f)})`).join(', ') || 'No additional files available.'}\n\n### Sanitized diagnostic\n\n<pre>${escape(r.diagnostic || 'No additional diagnostic recorded.')}</pre>\n\n### Executable definition (procedure, not execution log)\n\n${(r.definitions || []).map(d => `${md(d.path)}:${d.line}; SHA-256 ${d.fileHash}\n\n<pre>${escape(d.excerpt)}</pre>`).join('\n\n') || 'Definition location unavailable; original tooling reproduction is shown above.'}\n`).join('\n')}`;
@@ -124,7 +126,7 @@ export function detailed(report) {
 export function junit(report) {
   const c = report.counts;
   const infra = report.infrastructure.filter(i => i.status === 'ERROR');
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<testsuites><testsuite name="Vocle.${escape(report.suite)}" tests="${report.results.length}" failures="${c.FAIL + c.BLOCKED + c.NEEDS_DECISION}" errors="${c.ERROR}" skipped="${c.SKIP}">\n${report.results.map(r => `<testcase classname="${escape(r.module)}" name="${escape(r.id)}"${r.durationMs !== null ? ` time="${r.durationMs / 1000}"` : ''}><properties><property name="vocle.status" value="${r.status}"/><property name="vocle.attempted" value="${r.executed}"/></properties>${r.status === 'PASS' ? '' : `<${r.status === 'SKIP' ? 'skipped' : r.status === 'ERROR' ? 'error' : 'failure'} message="${escape(r.status)}">${escape(r.actual)}</${r.status === 'SKIP' ? 'skipped' : r.status === 'ERROR' ? 'error' : 'failure'}>`}</testcase>`).join('\n')}\n</testsuite><testsuite name="Vocle.infrastructure" tests="${infra.length}" errors="${infra.length}">${infra.map(i => `<testcase name="${escape(i.category)}"><error>${escape(i.message)}</error></testcase>`).join('')}</testsuite></testsuites>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<testsuites><testsuite name="Vocle.${escape(report.suite)}" tests="${report.results.length}" failures="${c.FAIL + c.BLOCKED + c.NEEDS_DECISION}" errors="${c.ERROR}" skipped="${c.SKIP + (c.OBSERVATION || 0)}">\n${report.results.map(r => `<testcase classname="${escape(r.module)}" name="${escape(r.id)}"${r.durationMs !== null ? ` time="${r.durationMs / 1000}"` : ''}><properties><property name="vocle.status" value="${r.status}"/><property name="vocle.attempted" value="${r.executed}"/></properties>${r.status === 'PASS' ? '' : `<${['SKIP','OBSERVATION'].includes(r.status) ? 'skipped' : r.status === 'ERROR' ? 'error' : 'failure'} message="${escape(r.status)}">${escape(r.actual)}</${['SKIP','OBSERVATION'].includes(r.status) ? 'skipped' : r.status === 'ERROR' ? 'error' : 'failure'}>`}</testcase>`).join('\n')}\n</testsuite><testsuite name="Vocle.infrastructure" tests="${infra.length}" errors="${infra.length}">${infra.map(i => `<testcase name="${escape(i.category)}"><error>${escape(i.message)}</error></testcase>`).join('')}</testsuite></testsuites>\n`;
 }
 
 export async function writeReports(output, report, options = {}) {
@@ -169,7 +171,8 @@ export async function generate(options) {
   catch (error) {
     // Preserve independently recorded failures when a different row or tally is
     // malformed. The separate reporting error prevents any suite success claim.
-    const original = input.results?.results ? input.results : input;
+    const outcomes = options.statuses || statuses;
+  const original = input.results?.results ? input.results : input;
     const groups = new Map();
     for (const row of rowsOf(input)) {
       if (!row?.id || (!metadata.some(c=>c.id===row.id) && options.suite !== 'developer')) continue;

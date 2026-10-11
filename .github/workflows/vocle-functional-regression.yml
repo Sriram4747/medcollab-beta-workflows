@@ -84,7 +84,7 @@ jobs:
         run: |
           node tests/functional-regression/scripts/validate-catalog.mjs
           node --test tests/functional-regression/scripts/ci-contracts.test.mjs
-          node --test tests/reporting/report.test.mjs
+          node --test tests/reporting/report.test.mjs tests/reporting/workflow-adapters.test.mjs
       - id: target
         name: Resolve exact read-only target
         env:
@@ -375,7 +375,8 @@ jobs:
           VOCLE_REPORT_NEEDS_RUN: ${{ needs.detect.outputs.needs_run }}
           VOCLE_REPORT_JOBS: '{"detect":"${{ needs.detect.result }}","execute":"${{ needs.execute.result }}","flutter":"${{ needs.flutter.result }}"}'
         run: node tests/reporting/workflow-report.mjs vocle-report-output
-      - name: Upload workflow dashboard including detection failures and skips
+      - id: dashboard_upload
+        name: Upload workflow dashboard including detection failures and skips
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
@@ -383,6 +384,16 @@ jobs:
           path: vocle-report-output/
           if-no-files-found: error
           retention-days: 90
+      - name: Publish clickable report download
+        if: always()
+        env:
+          REPORT_DOWNLOAD_URL: ${{ steps.dashboard_upload.outputs.artifact-url }}
+        run: |
+          if [ -n "$REPORT_DOWNLOAD_URL" ]; then
+            printf '\n## Download the visual QA report\n\n[Download report ZIP](%s)\n\nSign into GitHub, extract the ZIP, and open `vocle-regression-dashboard.html`.\n' "$REPORT_DOWNLOAD_URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            printf '\nReport upload unavailable; inspect the upload step.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Summarize detection, coverage gate and artifacts
         if: always()
         env:

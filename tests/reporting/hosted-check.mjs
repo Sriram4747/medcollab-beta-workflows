@@ -8,7 +8,7 @@ import { hash } from './scenarios.mjs';
 const repository = 'Sriram4747/medcollab-beta-workflows';
 if (execFileSync('git',['-C',root,'remote','get-url','origin'],{encoding:'utf8'}).trim() !== `https://github.com/${repository}.git`) throw new Error('Authorized fork origin required');
 const [action,arg,directory] = process.argv.slice(2);
-if (!['dispatch-sanity','inspect','download','job-log'].includes(action)) throw new Error('Use dispatch-sanity, inspect RUN_ID, download RUN_ID OUTPUT_DIR, or job-log JOB_ID OUTPUT_DIR');
+if (!['dispatch-sanity','dispatch-isolated','inspect','download','job-log'].includes(action)) throw new Error('Use dispatch-sanity, dispatch-isolated WORKFLOW_FILE, inspect RUN_ID, download RUN_ID OUTPUT_DIR, or job-log JOB_ID OUTPUT_DIR');
 const credential = execFileSync('git',['credential','fill'],{cwd:root,input:`protocol=https\nhost=github.com\npath=${repository}.git\n\n`,encoding:'utf8',env:{...process.env,GIT_TERMINAL_PROMPT:'0',GCM_INTERACTIVE:'Never'},windowsHide:true,stdio:['pipe','pipe','pipe']});
 const token=credential.split(/\r?\n/).find(l=>l.startsWith('password='))?.slice(9);
 if(!token)throw new Error('Stored GitHub authentication unavailable');
@@ -17,6 +17,10 @@ async function request(path,options={}){const response=await fetch(`https://api.
 if(action==='dispatch-sanity'){
  await request('/actions/workflows/vocle-sanity.yml/dispatches',{method:'POST',body:JSON.stringify({ref:'master',inputs:{force:'true'}})});
  console.log('Forced sanity workflow dispatched on authorized fork master.');
+}else if(action==='dispatch-isolated'){
+ if(!['vocle-data-security.yml','vocle-media-security.yml','vocle-backend-environment-test.yml','vocle-developer-qa.yml'].includes(arg))throw new Error('Only allowlisted isolated workflows can be dispatched. Real-provider and excluded security workflows are prohibited.');
+ await request('/actions/workflows/'+arg+'/dispatches',{method:'POST',body:JSON.stringify({ref:'master'})});
+ console.log('Authorized isolated workflow dispatched on fork master: '+arg);
 }else{
  if(!/^\d+$/.test(arg||''))throw new Error('Numeric run/job ID required');
  if(action==='job-log'){
@@ -29,7 +33,7 @@ if(action==='dispatch-sanity'){
   if(directory){await mkdir(directory,{recursive:true});await writeFile(join(directory,'hosted-metadata.json'),JSON.stringify(metadata,null,2)+'\n');}
   if(action==='download'){
    if(!directory)throw new Error('Output directory required');
-   for(const a of artifacts.artifacts.filter(a=>!a.expired&&/^(vocle-functional-report-|vocle-flutter-report-|vocle-sanity-diagnostics-|vocle-regression-dashboard-|developer-qa-)/.test(a.name))){
+   for(const a of artifacts.artifacts.filter(a=>!a.expired&&/^(vocle-functional-report-|vocle-flutter-report-|vocle-sanity-diagnostics-|vocle-regression-dashboard-|vocle-qa-dashboard-|developer-qa-|vocle-mongodb-data-security$|vocle-offline-media-security$|vocle-security-discovery$)/.test(a.name))){
     const response=await request('/actions/artifacts/'+a.id+'/zip');if(response.status!==302)throw new Error('Artifact redirect required');const u=new URL(response.headers.get('location'));if(u.protocol!=='https:')throw new Error('Unsafe artifact redirect');const r=await fetch(u,{signal:AbortSignal.timeout(60000)});if(!r.ok)throw new Error('Artifact storage read failed');const bytes=Buffer.from(await r.arrayBuffer());if(a.digest&&a.digest!=='sha256:'+hash(bytes))throw new Error('Downloaded artifact digest mismatch');await writeFile(join(directory,a.name+'.zip'),bytes);
    }
   }

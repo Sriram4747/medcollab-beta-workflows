@@ -26,7 +26,8 @@ for archive in sorted(directory.glob('*.zip')):
             report = json.loads(z.read(name))
             rows = report['results']
             assert len({r['id'] for r in rows}) == len(rows), 'Duplicate IDs'
-            counts = {s: sum(r['status'] == s for r in rows) for s in statuses}
+            outcomes = report.get('statuses', statuses)
+            counts = {s: sum(r['status'] == s for r in rows) for s in outcomes}
             assert counts == report['counts'], 'Normalized count mismatch'
             assert not any(r['status'] == 'PASS' and not r['executed'] for r in rows), 'Unexecuted PASS'
             assert all(r.get('scenario') and r.get('prerequisites') and r.get('steps') for r in rows), 'Missing reproduction metadata'
@@ -36,11 +37,14 @@ for archive in sorted(directory.glob('*.zip')):
                 original = json.loads(z.read(original_path))
                 raw = original.get('results', original.get('cases', original.get('scenarios', [])))
                 aliases = {'passed': 'PASS', 'failed': 'FAIL', 'blocked': 'BLOCKED', 'planned': 'SKIP'}
-                expected = {r['id']: aliases.get(r['status'], r['status']) for r in raw}
+                def raw_status(r):
+                    value = r.get('status') or ('PASS' if r.get('passed') is True else 'OBSERVATION' if r.get('passed') is False else 'ERROR')
+                    return 'ERROR' if value == 'INFRASTRUCTURE_FAILURE' else aliases.get(value, value)
+                expected = {r.get('id', r.get('caseId')): raw_status(r) for r in raw}
                 actual = {r['id']: r['status'] for r in rows}
                 assert all(actual.get(k) == v for k, v in expected.items()), 'Original classification changed'
                 if len(raw) == len(rows):
-                    assert {s: sum(aliases.get(r['status'], r['status']) == s for r in raw) for s in statuses} == counts
+                    assert {s: sum(raw_status(r) == s for r in raw) for s in outcomes} == counts
             ET.fromstring(z.read(prefix + 'vocle-regression-junit.xml'))
             html = z.read(prefix + 'vocle-regression-dashboard.html').decode('utf-8')
             match = re.search(r'<script id="report-data" type="application/json">(.*?)</script>', html, re.S)

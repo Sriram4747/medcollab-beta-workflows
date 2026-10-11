@@ -37,3 +37,24 @@ Use `--baseline path/to/vocle-regression-results.json` for a local comparison. H
 ## Maintaining scenarios
 
 Edit catalog actions/expected results only through the approved testcase specification process. Reporting improvements belong in `scenarios.mjs` fixture/context/overrides or the generator. Keep procedure text factual; do not convert known application defects into expected results. Add a contract fixture for every new input shape, and preserve the actual runner's outcome. No runtime AI inference is used.
+
+
+## Visual reporting across workflows
+
+The shared offline dashboard now provides a navigation sidebar, clickable outcome cards, an outcome donut, stacked module bars with drill-down, priority counts, recorded duration bars, baseline badges, original workflow job details, and five local report download buttons. Filters update the charts and details together. No Power BI service, account, CDN, or runtime AI is required.
+
+All eight established workflows are included except **Vocle Security Environment Test**, which remains untouched. Functional regression and sanity retain their existing collectors. Secret Scan, Backend Environment Test, MongoDB Data Security, Offline Media Security, Real Cloudinary Security and Developer QA use the reporting-only reusable `vocle-reporting.yml` job after their original jobs. Reporting reads existing case JSON and GitHub job metadata; it never runs providers/tests or changes original gates. Artifact hygiene conditions remain intact.
+
+Security **OBSERVATION** is preserved as a separate outcome and is not converted to PASS, FAIL, or NEEDS_DECISION. Original `passed`, classification and counts are retained. JUnit expresses non-blocking observations as skipped elements with `vocle.status=OBSERVATION` and `vocle.attempted=true`; HTML/JSON/Markdown retain their full meaning. Unknown priorities/owners stay unspecified/unassigned. Scanner and job-level checks are explicitly labeled as workflow checks, not new catalog cases; raw secret matches/SARIF are never read or published by this reporting job. Developer matrix/profile evidence links stay separate to avoid counting overlapping application IDs as unique cases.
+
+Each new summary publishes an actual **Download report ZIP** hyperlink from upload-artifact's output. GitHub artifact downloads require sign-in. The new non-functional artifact is `vocle-qa-dashboard-<workflow.yml>-<run>-<attempt>`; functional/sanity names are unchanged. Extract it and open `vocle-regression-dashboard.html`. Download the original lane artifact separately for additional original evidence.
+
+Old uploaded GitHub artifacts are immutable. Refresh an existing normalized report into a **new** directory without rerunning tests:
+
+```powershell
+node tests/reporting/refresh.mjs INPUT/vocle-regression-results.json NEW_OUTPUT_DIRECTORY
+node tests/reporting/refresh.mjs OLD_SECURITY/results.json NEW_OUTPUT_DIRECTORY vocle-data-security.yml ORIGINAL_SOURCE_SHA
+node --test tests/reporting/report.test.mjs tests/reporting/workflow-adapters.test.mjs
+```
+
+Recorded revisions/outcomes remain unchanged and presentation provenance states that this is not a new execution. `docs/reporting-examples/visual-regression-38123414193/` and `visual-discovery-37361855710/` demonstrate refreshed historical evidence. Reporting for Real Cloudinary is implemented and adapter-tested offline; validating reports never authorizes real-provider execution. Missing/setup-failed case evidence becomes explicitly unexecuted ERROR; intentionally skipped original jobs remain SKIP. Forced termination or platform/checkout failure can still prevent artifacts.

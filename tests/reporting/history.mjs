@@ -9,7 +9,7 @@ export async function api(path, token = process.env.GITHUB_TOKEN) {
   if (!response.ok) throw new Error(`GitHub read-only API returned ${response.status}`);
   return response.json();
 }
-export async function artifactReports(id) {
+export async function artifactReports(id, rawResults = false) {
   const response = await fetch(`https://api.github.com/repos/Sriram4747/medcollab-beta-workflows/actions/artifacts/${id}/zip`, { headers: { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }, redirect: 'manual', signal: AbortSignal.timeout(15000) });
   if (response.status !== 302) throw new Error(`Artifact read returned ${response.status}`);
   const url = new URL(response.headers.get('location'));
@@ -21,8 +21,9 @@ export async function artifactReports(id) {
     const zip = join(dir, 'report.zip');
     await writeFile(zip, Buffer.from(await archive.arrayBuffer()));
     // Read exact JSON members, never extract arbitrary ZIP paths or execute content.
-    const code = "import zipfile,json,sys\nwith zipfile.ZipFile(sys.argv[1]) as z:\n members=[n for n in z.namelist() if n.endswith('vocle-regression-results.json')]\n if len(members)>4: raise ValueError('Too many reports')\n print(json.dumps([json.loads(z.read(n)) for n in members if z.getinfo(n).file_size<30000000]))";
-    return JSON.parse(execFileSync(process.platform === 'win32' ? 'python' : 'python3', ['-c', code, zip], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, windowsHide: true }));
+    const suffix = rawResults ? '/results.json' : 'vocle-regression-results.json';
+    const code = "import zipfile,json,sys\nwith zipfile.ZipFile(sys.argv[1]) as z:\n members=[n for n in z.namelist() if (n=='results.json' or n.endswith(sys.argv[2]))] if sys.argv[3]=='raw' else [n for n in z.namelist() if n.endswith(sys.argv[2])]\n if len(members)>4 or sum(z.getinfo(n).file_size for n in members)>30000000: raise ValueError('Oversized report inventory')\n print(json.dumps([json.loads(z.read(n)) for n in members]))";
+    return JSON.parse(execFileSync(process.platform === 'win32' ? 'python' : 'python3', ['-c', code, zip, suffix, rawResults ? 'raw' : 'normalized'], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, windowsHide: true }));
   } finally { await rm(dir, { recursive: true, force: true }); }
 }
 export async function priorCompatible(current, compare) {

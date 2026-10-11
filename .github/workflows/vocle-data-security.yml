@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   disposable-data:
@@ -73,3 +74,12 @@ jobs:
       - name: Stop disposable MongoDB
         if: always()
         run: docker stop vocle-data-mongo || true
+
+  visual-report:
+    name: Visual QA report
+    if: always()
+    needs: [disposable-data]
+    uses: ./.github/workflows/vocle-reporting.yml
+    with:
+      workflow_file: vocle-data-security.yml
+      original_jobs: ${{ toJSON(needs) }}

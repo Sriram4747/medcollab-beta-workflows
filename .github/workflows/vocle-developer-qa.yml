@@ -13,6 +13,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 jobs:
   integration:
     if: github.repository == 'Sriram4747/medcollab-beta-workflows'
@@ -34,7 +35,7 @@ jobs:
       - name: Evidence, comparison, ownership and coverage contracts
         run: node --test tests/developer-workflow/workflow.test.mjs
       - name: Detailed report normalization and escaping contracts
-        run: node --test tests/reporting/report.test.mjs
+        run: node --test tests/reporting/report.test.mjs tests/reporting/workflow-adapters.test.mjs
       - name: Enforce stable IDs and feature declaration
         if: github.event_name == 'pull_request'
         env:
@@ -63,3 +64,12 @@ jobs:
             !developer-runtime-output/backend/mongo-binaries/
           if-no-files-found: error
           retention-days: 90
+
+  visual-report:
+    name: Visual QA report
+    if: always()
+    needs: [integration]
+    uses: ./.github/workflows/vocle-reporting.yml
+    with:
+      workflow_file: vocle-developer-qa.yml
+      original_jobs: ${{ toJSON(needs) }}

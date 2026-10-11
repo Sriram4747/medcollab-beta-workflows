@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   offline-media:
@@ -64,3 +65,12 @@ jobs:
       - name: Stop disposable MongoDB
         if: always()
         run: docker stop vocle-media-mongo || true
+
+  visual-report:
+    name: Visual QA report
+    if: always()
+    needs: [offline-media]
+    uses: ./.github/workflows/vocle-reporting.yml
+    with:
+      workflow_file: vocle-media-security.yml
+      original_jobs: ${{ toJSON(needs) }}

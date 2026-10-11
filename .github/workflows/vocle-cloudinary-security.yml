@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: vocle-real-cloudinary-security
@@ -67,3 +68,12 @@ jobs:
           path: ${{ runner.temp }}/vocle-cloudinary-results/
           if-no-files-found: error
           retention-days: 14
+
+  visual-report:
+    name: Visual QA report
+    if: always()
+    needs: [real-cloudinary]
+    uses: ./.github/workflows/vocle-reporting.yml
+    with:
+      workflow_file: vocle-cloudinary-security.yml
+      original_jobs: ${{ toJSON(needs) }}

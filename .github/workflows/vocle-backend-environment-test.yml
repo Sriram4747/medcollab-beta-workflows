@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   boot-backend:
@@ -109,3 +110,12 @@ jobs:
           cat "$RUNNER_TEMP/vocle-backend.log" 2>/dev/null || true
           echo '=== MongoDB log ==='
           docker logs vocle-ci-mongodb 2>/dev/null || true
+
+  visual-report:
+    name: Visual QA report
+    if: always()
+    needs: [boot-backend]
+    uses: ./.github/workflows/vocle-reporting.yml
+    with:
+      workflow_file: vocle-backend-environment-test.yml
+      original_jobs: ${{ toJSON(needs) }}
