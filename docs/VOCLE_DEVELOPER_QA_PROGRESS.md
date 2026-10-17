@@ -173,3 +173,13 @@ Next: validate the exact submitted Python tooling candidate on Windows/Ubuntu in
 the existing integration workflow. Full local backend/security execution still
 requires a working Linux Docker engine. Existing application failures/product
 decisions are unchanged and must be resolved through the developer process.
+
+Committed local tooling validation on `78b9dd7d3e6ee439e01c8c516f33bccdd48f9203`
+passed with 13 checks, verified committed pass manifest, previous-Python-root
+comparison and cleanup PASS. The full/tooling scope difference correctly makes
+the previous report NOT_COMPARABLE. First hosted integration
+[39019569817](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39019569817)
+passed Python execution on Ubuntu but found a Windows-only fixture path mismatch:
+the hosted temp directory uses the `RUNNER~1` short alias, while the launcher
+correctly resolves its full path. The fixture now resolves its expected path too;
+no runner behavior or assertion coverage changed. Hosted rerun remains required.

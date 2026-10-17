@@ -30,7 +30,7 @@ class PythonLauncherTests(unittest.TestCase):
             argv = launcher.runner_arguments(config)
             self.assertEqual(argv[argv.index("--source") + 1], str(Path(directory).resolve()))
             self.assertEqual(argv[argv.index("--commit") + 1], "a" * 40)
-            self.assertEqual(argv[argv.index("--previous") + 1], str(previous / "evidence"))
+            self.assertEqual(argv[argv.index("--previous") + 1], str((previous / "evidence").resolve()))
             self.assertTrue(Path(argv[argv.index("--flutter-bin") + 1]).is_absolute())
             self.assertIn("--android", argv)
             self.assertIn("--security", argv)
