@@ -84,6 +84,9 @@ def session_environment(scratch, environment=None):
     env["VIRTUAL_ENV"] = str(scratch / "venv")
     env["PATH"] = str(bin_dir) + os.pathsep + env.get("PATH", "")
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    env["PSModuleAnalysisCachePath"] = str(scratch / "powershell-module-cache")
+    env["GIT_TERMINAL_PROMPT"] = "0"
+    env["GCM_INTERACTIVE"] = "never"
     # Docker uses the existing local engine/context, never an application .env.
     docker_config = Path(original.get("DOCKER_CONFIG") or (Path(original.get("USERPROFILE") or original.get("HOME") or "~") / ".docker"))
     if docker_config.is_dir():

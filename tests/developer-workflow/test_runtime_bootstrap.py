@@ -4,18 +4,42 @@ import io
 import json
 import os
 from pathlib import Path
+import signal
 import sys
 import tarfile
 import tempfile
+import threading
+import time
 import unittest
 from unittest.mock import patch
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from vocle_bootstrap import Bootstrap, SetupRequired, decode, download, extract, owned_mounts, proxy_args, windows_mount
+from vocle_bootstrap import Bootstrap, SetupRequired, checked, decode, download, extract, owned_mounts, proxy_args, windows_mount
 
 
 class RuntimeBootstrapTests(unittest.TestCase):
+    def test_bootstrap_wait_can_be_interrupted_before_a_long_command_finishes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            ready = Path(directory) / "ready"
+
+            def interrupt_when_ready():
+                for _ in range(100):
+                    if ready.exists():
+                        signal.raise_signal(signal.SIGINT)
+                        return
+                    time.sleep(0.05)
+
+            trigger = threading.Thread(target=interrupt_when_ready)
+            trigger.start()
+            start = time.monotonic()
+            try:
+                with self.assertRaises(KeyboardInterrupt):
+                    checked([sys.executable, "-c", "from pathlib import Path; import sys,time; Path(sys.argv[1]).write_text('ready'); time.sleep(20)", ready], timeout=30)
+                self.assertLess(time.monotonic() - start, 5)
+            finally:
+                trigger.join(timeout=5)
+
     def test_checksum_failure_rejects_download_before_execution(self):
         with tempfile.TemporaryDirectory() as directory:
             destination = Path(directory) / "runtime.zip"

@@ -20,7 +20,7 @@ export async function fingerprint(root, paths) {
   return { fingerprint: hash(JSON.stringify(hashes)), hashes };
 }
 export function cleanEnvironment() {
-  return Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|SYSTEMROOT|SYSTEMDRIVE|WINDIR|COMSPEC|PROGRAMFILES|PROGRAMFILES\(X86\)|PROGRAMW6432|TEMP|TMP|TMPDIR|USERPROFILE|LOCALAPPDATA|APPDATA|HOME|LANG|LC_ALL|JAVA_HOME|ANDROID_HOME|ANDROID_SDK_ROOT|PUB_CACHE|NPM_CONFIG_CACHE|GRADLE_USER_HOME|VIRTUAL_ENV|DOCKER_CONFIG)$/i.test(key)));
+  return Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|SYSTEMROOT|SYSTEMDRIVE|WINDIR|COMSPEC|PROGRAMFILES|PROGRAMFILES\(X86\)|PROGRAMW6432|TEMP|TMP|TMPDIR|USERPROFILE|LOCALAPPDATA|APPDATA|HOME|LANG|LC_ALL|JAVA_HOME|ANDROID_HOME|ANDROID_SDK_ROOT|PUB_CACHE|NPM_CONFIG_CACHE|GRADLE_USER_HOME|VIRTUAL_ENV|DOCKER_CONFIG|PSMODULEANALYSISCACHEPATH)$/i.test(key)));
 }
 export async function run(bin, args, { cwd, env = cleanEnvironment(), timeout = 120000, log, signal } = {}) {
   if (signal?.aborted) return { code: null, error: 'Run cancelled', aborted: true, stdout: '', stderr: '' };

@@ -61,6 +61,9 @@ jobs:
           TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
         run: python -B scripts/test_vocle.py --source . --commit "$TARGET_SHA" --profile backend-smoke --runtime managed --output developer-runtime-output
+      - name: Verify cold Node and Flutter installation without preinstalled SDKs
+        if: runner.os == 'Windows'
+        run: python -B tests/developer-workflow/bootstrap-download-check.py bootstrap-download-output
       - name: Preserve submission and QA evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -69,6 +72,7 @@ jobs:
           path: |
             developer-qa-output/
             developer-runtime-output/
+            bootstrap-download-output/
             !developer-runtime-output/evidence/backend/mongo-binaries/
           if-no-files-found: error
           retention-days: 90

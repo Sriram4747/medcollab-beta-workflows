@@ -40,7 +40,14 @@ def checked(argv, *, env=None, timeout=120, check=True, log=None):
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              start_new_session=os.name != "nt")
     try:
-        raw, _ = child.communicate(timeout=timeout)
+        deadline = time.monotonic() + timeout
+        while True:
+            try:
+                raw, _ = child.communicate(timeout=min(0.2, max(0.01, deadline - time.monotonic())))
+                break
+            except subprocess.TimeoutExpired:
+                if time.monotonic() >= deadline:
+                    raise
     except BaseException:
         if os.name == "nt":
             subprocess.run(["taskkill.exe", "/pid", str(child.pid), "/T", "/F"], capture_output=True, timeout=15)
@@ -169,9 +176,9 @@ class Bootstrap:
         self.details["downloads"].append({"url": asset["url"], "sha256": asset["sha256"]})
         return result
 
-    def node(self):
+    def node(self, force=False):
         existing = shutil.which("node", path=self.env["PATH"])
-        if existing:
+        if existing and not force:
             code, version = self.command([existing, "--version"], check=False)
             if not code and int(version.lstrip("v").split(".")[0]) >= 22 and shutil.which("npm", path=self.env["PATH"]):
                 self.details["node"] = {"kind": "existing", "version": version}
@@ -189,9 +196,9 @@ class Bootstrap:
         self.details["node"] = {"kind": "disposable", "version": "22.20.0"}
         return str(bin_dir / ("node.exe" if os.name == "nt" else "node"))
 
-    def flutter(self, explicit=None):
+    def flutter(self, explicit=None, force=False):
         name = "flutter.bat" if os.name == "nt" else "flutter"
-        candidates = [explicit] if explicit else [shutil.which(name, path=self.env["PATH"]), str(HERE.parent / "tests/functional-regression/output/flutter-sdk-3.29.3/bin" / name)]
+        candidates = [] if force else [explicit] if explicit else [shutil.which(name, path=self.env["PATH"]), str(HERE.parent / "tests/functional-regression/output/flutter-sdk-3.29.3/bin" / name)]
         for candidate in filter(None, candidates):
             if not Path(candidate).is_file():
                 continue
@@ -206,7 +213,12 @@ class Bootstrap:
             raise SetupRequired("Explicit Flutter executable must provide version 3.29.3: " + explicit)
         print("Installing disposable Flutter 3.29.3 SDK and its required artifacts...", flush=True)
         directory = self.scratch / "flutter-sdk"
-        self.command(["git", "clone", "--depth", "1", "--branch", "3.29.3", "--", LOCK["flutter"]["repository"], directory], timeout=900)
+        transport = ["git", "-c", "credential.interactive=false", "-c", "http.lowSpeedLimit=1024", "-c", "http.lowSpeedTime=60"]
+        code, _ = self.command(transport + ["clone", "--depth", "1", "--branch", "3.29.3", "--", LOCK["flutter"]["repository"], directory], timeout=600, check=False)
+        if code:
+            print("Retrying the Flutter source download with HTTP/1.1...", flush=True)
+            directory = self.scratch / "flutter-sdk-retry"
+            self.command(transport + ["-c", "http.version=HTTP/1.1", "clone", "--depth", "1", "--branch", "3.29.3", "--", LOCK["flutter"]["repository"], directory], timeout=600)
         _, sha = self.command(["git", "-C", directory, "rev-parse", "HEAD"])
         if sha != LOCK["flutter"]["commit"]:
             raise SetupRequired("Flutter release commit does not match the runtime lock")
