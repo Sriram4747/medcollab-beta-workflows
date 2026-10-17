@@ -8,6 +8,7 @@ on:
       - 'tests/developer-workflow/**'
       - 'tests/reporting/**'
       - 'scripts/Test-Vocle.ps1'
+      - 'scripts/test_vocle.py'
       - '.github/workflows/vocle-developer-qa.yml'
       - '.github/regression-*.json'
   workflow_dispatch:
@@ -32,8 +33,13 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
       - name: Evidence, comparison, ownership and coverage contracts
-        run: node --test tests/developer-workflow/workflow.test.mjs
+        run: node --test tests/developer-workflow/workflow.test.mjs tests/developer-workflow/process.test.mjs
+      - name: Python disposable-session contracts
+        run: python -B -m unittest discover -s tests/developer-workflow -p test_python_launcher.py -v
       - name: Detailed report normalization and escaping contracts
         run: node --test tests/reporting/report.test.mjs tests/reporting/workflow-adapters.test.mjs
       - name: Enforce stable IDs and feature declaration
@@ -46,7 +52,7 @@ jobs:
         env:
           TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
-        run: node tests/developer-workflow/run.mjs --source . --commit "$TARGET_SHA" --profile tooling --output developer-qa-output
+        run: python -B scripts/test_vocle.py --source . --commit "$TARGET_SHA" --profile tooling --output developer-qa-output
       - name: Verify portable Docker orchestration with disposable real backend assertions
         if: runner.os == 'Linux'
         env:

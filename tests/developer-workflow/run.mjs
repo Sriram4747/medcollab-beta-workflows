@@ -28,7 +28,16 @@ const catalog = JSON.parse(await readFile(join(root, 'tests/functional-regressio
 const rows = [], commandLine = 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
 let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, integrity = 'PASS', environment = {};
 const ownedContainers = [];
+const cancellation = new AbortController();
+const cancel = () => { console.error('Cancellation requested; cleaning up owned test resources.'); cancellation.abort(); };
+for (const name of process.platform === 'win32' ? ['SIGINT', 'SIGTERM', 'SIGBREAK'] : ['SIGINT', 'SIGTERM']) process.on(name, cancel);
 const env = { ...cleanEnvironment(), TZ: 'UTC', CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true', DART_SUPPRESS_ANALYTICS: 'true' };
+async function execute(bin, argv, options = {}) {
+  if (cancellation.signal.aborted) throw new Error('Run cancelled');
+  const result = await run(bin, argv, { ...options, signal: cancellation.signal });
+  if (result.aborted) throw new Error('Run cancelled');
+  return result;
+}
 const image = 'node:22.20.0-bookworm@sha256:915acd9e9b885ead0c620e27e37c81b74c226e0e1c8177f37a60217b6eabb0d7';
 const add = (id, status, required, extra = {}) => rows.push({ id, status, required, executed: false, module: 'TOOLING', ...extra });
 async function command(id, bin, argv, cwd, required = true, extra = {}) {
@@ -39,7 +48,7 @@ async function command(id, bin, argv, cwd, required = true, extra = {}) {
     ownedContainers.push(name); argv = ['run', '--name', name, ...user, ...argv.slice(1)];
   }
   const log = join(output, 'diagnostics', id + '.log');
-  const result = await run(bin, argv, { cwd, env, timeout: 30 * 60 * 1000, log });
+  const result = await execute(bin, argv, { cwd, env, timeout: 30 * 60 * 1000, log });
   add(id, result.error || result.timedOut ? 'ERROR' : result.code === 0 ? 'PASS' : extra.infrastructure || (extra.failureCodes && !extra.failureCodes.includes(result.code)) ? 'ERROR' : 'FAIL', required,
     { executed: !result.error, error: result.code === 0 ? undefined : (result.error || (result.timedOut ? 'Command deadline exceeded' : result.stderr.slice(-1500) || 'Nonzero exit ' + result.code)), artifacts: ['diagnostics/' + id + '.log'], ...extra });
   return result;
@@ -58,7 +67,7 @@ async function overlay(directory, paths, destination) {
   }
 }
 async function clone(directory, destination, sha) {
-  const result = await run('git', ['clone', '--no-hardlinks', '--no-checkout', '--', directory, destination], { env });
+  const result = await execute('git', ['clone', '--no-hardlinks', '--no-checkout', '--', directory, destination], { env });
   if (result.code !== 0) throw new Error('Source clone failed: ' + result.stderr);
   git(destination, ['checkout', '--detach', sha]);
 }
@@ -84,7 +93,7 @@ try {
   const harnessSha = git(root, ['rev-parse', 'HEAD']);
   await clone(root, harness, harnessSha);
   const harnessPaths = [...tracked(root), ...git(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean)]
-    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/Test-Vocle)/.test(f))
+    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$))/.test(f))
     .filter(f => !/\/(node_modules|output)\//.test(f));
   await overlay(root, harnessPaths, harness);
   harnessInfo = { sha: harnessSha, ...(await fingerprint(harness, harnessPaths)), verified: true };
@@ -107,7 +116,7 @@ try {
   else add('sanity-self-check', 'BLOCKED', true, { exclusion: 'Pinned sanity dependencies unavailable' });
   if (['full', 'backend-smoke'].includes(options.profile || 'full')) {
     // Backend runtime uses precisely the existing CI network-none preparation and runners.
-    const docker = await run('docker', ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
+    const docker = await execute('docker', ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
     environment.docker = docker.code === 0 ? docker.stdout.trim() : 'unavailable';
     const smoke = options.profile === 'backend-smoke';
     const backend = smoke ? [{ id: 'harness-smoke', module: 'HARNESS', tier: 'B' }] : catalog.filter(c => c.tier === 'B');
@@ -138,7 +147,7 @@ try {
     }
     if (!smoke) {
     const app = join(target, 'medcollab-app');
-    const version = await run(flutter, ['--version', '--machine'], { cwd: app, env, timeout: 60000 });
+    const version = await execute(flutter, ['--version', '--machine'], { cwd: app, env, timeout: 60000 });
     let sdk, flutterRoot; try { const info = JSON.parse(version.stdout); sdk = info.frameworkVersion; flutterRoot = info.flutterRoot; } catch { /* report unavailable */ }
     environment.flutter = sdk || 'unavailable';
     if (sdk !== '3.29.3') {
@@ -157,7 +166,7 @@ try {
         // SDK development examples even for a single app, which fails on some Windows archives.
         const dart = join(flutterRoot, 'bin/cache/dart-sdk/bin', process.platform === 'win32' ? 'dart.exe' : 'dart');
         await command('flutter-analysis', dart, ['analyze', '--format', 'machine'], app, true, { failureCodes: [1, 2, 3] });
-        const tests = await run(flutter, ['test', '--no-pub', '--reporter', 'json', 'test/functional_regression'], { cwd: app, env, timeout: 12 * 60 * 1000, log: join(output, 'diagnostics/flutter-catalog.log') });
+        const tests = await execute(flutter, ['test', '--no-pub', '--reporter', 'json', 'test/functional_regression'], { cwd: app, env, timeout: 12 * 60 * 1000, log: join(output, 'diagnostics/flutter-catalog.log') });
         await writeFile(join(output, 'flutter.ndjson'), tests.stdout);
         const aggregate = await command('flutter-aggregation', process.execPath, [join(harness, 'tests/functional-regression/scripts/aggregate-flutter.mjs'), join(output, 'flutter.ndjson'), join(output, 'flutter')], harness);
         if (aggregate.code !== 0) unavailable(catalog.filter(c => c.tier === 'F'), 'Flutter report aggregation failed', true);
@@ -176,7 +185,9 @@ try {
     }
     // The existing Android runner only supports committed archives. Dirty input remains explicit.
     if (options.android && sourceInfo.kind === 'commit' && source === root) {
-      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter], root, false);
+      const androidSdk = env.ANDROID_HOME || env.ANDROID_SDK_ROOT;
+      const adb = androidSdk ? ['--adb-bin=' + join(androidSdk, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb')] : [];
+      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter, ...adb], root, false);
       let deviceReport; try { deviceReport = JSON.parse(device.stdout.trim().split(/\r?\n/).at(-1)); } catch { /* explicit missing report */ }
       if (deviceReport?.reportDirectory) {
         const report = JSON.parse(await readFile(join(deviceReport.reportDirectory, 'results.json')));

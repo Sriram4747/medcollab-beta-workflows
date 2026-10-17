@@ -120,3 +120,56 @@ on a Linux Docker host run `node tests/developer-workflow/run.mjs --source . --c
 the separate developer process, approve ownership and required branch checks, then rerun
 exact candidate full gates. Sriram handles upstream integration after approval. No upstream
 or production writes occurred, and all original unrelated user work remains unstaged.
+
+## Disposable Python launcher (2026-10-17)
+
+Added `python scripts/test_vocle.py --source .` as a portable local entry point.
+It creates a temporary Python venv without pip dependencies, executes the original
+Node harness with isolated Pub/npm/Gradle caches and home directories, retains
+reports locally, then removes the session. The existing harness performs locked
+Flutter package resolution and npm installation inside disposable source copies.
+No test assertions or application code were changed. Git/Node/npm, Flutter 3.29.3
+and a local Linux Docker engine remain installed prerequisites; the venv does not
+contain those runtimes. Existing SDKs, emulator and Docker images are reused.
+
+The existing Windows/Ubuntu tooling integration now runs through Python and
+includes five Python lifecycle contracts and three process-lifecycle contracts.
+The original full functional CI jobs and existing sanity/security suites are reused.
+Python 3.12 is selected using the official immutable setup-python v5 action revision.
+The Python entry point is included in the recorded harness fingerprint. Android
+ADB discovery honors the original Android SDK path when temporary HOME is used.
+
+Measured local validation on application `23c3efd40529fd8b8e25b22964339e9d71cb9e61`:
+
+- Five Python contracts PASS. The combined Node run passed 51 contracts across
+  process/workflow, existing CI/device and report adapters/escaping.
+- Actual Python tooling session: PASS, all 13 checks executed, venv/caches and
+  nested source workspaces removed. Dirty source remains labeled working-tree.
+- Actual Python full session with the installed pinned SDK: locked Flutter package
+  download PASS; all 32 catalog cases executed with 15 PASS / 14 FAIL /
+  3 NEEDS_DECISION; all 33 retained tests PASS; static analysis FAIL. All 147
+  backend IDs remain BLOCKED because Docker is unavailable on this Windows host.
+  Overall FAIL is preserved. Source/harness integrity and both cleanup layers PASS.
+- Actual whole-launcher interruption during npm setup: exit 130, ERROR test gate,
+  INTERRUPTED session, no pass manifest; both disposable workspace layers removed.
+  This exposed a Windows infinite process-wait issue: Python signal delivery was
+  delayed until child exit. Bounded waits now let the launcher forward cancellation
+  promptly; the real interrupted rerun and signal contract both pass. Child
+  termination removes the entire owned process tree on timeout/cancellation.
+- First sandboxed run correctly produced ERROR when temporary Git configuration
+  writes were denied. Retried real execution with the required local test access;
+  original error evidence remains in ignored output.
+
+Local evidence is under `tests/developer-workflow/output/python-tooling-verified/`,
+`python-full-validation/`, and `python-cancel-verified/`. Each contains session
+JSON/Markdown; `evidence/` contains the original checksummed reports and offline
+HTML dashboard. Setup failures still retain session reports. `--previous` accepts
+the Python report root or the previous direct evidence directory. Existing source,
+coverage and release evidence restrictions remain in force. Optional Android
+execution was not rerun for this launcher change; SDK path integration and existing
+device contracts were validated. Abrupt termination can prevent cleanup.
+
+Next: validate the exact submitted Python tooling candidate on Windows/Ubuntu in
+the existing integration workflow. Full local backend/security execution still
+requires a working Linux Docker engine. Existing application failures/product
+decisions are unchanged and must be resolved through the developer process.

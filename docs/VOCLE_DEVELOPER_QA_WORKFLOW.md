@@ -2,6 +2,58 @@
 
 ## Start here
 
+For a disposable Python session, install **Python 3.10+**, Git, Node 22+/npm,
+Flutter **3.29.3**, and Docker with a running Linux engine. Run from the repository:
+
+```sh
+python scripts/test_vocle.py --source .
+python scripts/test_vocle.py --source . --commit FULL_40_CHARACTER_SHA
+python scripts/test_vocle.py --source . --flutter-bin /path/to/flutter/bin/flutter
+python scripts/test_vocle.py --source . --previous path/to/previous-python-report
+python scripts/test_vocle.py --source . --security
+```
+
+On Windows use `python` (or `py -3`); on systems that call Python 3 `python3`,
+use `python3`. No manual venv activation or pip install is needed. The launcher
+creates a temporary venv, starts its Python interpreter, and calls the existing
+Node harness. Flutter/Dart and Node execute the original assertions using their
+own runtimes; a Python venv does not install or isolate those runtimes.
+
+The existing harness installs **Flutter packages** using
+`flutter pub get --enforce-lockfile`, installs npm dependencies using `npm ci`,
+and tests a disposable source copy. The Python session supplies temporary Pub,
+npm and Gradle caches, temporary home directories, and temporary build directories.
+It does not install the Flutter SDK, Node, Docker or Android SDK globally. These
+tools must already be available; `--flutter-bin` selects an existing pinned SDK.
+Missing/mismatched Flutter or an unavailable Docker engine stays BLOCKED in the
+report while other checks run. Package downloads need internet access; backend
+assertions run in the existing network-none Docker containers.
+
+After success, test failure, setup failure or a handled Ctrl+C, temporary source
+copies, the venv and session package caches are deleted. Owned containers are
+removed by the original harness. The existing Flutter SDK, Docker engine/images,
+Android SDK and running emulator are reused and remain installed. Abrupt power
+loss or force-killing the launcher can prevent normal cleanup.
+
+Reports are retained under a new ignored
+`tests/developer-workflow/output/python-<timestamp>-<id>/` directory, or the new
+directory supplied with `--output`. Open `local-session.md` for session/cleanup
+status and `evidence/detailed/vocle-regression-dashboard.html` for the offline
+dashboard. Original JSON/JUnit/Markdown, QA findings, submission evidence and
+comparison reports are under `evidence/`. Both an older Python report root and
+an older direct evidence directory work with `--previous`. For submission checks,
+use the `evidence/` directory with the existing verifier. Setup failure before
+the harness starts produces `local-session.json` and `local-session.md`, with no
+PASS evidence. A nonzero exit means the session did not pass; cleanup errors
+also make the launcher exit nonzero.
+
+`--profile tooling` is a quick check of the wrapper and existing offline tooling;
+the default `full` runs the existing locally supported regression scope. Android,
+provider integration, dirty-source evidence and release limitations below apply
+equally to Python. The script never commits, pushes or opens a pull request.
+
+### Existing PowerShell and Node entry points
+
 Use Node 22 or later, Git, npm, and a Linux Docker engine (Docker Desktop works on
 Windows) for backend runtime isolation. Flutter must be **3.29.3**, the version
 already validated by the existing workflow. Package downloads happen before runtime;

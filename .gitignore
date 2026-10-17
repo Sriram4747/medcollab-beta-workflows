@@ -40,3 +40,7 @@ medcollab-app/android/local.properties
 # ─── Misc ───────────────────────────────────────────────────
 *.log
 coverage/
+
+# Python local test tooling
+__pycache__/
+*.pyc
