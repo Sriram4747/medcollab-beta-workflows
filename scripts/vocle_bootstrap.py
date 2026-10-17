@@ -253,7 +253,9 @@ class Bootstrap:
             raise SetupRequired("Explicit Flutter executable must provide version 3.29.3: " + explicit)
         print("Installing disposable Flutter 3.29.3 SDK and its required artifacts...", flush=True)
         directory = self.scratch / "flutter-sdk"
-        transport = ["git", "-c", "credential.interactive=false", "-c", "http.lowSpeedLimit=1024", "-c", "http.lowSpeedTime=60"]
+        # Flutter includes engine fixtures whose paths exceed Windows' legacy
+        # limit. Scope this setting to the disposable clone and its children.
+        transport = ["git", "-c", "core.longpaths=true", "-c", "credential.interactive=false", "-c", "http.lowSpeedLimit=1024", "-c", "http.lowSpeedTime=60"]
         code, _ = self.command(transport + ["clone", "--depth", "1", "--branch", "3.29.3", "--", LOCK["flutter"]["repository"], directory], timeout=600, check=False)
         if code:
             print("Retrying the Flutter source download with HTTP/1.1...", flush=True)
