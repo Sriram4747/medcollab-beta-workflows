@@ -14,6 +14,7 @@ from unittest.mock import patch
 
 
 spec = importlib.util.spec_from_file_location("test_vocle_launcher", Path(__file__).resolve().parents[2] / "scripts/test_vocle.py")
+sys.path.insert(0, str(Path(spec.origin).parent))
 launcher = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(launcher)
 

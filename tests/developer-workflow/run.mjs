@@ -10,7 +10,7 @@ import { generate as generateDetailedReport } from '../reporting/report.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2), options = {};
 const flags = new Set(['android', 'security']);
-const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'apk', 'profile']);
+const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'apk', 'profile']);
 for (let i = 0; i < args.length; i++) {
   const key = args[i].replace(/^--/, '');
   if (flags.has(key)) options[key] = true;
@@ -28,6 +28,8 @@ const catalog = JSON.parse(await readFile(join(root, 'tests/functional-regressio
 const rows = [], commandLine = 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
 let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, integrity = 'PASS', environment = {};
 const ownedContainers = [];
+const dockerOption = options['docker-bin'] || 'docker';
+const dockerBin = /[\\/]/.test(dockerOption) ? resolve(dockerOption) : dockerOption;
 const cancellation = new AbortController();
 const cancel = () => { console.error('Cancellation requested; cleaning up owned test resources.'); cancellation.abort(); };
 for (const name of process.platform === 'win32' ? ['SIGINT', 'SIGTERM', 'SIGBREAK'] : ['SIGINT', 'SIGTERM']) process.on(name, cancel);
@@ -42,7 +44,7 @@ const image = 'node:22.20.0-bookworm@sha256:915acd9e9b885ead0c620e27e37c81b74c22
 const add = (id, status, required, extra = {}) => rows.push({ id, status, required, executed: false, module: 'TOOLING', ...extra });
 async function command(id, bin, argv, cwd, required = true, extra = {}) {
   console.log(`Running ${id}`);
-  if (bin === 'docker' && argv[0] === 'run') {
+  if (bin === dockerBin && argv[0] === 'run') {
     const name = 'vocle-dev-' + randomUUID();
     const user = typeof process.getuid === 'function' ? ['--user', `${process.getuid()}:${process.getgid()}`] : [];
     ownedContainers.push(name); argv = ['run', '--name', name, ...user, ...argv.slice(1)];
@@ -93,7 +95,7 @@ try {
   const harnessSha = git(root, ['rev-parse', 'HEAD']);
   await clone(root, harness, harnessSha);
   const harnessPaths = [...tracked(root), ...git(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean)]
-    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$))/.test(f))
+    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_bootstrap\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
     .filter(f => !/\/(node_modules|output)\//.test(f));
   await overlay(root, harnessPaths, harness);
   harnessInfo = { sha: harnessSha, ...(await fingerprint(harness, harnessPaths)), verified: true };
@@ -116,7 +118,7 @@ try {
   else add('sanity-self-check', 'BLOCKED', true, { exclusion: 'Pinned sanity dependencies unavailable' });
   if (['full', 'backend-smoke'].includes(options.profile || 'full')) {
     // Backend runtime uses precisely the existing CI network-none preparation and runners.
-    const docker = await execute('docker', ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
+    const docker = await execute(dockerBin, ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
     environment.docker = docker.code === 0 ? docker.stdout.trim() : 'unavailable';
     const smoke = options.profile === 'backend-smoke';
     const backend = smoke ? [{ id: 'harness-smoke', module: 'HARNESS', tier: 'B' }] : catalog.filter(c => c.tier === 'B');
@@ -124,11 +126,11 @@ try {
     else {
       const backendOut = join(output, 'backend'); await mkdir(backendOut);
       const mounts = ['--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness`, '--mount', `type=bind,source=${backendOut},target=/output`];
-      const prep = await command('docker-prepare', 'docker', ['run', '--rm', ...mounts, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; cd /harness/tests/sanity && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root);
+      const prep = await command('docker-prepare', dockerBin, ['run', '--rm', ...mounts, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; cd /harness/tests/sanity && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root);
       if (prep.code !== 0) unavailable(backend, 'Docker dependency/Mongo preparation failed', true);
       else {
         environment.mongoBinaries = await fingerprint(join(backendOut, 'mongo-binaries'), (await readdir(join(backendOut, 'mongo-binaries'))).filter(f => !f.endsWith('.lock')));
-        await command('backend-driver', 'docker', ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${backendOut},target=/output`, '-e', 'HOME=/tmp', '-e', 'TZ=UTC', '-e', 'VOCLE_TARGET_DIR=/target', '-e', 'VOCLE_OUTPUT_DIR=/output', '-e', 'VOCLE_SCOPE=backend-all', image, 'sh', '-ec', 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/' + (smoke ? 'src/runner.mjs --smoke' : 'scripts/run-backend.mjs')], root);
+        await command('backend-driver', dockerBin, ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${backendOut},target=/output`, '-e', 'HOME=/tmp', '-e', 'TZ=UTC', '-e', 'VOCLE_TARGET_DIR=/target', '-e', 'VOCLE_OUTPUT_DIR=/output', '-e', 'VOCLE_SCOPE=backend-all', image, 'sh', '-ec', 'node /harness/tests/functional-regression/scripts/preflight-isolation.mjs && node /harness/tests/functional-regression/' + (smoke ? 'src/runner.mjs --smoke' : 'scripts/run-backend.mjs')], root);
         const execution = smoke ? null : JSON.parse(await readFile(join(backendOut, 'execution.json')));
         const reports = [];
         if (smoke) reports.push(JSON.parse(await readFile(join(backendOut, 'smoke/results.json'))));
@@ -198,9 +200,9 @@ try {
     add('backend-legacy-jest', 'BLOCKED', false, { exclusion: 'Two retained Jest files exist, but Jest and a Jest runner are absent from the lockfile; backend npm test is a placeholder. No assertion execution claimed.' });
     if (options.security && docker.code === 0 && docker.stdout.trim() === 'linux') {
       const securityOut = join(output, 'security'); await mkdir(securityOut);
-      const securityPrep = await command('security-runtime-prepare', 'docker', ['run', '--rm', '--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root, true, { infrastructure: true });
+      const securityPrep = await command('security-runtime-prepare', dockerBin, ['run', '--rm', '--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root, true, { infrastructure: true });
       if (securityPrep.code === 0) {
-        const securityRun = await command('security-runtime-driver', 'docker', ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'node', '/harness/tests/developer-workflow/security-runtime.mjs'], root, true, { infrastructure: true });
+        const securityRun = await command('security-runtime-driver', dockerBin, ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'node', '/harness/tests/developer-workflow/security-runtime.mjs'], root, true, { infrastructure: true });
         const files = ['vocle-media-results', 'vocle-data-results', 'vocle-security-results'];
         for (const dir of files) {
           try {
@@ -235,8 +237,8 @@ try {
   if ((options.profile || 'full') === 'full') unavailable(catalog.filter(c => !rows.some(r => r.id === c.id)), 'Orchestration/setup failed; no testcase execution evidence', true);
 } finally {
   for (const name of ownedContainers) {
-    const present = await run('docker', ['container', 'ls', '--all', '--filter', 'name=^/' + name + '$', '--format', '{{.Names}}'], { env, timeout: 15000 });
-    if (present.code !== 0 || (present.stdout.trim() && (await run('docker', ['rm', '--force', name], { env, timeout: 30000 })).code !== 0)) {
+    const present = await run(dockerBin, ['container', 'ls', '--all', '--filter', 'name=^/' + name + '$', '--format', '{{.Names}}'], { env, timeout: 15000 });
+    if (present.code !== 0 || (present.stdout.trim() && (await run(dockerBin, ['rm', '--force', name], { env, timeout: 30000 })).code !== 0)) {
       integrity = 'ERROR'; add('container-cleanup-' + name, 'ERROR', true, { error: 'Cannot verify removal of owned container ' + name });
     }
   }

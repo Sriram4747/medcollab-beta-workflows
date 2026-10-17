@@ -2,8 +2,8 @@
 
 ## Start here
 
-For a disposable Python session, install **Python 3.10+**, Git, Node 22+/npm,
-Flutter **3.29.3**, and Docker with a running Linux engine. Run from the repository:
+For a disposable Python session, start with **Python 3.10+** and Git. Run from
+the repository; no Flutter or Docker flags are needed:
 
 ```sh
 python scripts/test_vocle.py --source .
@@ -15,24 +15,52 @@ python scripts/test_vocle.py --source . --security
 
 On Windows use `python` (or `py -3`); on systems that call Python 3 `python3`,
 use `python3`. No manual venv activation or pip install is needed. The launcher
-creates a temporary venv, starts its Python interpreter, and calls the existing
-Node harness. Flutter/Dart and Node execute the original assertions using their
-own runtimes; a Python venv does not install or isolate those runtimes.
+creates a temporary venv, prepares runtimes, starts its Python interpreter, and
+calls the existing Node harness. Node 22+/npm is reused if compatible or downloaded
+into the session. Flutter 3.29.3 is discovered automatically (including the local
+pinned SDK), or installed at the verified release commit in a temporary directory.
+`--flutter-bin` is an optional explicit override; an incompatible explicit SDK is
+rejected. Node/Docker archives have committed SHA-256 pins in
+`scripts/vocle-runtime-lock.json`; Flutter's release commit is pinned there too.
 
 The existing harness installs **Flutter packages** using
 `flutter pub get --enforce-lockfile`, installs npm dependencies using `npm ci`,
 and tests a disposable source copy. The Python session supplies temporary Pub,
 npm and Gradle caches, temporary home directories, and temporary build directories.
-It does not install the Flutter SDK, Node, Docker or Android SDK globally. These
-tools must already be available; `--flutter-bin` selects an existing pinned SDK.
-Missing/mismatched Flutter or an unavailable Docker engine stays BLOCKED in the
-report while other checks run. Package downloads need internet access; backend
-assertions run in the existing network-none Docker containers.
+Nothing installs Node or Flutter globally or changes the source checkout. A
+compatible running local Docker engine can be reused. If absent, x64 Windows
+automatically prepares a private WSL 2 guest containing Ubuntu Base, the minimal
+Docker Engine binaries and required guest OS packages. Docker Desktop is not
+required. On x64 Linux a private daemon is started with a private Unix socket,
+configuration and data root. Linux may request sudo authorization; no daemon is
+registered as a system service. macOS and other architectures currently reuse an
+existing local Linux Docker engine; automatic guest provisioning is not implemented
+there. Python and Git remain baseline requirements on every platform.
+
+On Windows without WSL, the launcher runs the fixed Microsoft WSL installer and
+Windows may request administrator approval. If platform installation completes,
+the launcher reports **RESTART_REQUIRED** (exit 3), records setup diagnostics, and
+asks you to restart Windows once and rerun the same command. It never restarts
+Windows itself. Hardware virtualization must be enabled; firmware/IT restrictions
+cannot be bypassed by Python. The WSL OS platform remains installed between runs,
+just as Windows itself does; it cannot be installed inside a venv.
+
+Cold setup downloads runtimes and images. Package preparation has network access;
+the existing backend/security assertion commands retain `--network none` and the
+provider/network isolation preflight. The private daemon uses no bridge, no TCP
+listener and a private data root. Its proxy translates Windows bind paths into
+WSL paths and uses host networking only for dependency preparation, preserving
+the explicit network-none assertion commands. Existing Docker remote contexts are
+refused. Use `--runtime managed` to force a private engine, or `--runtime existing`
+to require a running local engine and suppress guest provisioning.
 
 After success, test failure, setup failure or a handled Ctrl+C, temporary source
-copies, the venv and session package caches are deleted. Owned containers are
-removed by the original harness. The existing Flutter SDK, Docker engine/images,
-Android SDK and running emulator are reused and remain installed. Abrupt power
+copies, downloaded runtimes, the venv and session package caches are deleted.
+The original harness removes owned containers. Managed Docker is stopped and its
+images/data are deleted; a managed WSL guest is unregistered only after verifying
+its unique session identity and exact registered disk path. Existing user Docker
+engines/images, existing Flutter SDKs, Android SDKs and emulators are preserved.
+Cleanup failure stays red and retains the session path for recovery. Abrupt power
 loss or force-killing the launcher can prevent normal cleanup.
 The optional Android lane retains its existing artifact directory and device cleanup;
 cancellation during a native device run was not validated by this launcher change.
@@ -45,8 +73,11 @@ dashboard. Original JSON/JUnit/Markdown, QA findings, submission evidence and
 comparison reports are under `evidence/`. Both an older Python report root and
 an older direct evidence directory work with `--previous`. For submission checks,
 use the `evidence/` directory with the existing verifier. Setup failure before
-the harness starts produces `local-session.json` and `local-session.md`, with no
-PASS evidence. A nonzero exit means the session did not pass; cleanup errors
+the harness starts produces `local-session.json`, `local-session.md` and setup
+diagnostics, with no PASS evidence. `windows-setup.json` records Windows platform
+installation; `docker-daemon.log` records a private daemon. Reports distinguish
+RESTART_REQUIRED/BOOTSTRAP_BLOCKED from executed test failures. A nonzero exit means
+the session did not pass; cleanup errors
 also make the launcher exit nonzero.
 
 `--profile tooling` is a quick check of the wrapper and existing offline tooling;

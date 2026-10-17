@@ -203,3 +203,29 @@ harness SHAs, all required outcomes, and source/workspace/session cleanup:
 Windows tooling 13/13 PASS; Ubuntu tooling 13/13 PASS and Docker smoke 17/17 PASS.
 Archive hashes and report details are saved in
 `developer-qa-evidence/2026-10-17-python/hosted-validation.json`.
+
+## Automatic runtime setup correction (2026-10-17)
+
+The previous Python wrapper still required developers to configure Flutter and
+Docker. Added automatic runtime setup: Node 22.20.0 download when needed, automatic
+pinned Flutter discovery/download, and minimal private Docker Engine provisioning
+on x64 Windows/WSL 2 and Linux. Bootstrap reuses the existing suites and original
+network-none assertion commands. The guest/daemon, its images and downloaded tools
+are disposable. Existing local engines can be reused; unrelated resources are never
+pruned. Runtimes have committed archive checksums or an exact Flutter commit pin.
+
+Windows WSL is an OS prerequisite outside a Python venv. The launcher automates its
+installation with a fixed elevated helper, reports RESTART_REQUIRED rather than
+test success, and never reboots the computer. One-time OS permission/restart and
+hardware virtualization cannot be hidden by a venv. Current machine inspection:
+Windows 11 Pro, firmware virtualization enabled, WSL not installed. Windows guest
+execution needs that OS setup completed before it can be validated locally.
+
+Measured so far: 14 Python bootstrap/lifecycle contracts PASS, 11 Node workflow/
+process contracts PASS. Actual fresh Windows Node 22.20.0 archive download, checksum,
+extraction and execution PASS; automatic Flutter 3.29.3 discovery PASS even though
+PATH points to 3.47.2. Disposable validation files removed. Existing CI's Ubuntu
+smoke step now uses the Python launcher with `--runtime managed`, to exercise a
+real fresh engine and teardown without adding a second functional regression suite.
+Next: validate the managed engine in CI and run the automated Windows platform
+setup; preserve setup/restart limitations and existing application failures.
