@@ -12,7 +12,7 @@ from unittest.mock import patch
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-from vocle_bootstrap import Bootstrap, SetupRequired, decode, download, extract, proxy_args, windows_mount
+from vocle_bootstrap import Bootstrap, SetupRequired, decode, download, extract, owned_mounts, proxy_args, windows_mount
 
 
 class RuntimeBootstrapTests(unittest.TestCase):
@@ -63,10 +63,20 @@ class RuntimeBootstrapTests(unittest.TestCase):
             scratch = Path(directory)
             setup = Bootstrap(scratch, scratch, {"PATH": os.environ["PATH"]}, {})
             flags = setup.daemon_flags(scratch, "unix://" + str(scratch / "socket"))
-            for key in ("--config-file", "--data-root", "--exec-root", "--pidfile"):
+            for key in ("--config-file", "--data-root", "--exec-root", "--pidfile", "--containerd"):
                 self.assertTrue(Path(flags[flags.index(key) + 1]).is_relative_to(scratch))
             self.assertIn("--bridge=none", flags)
             self.assertFalse(any("tcp://" in flag for flag in flags))
+
+    def test_namespace_cleanup_selects_only_mounts_inside_the_owned_engine(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve() / "engine"
+            # mountinfo uses forward slashes even when fixture tests run on Windows.
+            path = root.as_posix()
+            lines = [f"1 0 0:1 / {path}/exec/netns/default rw - nsfs nsfs rw",
+                     f"2 0 0:1 / {path}-other/netns/default rw - nsfs nsfs rw",
+                     "3 0 0:1 / /run/docker/netns/default rw - nsfs nsfs rw"]
+            self.assertEqual(owned_mounts("\n".join(lines), root), [root / "exec/netns/default"])
 
     def test_remote_existing_context_is_refused(self):
         with tempfile.TemporaryDirectory() as directory:

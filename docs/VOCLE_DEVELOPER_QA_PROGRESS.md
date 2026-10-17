@@ -229,3 +229,15 @@ smoke step now uses the Python launcher with `--runtime managed`, to exercise a
 real fresh engine and teardown without adding a second functional regression suite.
 Next: validate the managed engine in CI and run the automated Windows platform
 setup; preserve setup/restart limitations and existing application failures.
+
+First actual private-engine CI run on `d033386`: all 17 backend smoke checks PASS,
+but overall session ERROR because a retained network-namespace bind mount prevented
+teardown. The failure is preserved in run 39023183535. The daemon had also selected
+the runner's system containerd; the bootstrap now starts its own pinned containerd
+with private configuration/socket/data and unmounts only verified paths inside its
+owned engine directory before deletion. Cleanup failure removes the pass marker and
+keeps the session gate ERROR. Existing processes/namespaces are not selected.
+The local Windows WSL installer was invoked; its administrator prompt was canceled.
+It correctly reported BOOTSTRAP_BLOCKED and removed its temporary files. No WSL
+installation or local managed guest execution is claimed. Further OS setup requires
+the Windows permission prompt to be approved by the user.

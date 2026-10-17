@@ -38,7 +38,7 @@ existing local Linux Docker engine; automatic guest provisioning is not implemen
 there. Python and Git remain baseline requirements on every platform.
 
 On Windows without WSL, the launcher runs the fixed Microsoft WSL installer and
-Windows may request administrator approval. If platform installation completes,
+Windows may request administrator approval. If Windows still needs a restart,
 the launcher reports **RESTART_REQUIRED** (exit 3), records setup diagnostics, and
 asks you to restart Windows once and rerun the same command. It never restarts
 Windows itself. Hardware virtualization must be enabled; firmware/IT restrictions

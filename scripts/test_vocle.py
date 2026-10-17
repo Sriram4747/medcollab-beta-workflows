@@ -250,6 +250,11 @@ def run_session(args):
             except Exception as error:
                 state["cleanup"], state["cleanupError"], state["status"], code = "ERROR", str(error), "ERROR", 1
         state["finishedAt"] = datetime.now(timezone.utc).isoformat()
+        if state["cleanup"] == "ERROR":
+            state["testGate"] = state.get("gate")
+            state["gate"] = state["releaseGate"] = "ERROR"
+        if state["status"] != "PASS":
+            (output / "evidence/pass-manifest.json").unlink(missing_ok=True)
         (output / "local-session.json").write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
         evidence_links = ("Existing JSON, Markdown, JUnit, ownership and submission evidence: [evidence/](evidence/).\n\n"
                           "Open [the local dashboard](evidence/detailed/vocle-regression-dashboard.html) for test details.\n\n") if (output / "evidence").is_dir() else "Application tests have not started. See [setup.log](setup.log) for automatic setup diagnostics.\n\n"
@@ -266,6 +271,8 @@ def run_session(args):
         print(f"Reports: {output}\nSession: {state['status']}; cleanup: {state['cleanup']}", flush=True)
         if state.get("error"):
             print(state["error"], file=sys.stderr)
+        if state.get("cleanupError"):
+            print("Cleanup failed: " + state["cleanupError"], file=sys.stderr)
     return code
 
 

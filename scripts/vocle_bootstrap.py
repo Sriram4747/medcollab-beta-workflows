@@ -129,6 +129,17 @@ def proxy_args(args, mode):
     return result
 
 
+def owned_mounts(mountinfo, directory):
+    owned = directory.resolve()
+    result = []
+    for line in mountinfo.splitlines():
+        mount = re.sub(r"\\([0-7]{3})", lambda match: chr(int(match[1], 8)), line.split()[4])
+        point = Path(mount).resolve()
+        if point.is_relative_to(owned):
+            result.append(point)
+    return sorted(result, key=lambda path: len(path.parts), reverse=True)
+
+
 def docker_proxy(config_file, args):
     config = json.loads(Path(config_file).read_text(encoding="utf-8"))
     prefix = ([config["wsl"], "--distribution", config["distribution"], "--user", "root", "--exec"]
@@ -143,6 +154,7 @@ class Bootstrap:
         self.log = output / "setup.log"
         self.guest = None
         self.daemon = None
+        self.containerd = None
         self.daemon_log = None
         self.sudo = []
         self.wsl = shutil.which("wsl.exe") if os.name == "nt" else None
@@ -216,12 +228,17 @@ class Bootstrap:
         self.details["windowsPlatformSetup"] = detail
         if code or detail.get("exitCode") not in (0, 3010):
             raise SetupRequired("Windows WSL setup did not complete. See windows-setup.json and setup.log. " + detail.get("error", text))
+        if detail.get("exitCode") == 0:
+            ready, _ = self.command([self.wsl, "--status"], check=False)
+            if ready == 0:
+                return  # Existing virtualization components may already be ready.
         raise SetupRequired("Windows WSL setup completed. Restart Windows once, then rerun the same Python command. No tests were executed. The Windows platform remains installed; each test guest is disposable.", "RESTART_REQUIRED")
 
     def daemon_flags(self, directory, socket):
         return ["--config-file", str(directory / "daemon.json"), "--host", socket,
                 "--data-root", str(directory / "data"), "--exec-root", str(directory / "exec"),
                 "--pidfile", str(directory / "dockerd.pid"), "--storage-driver=vfs",
+                "--containerd", str(directory / "containerd.sock"),
                 "--bridge=none", "--iptables=false", "--ip6tables=false", "--ip-forward=false", "--ip-masq=false"]
 
     def docker(self, policy="auto"):
@@ -268,12 +285,42 @@ class Bootstrap:
             time.sleep(0.5)
         raise SetupRequired("Private Docker daemon did not become ready; see docker-daemon.log")
 
+    def start_engines(self, prefix, directory, binary):
+        self.daemon_log = (self.output / "docker-daemon.log").open("wb")
+        path = str(binary.parent) + ":/usr/sbin:/usr/bin:/sbin:/bin"
+        # Write an owned PID before exec; never discover/stop a system containerd.
+        launch = prefix + ["env", "PATH=" + path, "sh", "-c", 'echo $$ > "$1"; shift; exec "$@"', "vocle-runtime"]
+        containerd_args = [str(binary.parent / "containerd"), "--config", str(directory / "containerd.toml"),
+                           "--root", str(directory / "containerd-data"), "--state", str(directory / "containerd-state"),
+                           "--address", str(directory / "containerd.sock")]
+        options = {"env": self.env, "stdout": self.daemon_log, "stderr": subprocess.STDOUT,
+                   "stdin": subprocess.DEVNULL, "start_new_session": os.name != "nt"}
+        self.containerd = subprocess.Popen(launch + [str(directory / "containerd.pid"), *containerd_args], **options)
+        for _ in range(60):
+            if self.containerd.poll() is not None:
+                raise SetupRequired("Private containerd stopped during setup; see docker-daemon.log")
+            code, _ = self.command(prefix + [binary.parent / "ctr", "--address", directory / "containerd.sock", "version"], timeout=5, check=False)
+            if code == 0:
+                break
+            time.sleep(0.5)
+        else:
+            raise SetupRequired("Private containerd did not become ready")
+        socket = "unix://" + str(directory / "docker.sock")
+        self.daemon = subprocess.Popen(launch + [str(directory / "dockerd-launch.pid"), str(binary.parent / "dockerd"), *self.daemon_flags(directory, socket)], **options)
+        self.wait_daemon(prefix + [binary, "--host", socket])
+        self.details["containerd"] = "disposable-private-socket"
+        return socket
+
     def wsl_docker(self):
         name = "Vocle-Test-" + uuid.uuid4().hex
         self.guest = name
         self.details["distribution"] = name
         rootfs = self.asset(LOCK["wslRootfs"], "ubuntu-base.tar.gz")
-        self.command([self.wsl, "--import", name, self.scratch / "wsl", rootfs, "--version", "2"], timeout=300)
+        code, text = self.command([self.wsl, "--import", name, self.scratch / "wsl", rootfs, "--version", "2"], timeout=300, check=False)
+        if code:
+            if self.details.get("windowsPlatformSetup") and re.search(r"HYPERV_NOT_INSTALLED|0x80370102|restart|reboot", text, re.I):
+                raise SetupRequired("Windows installed WSL but its virtual machine platform needs a restart. Restart once and rerun the same command. " + text[-1000:], "RESTART_REQUIRED")
+            raise SetupRequired("The private WSL 2 guest could not start. See setup.log. " + text[-1500:])
         prefix = [self.wsl, "--distribution", name, "--user", "root", "--exec"]
         # TLS trust and, when enabled by the kernel, the AppArmor loader are OS
         # requirements. Install them only in this disposable guest.
@@ -289,11 +336,11 @@ class Bootstrap:
         configuration = self.scratch / "daemon.json"
         configuration.write_text("{}", encoding="ascii")
         self.command(prefix + ["cp", windows_mount(str(configuration)), "/opt/vocle/daemon.json"])
+        containerd_config = self.scratch / "containerd.toml"
+        containerd_config.write_text("version = 2\n", encoding="ascii")
+        self.command(prefix + ["cp", windows_mount(str(containerd_config)), "/opt/vocle/containerd.toml"])
         binary = "/opt/vocle/docker/docker"
-        socket = "unix:///opt/vocle/docker.sock"
-        self.daemon_log = (self.output / "docker-daemon.log").open("wb")
-        self.daemon = subprocess.Popen(prefix + ["env", "PATH=/opt/vocle/docker:/usr/sbin:/usr/bin:/sbin:/bin", "/opt/vocle/docker/dockerd"] + self.daemon_flags(PurePosixPath("/opt/vocle"), socket), stdout=self.daemon_log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
-        self.wait_daemon(prefix + [binary, "--host", socket])
+        socket = self.start_engines(prefix, PurePosixPath("/opt/vocle"), PurePosixPath(binary))
         self.details["docker"] = "disposable-wsl-engine"
         return self.shim({"mode": "wsl", "wsl": self.wsl, "distribution": name, "docker": binary, "socket": socket, "clientConfig": "/opt/vocle/client"})
 
@@ -313,12 +360,9 @@ class Bootstrap:
         extract(self.asset(LOCK["docker"], "docker.tgz"), directory)
         (directory / "client").mkdir()
         (directory / "daemon.json").write_text("{}", encoding="ascii")
+        (directory / "containerd.toml").write_text("version = 2\n", encoding="ascii")
         binary = directory / "docker/docker"
-        socket = "unix://" + str(directory / "docker.sock")
-        env = self.env | {"PATH": str(binary.parent) + os.pathsep + self.env["PATH"]}
-        self.daemon_log = (self.output / "docker-daemon.log").open("wb")
-        self.daemon = subprocess.Popen(self.sudo + [str(directory / "docker/dockerd")] + self.daemon_flags(directory, socket), env=env, stdout=self.daemon_log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, start_new_session=True)
-        self.wait_daemon(self.sudo + [binary, "--host", socket])
+        socket = self.start_engines(self.sudo, directory, binary)
         if self.sudo:
             self.command(self.sudo + ["chown", str(os.getuid()) + ":" + str(os.getgid()), directory / "docker.sock"])
         self.details["docker"] = "disposable-linux-engine"
@@ -349,26 +393,33 @@ class Bootstrap:
                 self.command([self.wsl, "--unregister", self.guest], timeout=120)
                 if self.verify_wsl_owner():
                     raise SetupRequired("Owned WSL guest was not removed")
-            elif self.daemon and self.daemon.poll() is None:
-                if self.sudo:
-                    pid_file = self.scratch / "docker-engine/dockerd.pid"
-                    pid = pid_file.read_text().strip()
-                    if not pid.isdecimal():
-                        raise SetupRequired("Invalid owned Docker PID")
-                    actual = Path("/proc", pid, "cmdline").read_bytes().split(b"\0")[0]
-                    expected = str(self.scratch / "docker-engine/docker/dockerd").encode()
-                    if actual != expected:
-                        raise SetupRequired("Docker cleanup refused: PID no longer identifies the owned daemon")
-                    self.command(self.sudo + ["kill", "-TERM", pid])
-                else:
-                    self.daemon.terminate()
-            if self.daemon:
-                self.daemon.wait(timeout=30)
+            elif not self.guest:
+                for process, name in ((self.daemon, "dockerd"), (self.containerd, "containerd")):
+                    if process and process.poll() is None:
+                        if self.sudo:
+                            pid = (self.scratch / ("docker-engine/" + name + ".pid")).read_text().strip()
+                            if not pid.isdecimal():
+                                raise SetupRequired("Invalid owned runtime PID")
+                            actual = Path("/proc", pid, "cmdline").read_bytes().split(b"\0")[0]
+                            expected = str(self.scratch / "docker-engine/docker" / name).encode()
+                            if actual != expected:
+                                raise SetupRequired("Cleanup refused: PID no longer identifies the owned runtime")
+                            self.command(self.sudo + ["kill", "-TERM", pid])
+                        else:
+                            process.terminate()
+                        process.wait(timeout=30)
+            for process in (self.daemon, self.containerd):
+                if process:
+                    process.wait(timeout=30)
             # Private Linux daemon may leave root-owned files. Delete only its checked data root.
-            if self.sudo:
+            if sys.platform == "linux" and (self.scratch / "docker-engine").exists():
                 data = (self.scratch / "docker-engine").resolve()
                 if data.parent != self.scratch.resolve() or data.name != "docker-engine":
                     raise SetupRequired("Unsafe Docker data cleanup path")
+                # Network namespaces are bind mounts; Docker may retain these
+                # after stopping. Unmount only exact paths inside our data root.
+                for point in owned_mounts(Path("/proc/self/mountinfo").read_text(), data):
+                    self.command(self.sudo + ["umount", "--", point])
                 self.command(self.sudo + ["rm", "-rf", "--", data])
             self.details["cleanup"] = "PASS"
         except Exception:
