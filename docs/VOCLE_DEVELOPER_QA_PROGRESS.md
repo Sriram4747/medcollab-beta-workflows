@@ -183,3 +183,23 @@ passed Python execution on Ubuntu but found a Windows-only fixture path mismatch
 the hosted temp directory uses the `RUNNER~1` short alias, while the launcher
 correctly resolves its full path. The fixture now resolves its expected path too;
 no runner behavior or assertion coverage changed. Hosted rerun remains required.
+
+Hosted rerun [39019681073](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39019681073)
+on `3054cb68c9d0cba49a5ab7dd8ed86c5b70dddf73` completed **SUCCESS**: Windows
+and Ubuntu Python contracts and actual tooling execution PASS, original Ubuntu
+Docker runtime smoke PASS, artifact uploads and the shared visual QA report PASS.
+This verifies both platforms without a second full functional CI suite. Measured
+local session summaries/checksums are saved in
+`developer-qa-evidence/2026-10-17-python/validation.json`; the original local
+checksummed evidence and dashboard paths remain listed above. Current application
+failures and missing local Docker still prevent a full local release claim.
+Next action: developers use the documented Python command with Flutter 3.29.3
+and a running local Linux Docker engine, then review the retained gate, diagnostics,
+QA findings and independent exact-commit CI results.
+
+Downloaded both hosted matrix artifacts and read their JSON ZIP members without
+extracting or executing contents. Verified report checksums, exact candidate and
+harness SHAs, all required outcomes, and source/workspace/session cleanup:
+Windows tooling 13/13 PASS; Ubuntu tooling 13/13 PASS and Docker smoke 17/17 PASS.
+Archive hashes and report details are saved in
+`developer-qa-evidence/2026-10-17-python/hosted-validation.json`.

@@ -1,0 +1,214 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-17",
+  "note": "Measured local execution summaries, not replacement evidence or a full release certificate. Original JSON/manifest/dashboard remain in the referenced ignored local directories. Existing app failures preserved; local Docker unavailable.",
+  "pythonContractsPassed": 5,
+  "nodeContractsPassed": 51,
+  "runs": [
+    {
+      "name": "python-tooling-verified",
+      "session": {
+        "schemaVersion": 1,
+        "startedAt": "2026-10-17T14:25:18.884725+05:30",
+        "status": "PASS",
+        "profile": "tooling",
+        "source": "C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows",
+        "python": "3.12.0",
+        "cleanup": "PASS",
+        "runnerExitCode": 0,
+        "node": "v24.14.1",
+        "temporaryDirectory": "C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-python-u4fted1u",
+        "gate": "PASS",
+        "releaseGate": "NOT_EVALUATED",
+        "finishedAt": "2026-10-17T14:25:56.291629+05:30"
+      },
+      "reportChecksum": "15511c40b39e522fb43ba4cda4d471ca5d36e3e3069a2ec1a3f4998bc169e6e9",
+      "scope": "tooling",
+      "sourceSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "sourceKind": "working-tree",
+      "sourceFingerprint": "35378d0d167d0214f608e48122e4223f22a513ebfc0343eed2201d2078f2806b",
+      "harnessSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "harnessFingerprint": "5c38f2dde8c542524359ae401ddcdddf225302f3a35a1a42d88797ef9c30b931",
+      "gate": "PASS",
+      "integrity": "PASS",
+      "counts": {
+        "PASS": 13
+      },
+      "selectedChecks": [
+        {
+          "id": "source-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "harness-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "workspace-cleanup",
+          "status": "PASS",
+          "executed": true
+        }
+      ],
+      "temporaryDirectoryRemoved": true,
+      "passManifestPresent": false
+    },
+    {
+      "name": "python-full-validation",
+      "session": {
+        "schemaVersion": 1,
+        "startedAt": "2026-10-17T14:26:05.406459+05:30",
+        "status": "NON_SUCCESS",
+        "profile": "full",
+        "source": "C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows",
+        "python": "3.12.0",
+        "cleanup": "PASS",
+        "runnerExitCode": 1,
+        "node": "v24.14.1",
+        "temporaryDirectory": "C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-python-1afmy96f",
+        "gate": "FAIL",
+        "releaseGate": "FAIL",
+        "finishedAt": "2026-10-17T14:28:18.536502+05:30"
+      },
+      "reportChecksum": "4a56457fb6d20baabe4506eca2f45f4f547c3134c9ec6147cd96660783131e6f",
+      "scope": "full",
+      "sourceSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "sourceKind": "commit",
+      "sourceFingerprint": "9951960aa7319ca7ac6040e4f414520e23394622b9a653ea6b2c4faa0b52bb7e",
+      "harnessSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "harnessFingerprint": "d744590bfa6ec54cbb680be273a27db2062a43b34a4dbb690298c67517074103",
+      "gate": "FAIL",
+      "integrity": "PASS",
+      "counts": {
+        "PASS": 31,
+        "FAIL": 15,
+        "NEEDS_DECISION": 3,
+        "BLOCKED": 159
+      },
+      "selectedChecks": [
+        {
+          "id": "flutter-locked-dependencies",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "flutter-analysis",
+          "status": "FAIL",
+          "executed": true
+        },
+        {
+          "id": "flutter-retained",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "source-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "harness-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "workspace-cleanup",
+          "status": "PASS",
+          "executed": true
+        }
+      ],
+      "temporaryDirectoryRemoved": true,
+      "passManifestPresent": false
+    },
+    {
+      "name": "python-cancel-verified",
+      "session": {
+        "schemaVersion": 1,
+        "startedAt": "2026-10-17T14:29:16.706785+05:30",
+        "status": "INTERRUPTED",
+        "profile": "tooling",
+        "source": "C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows",
+        "python": "3.12.0",
+        "cleanup": "PASS",
+        "runnerExitCode": 130,
+        "node": "v24.14.1",
+        "temporaryDirectory": "C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-python-7l_vo7oc",
+        "gate": "ERROR",
+        "releaseGate": "NOT_EVALUATED",
+        "finishedAt": "2026-10-17T14:29:26.381394+05:30"
+      },
+      "reportChecksum": "6964665d531cd297709c485341f5f10a92481c7cb51acee83a54d12e44fe09fb",
+      "scope": "tooling",
+      "sourceSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "sourceKind": "working-tree",
+      "sourceFingerprint": "35378d0d167d0214f608e48122e4223f22a513ebfc0343eed2201d2078f2806b",
+      "harnessSha": "23c3efd40529fd8b8e25b22964339e9d71cb9e61",
+      "harnessFingerprint": "2a27f11531866fb174f41813aedf21ed7d8c35b7238f3c7b510ea54789363902",
+      "gate": "ERROR",
+      "integrity": "ERROR",
+      "counts": {
+        "ERROR": 1,
+        "PASS": 4
+      },
+      "selectedChecks": [
+        {
+          "id": "workspace-cleanup",
+          "status": "PASS",
+          "executed": true
+        }
+      ],
+      "temporaryDirectoryRemoved": true,
+      "passManifestPresent": false
+    },
+    {
+      "name": "python-committed-validation",
+      "session": {
+        "schemaVersion": 1,
+        "startedAt": "2026-10-17T14:31:58.478457+05:30",
+        "status": "PASS",
+        "profile": "tooling",
+        "source": "C:\\Users\\delll\\AndroidStudioProjects\\Vocle\\medcollab-beta-workflows",
+        "python": "3.12.0",
+        "cleanup": "PASS",
+        "runnerExitCode": 0,
+        "node": "v24.14.1",
+        "temporaryDirectory": "C:\\Users\\delll\\AppData\\Local\\Temp\\vocle-python-bvwlti1o",
+        "gate": "PASS",
+        "releaseGate": "NOT_EVALUATED",
+        "finishedAt": "2026-10-17T14:32:19.084255+05:30"
+      },
+      "reportChecksum": "e91a9ccf4739e6a987d5b6fcb45775960274888e914873c74e4eac2986e392e7",
+      "scope": "tooling",
+      "sourceSha": "78b9dd7d3e6ee439e01c8c516f33bccdd48f9203",
+      "sourceKind": "commit",
+      "sourceFingerprint": "9951960aa7319ca7ac6040e4f414520e23394622b9a653ea6b2c4faa0b52bb7e",
+      "harnessSha": "78b9dd7d3e6ee439e01c8c516f33bccdd48f9203",
+      "harnessFingerprint": "53864e08d6e0f8377bfae8d912c60cf3dff028d0bbe1c3354ed5225132bb2e15",
+      "gate": "PASS",
+      "integrity": "PASS",
+      "counts": {
+        "PASS": 13
+      },
+      "selectedChecks": [
+        {
+          "id": "source-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "harness-integrity",
+          "status": "PASS",
+          "executed": true
+        },
+        {
+          "id": "workspace-cleanup",
+          "status": "PASS",
+          "executed": true
+        }
+      ],
+      "temporaryDirectoryRemoved": true,
+      "passManifestPresent": true
+    }
+  ]
+}

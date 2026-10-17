@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "runId": 39019681073,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39019681073",
+  "candidateSha": "3054cb68c9d0cba49a5ab7dd8ed86c5b70dddf73",
+  "verification": "PASS",
+  "note": "Original ZIP JSON members read without extracting or executing contents. Report checksums, exact source/harness SHA, required outcomes and session/workspace cleanup verified. Tooling and smoke do not certify a full release.",
+  "artifacts": [
+    {
+      "artifact": "developer-qa-ubuntu-24.04-39019681073-1.zip",
+      "archiveSha256": "9572c66489213c8c9e736236c427578d0eede214ee2e66b58850a7cc8c2d79d2",
+      "session": "PASS",
+      "sessionCleanup": "PASS",
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "integrity": "PASS",
+          "sourceSha": "3054cb68c9d0cba49a5ab7dd8ed86c5b70dddf73",
+          "harnessFingerprint": "e847077bfbc81d2dc1f9cf33fef2c4430106a92e530b1a31d3e8ed87200f0474",
+          "reportChecksum": "309390c5de07540ca0c4651f9fcca01443e93f2d1d4ddf12d6c04fc438177a32",
+          "counts": {
+            "PASS": 13
+          },
+          "requiredChecksPassed": 13
+        },
+        {
+          "scope": "backend-smoke",
+          "gate": "PASS",
+          "integrity": "PASS",
+          "sourceSha": "3054cb68c9d0cba49a5ab7dd8ed86c5b70dddf73",
+          "harnessFingerprint": "e847077bfbc81d2dc1f9cf33fef2c4430106a92e530b1a31d3e8ed87200f0474",
+          "reportChecksum": "ebc3d672424dd9d7440cf80650602edba78663bd93300cba5b6c13e828d61b41",
+          "counts": {
+            "PASS": 17
+          },
+          "requiredChecksPassed": 17
+        }
+      ]
+    },
+    {
+      "artifact": "developer-qa-windows-2022-39019681073-1.zip",
+      "archiveSha256": "9c112c64ace95cd55644587428605926a7f718f9d769d5a51cfc46ef6d0e76ae",
+      "session": "PASS",
+      "sessionCleanup": "PASS",
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "integrity": "PASS",
+          "sourceSha": "3054cb68c9d0cba49a5ab7dd8ed86c5b70dddf73",
+          "harnessFingerprint": "2b6d8a8324a5356bec45a3221025d968d8afae7eaaed8b4a9111f07b4faae817",
+          "reportChecksum": "22d14e09325ddf10d6fb19a1d667f46a327d429289b28b0022a10a66d942fc46",
+          "counts": {
+            "PASS": 13
+          },
+          "requiredChecksPassed": 13
+        }
+      ]
+    }
+  ]
+}

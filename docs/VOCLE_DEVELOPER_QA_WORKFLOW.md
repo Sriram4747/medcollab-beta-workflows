@@ -34,6 +34,8 @@ copies, the venv and session package caches are deleted. Owned containers are
 removed by the original harness. The existing Flutter SDK, Docker engine/images,
 Android SDK and running emulator are reused and remain installed. Abrupt power
 loss or force-killing the launcher can prevent normal cleanup.
+The optional Android lane retains its existing artifact directory and device cleanup;
+cancellation during a native device run was not validated by this launcher change.
 
 Reports are retained under a new ignored
 `tests/developer-workflow/output/python-<timestamp>-<id>/` directory, or the new
