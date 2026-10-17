@@ -2,6 +2,18 @@
 
 ## Start here
 
+From the repository root in Windows PowerShell, run:
+
+```powershell
+python .\scripts\test_vocle.py --source .
+```
+
+The launcher prepares tools and packages, runs the existing tests locally, saves
+reports, and removes its temporary environment. On the first Windows run, approve
+the Windows administrator prompt for WSL. If the report says `RESTART_REQUIRED`,
+restart Windows and run the same command again. Canceling that prompt leaves setup
+`BOOTSTRAP_BLOCKED`; it does not mean any application tests passed or failed.
+
 For a disposable Python session, start with **Python 3.10+** and Git. Run from
 the repository; no Flutter or Docker flags are needed:
 
@@ -84,6 +96,23 @@ also make the launcher exit nonzero.
 the default `full` runs the existing locally supported regression scope. Android,
 provider integration, dirty-source evidence and release limitations below apply
 equally to Python. The script never commits, pushes or opens a pull request.
+
+### Automatic setup validation
+
+[Hosted run 39033345875](https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39033345875)
+passed on candidate `0562b9c0547e939e5b67363cf4949ed2e4387e98`: Windows and
+Ubuntu tooling each passed 13 checks; a freshly downloaded private Linux Docker
+and containerd ran all 17 existing smoke checks and removed their owned data;
+Windows downloaded and executed Node 22.20.0 and pinned Flutter 3.29.3 from scratch
+and removed both. The visual QA report passed. Archive and report checksums,
+source bindings, and cleanup outcomes are recorded in
+[the validation record](developer-qa-evidence/2026-10-17-automatic-runtime/validation.json).
+
+On the developer's Windows machine the WSL administrator prompt was canceled;
+setup reported `BOOTSTRAP_BLOCKED` and cleanup passed. Running tests inside a
+managed WSL guest on that machine remains unverified until OS setup completes.
+These infrastructure results do not clear known application failures, static
+analysis findings, or QA decisions in the full regression scope.
 
 ### Existing PowerShell and Node entry points
 

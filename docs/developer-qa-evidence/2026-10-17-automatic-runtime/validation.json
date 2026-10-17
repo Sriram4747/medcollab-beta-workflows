@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "candidateSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+  "runId": 39033345875,
+  "runUrl": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39033345875",
+  "verification": "PASS",
+  "scope": "Runtime setup, original tooling and existing backend smoke; not full application or release certification",
+  "localPythonContracts": {
+    "passed": 16,
+    "failed": 0
+  },
+  "artifacts": [
+    {
+      "artifactId": 12101556034,
+      "name": "developer-qa-ubuntu-24.04-39033345875-1",
+      "archiveSha256": "5a5493e4146c2fdef0752e67ab1ae92a0ccc45a306bfa38b5301bbb0343b2edc",
+      "reports": [
+        {
+          "scope": "tooling",
+          "session": "PASS",
+          "sessionCleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          },
+          "gate": "PASS",
+          "releaseGate": "NOT_EVALUATED",
+          "integrity": "PASS",
+          "sourceSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "harnessSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "reportChecksum": "814aa6c6efcac708973998fd8bc36e97c6903356366e8cbb34d2a733d6a8e9f7",
+          "counts": {
+            "PASS": 13
+          }
+        },
+        {
+          "scope": "backend-smoke",
+          "session": "PASS",
+          "sessionCleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [
+              {
+                "url": "https://download.docker.com/linux/static/stable/x86_64/docker-29.9.1.tgz",
+                "sha256": "c158ecc55adb3afb01bbd3539ed3b997d20c26dbdc418080506cc1bf5243ff57"
+              }
+            ],
+            "docker": "disposable-linux-engine",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            },
+            "containerd": "disposable-private-socket"
+          },
+          "gate": "PASS",
+          "releaseGate": "NOT_EVALUATED",
+          "integrity": "PASS",
+          "sourceSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "harnessSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "reportChecksum": "9168a06172c8d3b20bdc15e090770c752528452ef516eeb1e7fbc7b11a4655cf",
+          "counts": {
+            "PASS": 17
+          }
+        }
+      ]
+    },
+    {
+      "artifactId": 12101371822,
+      "name": "developer-qa-windows-2022-39033345875-1",
+      "archiveSha256": "9c140479846c6463132992c194c58ce5eb943dcb3894f1dfc04580bb89c5c3a2",
+      "reports": [
+        {
+          "scope": "tooling",
+          "session": "PASS",
+          "sessionCleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          },
+          "gate": "PASS",
+          "releaseGate": "NOT_EVALUATED",
+          "integrity": "PASS",
+          "sourceSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "harnessSha": "0562b9c0547e939e5b67363cf4949ed2e4387e98",
+          "reportChecksum": "cd819aeb2e89057360404507c1295ba4f778f0bd058b69572e07ec860cd654be",
+          "counts": {
+            "PASS": 13
+          }
+        }
+      ],
+      "coldDownloads": {
+        "scope": "bootstrap-cold-downloads",
+        "status": "PASS",
+        "runtimeSetup": {
+          "downloads": [
+            {
+              "url": "https://nodejs.org/dist/v22.20.0/node-v22.20.0-win-x64.zip",
+              "sha256": "bb819d6eb8f5bfda294bbc83a7e4ec6539da67c4233d54b0d655b9248b15e29d"
+            }
+          ],
+          "docker": "NOT_REQUESTED",
+          "cleanup": "PASS",
+          "node": {
+            "kind": "disposable",
+            "version": "22.20.0"
+          },
+          "flutter": {
+            "kind": "disposable",
+            "version": "3.29.3",
+            "commit": "ea121f8859e4b13e47a8f845e4586164519588bc"
+          }
+        },
+        "temporaryDirectoryRemoved": true
+      }
+    }
+  ],
+  "limitations": [
+    "Local Windows WSL administrator prompt was canceled; guest setup/execution remains unverified on this machine.",
+    "WSL is an OS prerequisite outside the Python venv. One-time administrator approval and potentially a restart are required; no reboot is automated.",
+    "Automatic private Docker supports x64 Windows/WSL 2 and Linux. Other platforms require an existing local Linux Docker engine.",
+    "Known application failures are preserved. Android provisioning and provider/manual QA remain outside this launcher change."
+  ],
+  "resolvedValidationFailures": [
+    {
+      "runId": 39023183535,
+      "failure": "Private engine cleanup retained a network namespace mount and selected system containerd",
+      "fix": "Own containerd socket/config/data and cleanup only mounts inside owned runtime directory"
+    },
+    {
+      "runId": 39024042384,
+      "failure": "Fresh Flutter Git checkout exceeded Windows legacy filename limit",
+      "fix": "Command-scoped Git core.longpaths=true for the disposable SDK clone"
+    }
+  ],
+  "localWindowsPlatformAttempt": {
+    "status": "BOOTSTRAP_BLOCKED",
+    "cleanup": "PASS",
+    "runnerExitCode": null,
+    "error": "Windows WSL setup did not complete. See windows-setup.json and setup.log. This command cannot be run due to the error: The operation was canceled by the user.",
+    "temporaryDirectoryRemoved": true
+  },
+  "workflowConclusion": "success",
+  "visualQaReport": "PASS",
+  "verificationMethod": "Read original ZIP JSON members without extracting/executing contents; verified report SHA-256, exact source/harness commit, required outcomes, cleanup and cold SDK execution."
+}
