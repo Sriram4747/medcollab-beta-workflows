@@ -11,6 +11,7 @@ import signal
 import subprocess
 import sys
 import tarfile
+import threading
 import time
 import urllib.request
 import uuid
@@ -39,26 +40,65 @@ def checked(argv, *, env=None, timeout=120, check=True, log=None):
     child = subprocess.Popen(command, env=env, stdin=subprocess.DEVNULL,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              start_new_session=os.name != "nt")
-    try:
-        deadline = time.monotonic() + timeout
-        while True:
-            try:
-                raw, _ = child.communicate(timeout=min(0.2, max(0.01, deadline - time.monotonic())))
-                break
-            except subprocess.TimeoutExpired:
-                if time.monotonic() >= deadline:
-                    raise
-    except BaseException:
+    chunks = []
+
+    def collect():
+        while chunk := child.stdout.read(65536):
+            chunks.append(chunk)
+
+    reader = threading.Thread(target=collect, daemon=True)
+    reader.start()
+    cancelled = False
+    killers = []
+
+    def terminate():
+        if child.poll() is not None:
+            return
         if os.name == "nt":
-            subprocess.run(["taskkill.exe", "/pid", str(child.pid), "/T", "/F"], capture_output=True, timeout=15)
+            killers.append(subprocess.Popen(["taskkill.exe", "/pid", str(child.pid), "/T", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
         else:
             try:
                 os.killpg(child.pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass
-        child.wait(timeout=15)
+
+    def cancel(_signum, _frame):
+        nonlocal cancelled
+        cancelled = True
+        terminate()
+
+    def wait_until(deadline):
+        while True:
+            # Some Windows sandboxes deny taskkill's process lookup. The native
+            # handle returned when spawning this child still permits termination.
+            if child.poll() is None and any(killer.poll() not in (None, 0) for killer in killers):
+                child.kill()
+            try:
+                child.wait(timeout=min(0.2, max(0.01, deadline - time.monotonic())))
+                return
+            except subprocess.TimeoutExpired:
+                if time.monotonic() >= deadline:
+                    raise
+
+    names = [signal.SIGINT, signal.SIGTERM] + ([signal.SIGBREAK] if os.name == "nt" else [])
+    handlers = {name: signal.signal(name, cancel) for name in names}
+    try:
+        wait_until(time.monotonic() + timeout)
+    except BaseException:
+        terminate()
+        wait_until(time.monotonic() + 15)
         raise
-    text = decode(raw)
+    finally:
+        for name, handler in handlers.items():
+            signal.signal(name, handler)
+        for killer in killers:
+            killer.wait(timeout=15)
+        reader.join(timeout=5)
+        if not reader.is_alive():
+            child.stdout.close()
+    if cancelled:
+        raise KeyboardInterrupt
+    text = decode(b"".join(chunks))
     if log:
         with Path(log).open("a", encoding="utf-8") as target:
             target.write(text + "\n")
