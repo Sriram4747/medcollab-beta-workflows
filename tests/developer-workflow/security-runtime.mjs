@@ -13,13 +13,13 @@ process.env.MONGOMS_DOWNLOAD_DIR = '/output/mongo-binaries';
 process.env.MONGOMS_RUNTIME_DOWNLOAD = 'false';
 let mongo, app;
 const attempts = [];
-const startMongo = () => MongoMemoryServer.create({ instance: { ip: '127.0.0.1', port: 27017, args: ['--setParameter', 'ttlMonitorEnabled=false'] } });
+const startMongo = (pauseTTL = false) => MongoMemoryServer.create({ instance: { ip: '127.0.0.1', port: 27017, args: pauseTTL ? ['--setParameter', 'ttlMonitorEnabled=false'] : [] } });
 const authEnvironment = '/tmp/vocle-auth-environment';
 try {
   for (const suite of ['security-media', 'security-data']) {
     // Hosted jobs start separate empty disposable databases. Match that
     // lifecycle; media fixtures must never enter the data suite's preflight.
-    mongo = await startMongo();
+    mongo = await startMongo(suite === 'security-data');
     try {
       attempts.push(await run(process.execPath, [join(backend, 'scripts', suite, 'run.js')], { cwd: backend, env, timeout: 15 * 60 * 1000, log: '/output/' + suite + '.log' }));
     } finally { await mongo.stop(); mongo = null; }

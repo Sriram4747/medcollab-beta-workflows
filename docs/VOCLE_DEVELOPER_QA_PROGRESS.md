@@ -413,3 +413,24 @@ only the eight original synthetic token names from private container tmpfs, then
 removes the token file and memory bindings. Incomplete original suite counts now
 produce an explicit required ERROR row. A full security follow-up is running;
 original preflight errors and cleanup PASS remain preserved.
+
+Live Cloudinary completed locally after the user entered credentials privately:
+**34/34 executed, 26 PASS, eight original observations, zero infrastructure
+failures**. Initial and independent post-job scoped cleanup both proven; no
+blocked network requests, provider allowlist matched, synthetic fixtures only,
+application source unchanged, sanitized artifact hygiene PASS and disposable
+session cleanup PASS. Candidate/harness a0c15e1; application files match the
+functional candidate 9f17388. See cloudinary-live-validation.json (contains no
+cloud name or credentials). The developer does not need to repeat this run.
+
+The corrected security follow-up has completed media 97/97 (67 PASS, 30
+observations) and data 31/31 (23 PASS, eight observations) with healthy original
+infrastructure. Discovery authentication now succeeds; its 691 cases are running.
+The measured follow-up paused Mongo TTL sweeping for all three lanes; the launcher
+now mirrors hosted defaults and pauses it only for the original data lane.
+
+Independent integration run 39101354091 on a0c15e1: Windows, Ubuntu and visual
+report all SUCCESS. The clean native run has built/launched the real test APK and
+recorded FR-MED-08 as executed FAIL (existing permission-denial/framework
+diagnostics retained); remaining native cases are still running. No failure was
+changed into a pass or bypassed.

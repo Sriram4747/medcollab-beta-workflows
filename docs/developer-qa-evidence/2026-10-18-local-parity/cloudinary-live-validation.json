@@ -1,0 +1,33 @@
+{
+  "sourceSha": "a0c15e1aa595a0b59974c6ae2bd17d685f2d53ff",
+  "harnessSha": "a0c15e1aa595a0b59974c6ae2bd17d685f2d53ff",
+  "status": "PASS",
+  "cleanup": "PASS",
+  "providerCleanup": "PASS",
+  "counts": {
+    "registered": 34,
+    "executed": 34,
+    "pass": 26,
+    "observations": 8,
+    "infrastructureFailures": 0
+  },
+  "report": "tests/developer-workflow/output/cloudinary-2026-10-18T05-41-16Z-2b93a58f/vocle-cloudinary-results/results.json",
+  "reportSha256": "baab01295cc23b7e047e0b2b3806c2bdb480df8c9d59653b66d042656d92ed22",
+  "executionMode": "local",
+  "safety": {
+    "positiveAllowlistMatched": true,
+    "approvedTestCloudOnly": true,
+    "network": {
+      "apiRequests": 65,
+      "deliveryRequests": 14,
+      "blocked": 0,
+      "approvedCloudOnly": true
+    },
+    "syntheticFixturesOnly": true,
+    "appSourceUnchanged": true,
+    "appSourceSHA256": "97f2289c191e024e1f1cf6dc2ead50f6a8c2f1e7fee8a23768cfa46fa841e5a5"
+  },
+  "independentCleanupProven": true,
+  "applicationFilesUnchangedSinceFunctionalSource": true,
+  "originalAssertionsChanged": false
+}
