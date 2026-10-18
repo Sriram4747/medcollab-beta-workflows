@@ -434,3 +434,20 @@ report all SUCCESS. The clean native run has built/launched the real test APK an
 recorded FR-MED-08 as executed FAIL (existing permission-denial/framework
 diagnostics retained); remaining native cases are still running. No failure was
 changed into a pass or bypassed.
+
+Added optional `--cloudinary --test-cloud APPROVED_TEST_CLOUD` to the main Python
+launcher. It prompts in the user's terminal before launching noninteractive work,
+keeps credentials/cloud name out of worker config, and imports the live results
+only after validating exact source, original catalog, current provider definition
+hashes, safety journal identity and independent exact-resource cleanup. The actual
+34-case sanitized user run imported successfully through the original reporting,
+QA and evidence pipeline (tooling scope, 53 executed rows, PASS; no application
+release certification). Wrong-source, incomplete catalog, changed definitions and
+unproven cleanup imports are rejected. Contracts now 41 Node and 23 Python PASS.
+
+Discovery's next real run reached case 294 before exposing another missing local
+integration detail: the HTTP backend and discovery byte assertions used different
+upload working directories. They now share the original backend cwd with uploads
+on a dedicated disposable tmpfs, while sources remain read-only. Fresh security
+validation is running with hosted per-lane TTL defaults. Original 294-case report
+and its setup failure remain preserved, including cleanup PASS.

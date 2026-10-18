@@ -26,7 +26,10 @@ try {
   }
   // Exact fixture/auth/discovery sequence from the existing hosted workflow.
   mongo = await startMongo();
-  app = spawn(process.execPath, [join(backend, 'src/server.js')], { cwd: '/tmp', env, stdio: 'ignore' });
+  // Original discovery reads uploaded fixture bytes relative to its cwd. Both
+  // processes share the original backend cwd and a dedicated writable uploads
+  // tmpfs; application sources remain mounted read-only.
+  app = spawn(process.execPath, [join(backend, 'src/server.js')], { cwd: backend, env, stdio: 'ignore' });
   const deadline = Date.now() + 30000;
   let ready = false;
   while (Date.now() < deadline) {

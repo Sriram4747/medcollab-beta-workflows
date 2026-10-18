@@ -6,11 +6,12 @@ import { git, tracked, applicationFile, fingerprint, run, cleanEnvironment } fro
 import { hash, writeEvidence, compareEvidence, assertionExecuted } from './evidence.mjs';
 import { writeQA } from './qa.mjs';
 import { generate as generateDetailedReport } from '../reporting/report.mjs';
+import { providerEvidence } from './cloudinary-evidence.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2), options = {};
 const flags = new Set(['android', 'security', 'ci-checks']);
-const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'docker-proxy', 'gitleaks-bin', 'apk', 'profile']);
+const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'docker-proxy', 'gitleaks-bin', 'cloudinary-output', 'apk', 'profile']);
 for (let i = 0; i < args.length; i++) {
   const key = args[i].replace(/^--/, '');
   if (flags.has(key)) options[key] = true;
@@ -111,7 +112,7 @@ try {
   await command('ci-device-contracts', process.execPath, ['--test', join(harness, 'tests/functional-regression/scripts/ci-contracts.test.mjs'), join(harness, 'tests/functional-regression/scripts/device-contracts.test.mjs')], harness);
   await command('functional-classification', process.execPath, [join(harness, 'tests/functional-regression/src/runner.mjs'), '--self-check'], harness);
   if (options['ci-checks']) {
-    await command('ci-workflow-reporting-contracts', process.execPath, ['--test', ...['developer-workflow/workflow.test.mjs', 'developer-workflow/process.test.mjs', 'developer-workflow/cloudinary-local.test.cjs', 'reporting/report.test.mjs', 'reporting/workflow-adapters.test.mjs'].map(file => join(harness, 'tests', file))], harness);
+    await command('ci-workflow-reporting-contracts', process.execPath, ['--test', ...['developer-workflow/workflow.test.mjs', 'developer-workflow/process.test.mjs', 'developer-workflow/cloudinary-local.test.cjs', 'developer-workflow/cloudinary-evidence.test.mjs', 'reporting/report.test.mjs', 'reporting/workflow-adapters.test.mjs'].map(file => join(harness, 'tests', file))], harness);
     const python = process.env.VIRTUAL_ENV ? join(process.env.VIRTUAL_ENV, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python') : process.platform === 'win32' ? 'python' : 'python3';
     await command('ci-python-environment', python, ['-c', 'import pytest, requests, httpx; print("pytest, requests, and httpx imported successfully")'], harness);
     await command('ci-python-launcher-contracts', python, ['-B', '-m', 'unittest', 'discover', '-s', 'tests/developer-workflow', '-p', 'test_*.py', '-v'], harness);
@@ -217,9 +218,9 @@ try {
   if (options.security || (options.profile || 'full') === 'full') {
     if (options.security && docker?.code === 0 && docker.stdout.trim() === 'linux') {
       const securityOut = join(output, 'security'); await mkdir(securityOut);
-      const securityPrep = await command('security-runtime-prepare', dockerBin, ['run', '--rm', '--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root, true, { infrastructure: true });
+      const securityPrep = await command('security-runtime-prepare', dockerBin, ['run', '--rm', '--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; mkdir -p /target/medcollab-backend/uploads; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root, true, { infrastructure: true });
       if (securityPrep.code === 0) {
-        const securityRun = await command('security-runtime-driver', dockerBin, ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'node', '/harness/tests/developer-workflow/security-runtime.mjs'], root, true, { infrastructure: true });
+        const securityRun = await command('security-runtime-driver', dockerBin, ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec', '--tmpfs', '/target/medcollab-backend/uploads:rw,noexec,nosuid', '--mount', `type=bind,source=${target},target=/target,readonly`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'node', '/harness/tests/developer-workflow/security-runtime.mjs'], root, true, { infrastructure: true });
         const files = ['vocle-media-results', 'vocle-data-results', 'vocle-security-results'];
         for (const dir of files) {
           try {
@@ -242,12 +243,20 @@ try {
         if (securityRun.code !== 0) integrity = 'ERROR';
       }
     } else add('security-runtime', 'BLOCKED', Boolean(options.security), { exclusion: options.security ? 'Requested security runtime requires Linux Docker isolation' : 'Optional: --security reuses existing media, data and 691-case discovery runners in network-none Docker. Cloudinary uses the separate prompted launcher.' });
-    add('provider-accounts', 'BLOCKED', false, { exclusion: 'Private test credentials required: python scripts/test_vocle_cloudinary.py --test-cloud APPROVED_TEST_CLOUD --commit EXACT_SHA. Reuses existing Cloudinary assertions and scoped cleanup.' });
+    if (!options['cloudinary-output']) add('provider-accounts', 'BLOCKED', false, { exclusion: 'Private test credentials required: add --cloudinary --test-cloud APPROVED_TEST_CLOUD, or run scripts/test_vocle_cloudinary.py separately. Reuses existing Cloudinary assertions and scoped cleanup.' });
     add('ios-physical-device', 'BLOCKED', false, { exclusion: 'QA-only: platform hardware/runner required; existing coverage makes no iOS claim' });
     if (options.apk) {
       const apkPath = resolve(options.apk);
       add('submitted-apk', 'BLOCKED', false, { exclusion: 'Arbitrary APK cannot establish source binding or execute instrumented Flutter assertions. Use the existing Android runner to build from the exact SHA.', apk: { sha256: hash(await readFile(apkPath)), bytes: (await lstat(apkPath)).size } });
     }
+  }
+  if (options['cloudinary-output']) {
+    try {
+      const provider = await providerEvidence(resolve(options['cloudinary-output']), sha, harness);
+      await cp(join(resolve(options['cloudinary-output']), 'vocle-cloudinary-results'), join(output, 'cloudinary'), { recursive: true });
+      rows.push(...provider.rows);
+      add('cloudinary-evidence-integrity', 'PASS', true, { executed: true, artifacts: ['cloudinary/'] });
+    } catch (error) { add('cloudinary-evidence-integrity', 'ERROR', true, { error: error.message }); }
   }
   const after = await fingerprint(target, sourcePaths);
   const changedSourceFiles = sourcePaths.filter(file => before.hashes[file] !== after.hashes[file]);

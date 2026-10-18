@@ -24,7 +24,7 @@ from vocle_bootstrap import Bootstrap, SetupRequired
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "docker_proxy", "gitleaks_bin", "apk", "profile")
+VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "docker_proxy", "gitleaks_bin", "cloudinary_output", "apk", "profile")
 ENV_KEYS = {
     "PATH", "PATHEXT", "SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PROGRAMFILES",
     "PROGRAMFILES(X86)", "PROGRAMW6432", "LANG", "LC_ALL", "JAVA_HOME",
@@ -46,12 +46,18 @@ def parse_args(argv=None):
     parser.add_argument("--security", action="store_true", help="Include existing isolated security runtime")
     parser.add_argument("--ci-checks", action="store_true", help="Run existing CI tooling contracts and pinned Gitleaks locally")
     parser.add_argument("--all", action="store_true", help="Include Android, offline security and CI checks; requires --commit for Android provenance")
+    parser.add_argument("--cloudinary", action="store_true", help="Also prompt privately and run the existing live Cloudinary suite")
+    parser.add_argument("--test-cloud", help="Explicitly approved isolated Cloudinary test cloud; used only with --cloudinary")
     parser.add_argument("--profile", choices=("full", "tooling", "backend-smoke", "security"), default="full")
     args = parser.parse_args(argv)
     if args.all:
         args.android = args.security = args.ci_checks = True
     if args.profile == "security":
         args.security = True
+    if args.cloudinary and (not args.commit or not args.test_cloud):
+        parser.error("--cloudinary requires --test-cloud APPROVED_TEST_CLOUD and --commit EXACT_SHA")
+    if args.test_cloud and not args.cloudinary:
+        parser.error("--test-cloud requires --cloudinary")
     if args.android and (not args.commit or args.profile != "full"):
         parser.error("Android validation requires --profile full and --commit EXACT_SHA. Use --commit (git rev-parse HEAD) in PowerShell to test the committed revision.")
     for key in ("source", "output", "previous", "apk"):
@@ -218,6 +224,17 @@ def run_session(args):
         state["node"] = bootstrap.details["node"]["version"]
         config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
         config.update(output=str(output), node=node)
+        if args.cloudinary:
+            # Prompt in the user's terminal before invoking the noninteractive
+            # worker. Neither credentials nor the cloud name enter its config.
+            from test_vocle_cloudinary import parse_args as provider_args, run_session as provider_session
+            provider_output = output / "cloudinary"
+            state["cloudinaryExitCode"] = provider_session(provider_args([
+                "--test-cloud", args.test_cloud, "--commit", args.commit, "--output", str(provider_output)]))
+            if state["cloudinaryExitCode"] == 130:
+                raise KeyboardInterrupt
+            config["cloudinary_output"] = str(provider_output)
+        config.pop("test_cloud", None)
         if args.ci_checks:
             config["gitleaks_bin"] = bootstrap.gitleaks()
             session_python = scratch / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")

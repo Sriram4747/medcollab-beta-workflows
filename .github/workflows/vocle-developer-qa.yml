@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Evidence, comparison, ownership and coverage contracts
-        run: node --test tests/developer-workflow/workflow.test.mjs tests/developer-workflow/process.test.mjs tests/developer-workflow/cloudinary-local.test.cjs
+        run: node --test tests/developer-workflow/workflow.test.mjs tests/developer-workflow/process.test.mjs tests/developer-workflow/cloudinary-local.test.cjs tests/developer-workflow/cloudinary-evidence.test.mjs
       - name: Python disposable-session contracts
         run: python -B -m unittest discover -s tests/developer-workflow -p 'test_*.py' -v
       - name: Detailed report normalization and escaping contracts

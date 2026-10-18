@@ -15,6 +15,17 @@ python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --all
 ```
 
 `--all` selects the existing Android, isolated security and CI tooling checks.
+To also include the approved live Cloudinary suite in the same report, use:
+
+```powershell
+python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --all --cloudinary --test-cloud YOUR_TEST_CLOUD
+```
+
+This prompts privately for provider credentials before running the other lanes.
+Cloudinary remains an explicit selection because it uploads synthetic assets to
+the approved external test account. Its measured source, definitions, complete
+catalog and independent cleanup must validate before evidence can enter the report.
+
 It provisions a private Docker guest/engine, prepares pinned Flutter and package
 caches, creates a fresh Android AVD using the installed SDK/system image, starts
 it headlessly, invokes the original runners and tears down owned resources. The

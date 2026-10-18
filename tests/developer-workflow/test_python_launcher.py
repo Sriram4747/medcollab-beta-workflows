@@ -74,6 +74,15 @@ class PythonLauncherTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 launcher.run_session(args)
 
+    def test_live_provider_requires_explicit_cloud_and_forwards_only_evidence_to_worker(self):
+        with self.assertRaises(SystemExit):
+            launcher.parse_args(["--cloudinary", "--commit", "a" * 40])
+        args = launcher.parse_args(["--cloudinary", "--test-cloud", "synthetic-offline-cloud", "--commit", "a" * 40])
+        config = vars(args) | {"node": "node", "output": "report", "cloudinary_output": "provider-report"}
+        argv = launcher.runner_arguments(config)
+        self.assertIn("--cloudinary-output", argv)
+        self.assertNotIn("synthetic-offline-cloud", argv)
+
     def test_cleanup_removes_owned_readonly_files_and_refuses_other_paths(self):
         scratch = Path(tempfile.mkdtemp(prefix="vocle-python-"))
         readonly = scratch / "readonly.txt"
