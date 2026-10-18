@@ -9,6 +9,7 @@ on:
       - 'tests/reporting/**'
       - 'scripts/Test-Vocle.ps1'
       - 'scripts/test_vocle.py'
+      - 'scripts/test_vocle_cloudinary.py'
       - 'scripts/vocle*'
       - 'scripts/Setup-VocleWsl.ps1'
       - '.github/workflows/vocle-developer-qa.yml'
@@ -39,7 +40,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Evidence, comparison, ownership and coverage contracts
-        run: node --test tests/developer-workflow/workflow.test.mjs tests/developer-workflow/process.test.mjs
+        run: node --test tests/developer-workflow/workflow.test.mjs tests/developer-workflow/process.test.mjs tests/developer-workflow/cloudinary-local.test.cjs
       - name: Python disposable-session contracts
         run: python -B -m unittest discover -s tests/developer-workflow -p 'test_*.py' -v
       - name: Detailed report normalization and escaping contracts

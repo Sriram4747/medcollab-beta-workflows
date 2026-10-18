@@ -12,9 +12,21 @@ function configuration(env = process.env) {
   requireSafe(!/(^|[-_])(prod|production|live)([-_]|$)/i.test(env.CLOUDINARY_CLOUD_NAME), 'PRODUCTION_LIKE_CLOUD');
   requireSafe(env.CLOUDINARY_API_KEY?.trim() && env.CLOUDINARY_API_SECRET?.trim(), 'CREDENTIALS_MISSING');
   requireSafe(env.NODE_ENV === 'test' && env.VOCLE_CLOUDINARY_LIVE === 'isolated-synthetic-only', 'TEST_MODE_REQUIRED');
-  requireSafe(env.GITHUB_REPOSITORY === REPO && env.GITHUB_REF === 'refs/heads/master' && env.GITHUB_EVENT_NAME === 'workflow_dispatch', 'REPOSITORY_REF_EVENT_DENIED');
-  requireSafe(env.GITHUB_WORKFLOW === 'Vocle Real Cloudinary Security', 'WORKFLOW_DENIED');
-  requireSafe(/^\d+$/.test(env.GITHUB_RUN_ID || '') && /^[1-9]\d*$/.test(env.GITHUB_RUN_ATTEMPT || '') && /^[a-f0-9]{40}$/.test(env.GITHUB_SHA || ''), 'RUN_IDENTITY_INVALID');
+  const local = env.VOCLE_CLOUDINARY_LOCAL === 'isolated-synthetic-only';
+  let runId, attempt, source;
+  if (local) {
+    // Local identity is explicit; never impersonate a hosted workflow or allow
+    // the local path inside Actions. All provider/namespace guards still apply.
+    requireSafe(!Object.keys(env).some(key => /^GITHUB_/i.test(key) && env[key]), 'LOCAL_HOSTED_IDENTITY_DENIED');
+    requireSafe(env.VOCLE_LOCAL_APPROVED_CLOUD === env.CLOUDINARY_TEST_CLOUD_NAME, 'LOCAL_CLOUD_APPROVAL_REQUIRED');
+    runId = env.VOCLE_LOCAL_RUN_ID; attempt = '1'; source = env.VOCLE_LOCAL_SOURCE;
+  } else {
+    requireSafe(!env.VOCLE_CLOUDINARY_LOCAL, 'LOCAL_MODE_INVALID');
+    requireSafe(env.GITHUB_REPOSITORY === REPO && env.GITHUB_REF === 'refs/heads/master' && env.GITHUB_EVENT_NAME === 'workflow_dispatch', 'REPOSITORY_REF_EVENT_DENIED');
+    requireSafe(env.GITHUB_WORKFLOW === 'Vocle Real Cloudinary Security', 'WORKFLOW_DENIED');
+    runId = env.GITHUB_RUN_ID; attempt = env.GITHUB_RUN_ATTEMPT; source = env.GITHUB_SHA;
+  }
+  requireSafe(/^\d+$/.test(runId || '') && /^[1-9]\d*$/.test(attempt || '') && /^[a-f0-9]{40}$/.test(source || ''), 'RUN_IDENTITY_INVALID');
   for (const [name, value] of Object.entries(env)) {
     if (!value) continue;
     if (/^CLOUDINARY_/i.test(name)) requireSafe(['CLOUDINARY_TEST_CLOUD_NAME', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'].includes(name), 'FORBIDDEN_ENVIRONMENT');
@@ -25,7 +37,7 @@ function configuration(env = process.env) {
     requireSafe(!fs.readdirSync(directory).some(name => /^\.env($|\.)/.test(name) && !/\.(example|sample|template)$/.test(name)), 'CREDENTIAL_FILE_PRESENT');
   }
   requireSafe(env.RUNNER_TEMP && path.isAbsolute(env.RUNNER_TEMP), 'SCRATCH_REQUIRED');
-  return { runId: env.GITHUB_RUN_ID, attempt: env.GITHUB_RUN_ATTEMPT, source: env.GITHUB_SHA, positiveAllowlistMatched: true, cloud: env.CLOUDINARY_CLOUD_NAME };
+  return { runId, attempt, source, executionMode: local ? 'local' : 'hosted', positiveAllowlistMatched: true, cloud: env.CLOUDINARY_CLOUD_NAME };
 }
 function namespace(root, id) {
   requireSafe(/^medcollab\/security-test\/\d+-[1-9]\d*-[a-f0-9-]{36}$/.test(root), 'NAMESPACE_INVALID');
@@ -38,12 +50,13 @@ function preflight(env = process.env) {
   const c = configuration(env); const out = directory(env); fs.mkdirSync(out, { recursive: true });
   const file = path.join(out, 'safety.json');
   if (!fs.existsSync(file)) {
-    const text = JSON.stringify({ runId: c.runId, attempt: c.attempt, source: c.source, root: `medcollab/security-test/${c.runId}-${c.attempt}-${randomUUID()}`, positiveAllowlistMatched: true, nonProductionMode: true }, null, 2) + '\n';
+    const text = JSON.stringify({ runId: c.runId, attempt: c.attempt, source: c.source, executionMode: c.executionMode, root: `medcollab/security-test/${c.runId}-${c.attempt}-${randomUUID()}`, positiveAllowlistMatched: true, nonProductionMode: true }, null, 2) + '\n';
     for (const secret of [c.cloud, env.CLOUDINARY_API_KEY, env.CLOUDINARY_API_SECRET]) requireSafe(!text.includes(secret), 'NAMESPACE_SECRET_COLLISION');
     fs.writeFileSync(file, text, { flag: 'wx', mode: 0o600 });
   }
   const safety = JSON.parse(fs.readFileSync(file));
   requireSafe(safety.runId === c.runId && safety.attempt === c.attempt && safety.source === c.source, 'JOURNAL_RUN_MISMATCH');
+  requireSafe((safety.executionMode || 'hosted') === c.executionMode, 'JOURNAL_MODE_MISMATCH');
   namespace(safety.root, safety.root + '/check');
   return { ...c, ...safety, out };
 }

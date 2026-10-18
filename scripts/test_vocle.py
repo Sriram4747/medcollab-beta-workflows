@@ -46,10 +46,12 @@ def parse_args(argv=None):
     parser.add_argument("--security", action="store_true", help="Include existing isolated security runtime")
     parser.add_argument("--ci-checks", action="store_true", help="Run existing CI tooling contracts and pinned Gitleaks locally")
     parser.add_argument("--all", action="store_true", help="Include Android, offline security and CI checks; requires --commit for Android provenance")
-    parser.add_argument("--profile", choices=("full", "tooling", "backend-smoke"), default="full")
+    parser.add_argument("--profile", choices=("full", "tooling", "backend-smoke", "security"), default="full")
     args = parser.parse_args(argv)
     if args.all:
         args.android = args.security = args.ci_checks = True
+    if args.profile == "security":
+        args.security = True
     if args.android and (not args.commit or args.profile != "full"):
         parser.error("Android validation requires --profile full and --commit EXACT_SHA. Use --commit (git rev-parse HEAD) in PowerShell to test the committed revision.")
     for key in ("source", "output", "previous", "apk"):
@@ -72,6 +74,7 @@ def session_environment(scratch, environment=None):
         "HOME": "home", "USERPROFILE": "home", "APPDATA": "appdata",
         "LOCALAPPDATA": "localappdata", "PUB_CACHE": "pub-cache",
         "NPM_CONFIG_CACHE": "npm-cache", "GRADLE_USER_HOME": "gradle",
+        "PIP_CACHE_DIR": "pip-cache",
         "TMP": "tmp", "TEMP": "tmp", "TMPDIR": "tmp",
     }
     # Preserve discovery of a preinstalled Android SDK before isolating HOME.
@@ -222,7 +225,7 @@ def run_session(args):
             bootstrap.command([session_python, "-m", "pip", "install", "--disable-pip-version-check", "pytest", "requests", "httpx"], timeout=600)
             _, installed = bootstrap.command([session_python, "-m", "pip", "freeze"])
             bootstrap.details["pythonPackages"] = installed.splitlines()
-        if args.profile in ("full", "backend-smoke"):
+        if args.profile in ("full", "backend-smoke", "security"):
             print("Preparing local Linux container runtime...", flush=True)
             config["docker_bin"] = bootstrap.docker(args.runtime)
             if os.name == "nt" and config["docker_bin"].endswith(".json"):

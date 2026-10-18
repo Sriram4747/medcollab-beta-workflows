@@ -5,6 +5,10 @@ import { join } from 'node:path';
 export const hash = value => createHash('sha256').update(value).digest('hex');
 export const statuses = ['PASS', 'FAIL', 'ERROR', 'BLOCKED', 'NEEDS_DECISION', 'SKIP'];
 export const gate = rows => ['ERROR', 'FAIL', 'BLOCKED', 'NEEDS_DECISION', 'SKIP'].find(s => rows.some(r => r.required && r.status === s)) || 'PASS';
+export function assertionExecuted(row) {
+  if (!row || ['BLOCKED', 'SKIP'].includes(row.status) || ['SETUP', 'DEVICE_PREREQUISITE', 'INVALID_CASE_ID', 'DEPENDENCY'].includes(row.errorCategory)) return false;
+  return typeof row.executed === 'boolean' ? row.executed : true;
+}
 const xml = value => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 export const json = value => JSON.stringify(value, null, 2) + '\n';
 

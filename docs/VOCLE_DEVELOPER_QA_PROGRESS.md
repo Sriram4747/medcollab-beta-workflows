@@ -364,3 +364,42 @@ and manifest bytes remain unchanged. The first `--all` smoke of argument forward
 found `--ci_checks` instead of `--ci-checks`; fixed and extended the forwarding
 contract. That attempt stopped before test execution and cleaned up PASS. Gitleaks
 now scans the selected candidate's ancestry with the fingerprinted harness config.
+
+### October 18 measured local execution and provider preparation
+
+Selected application commit: `9f1738809d2d0ab2bd04f5b45938ec312827bdd1`;
+uncommitted application changes were excluded. First full run:
+`python-2026-10-18T04-58-30Z-ba98396d`.
+Backend: 117 PASS, 10 FAIL, 18 NEEDS_DECISION, two setup errors; retained sanity
+48/48 PASS. Flutter catalog: 15 PASS, 14 FAIL, three NEEDS_DECISION, no setup errors.
+Retained Flutter: 33/33 PASS. Existing Dart analysis findings retained. Local CI
+contracts: 38 Node and 22 Python PASS; Gitleaks: zero findings across 235 commits.
+
+The two runtime/persistence setup errors came from Mongo startup on Windows
+mounted storage. Moved only runtime database files to the owned guest's Linux
+disk; original FR-RUN-01 and FR-RUN-02 both PASS on a focused rerun with unchanged
+assertions and startup deadlines. Evidence: `runtime-storage-followup.json`.
+
+Android's Java Gradle distribution download timed out. Added official pinned
+Gradle archive verification and disposable wrapper-cache preparation; an actual
+native build and handoff seed subsequently ran. Full Android follow-up is in
+progress. A one-off attempt to copy caches concurrently with primary cleanup
+produced incomplete caches and zero native executions; preserved its ERROR report
+and discarded the copied caches. The next validation uses fresh caches only.
+The first combined report also exposed the adapter reading native `results`
+instead of the original `cases` schema, aborting before security execution.
+Corrected that adapter and added a security-only profile to finish the original
+security suites independently. No original assertion or expectation changed.
+
+Hosted integration on source/harness 9f17388: Windows, Ubuntu and visual report
+all SUCCESS (run 39098933138). Verified downloaded artifact checksums, source
+bindings, 18/18 tooling rows, Linux real backend smoke 22/22 and runtime cleanup;
+Windows cold Node/Flutter installation and cleanup PASS. See hosted-validation.json.
+
+User confirmed an isolated Cloudinary test cloud is available. Added explicit
+local identity/approval mode while preserving hosted guards, provider assertions,
+synthetic fixtures, exact-resource cleanup and artifact hygiene. The dedicated
+Python launcher prompts for credentials privately, never reads application .env,
+and installs locked packages without provider credentials. Its actual offline
+installation/self-test/transport validation and disposable cleanup PASS. Live
+provider execution awaits the user's cloud name and hidden terminal entry.

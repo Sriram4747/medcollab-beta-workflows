@@ -3,12 +3,20 @@ import assert from 'node:assert/strict';
 import { mkdtemp, rm, readFile, writeFile, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { writeEvidence, verifyEvidence, compareEvidence, compareReports, gate, hash } from './evidence.mjs';
+import { writeEvidence, verifyEvidence, compareEvidence, compareReports, gate, hash, assertionExecuted } from './evidence.mjs';
 import { defects } from './qa.mjs';
 import { validateCoverage } from './coverage-policy.mjs';
 import { validateSubmission } from './verify-submission.mjs';
 
 const caseRow = (id, status, extra = {}) => ({ id, status, required: true, executed: true, module: 'AUTH', expected: 'Synthetic request returns authorized identity', definitionFingerprint: 'definition-v1', environmentFingerprint: 'environment-v1', ...extra });
+test('setup errors and dependency blocks never inflate actual assertion execution', () => {
+  assert.equal(assertionExecuted({ id: 'FR-AUTH-01', status: 'ERROR', errorCategory: 'SETUP', error: 'Backend health timed out' }), false);
+  assert.equal(assertionExecuted({ status: 'BLOCKED', errorCategory: 'DEPENDENCY' }), false);
+  assert.equal(assertionExecuted({ status: 'SKIP' }), false);
+  assert.equal(assertionExecuted(undefined), false);
+  assert.equal(assertionExecuted({ status: 'ERROR', executed: false }), false);
+  for (const status of ['PASS', 'FAIL', 'NEEDS_DECISION']) assert.equal(assertionExecuted({ status }), true);
+});
 function report(results, sha = 'a'.repeat(40)) {
   return { scope: 'synthetic-fixture', source: { sha, kind: 'commit', fingerprint: 'b'.repeat(64), verified: true }, harness: { sha: 'c'.repeat(40), fingerprint: 'd'.repeat(64), verified: true }, integrity: 'PASS', environment: { node: '22', synthetic: true }, results };
 }

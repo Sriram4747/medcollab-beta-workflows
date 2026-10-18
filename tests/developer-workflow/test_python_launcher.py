@@ -45,7 +45,7 @@ class PythonLauncherTests(unittest.TestCase):
             scratch = Path(directory)
             env = launcher.session_environment(scratch, {"PATH": "runtime-path", "PATHEXT": ".EXE;.BAT;.CMD", "HOME": directory,
                                                         "MONGODB_URI": "must-not-leak", "GITHUB_TOKEN": "must-not-leak"})
-            for key in ("PUB_CACHE", "NPM_CONFIG_CACHE", "GRADLE_USER_HOME", "HOME", "TMPDIR", "VIRTUAL_ENV", "PSModuleAnalysisCachePath"):
+            for key in ("PUB_CACHE", "NPM_CONFIG_CACHE", "PIP_CACHE_DIR", "GRADLE_USER_HOME", "HOME", "TMPDIR", "VIRTUAL_ENV", "PSModuleAnalysisCachePath"):
                 self.assertTrue(Path(env[key]).is_relative_to(scratch))
             self.assertNotIn("MONGODB_URI", env)
             self.assertNotIn("GITHUB_TOKEN", env)

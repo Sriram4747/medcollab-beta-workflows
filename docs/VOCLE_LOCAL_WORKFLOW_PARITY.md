@@ -48,7 +48,7 @@ describe a device result from HEAD as validation of different uncommitted bytes.
 | Media security | Existing manifest/check/self-test and `security-media/run.js` | Network-none container with synthetic data |
 | Data security | Existing manifest/check/self-test and `security-data/run.js` | Same isolation; original observations preserved |
 | Backend environment/discovery | Original fixtures, fixture verification, auth smoke, 691-case discovery and coverage report | Started against disposable Express/Mongo; no production credentials |
-| Real Cloudinary security | Existing manifest/check/self-test/transport test offline | Live provider cases require an approved isolated test cloud and credentials; not supplied by local automation |
+| Real Cloudinary security | Existing manifest/check/self-test/transport test; explicit local provider launcher below | 34 live cases require the user's isolated test cloud and hidden credential entry |
 | Security environment | Existing `pytest`, `requests`, `httpx` package import check | Packages installed in the disposable venv; actual backend Docker execution supplies the runtime check |
 | Developer QA integration | Original workflow/process, Python lifecycle/bootstrap, reporting and adapter contracts | `--ci-checks`, included by `--all` |
 | Secret Scan | Official Gitleaks 8.30.1, pinned archive checksum, redacted full Git history scan | Local findings retain a failing gate; GitHub action permissions/artifact operations are hosted concerns |
@@ -59,6 +59,46 @@ filesystem. Output is retained on Windows. Original assertions still use
 `--network none`, read-only sources, the existing provider guard and unchanged
 startup deadlines. Windows tools keep `PATHEXT` so Flutter can resolve executables.
 Docker arguments are passed through native Python rather than a batch shell.
+Mongo restart/persistence data uses a private Linux disk nested under the evidence
+mount. It is removed with the private guest. Gradle 8.10.2 is verified by SHA256
+and prepared in the disposable wrapper cache before the Android build.
+
+## Real Cloudinary tests
+
+Run this separately for the approved isolated test cloud:
+
+```powershell
+python .\scripts\test_vocle_cloudinary.py --test-cloud YOUR_TEST_CLOUD --commit (git rev-parse HEAD)
+```
+
+The script prompts for the API key and API secret with hidden input in your own
+terminal. Do not put them in chat, command arguments or credential files. It
+installs the locked backend packages without credentials, then passes the entered
+credentials only to the existing guarded provider processes. Only synthetic
+assets are uploaded; the original broker deletes and verifies its exact recorded
+resources. Independent cleanup and artifact hygiene run even when tests fail.
+
+The explicit local guard mode records local source/run identity and refuses any
+GitHub environment identity. The existing hosted repository/ref/event/workflow
+restrictions still apply in hosted mode. The provider assertions, network
+allowlist, manifests and resource boundaries are reused.
+
+Reports are under `tests/developer-workflow/output/cloudinary-*/`. If cleanup is
+unproven, retry the recorded resource journal with the same cloud and source:
+
+```powershell
+python .\scripts\test_vocle_cloudinary.py --test-cloud YOUR_TEST_CLOUD --commit EXACT_SOURCE_SHA --resume-cleanup PATH_TO_PREVIOUS_VOCLE_CLOUDINARY_RESULTS
+```
+
+`--offline-check` exercises installation and the existing offline safety and
+transport tests without credentials or provider calls. This does not count as
+execution of the 34 live provider cases.
+
+To rerun only the existing local security suites after a functional run:
+
+```powershell
+python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --profile security
+```
 
 ## Reports
 
@@ -74,5 +114,8 @@ application PASS. GitHub still independently validates submitted commits.
 After the October 18 reboot, the actual private WSL engine started. Validation
 found and corrected native Docker argument transport, Windows executable lookup
 and slow backend imports across Windows mounts. A fresh Android AVD booted and was
-removed successfully. Full catalog/native/security validation is in progress;
-the progress log and measured evidence are updated when execution completes.
+removed successfully. The first full attempt measured 147 backend cases (two
+setup errors) and all 32 Flutter cases, plus 33 retained Flutter tests and the
+existing CI checks. Both backend setup errors passed a focused rerun after moving
+Mongo persistence onto the Linux disk. Original application failures and reports
+remain preserved. Android/security follow-up validation is in progress.

@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname, sep } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { git, tracked, applicationFile, fingerprint, run, cleanEnvironment } from './process.mjs';
-import { hash, writeEvidence, compareEvidence } from './evidence.mjs';
+import { hash, writeEvidence, compareEvidence, assertionExecuted } from './evidence.mjs';
 import { writeQA } from './qa.mjs';
 import { generate as generateDetailedReport } from '../reporting/report.mjs';
 
@@ -17,7 +17,8 @@ for (let i = 0; i < args.length; i++) {
   else if (values.has(key) && args[i + 1] && !args[i + 1].startsWith('--')) options[key] = args[++i];
   else throw new Error('Unknown or incomplete argument: ' + args[i]);
 }
-if (!['full', 'tooling', 'backend-smoke'].includes(options.profile || 'full')) throw new Error('Profile must be full, tooling or backend-smoke');
+if (!['full', 'tooling', 'backend-smoke', 'security'].includes(options.profile || 'full')) throw new Error('Profile must be full, tooling, backend-smoke or security');
+if (options.profile === 'security') options.security = true;
 const source = resolve(options.source || root);
 const output = resolve(options.output || join(root, 'tests/developer-workflow/output', new Date().toISOString().replace(/[:.]/g, '-') + '-' + randomUUID().slice(0, 8)));
 // Fresh outputs prevent stale reports or pass markers being reused.
@@ -26,7 +27,7 @@ await mkdir(output, { recursive: false });
 await mkdir(join(output, 'diagnostics'));
 const catalog = JSON.parse(await readFile(join(root, 'tests/functional-regression/catalog.json'))).cases;
 const rows = [], commandLine = 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
-let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, integrity = 'PASS', environment = {};
+let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, docker, integrity = 'PASS', environment = {};
 const ownedContainers = [];
 const dockerOption = options['docker-bin'] || 'docker';
 const dockerBin = /[\\/]/.test(dockerOption) ? resolve(dockerOption) : dockerOption;
@@ -97,7 +98,7 @@ try {
   const harnessSha = git(root, ['rev-parse', 'HEAD']);
   await clone(root, harness, harnessSha);
   const harnessPaths = [...tracked(root), ...git(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean)]
-    .filter(f => f === '.gitleaks.toml' || /^(tests\/(functional-regression|sanity|developer-workflow|reporting)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_(bootstrap|android)\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
+    .filter(f => f === '.gitleaks.toml' || /^(tests\/(functional-regression|sanity|developer-workflow|reporting)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle(?:_cloudinary)?\.py$|vocle_(bootstrap|android)\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
     .filter(f => !/\/(node_modules|output)\//.test(f));
   await overlay(root, harnessPaths, harness);
   harnessInfo = { sha: harnessSha, ...(await fingerprint(harness, harnessPaths)), verified: true };
@@ -110,7 +111,7 @@ try {
   await command('ci-device-contracts', process.execPath, ['--test', join(harness, 'tests/functional-regression/scripts/ci-contracts.test.mjs'), join(harness, 'tests/functional-regression/scripts/device-contracts.test.mjs')], harness);
   await command('functional-classification', process.execPath, [join(harness, 'tests/functional-regression/src/runner.mjs'), '--self-check'], harness);
   if (options['ci-checks']) {
-    await command('ci-workflow-reporting-contracts', process.execPath, ['--test', ...['developer-workflow/workflow.test.mjs', 'developer-workflow/process.test.mjs', 'reporting/report.test.mjs', 'reporting/workflow-adapters.test.mjs'].map(file => join(harness, 'tests', file))], harness);
+    await command('ci-workflow-reporting-contracts', process.execPath, ['--test', ...['developer-workflow/workflow.test.mjs', 'developer-workflow/process.test.mjs', 'developer-workflow/cloudinary-local.test.cjs', 'reporting/report.test.mjs', 'reporting/workflow-adapters.test.mjs'].map(file => join(harness, 'tests', file))], harness);
     const python = process.env.VIRTUAL_ENV ? join(process.env.VIRTUAL_ENV, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python') : process.platform === 'win32' ? 'python' : 'python3';
     await command('ci-python-environment', python, ['-c', 'import pytest, requests, httpx; print("pytest, requests, and httpx imported successfully")'], harness);
     await command('ci-python-launcher-contracts', python, ['-B', '-m', 'unittest', 'discover', '-s', 'tests/developer-workflow', '-p', 'test_*.py', '-v'], harness);
@@ -127,7 +128,7 @@ try {
   else add('sanity-self-check', 'BLOCKED', true, { exclusion: 'Pinned sanity dependencies unavailable' });
   if (['full', 'backend-smoke'].includes(options.profile || 'full')) {
     // Backend runtime uses precisely the existing CI network-none preparation and runners.
-    const docker = await execute(dockerBin, ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
+    docker = await execute(dockerBin, ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
     environment.docker = docker.code === 0 ? docker.stdout.trim() : 'unavailable';
     const smoke = options.profile === 'backend-smoke';
     const backend = smoke ? [{ id: 'harness-smoke', module: 'HARNESS', tier: 'B' }] : catalog.filter(c => c.tier === 'B');
@@ -150,7 +151,7 @@ try {
         if (new Set(observed.map(r => r.id)).size !== observed.length || observed.some(r => !backend.some(c => c.id === r.id))) throw new Error('Backend report IDs duplicated or unexpected');
         for (const c of backend) {
           const actual = observed.find(r => r.id === c.id);
-          add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: Boolean(actual), artifacts: ['backend/'], error: actual?.error || (!actual ? 'No result for selected ID' : undefined) });
+          add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: assertionExecuted(actual), artifacts: ['backend/'], error: actual?.error || (!actual ? 'No result for selected ID' : undefined) });
         }
         const clean = reports.length > 0 && reports.every(r => r.cleanup?.status === 'PASS' && r.complete && (smoke || (r.targetSha === sha && r.harnessSha === harnessInfo.sha))) && (await readdir(join(backendOut, 'runtime')).catch(() => [])).length === 0;
         add('backend-evidence-integrity', clean ? 'PASS' : 'ERROR', true, { executed: true, error: clean ? undefined : 'Incomplete module report, source mismatch or cleanup failure' });
@@ -185,7 +186,7 @@ try {
           const report = JSON.parse(await readFile(join(output, 'flutter.json')));
           for (const c of catalog.filter(c => c.tier === 'F')) {
             const actual = report.cases.find(r => r.id === c.id);
-            add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: Boolean(actual), artifacts: ['flutter.ndjson', 'flutter.json'], error: actual?.evidence || (!actual ? 'Missing Flutter case' : undefined) });
+            add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: assertionExecuted(actual), artifacts: ['flutter.ndjson', 'flutter.json'], error: actual?.evidence || (!actual ? 'Missing Flutter case' : undefined) });
           }
           if (tests.error || tests.timedOut || (tests.code !== 0 && report.cases.every(r => r.status === 'PASS'))) add('flutter-driver', 'ERROR', true, { executed: true, error: 'Flutter driver failure/timeout inconsistent with report' });
         }
@@ -203,11 +204,18 @@ try {
       if (deviceReport?.reportDirectory) {
         const report = JSON.parse(await readFile(join(deviceReport.reportDirectory, 'results.json')));
         await cp(deviceReport.reportDirectory, join(output, 'android'), { recursive: true });
-        for (const c of catalog.filter(c => c.tier === 'D')) { const actual = report.results.find(r => r.id === c.id); add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: Boolean(actual?.executed), artifacts: ['android/'] }); }
+        for (const c of catalog.filter(c => c.tier === 'D')) { const actual = report.cases.find(r => r.id === c.id); add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: assertionExecuted(actual), artifacts: ['android/'] }); }
       } else unavailable(catalog.filter(c => c.tier === 'D'), 'Android runner produced no usable report', true);
     } else unavailable(catalog.filter(c => c.tier === 'D'), options.android ? 'Existing Android runner requires a committed source revision available in this harness checkout' : 'Optional Android lane: rerun with --android on an isolated emulator', Boolean(options.android));
     add('backend-legacy-jest', 'BLOCKED', false, { exclusion: 'Two retained Jest files exist, but Jest and a Jest runner are absent from the lockfile; backend npm test is a placeholder. No assertion execution claimed.' });
-    if (options.security && docker.code === 0 && docker.stdout.trim() === 'linux') {
+    }
+  }
+  if (options.profile === 'security') {
+    docker = await execute(dockerBin, ['info', '--format', '{{.OSType}}'], { env, timeout: 20000 });
+    environment.docker = docker.code === 0 ? docker.stdout.trim() : 'unavailable';
+  }
+  if (options.security || (options.profile || 'full') === 'full') {
+    if (options.security && docker?.code === 0 && docker.stdout.trim() === 'linux') {
       const securityOut = join(output, 'security'); await mkdir(securityOut);
       const securityPrep = await command('security-runtime-prepare', dockerBin, ['run', '--rm', '--mount', `type=bind,source=${target},target=/target`, '--mount', `type=bind,source=${harness},target=/harness,readonly`, '--mount', `type=bind,source=${securityOut},target=/output`, '-e', 'HOME=/tmp', image, 'sh', '-ec', 'cd /target/medcollab-backend && npm ci --ignore-scripts; node /harness/tests/functional-regression/scripts/prepare-mongo.mjs /target /output'], root, true, { infrastructure: true });
       if (securityPrep.code === 0) {
@@ -235,7 +243,6 @@ try {
     if (options.apk) {
       const apkPath = resolve(options.apk);
       add('submitted-apk', 'BLOCKED', false, { exclusion: 'Arbitrary APK cannot establish source binding or execute instrumented Flutter assertions. Use the existing Android runner to build from the exact SHA.', apk: { sha256: hash(await readFile(apkPath)), bytes: (await lstat(apkPath)).size } });
-    }
     }
   }
   const after = await fingerprint(target, sourcePaths);

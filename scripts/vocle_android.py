@@ -1,6 +1,7 @@
 """Prepare an owned Android emulator for the existing eight-case runner."""
 
 import os
+import hashlib
 from pathlib import Path
 import shutil
 import socket
@@ -8,7 +9,7 @@ import subprocess
 import time
 import uuid
 
-from vocle_bootstrap import SetupRequired
+from vocle_bootstrap import SetupRequired, LOCK, download, extract
 
 
 class AndroidRuntime:
@@ -37,6 +38,7 @@ class AndroidRuntime:
         truststore = self.scratch / "android-truststore.jks"
         shutil.copyfile(java / "lib/security/cacerts", truststore)
         self.env["VOCLE_ANDROID_TRUSTSTORE"] = str(truststore)
+        self.prepare_gradle()
         _, devices = self.command([self.adb, "devices"])
         if any(line.strip() and not line.startswith(("List of devices", "*")) for line in devices.splitlines()):
             raise SetupRequired("Close other Android emulators and disconnect physical devices before the isolated Android run.")
@@ -87,6 +89,36 @@ class AndroidRuntime:
                 return
             time.sleep(2)
         raise SetupRequired("Owned Android emulator did not boot in five minutes; see android-emulator.log")
+
+    def prepare_gradle(self):
+        asset = LOCK["gradle"]
+        # Gradle's wrapper keys its distribution cache by base-36 MD5 of the URL.
+        value = int.from_bytes(hashlib.md5(asset["wrapperUrl"].encode()).digest(), "big")
+        key = ""
+        while value:
+            value, remainder = divmod(value, 36)
+            key = "0123456789abcdefghijklmnopqrstuvwxyz"[remainder] + key
+        filename = asset["wrapperUrl"].rsplit("/", 1)[-1]
+        folder = filename.removesuffix(".zip")
+        user_cache = Path(os.environ.get("GRADLE_USER_HOME") or (Path(os.environ.get("USERPROFILE") or os.environ.get("HOME") or "~") / ".gradle"))
+        cached = user_cache / "wrapper/dists" / folder / key / filename
+        archive = None
+        if cached.is_file():
+            with cached.open("rb") as stream:
+                digest = hashlib.sha256()
+                while chunk := stream.read(1024 * 1024):
+                    digest.update(chunk)
+            if digest.hexdigest() == asset["sha256"]:
+                archive = cached
+        if archive is None:
+            archive = download(asset, self.scratch / filename)
+        destination = Path(self.env["GRADLE_USER_HOME"]) / "wrapper/dists" / folder / key
+        destination.mkdir(parents=True, exist_ok=True)
+        extended = Path("\\\\?\\" + str(destination.resolve())) if os.name == "nt" else destination
+        print("Preparing verified Gradle " + asset["version"] + " in the disposable cache...", flush=True)
+        extract(archive, extended)
+        (destination / (filename + ".ok")).touch()
+        self.state["gradle"] = {"version": asset["version"], "sha256": asset["sha256"], "source": "verified-existing-archive" if archive == cached else "verified-download"}
 
     def close(self):
         try:

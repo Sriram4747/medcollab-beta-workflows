@@ -195,6 +195,7 @@ def docker_proxy(config_file, args):
     prefix = ([config["wsl"], "--distribution", config["distribution"], "--user", "root", "--exec"]
               if config["mode"] == "wsl" else [])
     workspaces = {}
+    runtime_mount = None
     if config["mode"] == "wsl" and config.get("workspaceRoot"):
         for index, arg in enumerate(args):
             if index and args[index - 1] == "--mount":
@@ -208,7 +209,17 @@ def docker_proxy(config_file, args):
                     script = 'set -eu; if [ ! -f "$2/.vocle-mirror-ready" ]; then mkdir -p "$2"; tar -C "$1" --exclude=node_modules -cf "$2/.vocle-source.tar" .; tar -C "$2" -xf "$2/.vocle-source.tar"; rm "$2/.vocle-source.tar"; touch "$2/.vocle-mirror-ready"; fi'
                     subprocess.run(prefix + ["sh", "-c", script, "vocle-mirror", windows_mount(source), private], check=True)
                     workspaces[source] = private
-    command = prefix + [config["docker"], "--config", config["clientConfig"], "--host", config["socket"]] + proxy_args(args, config["mode"], workspaces)
+                elif source and destination == "/output":
+                    # Restart/persistence cases use /output/runtime for Mongo
+                    # data. Keep real database files on the private Linux disk;
+                    # NTFS bind mount writes can exceed Mongo's startup deadline.
+                    private = config["workspaceRoot"] + "/runtime/" + hashlib.sha256(source.encode()).hexdigest()[:16]
+                    subprocess.run(prefix + ["mkdir", "-p", private], check=True)
+                    runtime_mount = "type=bind,source=" + private + ",target=/output/runtime"
+    forwarded = proxy_args(args, config["mode"], workspaces)
+    if runtime_mount and forwarded and forwarded[0] == "run":
+        forwarded[1:1] = ["--mount", runtime_mount]
+    command = prefix + [config["docker"], "--config", config["clientConfig"], "--host", config["socket"]] + forwarded
     return subprocess.call(command)
 
 

@@ -1,0 +1,40 @@
+{
+  "sourceSha": "9f1738809d2d0ab2bd04f5b45938ec312827bdd1",
+  "harnessSha": "9f1738809d2d0ab2bd04f5b45938ec312827bdd1",
+  "scope": "Focused original runtime module following Windows-mount setup errors in the full run",
+  "originalFailuresPreserved": true,
+  "originalFullReport": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d",
+  "report": "tests/developer-workflow/output/runtime-linux-storage-validation-2026-10-18/runtime-localruntimestorage/results.json",
+  "reportSha256": "d618ac7cd95b96d099ef0fe55d9f4bdda26d09b53810e9d493485da980a17a18",
+  "tally": {
+    "PASS": 2,
+    "FAIL": 0,
+    "ERROR": 0,
+    "BLOCKED": 0,
+    "NEEDS_DECISION": 0,
+    "SKIP": 0
+  },
+  "cases": [
+    {
+      "id": "FR-RUN-01",
+      "module": "RUN",
+      "status": "PASS",
+      "durationMs": 1632,
+      "error": ""
+    },
+    {
+      "id": "FR-RUN-02",
+      "module": "RUN",
+      "status": "PASS",
+      "durationMs": 12062,
+      "error": ""
+    }
+  ],
+  "cleanup": {
+    "status": "PASS",
+    "backendStopped": true,
+    "mongoStopped": true,
+    "runtimeRemoved": true
+  },
+  "change": "Private WSL Linux disk for /output/runtime; unchanged assertions and deadlines"
+}

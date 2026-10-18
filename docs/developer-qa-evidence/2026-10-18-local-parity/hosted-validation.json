@@ -1,0 +1,102 @@
+{
+  "runId": 39098933138,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39098933138",
+  "candidateSha": "9f1738809d2d0ab2bd04f5b45938ec312827bdd1",
+  "status": "PASS",
+  "scope": "Independent tooling, runtime smoke and cold SDK setup; full local catalog results recorded separately",
+  "artifacts": [
+    {
+      "platform": "windows",
+      "archiveSha256": "4ec3b56559256797c52cbc7550555d48bc47846098fe11f545ad9450b5f5f45e",
+      "reports": [
+        {
+          "scope": "tooling",
+          "counts": {
+            "PASS": 18
+          },
+          "reportChecksum": "65a09204869e8e4b9a9c3a626aac3fdc791f5389302289c8d038c46a3a0ae292",
+          "cleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          }
+        }
+      ],
+      "coldNodeFlutter": {
+        "scope": "bootstrap-cold-downloads",
+        "status": "PASS",
+        "runtimeSetup": {
+          "downloads": [
+            {
+              "url": "https://nodejs.org/dist/v22.20.0/node-v22.20.0-win-x64.zip",
+              "sha256": "bb819d6eb8f5bfda294bbc83a7e4ec6539da67c4233d54b0d655b9248b15e29d"
+            }
+          ],
+          "docker": "NOT_REQUESTED",
+          "cleanup": "PASS",
+          "node": {
+            "kind": "disposable",
+            "version": "22.20.0"
+          },
+          "flutter": {
+            "kind": "disposable",
+            "version": "3.29.3",
+            "commit": "ea121f8859e4b13e47a8f845e4586164519588bc"
+          }
+        },
+        "temporaryDirectoryRemoved": true
+      }
+    },
+    {
+      "platform": "linux",
+      "archiveSha256": "cebe258c79cf80956d48c1d2014670b99768b48695246286b8445e8cd3fd870a",
+      "reports": [
+        {
+          "scope": "tooling",
+          "counts": {
+            "PASS": 18
+          },
+          "reportChecksum": "f246da0728fc6b8e6746b05731e2fadcaddc7597bf9c7eb5aefac93901fe56fc",
+          "cleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          }
+        },
+        {
+          "scope": "backend-smoke",
+          "counts": {
+            "PASS": 22
+          },
+          "reportChecksum": "1f99af646da938d73b1b099a07b62caf0904bcfe0dc4bd92246f1f7edc23fc23",
+          "cleanup": "PASS",
+          "runtimeSetup": {
+            "downloads": [
+              {
+                "url": "https://download.docker.com/linux/static/stable/x86_64/docker-29.9.1.tgz",
+                "sha256": "c158ecc55adb3afb01bbd3539ed3b997d20c26dbdc418080506cc1bf5243ff57"
+              }
+            ],
+            "docker": "disposable-linux-engine",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            },
+            "containerd": "disposable-private-socket"
+          }
+        }
+      ]
+    }
+  ]
+}
