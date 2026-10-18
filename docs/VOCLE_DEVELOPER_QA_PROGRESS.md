@@ -451,3 +451,18 @@ upload working directories. They now share the original backend cwd with uploads
 on a dedicated disposable tmpfs, while sources remain read-only. Fresh security
 validation is running with hosted per-lane TTL defaults. Original 294-case report
 and its setup failure remain preserved, including cleanup PASS.
+
+Fresh isolated security validation completed: **97 media + 31 data + 691 API
+discovery = 819 suite executions**. Media 67 PASS / 30 observations; data 23 PASS /
+eight observations; discovery 635 PASS / 56 observations. All three original
+reports show full execution and no infrastructure failure. Combined security
+gate, source integrity, harness integrity and disposable cleanup PASS. Original
+data artifact hygiene/completeness check also PASS and is now invoked automatically
+after its runner. No provider credentials entered the Docker runtime.
+
+The native run encountered intermittent driver-extension connection timeouts
+after successful earlier cases. Completed PASS/FAIL results remain unchanged.
+Queued a once-only focused retry of unexecuted startup errors after full cleanup,
+using a fresh four-core / 4 GB AVD (host has 64 GB RAM, about 30 GB free). Only
+immutable completed Gradle module artifacts and hosted Pub packages were copied
+before cleanup; no mutable transforms, indexes or locks enter the retry cache.

@@ -22,6 +22,7 @@ try {
     mongo = await startMongo(suite === 'security-data');
     try {
       attempts.push(await run(process.execPath, [join(backend, 'scripts', suite, 'run.js')], { cwd: backend, env, timeout: 15 * 60 * 1000, log: '/output/' + suite + '.log' }));
+      if (suite === 'security-data') attempts.push(await run(process.execPath, [join(backend, 'scripts', suite, 'check.js'), '--artifacts'], { cwd: backend, env, timeout: 60000, log: '/output/' + suite + '-artifact-hygiene.log' }));
     } finally { await mongo.stop(); mongo = null; }
   }
   // Exact fixture/auth/discovery sequence from the existing hosted workflow.

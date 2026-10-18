@@ -57,7 +57,7 @@ class AndroidRuntime:
         self.command([managers[-1], "create", "avd", "--force", "--name", name, "--path", directory,
                       "--package", package, "--device", "pixel"], timeout=120, input_text="no\n")
         with (directory / "config.ini").open("a", encoding="utf-8") as config:
-            config.write("\nhw.ramSize=2048\nhw.cpu.ncore=2\ndisk.dataPartition.size=4G\n")
+            config.write("\nhw.ramSize=4096\nhw.cpu.ncore=4\ndisk.dataPartition.size=4G\n")
         port = None
         for candidate in range(5580, 5650, 2):
             with socket.socket() as console, socket.socket() as transport:
@@ -77,6 +77,7 @@ class AndroidRuntime:
                                         env=self.env, stdin=subprocess.DEVNULL, stdout=self.log,
                                         stderr=subprocess.STDOUT, **({"creationflags": subprocess.CREATE_NO_WINDOW} if os.name == "nt" else {}))
         self.state.update(kind="disposable-emulator", serial=self.serial, systemImage=package,
+                          ramMb=4096, cpuCores=4,
                           sdk=str(sdk), java=str(java), userAvdReused=False, cleanup="PENDING")
         deadline = time.monotonic() + 300
         while time.monotonic() < deadline:
