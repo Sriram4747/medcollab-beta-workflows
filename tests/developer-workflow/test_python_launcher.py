@@ -83,6 +83,12 @@ class PythonLauncherTests(unittest.TestCase):
         self.assertIn("--cloudinary-output", argv)
         self.assertNotIn("synthetic-offline-cloud", argv)
 
+    def test_live_local_provider_cannot_enter_local_mode_from_github_actions(self):
+        import test_vocle_cloudinary as provider
+        args = provider.parse_args(["--test-cloud", "synthetic-offline-cloud", "--commit", "a" * 40])
+        with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), self.assertRaisesRegex(RuntimeError, "existing guarded Cloudinary workflow"):
+            provider.run_session(args)
+
     def test_cleanup_removes_owned_readonly_files_and_refuses_other_paths(self):
         scratch = Path(tempfile.mkdtemp(prefix="vocle-python-"))
         readonly = scratch / "readonly.txt"

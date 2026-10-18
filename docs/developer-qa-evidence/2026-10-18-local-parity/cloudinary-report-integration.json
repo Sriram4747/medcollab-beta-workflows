@@ -1,0 +1,12 @@
+{
+  "scope": "tooling",
+  "gate": "PASS",
+  "sourceSha": "a0c15e1aa595a0b59974c6ae2bd17d685f2d53ff",
+  "harnessSha": "de0f6ba444e7df8a5c736a7d698a42c8ebeb3a7b",
+  "harnessFingerprint": "bd517acdf13eb05e17ca801ba003957fc16940a52a664deb83f5cc1bad713959",
+  "providerCases": 34,
+  "executedRows": 53,
+  "report": "tests/developer-workflow/output/cloudinary-report-integration-2026-10-18/results.json",
+  "reportSha256": "4f15648ecae00d31d74f58e53bc1bc7524ee104cfc7617e5be068fcea9650e88",
+  "applicationCertification": false
+}

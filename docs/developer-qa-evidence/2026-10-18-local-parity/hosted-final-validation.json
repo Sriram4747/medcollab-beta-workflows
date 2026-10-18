@@ -1,0 +1,90 @@
+{
+  "runId": 39101946787,
+  "candidateSha": "1f7882a247bc277c69d020e9889d1f80bc1b8432",
+  "status": "PASS",
+  "scope": "Independent tooling, Docker smoke and cold SDK setup; original local case results recorded separately",
+  "artifacts": [
+    {
+      "platform": "linux",
+      "archiveSha256": "0d6288f517ffa46de20ac18af509c2e742f91c56ed91102577cb0915942d20ea",
+      "sessions": [
+        {
+          "path": "developer-qa-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          }
+        },
+        {
+          "path": "developer-runtime-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS",
+          "runtimeSetup": {
+            "downloads": [
+              {
+                "url": "https://download.docker.com/linux/static/stable/x86_64/docker-29.9.1.tgz",
+                "sha256": "c158ecc55adb3afb01bbd3539ed3b997d20c26dbdc418080506cc1bf5243ff57"
+              }
+            ],
+            "docker": "disposable-linux-engine",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            },
+            "containerd": "disposable-private-socket"
+          }
+        }
+      ],
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "executedRows": 18,
+          "checksum": "5f77d8710d36cf87f172a26316f7e3ba37f08219e3da0391ff8359fcadacce79"
+        },
+        {
+          "scope": "backend-smoke",
+          "gate": "PASS",
+          "executedRows": 22,
+          "checksum": "7327f0c847d0db0bf6ed788bd43a18135728583c9cdd3d08c39e1f479cb8371b"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "archiveSha256": "6c520595e144d95fbffa882f78f124b1cf89ffc1a4dcef88647e214c87c7c11b",
+      "sessions": [
+        {
+          "path": "developer-qa-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS",
+          "runtimeSetup": {
+            "downloads": [],
+            "docker": "NOT_REQUESTED",
+            "cleanup": "PASS",
+            "node": {
+              "kind": "existing",
+              "version": "v22.23.3"
+            }
+          }
+        }
+      ],
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "executedRows": 18,
+          "checksum": "a7a0e92ccb43f4b34c2460ced63063545e78221eb59760dcfef6b60f98eb16e4"
+        }
+      ]
+    }
+  ]
+}

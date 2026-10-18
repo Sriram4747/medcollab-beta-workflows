@@ -44,6 +44,8 @@ def fingerprints(directory):
 
 
 def run_session(args):
+    if not args.offline_check and os.environ.get("GITHUB_ACTIONS") == "true":
+        raise RuntimeError("Use the existing guarded Cloudinary workflow in GitHub Actions; the local launcher requires a developer terminal.")
     if not args.offline_check and not sys.stdin.isatty():
         raise RuntimeError("Run this command in your own terminal for hidden credential entry; credentials cannot be supplied in chat, arguments or files.")
     output = (args.output or ROOT / "tests/developer-workflow/output" / (
