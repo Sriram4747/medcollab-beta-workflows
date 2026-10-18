@@ -83,6 +83,15 @@ class PythonLauncherTests(unittest.TestCase):
                 launcher.remove_session(Path(other))
             self.assertTrue(Path(other).exists())
 
+    def test_cleanup_removes_long_gradle_style_paths(self):
+        scratch = Path(tempfile.mkdtemp(prefix="vocle-python-"))
+        root = Path("\\\\?\\" + str(scratch.resolve())) if os.name == "nt" else scratch
+        directory = root / ("gradle-module-" + "x" * 120) / ("dependency-hash-" + "y" * 80)
+        directory.mkdir(parents=True)
+        (directory / ("android-test-plugin-" + "z" * 80 + ".pom")).write_text("temporary")
+        launcher.remove_session(scratch)
+        self.assertFalse(scratch.exists())
+
     def test_cancellation_waits_for_child_cleanup_and_returns_non_success(self):
         with tempfile.TemporaryDirectory() as directory:
             ready = Path(directory) / "ready"

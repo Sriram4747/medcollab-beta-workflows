@@ -346,3 +346,13 @@ failure reports remain in ignored output, not claimed as test execution.
 Current contracts: 21 Python and 37 workflow/process/reporting Node tests PASS.
 Next: complete the Android build probe, then run the complete committed catalog
 with `--all`, record original outcomes and verify all owned runtime cleanup.
+
+Native build preparation also exposed a missing relative Gradle CA truststore
+referenced by committed JVM arguments. The launcher now supplies the JDK's CA
+store only inside the disposable device workspace; no global trust settings or
+application files change. Stopped only the verified owned Dart/Gradle tree from
+the invalid build attempt; original diagnostics remain. Gradle cache names then
+exposed Windows MAX_PATH during cleanup. Root validation now precedes extended
+Windows path deletion; an actual long-path regression test and recovery cleanup
+PASS. Current Python contracts **22/22 PASS**. Requested Android cases are required
+in the local gate, and test-owned Mongo binaries are removed after execution.

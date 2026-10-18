@@ -73,13 +73,16 @@ export async function prepareDeviceWorkspace(sha = command('git', ['rev-parse', 
   // Local synthetic HTTP only, in the test build's debug manifest.
   await writeFile(join(app, 'android/app/src/debug/AndroidManifest.xml'),
     '<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><application android:usesCleartextTraffic="true" /></manifest>\n');
+  if (process.env.VOCLE_ANDROID_TRUSTSTORE) {
+    await cp(resolve(process.env.VOCLE_ANDROID_TRUSTSTORE), join(app, 'android/gradle-truststore.jks'));
+  }
   const tracked = command('git', ['ls-tree', '-r', '--name-only', sha, 'medcollab-app/lib', 'medcollab-backend/src', 'medcollab-backend/package-lock.json'], root).split(/\r?\n/);
   const sourceHashes = {};
   for (const file of tracked) sourceHashes[file] = hash(await readFile(join(target, file)));
   const provenance = { sourceSha: sha, harnessSha: command('git', ['rev-parse', 'HEAD'], root),
     sourceKind: 'committed-fork-archive', sourceHashes, harnessHashes, temporaryTarget: target,
     originalPubspecHash: hash(originalPubspec), originalAppLockHash: hash(await readFile(join(app, 'pubspec.lock'))),
-    isolatedTestOverlays: ['integration_test SDK and existing plugin interface dev dependencies (original versions verified unchanged)', `Android applicationId ${devicePackage}`, 'debug cleartext HTTP permission'],
+    isolatedTestOverlays: ['integration_test SDK and existing plugin interface dev dependencies (original versions verified unchanged)', `Android applicationId ${devicePackage}`, 'debug cleartext HTTP permission', ...(process.env.VOCLE_ANDROID_TRUSTSTORE ? ['JDK trusted CA store for committed Gradle SSL arguments'] : [])],
     userWorkingTreeCopied: false, releaseBuildAllowed: false };
   await writeFile(join(runRoot, 'provenance.json'), `${JSON.stringify(provenance, null, 2)}\n`);
   return { runRoot, target, app, provenance };

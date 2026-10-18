@@ -170,15 +170,22 @@ def remove_session(scratch):
 
     def writable_retry(function, filename, _exc):
         path = Path(filename)
-        if not path.resolve().is_relative_to(resolved):
+        canonical = Path(str(path.resolve()).removeprefix("\\\\?\\")) if os.name == "nt" else path.resolve()
+        if not canonical.is_relative_to(resolved):
             raise RuntimeError("Cleanup path escaped the disposable session")
+        error = _exc[1] if isinstance(_exc, tuple) else _exc
+        if isinstance(error, FileNotFoundError):
+            return  # A stopped build may have already removed a transient file.
         os.chmod(path, stat.S_IWRITE | stat.S_IREAD | stat.S_IEXEC)
         function(filename)
 
+    # Gradle dependency names exceed MAX_PATH even in a short session folder.
+    # Validate the ordinary absolute path above, then use Windows' extended form.
+    target = "\\\\?\\" + str(resolved) if os.name == "nt" else resolved
     if sys.version_info >= (3, 12):
-        shutil.rmtree(resolved, onexc=writable_retry)
+        shutil.rmtree(target, onexc=writable_retry)
     else:
-        shutil.rmtree(resolved, onerror=writable_retry)
+        shutil.rmtree(target, onerror=writable_retry)
 
 
 def run_session(args):

@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+import shutil
 import socket
 import subprocess
 import time
@@ -31,6 +32,11 @@ class AndroidRuntime:
             raise SetupRequired("Android tests need the Android Studio JDK or JAVA_HOME.")
         self.env.update(ANDROID_HOME=str(sdk), ANDROID_SDK_ROOT=str(sdk), JAVA_HOME=str(java))
         self.env["PATH"] = str(java / "bin") + os.pathsep + self.env["PATH"]
+        # The committed Gradle arguments refer to this relative truststore.
+        # Provide the JDK's trusted CAs only in the disposable build workspace.
+        truststore = self.scratch / "android-truststore.jks"
+        shutil.copyfile(java / "lib/security/cacerts", truststore)
+        self.env["VOCLE_ANDROID_TRUSTSTORE"] = str(truststore)
         _, devices = self.command([self.adb, "devices"])
         if any(line.strip() and not line.startswith(("List of devices", "*")) for line in devices.splitlines()):
             raise SetupRequired("Close other Android emulators and disconnect physical devices before the isolated Android run.")

@@ -198,14 +198,14 @@ try {
     if (options.android && sourceInfo.kind === 'commit' && source === root) {
       const androidSdk = env.ANDROID_HOME || env.ANDROID_SDK_ROOT;
       const adb = androidSdk ? ['--adb-bin=' + join(androidSdk, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb')] : [];
-      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter, ...adb], root, false);
+      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter, ...adb], root, true);
       let deviceReport; try { deviceReport = JSON.parse(device.stdout.trim().split(/\r?\n/).at(-1)); } catch { /* explicit missing report */ }
       if (deviceReport?.reportDirectory) {
         const report = JSON.parse(await readFile(join(deviceReport.reportDirectory, 'results.json')));
         await cp(deviceReport.reportDirectory, join(output, 'android'), { recursive: true });
-        for (const c of catalog.filter(c => c.tier === 'D')) { const actual = report.results.find(r => r.id === c.id); add(c.id, actual?.status || 'ERROR', false, { ...c, ...actual, executed: Boolean(actual?.executed), artifacts: ['android/'] }); }
-      } else unavailable(catalog.filter(c => c.tier === 'D'), 'Android runner produced no usable report', false);
-    } else unavailable(catalog.filter(c => c.tier === 'D'), options.android ? 'Existing Android runner requires a committed source revision available in this harness checkout' : 'Optional Android lane: rerun with --android on an isolated emulator', false);
+        for (const c of catalog.filter(c => c.tier === 'D')) { const actual = report.results.find(r => r.id === c.id); add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: Boolean(actual?.executed), artifacts: ['android/'] }); }
+      } else unavailable(catalog.filter(c => c.tier === 'D'), 'Android runner produced no usable report', true);
+    } else unavailable(catalog.filter(c => c.tier === 'D'), options.android ? 'Existing Android runner requires a committed source revision available in this harness checkout' : 'Optional Android lane: rerun with --android on an isolated emulator', Boolean(options.android));
     add('backend-legacy-jest', 'BLOCKED', false, { exclusion: 'Two retained Jest files exist, but Jest and a Jest runner are absent from the lockfile; backend npm test is a placeholder. No assertion execution claimed.' });
     if (options.security && docker.code === 0 && docker.stdout.trim() === 'linux') {
       const securityOut = join(output, 'security'); await mkdir(securityOut);
@@ -263,6 +263,12 @@ try {
       add('workspace-cleanup', 'PASS', true, { executed: true });
     } catch (e) { integrity = 'ERROR'; add('workspace-cleanup', 'ERROR', true, { executed: true, error: e.message }); }
   }
+  try {
+    for (const folder of ['backend/mongo-binaries', 'security/mongo-binaries']) {
+      await rm(join(output, folder), { recursive: true, force: true, maxRetries: 3, retryDelay: 500 });
+    }
+    add('runtime-binary-cleanup', 'PASS', true, { executed: true });
+  } catch (e) { integrity = 'ERROR'; add('runtime-binary-cleanup', 'ERROR', true, { executed: true, error: e.message }); }
 }
 sourceInfo ||= { sha: null, kind: 'unverified', verified: false };
 harnessInfo ||= { sha: null, verified: false };

@@ -228,6 +228,7 @@ try {
       // dependencies with the isolated target after checking unchanged source.
       verifyDeviceCleanupPath(workspace);
       await rm(workspace.target, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
+      await rm(join(workspace.runRoot, 'mongo-binaries'), { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
     }
     cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') || phases.some((row) => row.ownedResourceCleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
       dedicatedTestAppRemoved: Boolean(serial), isolatedTargetRemoved: Boolean(workspace) };
