@@ -150,7 +150,7 @@ def runner_arguments(config):
             argv.extend(["--" + key.replace("_", "-"), str(config[key])])
     for key in ("android", "security", "ci_checks"):
         if config.get(key):
-            argv.append("--" + key)
+            argv.append("--" + key.replace("_", "-"))
     return argv
 
 

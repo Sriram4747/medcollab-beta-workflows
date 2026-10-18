@@ -97,7 +97,7 @@ try {
   const harnessSha = git(root, ['rev-parse', 'HEAD']);
   await clone(root, harness, harnessSha);
   const harnessPaths = [...tracked(root), ...git(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean)]
-    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow|reporting)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_(bootstrap|android)\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
+    .filter(f => f === '.gitleaks.toml' || /^(tests\/(functional-regression|sanity|developer-workflow|reporting)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_(bootstrap|android)\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
     .filter(f => !/\/(node_modules|output)\//.test(f));
   await overlay(root, harnessPaths, harness);
   harnessInfo = { sha: harnessSha, ...(await fingerprint(harness, harnessPaths)), verified: true };
@@ -114,7 +114,7 @@ try {
     const python = process.env.VIRTUAL_ENV ? join(process.env.VIRTUAL_ENV, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python') : process.platform === 'win32' ? 'python' : 'python3';
     await command('ci-python-environment', python, ['-c', 'import pytest, requests, httpx; print("pytest, requests, and httpx imported successfully")'], harness);
     await command('ci-python-launcher-contracts', python, ['-B', '-m', 'unittest', 'discover', '-s', 'tests/developer-workflow', '-p', 'test_*.py', '-v'], harness);
-    await command('ci-gitleaks', options['gitleaks-bin'] || 'gitleaks', ['git', '--no-banner', '--redact=100', '--report-format=json', '--report-path=' + join(output, 'gitleaks.json'), '--log-opts=--all', source], source);
+    await command('ci-gitleaks', options['gitleaks-bin'] || 'gitleaks', ['git', '--no-banner', '--redact=100', '--config=' + join(harness, '.gitleaks.toml'), '--report-format=json', '--report-path=' + join(output, 'gitleaks.json'), '--log-opts=' + sha, source], harness);
   }
   const install = await command('backend-locked-dependencies', npm, ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], join(target, 'medcollab-backend'), true, { infrastructure: true });
   if (install.code === 0) {

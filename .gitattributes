@@ -1,4 +1,7 @@
 # Retain the exact downloaded/reviewed evidence bytes for hash verification.
+# Frozen security manifests are hashed as bytes by the original suite checks.
+# Preserve their committed LF bytes on Windows as well as Linux.
+medcollab-backend/scripts/security-*/manifest.json text eol=lf
 docs/security-evidence/37180593760/* -text
 docs/security-evidence/37181051425/* -text
 docs/security-evidence/37180497917/* -text

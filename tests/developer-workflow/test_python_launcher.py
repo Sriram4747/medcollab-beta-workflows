@@ -55,6 +55,9 @@ class PythonLauncherTests(unittest.TestCase):
     def test_all_selects_existing_suites_and_requires_explicit_device_revision(self):
         args = launcher.parse_args(["--all", "--commit", "a" * 40])
         self.assertTrue(args.android and args.security and args.ci_checks)
+        argv = launcher.runner_arguments(vars(args) | {"node": "node", "output": "report"})
+        self.assertIn("--ci-checks", argv)
+        self.assertNotIn("--ci_checks", argv)
         with self.assertRaises(SystemExit):
             launcher.parse_args(["--all"])
 

@@ -356,3 +356,11 @@ exposed Windows MAX_PATH during cleanup. Root validation now precedes extended
 Windows path deletion; an actual long-path regression test and recovery cleanup
 PASS. Current Python contracts **22/22 PASS**. Requested Android cases are required
 in the local gate, and test-owned Mongo binaries are removed after execution.
+
+Independent Windows integration on `fbcfba6` found the new original static checks
+failed only because Git CRLF conversion changed the byte-hashed frozen media and
+Cloudinary manifests. Added an LF checkout attribute; original expected hashes
+and manifest bytes remain unchanged. The first `--all` smoke of argument forwarding
+found `--ci_checks` instead of `--ci-checks`; fixed and extended the forwarding
+contract. That attempt stopped before test execution and cleaned up PASS. Gitleaks
+now scans the selected candidate's ancestry with the fingerprinted harness config.
