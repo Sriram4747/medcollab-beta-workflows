@@ -4,6 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
+from types import SimpleNamespace
 import signal
 import sys
 import tarfile
@@ -134,6 +135,55 @@ class RuntimeBootstrapTests(unittest.TestCase):
                     setup.close()
                 command.assert_not_called()
             self.assertEqual(state["runtimeSetup"]["cleanup"], "ERROR")
+
+    def test_wsl_success_status_with_virtualization_warning_requires_restart(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            setup = Bootstrap(root, root, {"PATH": os.environ["PATH"]}, {})
+            setup.wsl = "wsl.exe"
+            with patch.object(setup, "command", return_value=(0, "WSL2 is unable to start since virtualization is not enabled on this machine.")) as command:
+                with self.assertRaises(SetupRequired) as error:
+                    setup.ensure_wsl()
+            self.assertEqual(error.exception.status, "RESTART_REQUIRED")
+            self.assertEqual(command.call_count, 1)
+            self.assertIsNone(setup.guest)
+
+    def test_successful_installer_with_explicit_restart_stops_before_guest_setup(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            setup = Bootstrap(root, root, {"PATH": os.environ["PATH"]}, {})
+            setup.wsl = "wsl.exe"
+            (root / "windows-setup.json").write_text(json.dumps({"exitCode": 0, "restartRequired": True}))
+            with patch.object(setup, "command", side_effect=[(1, "not installed"), (0, "installed")]) as command:
+                with self.assertRaises(SetupRequired) as error:
+                    setup.ensure_wsl()
+            self.assertEqual(error.exception.status, "RESTART_REQUIRED")
+            self.assertEqual(command.call_count, 2)
+
+    def test_wsl_metadata_registry_subkeys_do_not_prevent_failed_import_cleanup(self):
+        class Key:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                pass
+
+        registry = SimpleNamespace(HKEY_CURRENT_USER=0, OpenKey=lambda *_args: Key(),
+                                   QueryInfoKey=lambda _key: (1, 0, 0), EnumKey=lambda *_args: "metadata")
+
+        def missing_value(*_args):
+            raise FileNotFoundError("Metadata subkey has no DistributionName")
+
+        registry.QueryValueEx = missing_value
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            state = {}
+            setup = Bootstrap(root, root, {"PATH": os.environ["PATH"]}, state)
+            setup.guest = "Vocle-Test-" + "a" * 32
+            with patch.dict(sys.modules, {"winreg": registry}), patch.object(setup, "command") as command:
+                setup.close()
+                command.assert_not_called()
+            self.assertEqual(state["runtimeSetup"]["cleanup"], "PASS")
 
 
 if __name__ == "__main__":

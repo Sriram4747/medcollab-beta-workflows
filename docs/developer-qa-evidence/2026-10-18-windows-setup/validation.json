@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-18",
+  "windowsPlatformInstall": {
+    "exitCode": 0,
+    "result": "WSL 3.0.3 installed and VirtualMachinePlatform enabled; installer explicitly required reboot"
+  },
+  "firstAttempt": {
+    "status": "ERROR",
+    "error": "The private WSL 2 guest could not start. See setup.log. The operation could not be started because a required feature is not installed. \r\nError code: Wsl/Service/RegisterDistro/CreateVm/HCS/HCS_E_SERVICE_NOT_AVAILABLE\r\nIf this error was unexpected, please consider searching for existing issues or filing a new issue at https://github.com/microsoft/WSL/issues.",
+    "cleanupError": "[WinError 2] The system cannot find the file specified"
+  },
+  "cleanupRecovery": {
+    "originalAttemptStatus": "ERROR",
+    "runtimeCleanup": "PASS",
+    "temporaryDirectoryRemoved": true,
+    "note": "Recovery after fixing WSL metadata subkey handling. Original failure report preserved."
+  },
+  "verificationAfterFix": {
+    "status": "RESTART_REQUIRED",
+    "cleanup": "PASS",
+    "runnerExitCode": null,
+    "temporaryDirectoryRemoved": true
+  },
+  "pythonContractTests": {
+    "passed": 19,
+    "failed": 0
+  },
+  "nextAction": "User saves work and restarts Windows once, then reruns python .\\scripts\\test_vocle.py --source .",
+  "limitations": "Docker guest execution and application assertions have not run locally; no application PASS is claimed."
+}

@@ -274,6 +274,10 @@ class Bootstrap:
             self.wsl = str(Path(os.environ.get("SystemRoot", "C:/Windows")) / "System32/wsl.exe")
         code, text = self.command([self.wsl, "--status"], check=False)
         if code == 0:
+            # WSL can return success while warning that WSL 2 cannot start,
+            # including just after VirtualMachinePlatform was enabled.
+            if re.search(r"WSL\s*2\b[^\n]*(?:unable to start|not supported)|virtualization is not enabled", text, re.I):
+                raise SetupRequired("WSL is installed, but Windows cannot start WSL 2 yet. If WSL was just installed, restart Windows once and rerun the same command. If this persists after restarting, check that firmware virtualization and Virtual Machine Platform are enabled. " + text, "RESTART_REQUIRED")
             return
         print("Preparing the Windows WSL platform. Windows may request administrator permission.", flush=True)
         result = self.output / "windows-setup.json"
@@ -282,7 +286,7 @@ class Bootstrap:
         self.details["windowsPlatformSetup"] = detail
         if code or detail.get("exitCode") not in (0, 3010):
             raise SetupRequired("Windows WSL setup did not complete. See windows-setup.json and setup.log. " + detail.get("error", text))
-        if detail.get("exitCode") == 0:
+        if detail.get("exitCode") == 0 and not detail.get("restartRequired"):
             ready, _ = self.command([self.wsl, "--status"], check=False)
             if ready == 0:
                 return  # Existing virtualization components may already be ready.
@@ -372,7 +376,7 @@ class Bootstrap:
         rootfs = self.asset(LOCK["wslRootfs"], "ubuntu-base.tar.gz")
         code, text = self.command([self.wsl, "--import", name, self.scratch / "wsl", rootfs, "--version", "2"], timeout=300, check=False)
         if code:
-            if self.details.get("windowsPlatformSetup") and re.search(r"HYPERV_NOT_INSTALLED|0x80370102|restart|reboot", text, re.I):
+            if self.details.get("windowsPlatformSetup") and re.search(r"HYPERV_NOT_INSTALLED|HCS_E_SERVICE_NOT_AVAILABLE|0x80370102|restart|reboot", text, re.I):
                 raise SetupRequired("Windows installed WSL but its virtual machine platform needs a restart. Restart once and rerun the same command. " + text[-1000:], "RESTART_REQUIRED")
             raise SetupRequired("The private WSL 2 guest could not start. See setup.log. " + text[-1500:])
         prefix = [self.wsl, "--distribution", name, "--user", "root", "--exec"]
@@ -433,7 +437,11 @@ class Bootstrap:
         with registry as key:
             for index in range(winreg.QueryInfoKey(key)[0]):
                 with winreg.OpenKey(key, winreg.EnumKey(key, index)) as entry:
-                    if winreg.QueryValueEx(entry, "DistributionName")[0] == self.guest:
+                    try:
+                        name = winreg.QueryValueEx(entry, "DistributionName")[0]
+                    except FileNotFoundError:
+                        continue  # WSL also keeps metadata subkeys here.
+                    if name == self.guest:
                         base = winreg.QueryValueEx(entry, "BasePath")[0].removeprefix("\\\\?\\")
                         if Path(base).resolve() != (self.scratch / "wsl").resolve():
                             raise SetupRequired("WSL cleanup refused: registered path does not belong to this session")

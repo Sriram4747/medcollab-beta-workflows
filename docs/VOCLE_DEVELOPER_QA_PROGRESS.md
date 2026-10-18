@@ -291,3 +291,29 @@ failures; successful setup/smoke does not certify the full application or releas
 All implementation checkpoints were pushed only to `origin/master`; unrelated
 application changes remain outside these commits. Upstream integration remains
 the user's separate review decision.
+
+## Windows platform installed; restart required (2026-10-18)
+
+User authorized completing local setup. Ran the Python launcher and its fixed
+elevated WSL installer. WSL **3.0.3 installed successfully**, installer exit 0;
+Virtual Machine Platform was enabled and Windows explicitly reported that changes
+take effect after reboot. No restart was initiated by the launcher or agent.
+
+The first import attempt exposed two startup defects: `wsl --status` returned 0
+with a WSL 2 virtualization warning, and the ownership check encountered a WSL
+metadata registry subkey without `DistributionName`. The original failure report
+is preserved. Fixed readiness checking to stop on that warning, recorded explicit
+installer reboot requirements, recognized the observed first-install HCS service
+error, and skipped metadata subkeys while preserving exact ownership/path checks.
+
+Measured verification: **19/19 Python contracts PASS**, including explicit reboot,
+success-with-warning readiness, and metadata cleanup regression cases. Recovered
+the first session's exact owned temporary directory with cleanup **PASS**. Actual
+rerun now reports **RESTART_REQUIRED**, no tests executed, cleanup **PASS**; its
+temporary directory was removed. Small measured evidence is saved in
+`developer-qa-evidence/2026-10-18-windows-setup/validation.json`.
+
+Next action: the user saves work and restarts Windows once. Then rerun
+`python .\scripts\test_vocle.py --source .` to provision Docker, install packages
+and run the existing suites. Managed WSL guest execution and full application
+results on this machine remain unverified until after reboot.

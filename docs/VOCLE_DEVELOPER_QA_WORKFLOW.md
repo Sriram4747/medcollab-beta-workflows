@@ -108,9 +108,13 @@ and removed both. The visual QA report passed. Archive and report checksums,
 source bindings, and cleanup outcomes are recorded in
 [the validation record](developer-qa-evidence/2026-10-17-automatic-runtime/validation.json).
 
-On the developer's Windows machine the WSL administrator prompt was canceled;
-setup reported `BOOTSTRAP_BLOCKED` and cleanup passed. Running tests inside a
-managed WSL guest on that machine remains unverified until OS setup completes.
+The developer's initial Windows WSL administrator prompt was canceled on October
+17. On October 18 the installer completed: WSL 3.0.3 installed and the Virtual
+Machine Platform feature was enabled. Windows requires a restart to activate it.
+The corrected launcher reports `RESTART_REQUIRED` with cleanup `PASS` before
+creating a guest. Running tests inside a managed WSL guest on that machine remains
+unverified until Windows restarts and setup continues. See the
+[Windows setup record](developer-qa-evidence/2026-10-18-windows-setup/validation.json).
 These infrastructure results do not clear known application failures, static
 analysis findings, or QA decisions in the full regression scope.
 
