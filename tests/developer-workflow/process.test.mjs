@@ -53,11 +53,13 @@ test('disposable caches survive environment sanitization without application sec
   const original = { ...process.env };
   try {
     process.env.PUB_CACHE = '/disposable/pub'; process.env.NPM_CONFIG_CACHE = '/disposable/npm';
+    process.env.PIP_CACHE_DIR = '/disposable/pip';
     process.env.GRADLE_USER_HOME = '/disposable/gradle'; process.env.TMPDIR = '/disposable/tmp';
     process.env.VOCLE_TEST_SECRET = 'not-forwarded';
     const env = cleanEnvironment();
     assert.equal(env.PUB_CACHE, '/disposable/pub');
     assert.equal(env.NPM_CONFIG_CACHE, '/disposable/npm');
+    assert.equal(env.PIP_CACHE_DIR, '/disposable/pip');
     assert.equal(env.GRADLE_USER_HOME, '/disposable/gradle');
     assert.equal(env.TMPDIR, '/disposable/tmp');
     assert.equal(env.VOCLE_TEST_SECRET, undefined);

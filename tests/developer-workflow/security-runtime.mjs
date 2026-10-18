@@ -1,6 +1,6 @@
 // Executes existing security assertions in a network-none Linux container only.
 import { createRequire } from 'node:module';
-import { readdir, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { spawn } from 'node:child_process';
 import { run } from './process.mjs';
@@ -13,12 +13,19 @@ process.env.MONGOMS_DOWNLOAD_DIR = '/output/mongo-binaries';
 process.env.MONGOMS_RUNTIME_DOWNLOAD = 'false';
 let mongo, app;
 const attempts = [];
+const startMongo = () => MongoMemoryServer.create({ instance: { ip: '127.0.0.1', port: 27017, args: ['--setParameter', 'ttlMonitorEnabled=false'] } });
+const authEnvironment = '/tmp/vocle-auth-environment';
 try {
-  mongo = await MongoMemoryServer.create({ instance: { ip: '127.0.0.1', port: 27017, args: ['--setParameter', 'ttlMonitorEnabled=false'] } });
   for (const suite of ['security-media', 'security-data']) {
-    attempts.push(await run(process.execPath, [join(backend, 'scripts', suite, 'run.js')], { cwd: backend, env, timeout: 15 * 60 * 1000, log: '/output/' + suite + '.log' }));
+    // Hosted jobs start separate empty disposable databases. Match that
+    // lifecycle; media fixtures must never enter the data suite's preflight.
+    mongo = await startMongo();
+    try {
+      attempts.push(await run(process.execPath, [join(backend, 'scripts', suite, 'run.js')], { cwd: backend, env, timeout: 15 * 60 * 1000, log: '/output/' + suite + '.log' }));
+    } finally { await mongo.stop(); mongo = null; }
   }
   // Exact fixture/auth/discovery sequence from the existing hosted workflow.
+  mongo = await startMongo();
   app = spawn(process.execPath, [join(backend, 'src/server.js')], { cwd: '/tmp', env, stdio: 'ignore' });
   const deadline = Date.now() + 30000;
   let ready = false;
@@ -28,13 +35,28 @@ try {
   }
   if (!ready) throw new Error('Discovery backend health timeout');
   for (const [script, args] of [['security-test-fixtures.js', []], ['security-test-fixtures.js', ['--verify']], ['security-test-auth-smoke.js', []], ['security-api-discovery.js', []], ['security-api-coverage-report.js', []]]) {
-    const result = await run(process.execPath, [join(backend, 'scripts', script), ...args], { cwd: backend, env, timeout: 15 * 60 * 1000, log: '/output/' + script + (args.length ? '-verify' : '') + '.log' });
+    const childEnv = script === 'security-test-auth-smoke.js' ? { ...env, GITHUB_ENV: authEnvironment } : env;
+    const result = await run(process.execPath, [join(backend, 'scripts', script), ...args], { cwd: backend, env: childEnv, timeout: 15 * 60 * 1000, log: '/output/' + script + (args.length ? '-verify' : '') + '.log' });
     attempts.push(result);
     if (result.code !== 0 && script !== 'security-api-discovery.js') throw new Error('Existing security prerequisite failed: ' + script);
+    if (script === 'security-test-auth-smoke.js') {
+      // Reuse the original workflow's environment-file protocol. The file lives
+      // only in this container's private tmpfs and is never exported as evidence.
+      const lines = (await readFile(authEnvironment, 'utf8')).trim().split(/\r?\n/);
+      await rm(authEnvironment);
+      if (lines.length !== 8) throw new Error('Expected eight original synthetic authentication identities');
+      for (const line of lines) {
+        const match = /^(VOCLE_TEST_USER_[A-H]_TOKEN)=([^\r\n]+)$/.exec(line);
+        if (!match || env[match[1]]) throw new Error('Invalid original authentication environment export');
+        env[match[1]] = match[2];
+      }
+    }
   }
 } finally {
   if (app && app.exitCode === null) { app.kill('SIGTERM'); await new Promise(r => app.once('exit', r)); }
   await mongo?.stop();
+  await rm(authEnvironment, { force: true });
+  for (const key of Object.keys(env)) if (/^VOCLE_TEST_.*_TOKEN$/.test(key)) delete env[key];
   await writeFile('/output/security-execution.json', JSON.stringify({ attempts: attempts.map(({ code, timedOut, error }) => ({ code, timedOut, error })), cleanup: 'PASS' }, null, 2));
 }
 if (!attempts.length || attempts.some(r => r.code !== 0 || r.timedOut)) process.exitCode = 1;

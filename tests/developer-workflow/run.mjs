@@ -224,7 +224,11 @@ try {
         for (const dir of files) {
           try {
             const result = JSON.parse(await readFile(join(securityOut, dir, 'results.json')));
-            for (const r of result.cases || result.results || []) {
+            const measured = result.cases || result.results || [];
+            if (result.infrastructureFailure || measured.length !== result.planned || result.executed !== measured.length) {
+              add('security-completeness-' + dir, 'ERROR', true, { error: 'Original suite did not complete: ' + measured.length + '/' + result.planned, artifacts: ['security/' + dir + '/results.json'] });
+            }
+            for (const r of measured) {
               const status = r.status === 'PASS' || r.passed === true ? 'PASS' : r.status === 'FAIL' ? 'FAIL' : r.status === 'ERROR' ? 'ERROR' : 'NEEDS_DECISION';
               const catalogId = r.caseId || r.id;
               if (!catalogId) throw new Error('Security result has no original catalog ID');
@@ -237,8 +241,8 @@ try {
         }
         if (securityRun.code !== 0) integrity = 'ERROR';
       }
-    } else add('security-runtime', 'BLOCKED', Boolean(options.security), { exclusion: options.security ? 'Requested security runtime requires Linux Docker isolation' : 'Optional: --security reuses existing media, data and 691-case discovery runners in network-none Docker. Provider account integration stays QA-only.' });
-    add('provider-accounts', 'BLOCKED', false, { exclusion: 'QA-only: approved isolated test account credentials and resource cleanup; existing Cloudinary workflow' });
+    } else add('security-runtime', 'BLOCKED', Boolean(options.security), { exclusion: options.security ? 'Requested security runtime requires Linux Docker isolation' : 'Optional: --security reuses existing media, data and 691-case discovery runners in network-none Docker. Cloudinary uses the separate prompted launcher.' });
+    add('provider-accounts', 'BLOCKED', false, { exclusion: 'Private test credentials required: python scripts/test_vocle_cloudinary.py --test-cloud APPROVED_TEST_CLOUD --commit EXACT_SHA. Reuses existing Cloudinary assertions and scoped cleanup.' });
     add('ios-physical-device', 'BLOCKED', false, { exclusion: 'QA-only: platform hardware/runner required; existing coverage makes no iOS claim' });
     if (options.apk) {
       const apkPath = resolve(options.apk);

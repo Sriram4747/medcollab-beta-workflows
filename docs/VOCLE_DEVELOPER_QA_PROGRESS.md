@@ -403,3 +403,13 @@ Python launcher prompts for credentials privately, never reads application .env,
 and installs locked packages without provider credentials. Its actual offline
 installation/self-test/transport validation and disposable cleanup PASS. Live
 provider execution awaits the user's cloud name and hidden terminal entry.
+
+The first isolated security run completed all 97 media cases (67 PASS, 30 original
+observations). It exposed two missing workflow integration steps: data security
+requires a new empty database after media, and discovery requires the auth-smoke
+step's synthetic tokens passed through the original environment-file protocol.
+Local orchestration now creates a fresh Mongo instance per original job, imports
+only the eight original synthetic token names from private container tmpfs, then
+removes the token file and memory bindings. Incomplete original suite counts now
+produce an explicit required ERROR row. A full security follow-up is running;
+original preflight errors and cleanup PASS remain preserved.
