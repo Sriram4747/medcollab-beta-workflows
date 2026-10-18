@@ -317,3 +317,32 @@ Next action: the user saves work and restarts Windows once. Then rerun
 `python .\scripts\test_vocle.py --source .` to provision Docker, install packages
 and run the existing suites. Managed WSL guest execution and full application
 results on this machine remain unverified until after reboot.
+
+## Post-reboot local parity validation (2026-10-18, checkpoint)
+
+Confirmed the original catalog is exactly B147/F32/D8 = 187; retained sanity48 is
+included in B147. Audited all ten workflow files and documented their reused
+local commands and external-service requirements in `VOCLE_LOCAL_WORKFLOW_PARITY.md`.
+Added `--all` for original Android/security/CI checks against an explicit commit,
+the existing offline Cloudinary transport/static checks, pinned Gitleaks and
+existing Python environment package imports. No original suite/assertion rebuilt.
+
+The actual WSL guest and private Docker/containerd now start locally. First run
+exposed unsafe Windows batch transport of Docker shell arguments; switched the
+managed WSL proxy to native Python argv. The next run prepared Docker dependencies
+but backend imports from Windows mounts exceeded existing startup deadlines.
+Stopped only that run's owned container, preserved its failure report and verified
+session cleanup PASS. WSL backend sources/dependencies now use a private Linux
+filesystem copy; Windows output remains mounted, network-none assertions and
+original deadlines unchanged.
+
+Android SDK/JDK/system image already exist locally. New bootstrap creates and
+boots a fresh AVD with isolated user/AVD directories and later removes it; it does
+not load the existing Pixel AVD's user data. First actual Android bootstrap and
+teardown PASS. Device invocation exposed missing PATHEXT in the sanitized Windows
+environment; fixed and a native build/media validation is running. Original
+failure reports remain in ignored output, not claimed as test execution.
+
+Current contracts: 21 Python and 37 workflow/process/reporting Node tests PASS.
+Next: complete the Android build probe, then run the complete committed catalog
+with `--all`, record original outcomes and verify all owned runtime cleanup.

@@ -9,8 +9,8 @@ import { generate as generateDetailedReport } from '../reporting/report.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2), options = {};
-const flags = new Set(['android', 'security']);
-const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'apk', 'profile']);
+const flags = new Set(['android', 'security', 'ci-checks']);
+const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'docker-proxy', 'gitleaks-bin', 'apk', 'profile']);
 for (let i = 0; i < args.length; i++) {
   const key = args[i].replace(/^--/, '');
   if (flags.has(key)) options[key] = true;
@@ -30,13 +30,15 @@ let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, inte
 const ownedContainers = [];
 const dockerOption = options['docker-bin'] || 'docker';
 const dockerBin = /[\\/]/.test(dockerOption) ? resolve(dockerOption) : dockerOption;
+const dockerArguments = argv => options['docker-proxy']
+  ? [join(root, 'scripts/vocle_bootstrap.py'), '--proxy', resolve(options['docker-proxy']), ...argv] : argv;
 const cancellation = new AbortController();
 const cancel = () => { console.error('Cancellation requested; cleaning up owned test resources.'); cancellation.abort(); };
 for (const name of process.platform === 'win32' ? ['SIGINT', 'SIGTERM', 'SIGBREAK'] : ['SIGINT', 'SIGTERM']) process.on(name, cancel);
 const env = { ...cleanEnvironment(), TZ: 'UTC', CI: 'true', FLUTTER_SUPPRESS_ANALYTICS: 'true', DART_SUPPRESS_ANALYTICS: 'true' };
 async function execute(bin, argv, options = {}) {
   if (cancellation.signal.aborted) throw new Error('Run cancelled');
-  const result = await run(bin, argv, { ...options, signal: cancellation.signal });
+  const result = await run(bin, bin === dockerBin ? dockerArguments(argv) : argv, { ...options, signal: cancellation.signal });
   if (result.aborted) throw new Error('Run cancelled');
   return result;
 }
@@ -95,7 +97,7 @@ try {
   const harnessSha = git(root, ['rev-parse', 'HEAD']);
   await clone(root, harness, harnessSha);
   const harnessPaths = [...tracked(root), ...git(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean)]
-    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_bootstrap\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
+    .filter(f => /^(tests\/(functional-regression|sanity|developer-workflow|reporting)\/|medcollab-app\/(test|integration_test|test_driver)\/|medcollab-backend\/scripts\/security|\.github\/workflows\/|scripts\/(Test-Vocle|test_vocle\.py$|vocle_(bootstrap|android)\.py$|vocle-runtime-lock\.json$|Setup-VocleWsl\.ps1$))/.test(f))
     .filter(f => !/\/(node_modules|output)\//.test(f));
   await overlay(root, harnessPaths, harness);
   harnessInfo = { sha: harnessSha, ...(await fingerprint(harness, harnessPaths)), verified: true };
@@ -107,9 +109,16 @@ try {
   await command('catalog-validation', process.execPath, [join(harness, 'tests/functional-regression/scripts/validate-catalog.mjs')], harness);
   await command('ci-device-contracts', process.execPath, ['--test', join(harness, 'tests/functional-regression/scripts/ci-contracts.test.mjs'), join(harness, 'tests/functional-regression/scripts/device-contracts.test.mjs')], harness);
   await command('functional-classification', process.execPath, [join(harness, 'tests/functional-regression/src/runner.mjs'), '--self-check'], harness);
+  if (options['ci-checks']) {
+    await command('ci-workflow-reporting-contracts', process.execPath, ['--test', ...['developer-workflow/workflow.test.mjs', 'developer-workflow/process.test.mjs', 'reporting/report.test.mjs', 'reporting/workflow-adapters.test.mjs'].map(file => join(harness, 'tests', file))], harness);
+    const python = process.env.VIRTUAL_ENV ? join(process.env.VIRTUAL_ENV, process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python') : process.platform === 'win32' ? 'python' : 'python3';
+    await command('ci-python-environment', python, ['-c', 'import pytest, requests, httpx; print("pytest, requests, and httpx imported successfully")'], harness);
+    await command('ci-python-launcher-contracts', python, ['-B', '-m', 'unittest', 'discover', '-s', 'tests/developer-workflow', '-p', 'test_*.py', '-v'], harness);
+    await command('ci-gitleaks', options['gitleaks-bin'] || 'gitleaks', ['git', '--no-banner', '--redact=100', '--report-format=json', '--report-path=' + join(output, 'gitleaks.json'), '--log-opts=--all', source], source);
+  }
   const install = await command('backend-locked-dependencies', npm, ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], join(target, 'medcollab-backend'), true, { infrastructure: true });
   if (install.code === 0) {
-    for (const script of ['security-manifest-check.js', 'security-media/self-test.js', 'security-data/self-test.js', 'security-cloudinary/self-test.js']) {
+    for (const script of ['security-manifest-check.js', 'security-media/check.js', 'security-media/self-test.js', 'security-data/check.js', 'security-data/self-test.js', 'security-cloudinary/check.js', 'security-cloudinary/self-test.js', 'security-cloudinary/transport-test.js']) {
       await command('security-' + script.replaceAll('/', '-').replace('.js', ''), process.execPath, [join(target, 'medcollab-backend/scripts', script)], target);
     }
   } else add('security-offline', 'BLOCKED', true, { exclusion: 'Pinned backend dependencies unavailable' });
@@ -209,7 +218,12 @@ try {
             const result = JSON.parse(await readFile(join(securityOut, dir, 'results.json')));
             for (const r of result.cases || result.results || []) {
               const status = r.status === 'PASS' || r.passed === true ? 'PASS' : r.status === 'FAIL' ? 'FAIL' : r.status === 'ERROR' ? 'ERROR' : 'NEEDS_DECISION';
-              add(r.caseId || r.id, status, false, { executed: true, module: r.module || 'SECURITY', expected: JSON.stringify(r.expected), error: status === 'PASS' ? undefined : JSON.stringify(r.actual || r.classification), artifacts: ['security/' + dir + '/results.json'] });
+              const catalogId = r.caseId || r.id;
+              if (!catalogId) throw new Error('Security result has no original catalog ID');
+              // Media reuses baseline discovery IDs. Keep each measured suite
+              // execution separate, and retain its unchanged catalog ID.
+              add(dir + ':' + catalogId, status, false, { catalogId, suite: dir, recordedStatus: r.status, classification: r.classification,
+                executed: true, module: r.module || 'SECURITY', expected: JSON.stringify(r.expected), error: status === 'PASS' ? undefined : JSON.stringify(r.actual || r.classification), artifacts: ['security/' + dir + '/results.json'] });
             }
           } catch (e) { add('security-report-' + dir, 'ERROR', true, { error: 'Missing/invalid security evidence: ' + e.message }); }
         }
@@ -237,8 +251,8 @@ try {
   if ((options.profile || 'full') === 'full') unavailable(catalog.filter(c => !rows.some(r => r.id === c.id)), 'Orchestration/setup failed; no testcase execution evidence', true);
 } finally {
   for (const name of ownedContainers) {
-    const present = await run(dockerBin, ['container', 'ls', '--all', '--filter', 'name=^/' + name + '$', '--format', '{{.Names}}'], { env, timeout: 15000 });
-    if (present.code !== 0 || (present.stdout.trim() && (await run(dockerBin, ['rm', '--force', name], { env, timeout: 30000 })).code !== 0)) {
+    const present = await run(dockerBin, dockerArguments(['container', 'ls', '--all', '--filter', 'name=^/' + name + '$', '--format', '{{.Names}}']), { env, timeout: 15000 });
+    if (present.code !== 0 || (present.stdout.trim() && (await run(dockerBin, dockerArguments(['rm', '--force', name]), { env, timeout: 30000 })).code !== 0)) {
       integrity = 'ERROR'; add('container-cleanup-' + name, 'ERROR', true, { error: 'Cannot verify removal of owned container ' + name });
     }
   }

@@ -28,6 +28,8 @@ class PythonLauncherTests(unittest.TestCase):
                                         "--previous", str(previous), "--flutter-bin", "relative sdk/flutter",
                                         "--android", "--security", "--profile", "full"])
             config = vars(args) | {"node": "node", "output": str(Path(directory) / "new report")}
+            config["docker_bin"] = sys.executable
+            config["docker_proxy"] = str(Path(directory) / "docker-proxy.json")
             argv = launcher.runner_arguments(config)
             self.assertEqual(argv[argv.index("--source") + 1], str(Path(directory).resolve()))
             self.assertEqual(argv[argv.index("--commit") + 1], "a" * 40)
@@ -35,17 +37,26 @@ class PythonLauncherTests(unittest.TestCase):
             self.assertTrue(Path(argv[argv.index("--flutter-bin") + 1]).is_absolute())
             self.assertIn("--android", argv)
             self.assertIn("--security", argv)
+            self.assertEqual(argv[argv.index("--docker-bin") + 1], sys.executable)
+            self.assertEqual(argv[argv.index("--docker-proxy") + 1], config["docker_proxy"])
 
     def test_venv_caches_and_home_are_local_without_application_credentials(self):
         with tempfile.TemporaryDirectory() as directory:
             scratch = Path(directory)
-            env = launcher.session_environment(scratch, {"PATH": "runtime-path", "HOME": directory,
+            env = launcher.session_environment(scratch, {"PATH": "runtime-path", "PATHEXT": ".EXE;.BAT;.CMD", "HOME": directory,
                                                         "MONGODB_URI": "must-not-leak", "GITHUB_TOKEN": "must-not-leak"})
             for key in ("PUB_CACHE", "NPM_CONFIG_CACHE", "GRADLE_USER_HOME", "HOME", "TMPDIR", "VIRTUAL_ENV", "PSModuleAnalysisCachePath"):
                 self.assertTrue(Path(env[key]).is_relative_to(scratch))
             self.assertNotIn("MONGODB_URI", env)
             self.assertNotIn("GITHUB_TOKEN", env)
             self.assertIn("venv", env["PATH"])
+            self.assertEqual(env["PATHEXT"], ".EXE;.BAT;.CMD")
+
+    def test_all_selects_existing_suites_and_requires_explicit_device_revision(self):
+        args = launcher.parse_args(["--all", "--commit", "a" * 40])
+        self.assertTrue(args.android and args.security and args.ci_checks)
+        with self.assertRaises(SystemExit):
+            launcher.parse_args(["--all"])
 
     def test_setup_failure_keeps_report_and_rejects_reused_output(self):
         with tempfile.TemporaryDirectory() as directory:

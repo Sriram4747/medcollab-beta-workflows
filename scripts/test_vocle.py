@@ -24,9 +24,9 @@ from vocle_bootstrap import Bootstrap, SetupRequired
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "apk", "profile")
+VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "docker_proxy", "gitleaks_bin", "apk", "profile")
 ENV_KEYS = {
-    "PATH", "SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PROGRAMFILES",
+    "PATH", "PATHEXT", "SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PROGRAMFILES",
     "PROGRAMFILES(X86)", "PROGRAMW6432", "LANG", "LC_ALL", "JAVA_HOME",
     "ANDROID_HOME", "ANDROID_SDK_ROOT",
 }
@@ -44,8 +44,14 @@ def parse_args(argv=None):
     parser.add_argument("--apk", type=Path, help="Record APK evidence (existing runner limitations apply)")
     parser.add_argument("--android", action="store_true", help="Use the existing emulator runner")
     parser.add_argument("--security", action="store_true", help="Include existing isolated security runtime")
+    parser.add_argument("--ci-checks", action="store_true", help="Run existing CI tooling contracts and pinned Gitleaks locally")
+    parser.add_argument("--all", action="store_true", help="Include Android, offline security and CI checks; requires --commit for Android provenance")
     parser.add_argument("--profile", choices=("full", "tooling", "backend-smoke"), default="full")
     args = parser.parse_args(argv)
+    if args.all:
+        args.android = args.security = args.ci_checks = True
+    if args.android and (not args.commit or args.profile != "full"):
+        parser.error("Android validation requires --profile full and --commit EXACT_SHA. Use --commit (git rev-parse HEAD) in PowerShell to test the committed revision.")
     for key in ("source", "output", "previous", "apk"):
         value = getattr(args, key)
         if value is not None:
@@ -142,7 +148,7 @@ def runner_arguments(config):
     for key in VALUE_OPTIONS:
         if config.get(key):
             argv.extend(["--" + key.replace("_", "-"), str(config[key])])
-    for key in ("android", "security"):
+    for key in ("android", "security", "ci_checks"):
         if config.get(key):
             argv.append("--" + key)
     return argv
@@ -195,19 +201,31 @@ def run_session(args):
         state["temporaryDirectory"] = str(scratch)
         state["cleanup"] = "PENDING"
         print("Creating disposable venv and package caches: " + str(scratch), flush=True)
-        venv.EnvBuilder(with_pip=False).create(scratch / "venv")
+        venv.EnvBuilder(with_pip=args.ci_checks).create(scratch / "venv")
         environment = session_environment(scratch)
         bootstrap = Bootstrap(scratch, output, environment, state)
         node = bootstrap.node()
         state["node"] = bootstrap.details["node"]["version"]
         config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
         config.update(output=str(output), node=node)
+        if args.ci_checks:
+            config["gitleaks_bin"] = bootstrap.gitleaks()
+            session_python = scratch / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+            print("Preparing Python packages used by the existing security environment workflow...", flush=True)
+            bootstrap.command([session_python, "-m", "pip", "install", "--disable-pip-version-check", "pytest", "requests", "httpx"], timeout=600)
+            _, installed = bootstrap.command([session_python, "-m", "pip", "freeze"])
+            bootstrap.details["pythonPackages"] = installed.splitlines()
         if args.profile in ("full", "backend-smoke"):
             print("Preparing local Linux container runtime...", flush=True)
             config["docker_bin"] = bootstrap.docker(args.runtime)
+            if os.name == "nt" and config["docker_bin"].endswith(".json"):
+                config["docker_proxy"] = config["docker_bin"]
+                config["docker_bin"] = sys.executable
         if args.profile == "full":
             print("Selecting or installing pinned Flutter 3.29.3...", flush=True)
             config["flutter_bin"] = bootstrap.flutter(args.flutter_bin)
+        if args.android:
+            bootstrap.android()
         config_path = scratch / "session.json"
         config_path.write_text(json.dumps(config), encoding="utf-8")
         python = scratch / "venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")

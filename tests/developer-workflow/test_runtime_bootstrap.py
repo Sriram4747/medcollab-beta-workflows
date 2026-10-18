@@ -83,6 +83,14 @@ class RuntimeBootstrapTests(unittest.TestCase):
         self.assertIn("type=bind,source=/mnt/c/work folder,target=/target,readonly", mapped)
         self.assertEqual(proxy_args(["run", "--rm", "image"], "linux")[1], "--network=host")
 
+    def test_wsl_private_workspaces_keep_windows_evidence_mounts_and_assertion_isolation(self):
+        args = ["run", "--network", "none", "--mount", r"type=bind,source=C:\session\target,target=/target,readonly",
+                "--mount", r"type=bind,source=C:\reports,target=/output"]
+        mapped = proxy_args(args, "wsl", {r"C:\session\target": "/opt/vocle/work/target"})
+        self.assertIn("type=bind,source=/opt/vocle/work/target,target=/target,readonly", mapped)
+        self.assertIn("type=bind,source=/mnt/c/reports,target=/output", mapped)
+        self.assertNotIn("--network=host", mapped)
+
     def test_private_daemon_never_uses_global_data_configuration_or_tcp(self):
         with tempfile.TemporaryDirectory() as directory:
             scratch = Path(directory)

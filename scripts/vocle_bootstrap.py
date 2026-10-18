@@ -31,13 +31,13 @@ def decode(raw):
     return raw.decode("utf-16-le" if b"\0" in raw[:80] else "utf-8-sig", errors="replace").strip("\ufeff\0\r\n ")
 
 
-def checked(argv, *, env=None, timeout=120, check=True, log=None):
+def checked(argv, *, env=None, timeout=120, check=True, log=None, input_text=None):
     command = list(map(str, argv))
     if os.name == "nt" and command[0].lower().endswith((".bat", ".cmd")):
         if any(re.search(r'[&|<>^%\r\n"]', arg) for arg in command):
             raise ValueError("Unsafe batch argument")
         command = 'cmd.exe /d /s /c "' + " ".join('"' + arg + '"' for arg in command) + '"'
-    child = subprocess.Popen(command, env=env, stdin=subprocess.DEVNULL,
+    child = subprocess.Popen(command, env=env, stdin=subprocess.PIPE if input_text is not None else subprocess.DEVNULL,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              start_new_session=os.name != "nt")
     chunks = []
@@ -48,6 +48,9 @@ def checked(argv, *, env=None, timeout=120, check=True, log=None):
 
     reader = threading.Thread(target=collect, daemon=True)
     reader.start()
+    if input_text is not None:
+        child.stdin.write(input_text.encode("utf-8"))
+        child.stdin.close()
     cancelled = False
     killers = []
 
@@ -164,12 +167,12 @@ def windows_mount(path):
     return "/mnt/" + value.drive[0].lower() + "/" + "/".join(value.parts[1:])
 
 
-def proxy_args(args, mode):
+def proxy_args(args, mode, workspaces=None):
     result = list(args)
     if mode == "wsl":
         for index, arg in enumerate(result):
             if index and result[index - 1] == "--mount":
-                result[index] = ",".join("source=" + windows_mount(piece[7:]) if piece.startswith("source=") else piece for piece in arg.split(","))
+                result[index] = ",".join("source=" + ((workspaces or {}).get(piece[7:]) or windows_mount(piece[7:])) if piece.startswith("source=") else piece for piece in arg.split(","))
     if result and result[0] == "run" and not any(arg == "--network" or arg.startswith("--network=") for arg in result):
         # Only dependency preparation lacks --network. Assertions keep --network none.
         result.insert(1, "--network=host")
@@ -191,7 +194,21 @@ def docker_proxy(config_file, args):
     config = json.loads(Path(config_file).read_text(encoding="utf-8"))
     prefix = ([config["wsl"], "--distribution", config["distribution"], "--user", "root", "--exec"]
               if config["mode"] == "wsl" else [])
-    command = prefix + [config["docker"], "--config", config["clientConfig"], "--host", config["socket"]] + proxy_args(args, config["mode"])
+    workspaces = {}
+    if config["mode"] == "wsl" and config.get("workspaceRoot"):
+        for index, arg in enumerate(args):
+            if index and args[index - 1] == "--mount":
+                fields = dict(piece.split("=", 1) for piece in arg.split(",") if "=" in piece)
+                destination, source = fields.get("target"), fields.get("source")
+                if source and destination in ("/target", "/harness"):
+                    private = config["workspaceRoot"] + destination
+                    # Linux dependency trees on /mnt/c can take minutes merely
+                    # to import. Copy the immutable source into our private guest;
+                    # prepare and execute with the original CI timeouts there.
+                    script = 'set -eu; if [ ! -f "$2/.vocle-mirror-ready" ]; then mkdir -p "$2"; tar -C "$1" --exclude=node_modules -cf "$2/.vocle-source.tar" .; tar -C "$2" -xf "$2/.vocle-source.tar"; rm "$2/.vocle-source.tar"; touch "$2/.vocle-mirror-ready"; fi'
+                    subprocess.run(prefix + ["sh", "-c", script, "vocle-mirror", windows_mount(source), private], check=True)
+                    workspaces[source] = private
+    command = prefix + [config["docker"], "--config", config["clientConfig"], "--host", config["socket"]] + proxy_args(args, config["mode"], workspaces)
     return subprocess.call(command)
 
 
@@ -203,6 +220,7 @@ class Bootstrap:
         self.daemon = None
         self.containerd = None
         self.daemon_log = None
+        self.android_runtime = None
         self.sudo = []
         self.wsl = shutil.which("wsl.exe") if os.name == "nt" else None
         state["runtimeSetup"] = {"downloads": [], "docker": "NOT_REQUESTED", "cleanup": "PENDING"}
@@ -323,12 +341,14 @@ class Bootstrap:
     def shim(self, config):
         config_path = self.scratch / "docker-proxy.json"
         config_path.write_text(json.dumps(config), encoding="utf-8")
-        executable = self.scratch / ("docker-proxy.cmd" if os.name == "nt" else "docker-proxy")
         if os.name == "nt":
-            text = '@echo off\r\n"' + sys.executable + '" "' + str(Path(__file__).resolve()) + '" --proxy "' + str(config_path) + '" %*\r\n'
-        else:
-            import shlex
-            text = "#!/bin/sh\nexec " + " ".join(shlex.quote(value) for value in [sys.executable, str(Path(__file__).resolve()), "--proxy", str(config_path)]) + ' "$@"\n'
+            # The Node harness invokes Python directly with this configuration.
+            # A batch shim cannot carry shell programs containing && or quotes
+            # without cmd.exe interpreting them before they reach the container.
+            return str(config_path)
+        executable = self.scratch / "docker-proxy"
+        import shlex
+        text = "#!/bin/sh\nexec " + " ".join(shlex.quote(value) for value in [sys.executable, str(Path(__file__).resolve()), "--proxy", str(config_path)]) + ' "$@"\n'
         executable.write_text(text, encoding="utf-8")
         executable.chmod(0o700)
         return str(executable)
@@ -400,7 +420,8 @@ class Bootstrap:
         binary = "/opt/vocle/docker/docker"
         socket = self.start_engines(prefix, PurePosixPath("/opt/vocle"), PurePosixPath(binary))
         self.details["docker"] = "disposable-wsl-engine"
-        return self.shim({"mode": "wsl", "wsl": self.wsl, "distribution": name, "docker": binary, "socket": socket, "clientConfig": "/opt/vocle/client"})
+        self.details["workspaceStorage"] = "private-wsl-linux-filesystem"
+        return self.shim({"mode": "wsl", "wsl": self.wsl, "distribution": name, "docker": binary, "socket": socket, "clientConfig": "/opt/vocle/client", "workspaceRoot": "/opt/vocle/work"})
 
     def linux_docker(self):
         if os.geteuid() != 0:
@@ -450,6 +471,8 @@ class Bootstrap:
 
     def close(self):
         try:
+            if self.android_runtime:
+                self.android_runtime.close()
             if self.guest and self.verify_wsl_owner():
                 self.command([self.wsl, "--terminate", self.guest], check=False)
                 self.command([self.wsl, "--unregister", self.guest], timeout=120)
@@ -490,6 +513,25 @@ class Bootstrap:
         finally:
             if self.daemon_log:
                 self.daemon_log.close()
+
+    def android(self):
+        from vocle_android import AndroidRuntime
+        self.details["android"] = {}
+        self.android_runtime = AndroidRuntime(self.scratch, self.output, self.env, self.command, self.details["android"])
+        self.android_runtime.prepare()
+
+    def gitleaks(self):
+        machine = "arm64" if platform.machine().lower() in ("arm64", "aarch64") else "x64"
+        key = ("windows" if os.name == "nt" else sys.platform) + "-" + machine
+        if key not in LOCK["gitleaks"]:
+            raise SetupRequired("Automatic Gitleaks installation unavailable for " + key)
+        asset = LOCK["gitleaks"][key]
+        directory = self.scratch / "gitleaks"
+        extract(self.asset(asset, asset["url"].rsplit("/", 1)[-1]), directory)
+        executable = directory / ("gitleaks.exe" if os.name == "nt" else "gitleaks")
+        executable.chmod(0o700)
+        self.details["gitleaks"] = {"kind": "disposable", "version": "8.30.1"}
+        return str(executable)
 
 
 if __name__ == "__main__" and len(sys.argv) > 2 and sys.argv[1] == "--proxy":
