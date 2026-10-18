@@ -3,6 +3,16 @@
 Updated: 18 October 2026. Applies to `scripts/test_vocle.py` and
 `scripts/test_vocle_cloudinary.py` in this repository.
 
+**First time here?** Follow sections 3, 4, 5 and 6 in order. Section 4 is the
+one-time machine setup. Section 6 is the command you repeat when testing a new
+commit. Section 9 shows how to open the dashboard. You can leave sections 7 and 8
+until you need extra security or live Cloudinary tests.
+
+This walkthrough assumes you are new to the tools. Each setup step says where
+to download, what to select and what a successful check looks like. If you already
+have a tool, run its check first and reuse it when it meets the listed version.
+Installing the launcher does **not** install every machine prerequisite.
+
 ## Contents
 
 1. [What this tool does](#1-what-this-tool-does)
@@ -129,118 +139,448 @@ verification or container isolation to get around a download error.
 
 ## 4. Install the prerequisites on Windows
 
+### Start here: who installs what?
+
+For the **Windows x64 full 187-case run**, use this table before downloading
+anything. "Developer" means you or your IT team complete that setup once.
+
+| Item | Who prepares it? | Version or selection | Instructions |
+| --- | --- | --- | --- |
+| Windows and hardware virtualization | Developer/IT | Windows 11 x64 is the validated path; firmware virtualization enabled | [4.2 A](#a-check-windows-and-hardware-virtualization) |
+| Python with venv/pip | Developer | Launcher requires 3.10+; use maintained **64-bit Python 3.13.x** for a fresh install | [4.1 A](#a-install-and-check-python) |
+| Git | Developer | Current stable Git for Windows x64; no exact Git pin | [4.1 B](#b-install-and-check-git) |
+| Windows Hypervisor Platform | Developer/IT | Windows optional feature for emulator acceleration | [4.2 B](#b-enable-the-windows-features-for-virtualization) |
+| WSL 2 platform | Script can request setup, or developer/IT installs beforehand | WSL **2**, not WSL 1; elevation/restart may be needed | [4.2 C](#c-prepare-wsl-2-or-let-the-script-request-it) |
+| Android Studio / SDK tools | Developer | Stable Windows x64 Studio as the SDK installer; required SDK versions below | [4.3 A–C](#a-install-android-studio-and-find-the-sdk-folder) |
+| JDK | Developer | **JDK 21**; reuse Studio's bundled JDK if it reports 21 | [4.3 D](#d-check-java-and-configure-the-sdkjdk-paths) |
+| Android system image and SDK licenses | Developer | Google Play **x86_64**, Android **36.1**; review licenses | [4.3 C and E](#c-install-the-exact-android-packages) |
+| Python venv, Node/npm, Flutter/Dart, packages, minimal Docker, MongoDB, Gradle, Gitleaks, temporary AVD | Script | Reuses compatible tools or prepares the versions in the runtime lock | [4.4](#44-what-the-script-prepares-automatically) |
+
+You do **not** need to install Docker Desktop, a personal Ubuntu distribution,
+MongoDB, Node.js, Flutter, Dart or Gradle just to follow this Windows walkthrough.
+You also do not need to create a Python venv or Android virtual device yourself.
+The script needs the Android **image** installed before it can create the device.
+
+### How to use the commands in this guide
+
+1. Press the Windows key, type **PowerShell**, and open **Windows PowerShell** or
+   a Windows Terminal **PowerShell** tab. Use a normal window unless a step says
+   **administrator**.
+2. Copy only the lines inside a `powershell` code block. Do not copy a displayed
+   `PS C:\...>` prompt. Paste the block and press Enter.
+3. Run the blocks in order. If a check fails, resolve it before continuing.
+4. `$env:...` reads or sets a Windows environment variable for this terminal.
+   `Test-Path` prints `True` when a file exists. The `&` at the start of a line
+   runs an executable whose path is in quotes.
+5. When a step says to reopen the terminal, close the whole terminal window. If
+   you use the Android Studio terminal, reopen the IDE too so it reads new settings.
+
 ### 4.1 Python and Git: install once
 
-1. Install **64-bit Python 3.10 or later** from the
-   [Python Windows downloads page](https://www.python.org/downloads/windows/).
-   Include `venv`/pip and put Python on PATH. Python 3.12 was validated locally.
-2. Install Git using the [official Git installation instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
-   Ensure `git` is available to terminal applications.
-3. Open a new PowerShell window and check:
+#### A. Install and check Python
+
+**Already installed?** In normal PowerShell, run:
 
 ```powershell
 python --version
-git --version
-python -m venv --help
+python -c "import sys, struct, venv, ensurepip; print(sys.executable); print('Python bits:', struct.calcsize('P') * 8)"
+python -m pip --version
 ```
 
-If `python` opens the Microsoft Store or is missing, fix your Python installation
-or Windows app execution alias. If your installation uses the `py` launcher,
-you may use `py -3` in place of `python` in the commands below after confirming
-it selects Python 3.10+. Do not install Python packages into your global Python
-environment for this runner.
+Continue if you see Python **3.10 or later**, `Python bits: 64`, an executable
+path and a pip version without an import error. The reference full run used
+Python 3.12.0. That is a historical observation, not a request to install an old
+unpatched release. For a fresh setup, use a maintained **3.13.x** build, which has
+official Windows installers (3.13.16 when this guide was updated). Python 3.12's
+newer security releases are source-only, so an old 3.12 installer is not the
+recommended fresh-install route. See the [official 3.13 download](https://www.python.org/downloads/release/python-31316/)
+and [Python's release notice](https://blog.python.org/2026/10/python-31022-31117/).
+The launcher accepts 3.10+, but only the recorded 3.12 environment has had the
+complete local 187-case validation; this is not a full-suite certification of
+every newer Python version.
+
+**Not installed? Follow these steps:**
+
+1. Open the [official Python Windows downloads page](https://www.python.org/downloads/windows/).
+2. Choose **Python install manager**, then its **Installer (MSIX)**. Open the
+   downloaded file and select **Install**. Use the current manager release;
+   the manager version is separate from the Python 3.13 runtime version.
+3. Close and reopen normal PowerShell. Install the maintained 3.13 runtime:
+
+   ```powershell
+   pymanager install 3.13
+   py -V:3.13 --version
+   py -V:3.13 -c "import struct, venv, ensurepip; print('Python bits:', struct.calcsize('P') * 8)"
+   py -V:3.13 -m pip --version
+   ```
+
+4. Expect `Python 3.13.x`, `Python bits: 64` and a pip version. The `x` represents
+   the patch installed by the manager; do not type `.x` in a command.
+5. Run `python --version` as well. All later examples use `python`. If it selects
+   a different installation or opens the Store, use **`py -V:3.13` in place of
+   `python`** in those examples. Section 6 includes the complete alternate command.
+
+If MSIX installation is blocked, ask IT to install the official manager using
+its MSI deployment option, or supply an approved maintained 64-bit Python with
+venv/pip. If `pymanager` is missing after reopening, check **Start > Manage app
+execution aliases** for Python's manager aliases and ask IT if they are locked.
+An older `py` launcher can coexist with the manager; `pymanager install 3.13`
+avoids confusing the old launcher with the manager's installer command.
+See [Python's Windows installation and troubleshooting guide](https://docs.python.org/3/using/windows.html).
+
+Do not download the **embeddable ZIP**, a source archive or a preview/free-threaded
+build for this walkthrough. If using a traditional Python `.exe` installer
+provided by IT, enable **Add python.exe to PATH** and include **pip**. Do not
+install test packages into global Python; the Vocle launcher supplies its own venv.
+
+**Done when:** one of `python` or `py -V:3.13` passes the version, 64-bit and pip
+checks above. Remember which command works on your machine.
+
+#### B. Install and check Git
+
+1. Run `git --version` in normal PowerShell. If it prints `git version 2...`,
+   you already have Git. This launcher has no exact Git version pin. The
+   reference machine used `2.53.0.windows.2`.
+2. If missing, open [Git for Windows](https://gitforwindows.org/) and choose the
+   current stable **x64 installer**. Use the installer, not a source-code ZIP.
+3. Open the downloaded `.exe`. Follow the installer. On its PATH selection page,
+   choose **Git from the command line and also from 3rd-party software** so
+   PowerShell and Python can find it. Keep your team's approved choices for
+   editor, credential manager and other settings; there are no extra Vocle
+   requirements on those pages.
+4. Close and reopen PowerShell, then run:
+
+   ```powershell
+   git --version
+   Get-Command git
+   ```
+
+**Done when:** a Git version and the path to `git.exe` appear. If Git works only
+in Git Bash, rerun the installer to enable its command-line PATH option. Tests
+below use **PowerShell**.
 
 ### 4.2 WSL 2 and virtualization: install/enable once
 
-For automatic minimal Docker setup on Windows, WSL 2 must be able to start.
-Use a supported Windows 11 x64 machine. Microsoft's installation command also
-supports Windows 10 version 2004/build 19041 or later; this project's complete run
-was validated on Windows 11. See the [Microsoft WSL installation guide](https://learn.microsoft.com/en-us/windows/wsl/install).
+There are three separate pieces here: hardware virtualization, Windows emulator
+acceleration, and WSL 2 for the managed Docker runtime. A Python venv cannot supply
+these OS capabilities.
 
-Enable CPU virtualization in BIOS/UEFI if it is disabled. Windows Virtual Machine
-Platform is needed by WSL 2. The Android emulator also needs a working hypervisor;
-follow [Android's acceleration instructions](https://developer.android.com/studio/run/emulator-acceleration)
-for Windows Hypervisor Platform (WHPX).
+#### A. Check Windows and hardware virtualization
 
-The Python launcher can request elevation to install the WSL platform with its
-fixed setup helper. If it prints `RESTART_REQUIRED`, restart Windows and rerun
-the same test command. That attempt has not run the application tests.
+1. Open **Settings > System > About**. Under **System type**, confirm an **x64-based
+   processor** and 64-bit Windows. Use Windows 11 x64 for the validated full path.
+   ARM Windows is not this workflow's complete 187-case path.
+2. Press **Ctrl+Shift+Esc**, open **Performance > CPU**, and find **Virtualization**.
+   Continue if it says **Enabled**.
+3. If it says **Disabled**, save your work. Ask IT or follow your computer maker's
+   instructions to enter BIOS/UEFI and enable Intel **VT-x / Virtualization
+   Technology** or AMD **SVM / AMD-V**. Firmware screens differ, so there is no
+   universal key/menu to copy. Save the firmware setting, boot Windows, then
+   check Task Manager again. The launcher cannot make this firmware change.
 
-If IT prefers to prepare WSL beforehand, run the following in an administrator
-PowerShell, then restart when requested:
+If your work computer is itself a VM, ask IT whether this workload is supported
+on that VM. This guide validates a suitable x64 Windows host, not nested VMs.
 
-```powershell
-wsl --install --no-distribution --web-download
-```
+#### B. Enable the Windows features for virtualization
 
-After the restart, check in a normal terminal:
+1. Open Start and search for **Turn Windows features on or off**. Open it and
+   approve the Windows administrator prompt, or ask IT to do this step.
+2. Select **Windows Hypervisor Platform** for Android emulator acceleration.
+3. Select **Virtual Machine Platform** for WSL 2. If already selected, leave it on.
+4. Click **OK** and let Windows finish. Save your work and select **Restart now**
+   if requested. A terminal restart is not a Windows restart.
+5. After signing in, return to this guide. The emulator check in section 4.3 F
+   confirms whether acceleration actually works.
 
-```powershell
-wsl --status
-```
+Use [Android's official WHPX instructions](https://developer.android.com/studio/run/emulator-acceleration#vm-windows-whpx)
+if the check fails. The walkthrough uses Windows Hypervisor Platform, so you do
+not need to add an old Intel HAXM installer or disable Windows security features.
 
-You do not need to install a personal Ubuntu distribution or Docker Desktop for
-the managed path. The runner imports its own disposable `Vocle-Test-...` guest.
-Windows WSL remains installed after the guest is removed. If your machine is
-itself a VM, IT must provide the virtualization capabilities needed by WSL and
-the emulator; otherwise use a suitable development machine.
+#### C. Prepare WSL 2 or let the script request it
+
+**Option 1: let the launcher prepare it.** No separate WSL download is needed.
+When you run section 6, the fixed setup helper can request administrator approval
+to install the WSL platform. Approve only if permitted by your team. If it prints
+`RESTART_REQUIRED`, note the report path, restart Windows, reopen PowerShell,
+return to your repository folder, and run the **same test command** again. That
+setup-only attempt has not executed the 187 application cases.
+
+**Option 2: install it now so the first test run has less setup to do.** Use this
+if you or IT want to finish the OS preparation before testing:
+
+1. Open Start, search **PowerShell**, right-click it and select **Run as
+   administrator**. Approve the Windows prompt.
+2. Run this exact command:
+
+   ```powershell
+   wsl --install --no-distribution --web-download
+   ```
+
+3. Let installation finish. Save your work and restart Windows if requested.
+4. Open a **normal** PowerShell window and check:
+
+   ```powershell
+   wsl --version
+   wsl --status
+   wsl --list --verbose
+   ```
+
+5. An installed WSL version with kernel details is expected. On an otherwise
+   unused machine, **no installed distributions** is fine: the test launcher
+   imports its own guest. If `wsl --status` says the default version is 1, run
+   `wsl --set-default-version 2` and check again. This changes the default for
+   new distributions, not the version of an existing personal distribution.
+
+If Windows says the kernel/platform needs an update, run `wsl --update` in the
+administrator window, restart if requested and repeat the checks. If `--version`
+is unrecognized or WSL reports that virtualization cannot start, use the
+[Microsoft installation](https://learn.microsoft.com/en-us/windows/wsl/install)
+and [troubleshooting](https://learn.microsoft.com/en-us/windows/wsl/troubleshooting)
+instructions with IT. A status command alone does not prove a test guest will
+boot; the launcher checks that during preparation.
+
+You do not need to download Docker Desktop or open a Linux terminal. The runner
+creates its own disposable `Vocle-Test-...` guest. WSL's Windows platform stays
+installed after the test guest is removed. A working existing local Linux Docker
+engine is another supported path, explained in section 7.
 
 ### 4.3 Android Studio, SDK and JDK: install once for all 187 cases
 
-1. Install [Android Studio](https://developer.android.com/studio).
-2. Open **SDK Manager** (from the welcome screen's More Actions or the IDE's
-   Tools menu). Note the **Android SDK Location**.
-3. Install the SDK packages in the table below. Enable **Show Package Details**
-   where required. Complete downloads before starting the tests.
-4. Review/accept licenses when prompted. The launcher does not accept them for you.
+The **SDK** is Android's build/device tool folder. A **system image** is the
+Android OS the emulator boots. An **AVD** is a virtual device created from an
+image. Install the SDK and image here; the script creates and removes the AVD.
+The **JDK** supplies Java for Android build tools.
 
-| SDK selection | Requirement for the current app |
-| --- | --- |
-| Android SDK Platform-Tools | Provides `adb` |
-| Android Emulator | Provides the headless native test device |
-| Android SDK Command-line Tools | Provides `avdmanager` and `sdkmanager` |
-| Android SDK Platform 35 and Build-Tools 35.0.0 | Current Flutter 3.29.3 default compile SDK; install additional versions if a selected app revision explicitly requires them |
-| NDK (Side by side) 27.0.12077973 | Explicit version in the app's Android build configuration |
-| x86_64 Android system image with Google Play | Validated selection: `system-images;android-36.1;google_apis_playstore;x86_64`; includes a document viewer used by media tests |
+#### A. Install Android Studio and find the SDK folder
 
-Do not assume an arbitrary emulator image has the same native behavior. The
-launcher currently selects the lexically last installed `*/*/x86_64/package.xml`
-image; there is no image-selection CLI flag. If several images are installed,
-check the selected image printed by the launcher. For reproducibility, use a
-dedicated SDK installation with the validated image if necessary. You do not
-need to create an AVD manually.
+1. Open the [official Android Studio download page](https://developer.android.com/studio).
+2. Download the **stable Windows 64-bit `.exe` installer**. Studio itself has no
+   launcher version pin. The SDK package versions and JDK major below are the
+   versions to check. You do not need a Canary/preview Studio build.
+3. Open the downloaded installer. Keep Android Studio selected, finish installation,
+   then launch it. On a new installation, complete its initial setup wizard and
+   let the recommended SDK downloads finish. A Google account sign-in is not
+   required for this local test command.
+4. At the welcome screen select **More Actions > SDK Manager**. If a project is
+   already open, use **Tools > SDK Manager** instead.
+5. At the top, copy the **Android SDK Location** into a note. The usual location
+   is `C:\Users\YOUR_WINDOWS_NAME\AppData\Local\Android\Sdk`. Your displayed
+   location is the one to use, even if it is on another drive.
 
-The Android Studio JDK 21 was validated. On a standard Windows install its path
-is `C:\Program Files\Android\Android Studio\jbr`. If yours differs, configure
-these variables in the PowerShell terminal used for testing:
+An existing installation is fine: start at step 4 and check its packages. The
+launcher does not need a Flutter IDE plugin or an Android project opened in Studio.
+See the [official Studio installation guide](https://developer.android.com/studio/install)
+if the installer or setup wizard cannot finish.
+
+#### B. Install the SDK tools through SDK Manager
+
+1. In **SDK Manager**, select the **SDK Tools** tab.
+2. Select **Android SDK Platform-Tools**, **Android Emulator**, and **Android SDK
+   Command-line Tools (latest)**. These supply `adb`, `emulator`, `sdkmanager`
+   and `avdmanager`. Use the current stable offered versions; the launcher does
+   not pin their exact patch revisions.
+3. Enable **Show Package Details**. Expand **Android SDK Build-Tools** and select
+   **35.0.0**. Expand **NDK (Side by side)** and select **27.0.12077973**.
+4. Click **Apply**, review the package list and any licenses, and finish the
+   download. Leave any packages needed by other projects installed.
+
+For orientation, the current validation machine has Emulator 36.5.10,
+Platform-Tools 37.0.0 and Command-line Tools 20.0. These are observed tool
+revisions, not extra pins or a reason to downgrade a working installation.
+
+#### C. Install the exact Android packages
+
+In SDK Manager's **SDK Platforms** tab, enable **Show Package Details**:
+
+1. Expand the Android **API 35** entry and select **Android SDK Platform 35**.
+2. Expand the Android **36.1** entry and select its **Google Play x86_64** system
+   image. Make sure it is **Google Play** and **x86_64**. An ARM64 image, a plain
+   Google APIs image or another Android API image does not reproduce this baseline.
+3. Click **Apply**, review licenses, then wait for **Finish**.
+
+The required package identifiers below are authoritative if the UI wording differs.
+If the exact image is missing from the UI, install the command-line tools first,
+configure Java/SDK paths in part D, then use part E's command to request it.
+
+| Package | Exact SDK package identifier | Why we need it |
+| --- | --- | --- |
+| Platform-Tools | `platform-tools` | Device connection with `adb` |
+| Emulator | `emulator` | Boots the temporary device |
+| Command-line Tools | `cmdline-tools;latest` | SDK/AVD management commands |
+| Compile platform | `platforms;android-35` | Current pinned Flutter app build default |
+| Build tools | `build-tools;35.0.0` | Android build utilities |
+| NDK | `ndk;27.0.12077973` | Explicit version in the app's build configuration |
+| Test device image | `system-images;android-36.1;google_apis_playstore;x86_64` | Validated native behavior, including the document viewer used by media tests |
+
+**API 35 for compilation and Android 36.1 for the test device are intentional.**
+They serve different purposes. Do not change the app's SDK versions to match the
+device image.
+
+You do not need to create a device in Device Manager. If you have several x86_64
+images, the current launcher selects the lexically last installed
+`*/*/x86_64/package.xml` path, not a user-selected AVD. Part F prints the same
+selection order so you can check before running. There is no image-selection
+CLI flag. If the first image differs, use a dedicated SDK with the validated
+packages or ask the maintainer to help; do not remove images other projects need.
+
+#### D. Check Java and configure the SDK/JDK paths
+
+Open **normal PowerShell**. Start with the usual installation paths:
 
 ```powershell
 $env:ANDROID_HOME = "$env:LOCALAPPDATA\Android\Sdk"
 $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
 Test-Path "$env:ANDROID_HOME\platform-tools\adb.exe"
+Test-Path "$env:JAVA_HOME\bin\java.exe"
+& "$env:JAVA_HOME\bin\java.exe" -version
+```
+
+Both checks should print `True`, followed by Java version **21...** and a 64-bit
+VM line. Java sometimes prints its version on the terminal's error stream; version
+text by itself is not a failed check. Android Studio's JDK 21.0.10 was used on the
+validation machine; use maintained JDK 21 patches rather than pinning that patch.
+
+**If either path is wrong:** replace the right-hand quoted path with the actual
+SDK location from part A or your actual JDK folder. `ANDROID_HOME` must be the
+folder containing `platform-tools`, `emulator` and `cmdline-tools`. `JAVA_HOME`
+must be the folder containing `bin\java.exe`, **not** the `bin` folder itself.
+Keep quotes around paths containing spaces.
+
+**If Studio has no JDK 21 or bundles another major:**
+
+1. Open [Microsoft's official OpenJDK downloads](https://learn.microsoft.com/en-us/java/openjdk/download#openjdk-21).
+2. Under **OpenJDK 21**, download the **Windows x64 ZIP** and its SHA-256 file.
+   Choose the current 21.x patch. This is a JDK 21 fallback; the recorded full
+   run used Studio's bundled JDK, not every vendor's JDK build.
+3. In PowerShell run `Get-FileHash 'C:\path\to\the-downloaded-jdk.zip' -Algorithm SHA256`,
+   replacing the example with your ZIP's actual path. Compare the hash to the
+   download page's SHA-256 file before extracting.
+4. In File Explorer, right-click the ZIP, select **Extract All**, and extract to
+   a short writable folder, for example `C:\Users\YOUR_WINDOWS_NAME\tools\jdk21`.
+5. Open that folder. There may be another JDK directory inside it. Find the
+   directory that directly contains `bin` and `lib`, then copy its address.
+6. Set `$env:JAVA_HOME = 'YOUR_ACTUAL_JDK_DIRECTORY'` using that address, then
+   repeat the `Test-Path` and Java version checks above. Do not type the placeholder.
+
+These `$env:` assignments affect the **current terminal only**. Once both paths
+are correct, save them for your Windows user so future runs find them:
+
+```powershell
+[Environment]::SetEnvironmentVariable('ANDROID_HOME', $env:ANDROID_HOME, 'User')
+[Environment]::SetEnvironmentVariable('JAVA_HOME', $env:JAVA_HOME, 'User')
+```
+
+If you already use `ANDROID_SDK_ROOT`, it must point to the **same** SDK. Correct
+that existing setting as well:
+
+```powershell
+if ($env:ANDROID_SDK_ROOT) {
+    $env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
+    [Environment]::SetEnvironmentVariable('ANDROID_SDK_ROOT', $env:ANDROID_HOME, 'User')
+}
+```
+
+Close and reopen PowerShell (and the IDE if using its terminal), then check:
+
+```powershell
+$env:ANDROID_HOME
+$env:JAVA_HOME
+& "$env:JAVA_HOME\bin\java.exe" -version
+```
+
+Expect your saved SDK/JDK directories and Java **21** again. If a company-managed
+system variable overrides your user setting, ask IT to align it. There is no need
+to add each Android tool directory to PATH: the commands below use full paths.
+
+#### E. Install missing packages and review SDK licenses
+
+The following is an **installation** command for the permanent SDK you selected,
+not a test invocation. Run it in normal PowerShell after part D. It is also useful
+if the SDK Manager UI did not expose the exact package selection:
+
+```powershell
+$vocleSdkManager = "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat"
+Test-Path $vocleSdkManager
+```
+
+The path check must be `True`. If you have a version-numbered command-line-tools
+folder instead of `latest`, run `Get-ChildItem "$env:ANDROID_HOME\cmdline-tools"`,
+then replace `latest` in the assignment with that actual folder name. The launcher
+accepts both layouts. If no such folder exists, return to part B and install
+Android SDK Command-line Tools.
+
+Once the path check is `True`, install the packages:
+
+```powershell
+& $vocleSdkManager --install 'platform-tools' 'emulator' 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.0.12077973' 'system-images;android-36.1;google_apis_playstore;x86_64'
+```
+
+Wait for package installation to finish. If it reports an unknown package, check
+the exact spelling, SDK Manager's available packages and network access. Do not
+silently substitute an ARM/other image. Review any requested SDK licenses yourself.
+Then check remaining licenses:
+
+```powershell
+& $vocleSdkManager --licenses
+```
+
+Read each agreement and enter `y` followed by Enter **only if you accept it**.
+Continue once it reports that all required SDK package licenses are accepted.
+The launcher does not accept licenses on your behalf. See the
+[official sdkmanager reference](https://developer.android.com/tools/sdkmanager)
+for package/license commands.
+
+Gradle may request other licensed SDK components for the app's plugins. Those go
+into this existing SDK and remain after cleanup. If a build names another missing
+component, install the exact version from its diagnostic through SDK Manager,
+then rerun. Do not edit application SDK pins just to suppress a setup error.
+
+#### F. Verify the Android installation before testing
+
+In the **same normal PowerShell terminal**, run:
+
+```powershell
+Test-Path "$env:ANDROID_HOME\platform-tools\adb.exe"
 Test-Path "$env:ANDROID_HOME\emulator\emulator.exe"
-Test-Path "$env:ANDROID_HOME\cmdline-tools\latest\bin\avdmanager.bat"
+Get-ChildItem "$env:ANDROID_HOME\cmdline-tools\*\bin\avdmanager.bat"
+Test-Path "$env:ANDROID_HOME\platforms\android-35\android.jar"
+Test-Path "$env:ANDROID_HOME\build-tools\35.0.0\aapt2.exe"
+Test-Path "$env:ANDROID_HOME\ndk\27.0.12077973\source.properties"
+Test-Path "$env:ANDROID_HOME\system-images\android-36.1\google_apis_playstore\x86_64\package.xml"
 & "$env:JAVA_HOME\bin\java.exe" -version
 & "$env:ANDROID_HOME\emulator\emulator.exe" -accel-check
 ```
 
-Change the example paths to your actual locations. Versioned command-line-tools
-directories are accepted too; `latest` is just the common example. If
-`ANDROID_SDK_ROOT` is also set, keep it consistent with `ANDROID_HOME`.
-Terminal assignments above last for that terminal session only.
+Every `Test-Path` should be `True`, the command-line-tools listing should include
+`avdmanager.bat`, and Java should report **21**. The acceleration check should
+report a usable hypervisor, such as **WHPX is installed and usable**, and exit
+successfully. If it cannot use acceleration, return to section 4.2 before starting
+a long test run.
 
-For command-line SDK installation, use the installed `sdkmanager.bat` and the
-[official sdkmanager instructions](https://developer.android.com/tools/sdkmanager).
-For example, after configuring Java/SDK paths:
+Check which image the launcher will choose. This lists matching paths in the
+same descending order used by the Python launcher:
 
 ```powershell
-& "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" --install 'platform-tools' 'emulator' 'platforms;android-35' 'build-tools;35.0.0' 'ndk;27.0.12077973' 'system-images;android-36.1;google_apis_playstore;x86_64'
-& "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" --licenses
+python -c "import os; from pathlib import Path; sdk=Path(os.environ['ANDROID_HOME']); images=sorted(sdk.glob('system-images/*/*/x86_64/package.xml'), reverse=True); print('\n'.join(str(p.relative_to(sdk)) for p in images) or 'NO X86_64 IMAGE INSTALLED')"
 ```
 
-Read the license prompts. Gradle may request other SDK components for plugins;
-allow space and install the exact versions named by a genuine SDK diagnostic.
-Do not change app SDK versions merely to suppress a setup error.
+The **first** line should be
+`system-images\android-36.1\google_apis_playstore\x86_64\package.xml`.
+If your Python command is `py -V:3.13`, use that at the beginning instead.
+
+Finally, close any running Android emulators and disconnect physical Android
+devices, including devices connected through wireless debugging. Check:
+
+```powershell
+& "$env:ANDROID_HOME\platform-tools\adb.exe" devices
+```
+
+Expected: `List of devices attached` with **no device rows below it**. An `offline`
+or `unauthorized` row still needs attention. Close/disconnect it before continuing.
+The test script creates its own emulator; starting one manually blocks isolation.
+
+**Done when:** paths exist, Java is 21, licenses are accepted, the selected image
+matches, acceleration is usable and the device list is empty.
 
 ### 4.4 What the script prepares automatically
 
@@ -251,14 +591,34 @@ Do not change app SDK versions merely to suppress a setup error.
 | Flutter | Reuses exact Flutter 3.29.3 if found or explicitly provided; otherwise installs a disposable pinned SDK |
 | Dart/Flutter packages | Fetches the app's dependencies using the existing runner and checks dependency integrity |
 | Backend/sanity packages | Uses locked dependency installation in the isolated test setup |
-| Minimal Docker/containerd | Reuses a running local Linux Docker engine, or provisions a private engine on x64 Windows/Linux |
+| Minimal Docker/containerd | Reuses a running local Linux Docker engine, or provisions the pinned Docker 29.9.1 bundle in a private x64 Windows/Linux runtime |
 | MongoDB | Prepares test-owned Mongo binaries/databases; no MongoDB service installation or Atlas account needed |
 | Gradle | Prepares verified Gradle 8.10.2 in the disposable cache for Android |
-| Gitleaks | Prepares the checksum-verified version when `--ci-checks` is selected |
+| Gitleaks | Prepares checksum-verified 8.30.1 when `--ci-checks` is selected |
 | Android AVD | Creates/boots a temporary 4-core/4-GB AVD from the installed image, then removes it |
 
 Runtime pins/checksums are in `scripts/vocle-runtime-lock.json`. Do not upgrade
 Flutter or dependency lockfiles just to make a failed case disappear.
+
+**You supply:** Python/Git, the installed Android SDK/JDK/image, accepted licenses,
+and usable OS virtualization. **The launcher supplies:** the temporary test
+workspace and the runtime/packages in the table. Its automatic setup does not
+replace the one-time machine setup above. Installed prerequisites remain on your
+computer; temporary resources are cleaned after each run.
+
+### 4.5 Ready to continue?
+
+- [ ] I can run Python 64-bit with venv/pip, and Git, in normal PowerShell.
+- [ ] My Windows host has hardware virtualization enabled and emulator acceleration works.
+- [ ] WSL 2 is ready, or I have permission for the launcher's setup and restart.
+- [ ] The required Android packages/image are installed and licenses accepted.
+- [ ] `ANDROID_HOME` and `JAVA_HOME` point to my actual SDK and JDK 21 directories.
+- [ ] After reopening the terminal, the saved paths still work.
+- [ ] Other Android emulators/devices are disconnected and I have enough free space.
+
+If all of these are true, continue to section 5. You do not need to run `pip
+install`, `npm install`, `flutter pub get` or start Docker/MongoDB manually for
+the managed path.
 
 ## 5. Get the repository and check your setup
 
@@ -269,12 +629,26 @@ interactive prompt or WSL shell. The IDE terminal is fine if it is PowerShell.
 Use a short local path that you can write to. Avoid cloud-synced/network folders,
 commas and shell characters such as `&`, `%`, `^` or `!` in tool/checkout paths.
 
+1. Open normal PowerShell. You do not need an administrator terminal to clone
+   the repository or run tests.
+2. Run the block below. It creates a `source` folder inside your Windows user
+   folder, downloads the repository, then enters its root folder:
+
 ```powershell
 New-Item -ItemType Directory -Path "$env:USERPROFILE\source" -Force | Out-Null
 Set-Location "$env:USERPROFILE\source"
 git clone --branch master https://github.com/Sriram4747/medcollab-beta-workflows.git
 Set-Location .\medcollab-beta-workflows
 ```
+
+3. Wait for cloning to finish before using `Set-Location`. If Git asks you to
+   authenticate, use your team's GitHub sign-in method. A `Repository not found`
+   or access-denied error needs the correct repository access, not Python packages.
+4. Your prompt should now end in `\source\medcollab-beta-workflows>`. Continue
+   with **Check the checkout** below. You can keep this PowerShell window open.
+
+If the clone says the destination already exists, do not clone over it. Use the
+existing-checkout steps below, or choose a different empty parent folder.
 
 Use your team's approved source checkout when different, while retaining the
 current testing scripts. This repository's `origin` is the experimental testing
@@ -287,12 +661,52 @@ Change into the **repository root**, the folder containing `scripts`,
 
 ```powershell
 Set-Location 'C:\path\to\medcollab-beta-workflows'
+```
+
+Replace the quoted example with your actual checkout path. An easy way to find
+it is to open the repository in File Explorer, click the address bar and copy
+the full path. Keep the quotes when pasting the path into `Set-Location`.
+Do not stop in the `scripts` or `medcollab-app` subfolder.
+
+### Check the checkout
+
+Everyone, including developers using a fresh clone, should run:
+
+```powershell
+Get-Location
 git status --short
 git remote -v
 git rev-parse --show-toplevel
 Test-Path .\scripts\test_vocle.py
 python .\scripts\test_vocle.py --help
 ```
+
+If you selected Python through `py -V:3.13`, replace `python` on the last line
+with `py -V:3.13`.
+
+Expected checks:
+
+| Check | What you should see |
+| --- | --- |
+| `Get-Location` / `git rev-parse --show-toplevel` | Both identify your repository root |
+| `git status --short` | Empty on a clean clone; file rows mean local changes to review before choosing a source commit |
+| `git remote -v` | `origin` points to the approved fork, not an unintended repository |
+| `Test-Path` | `True` |
+| `--help` | The launcher's options, including `--android`, `--ci-checks` and `--commit`; this does not run tests |
+
+For an existing **clean `master` checkout** of this fork, you can get the newest
+guide/tooling with:
+
+```powershell
+git branch --show-current
+git status --short
+git pull --ff-only origin master
+```
+
+Only run the pull after confirming you are on `master` and status is empty.
+If you are on a feature branch or have local edits, use your team's normal
+update/merge process instead. Do not discard work with reset/clean just to update
+this guide. A pull conflict or authentication problem needs Git help before testing.
 
 Use a fresh clone or update through your normal Git workflow if the script is
 missing/outdated. Preserve your existing edits; do not reset/clean the checkout.
@@ -309,11 +723,43 @@ devices. The launcher will create the one required emulator itself.
 
 ## 6. Run all 187 functional cases
 
-### Step 1: decide which application bytes to test
+### Step 1: choose which code to test
 
 For all 187 cases, the app must be in a **local Git commit**. Review your changes
 and create a commit through your normal workflow if you want those changes tested.
 A local commit does not require a push. The launcher does not create commits.
+
+Run:
+
+```powershell
+git status --short
+git log -1 --oneline
+git rev-parse HEAD
+```
+
+If you just cloned the repository and made no edits, its existing latest commit
+is enough. You do not need to create an empty commit. If you changed app files,
+review and commit the intended changes using your IDE's Git/Commit window or your
+normal Git commands first. Select only the files intended for that change.
+`git log -1 --oneline` should then show that commit; `git rev-parse HEAD` prints
+its full 40-character ID. `HEAD` means your currently checked-out commit.
+
+If you need the command-line steps to create that local commit:
+
+1. Run `git diff --stat` to see changed files, then `git diff` to review unstaged
+   content. If your IDE already staged files, review those with `git diff --cached`.
+2. Stage each intended file with `git add -- 'relative/path/to/your-file'`.
+   Replace that quoted example with an actual path shown by Git, relative to the
+   repo root. Repeat for each intended file. Leave reports and private inputs out.
+3. Run `git diff --cached --stat` and `git diff --cached`. Check that this is
+   exactly the change you want to test.
+4. Run `git commit -m 'Describe the change being tested'`, replacing the message
+   with your description. This saves locally; it does not push to GitHub.
+5. If Git asks for your identity, run `git config user.name 'YOUR NAME'` and
+   `git config user.email 'YOUR APPROVED COMMIT EMAIL'` with your real approved
+   values, then retry the commit. These commands configure this repository.
+6. Repeat `git status --short` and `git log -1 --oneline` to confirm the result.
+   If commit hooks fail, read their diagnostic and fix it before retrying.
 
 `--commit (git rev-parse HEAD)` tests committed application code. Uncommitted app
 edits are excluded. The harness separately fingerprints the test definitions it
@@ -322,13 +768,34 @@ test definitions or dependency files while a run is active.
 
 ### Step 2: run this in the repository root
 
+Keep the normal PowerShell window at the root confirmed in section 5. Plug in
+power, prevent sleep, close other emulators and run **one** command below.
+
 ```powershell
 python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --android --ci-checks
 ```
 
+If section 4's Python check worked through `py -V:3.13`, use this equivalent
+command **instead**:
+
+```powershell
+py -V:3.13 .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --android --ci-checks
+```
+
+| Part of the command | Meaning |
+| --- | --- |
+| `python` (or `py -V:3.13`) | Starts the Python you checked during setup |
+| `.\scripts\test_vocle.py` | Runs the launcher from this checkout |
+| `--source .` | Uses this repository; the dot means the current directory |
+| `--commit (git rev-parse HEAD)` | PowerShell supplies the exact current commit ID; you do not type a SHA placeholder |
+| `--android` | Includes the eight native cases, making the functional scope 187 instead of 179 |
+| `--ci-checks` | Adds existing tooling, analysis and secret-scanning checks |
+
 Nothing else needs to be started: no backend server, Mongo service, emulator,
 manual venv or production accounts. Allow setup downloads and any first-time
-Windows platform approval. After a required restart, repeat this command.
+Windows platform approval. Ordinary 187-case testing does not prompt for provider
+keys. After a required restart, reopen PowerShell, use `Set-Location` to return
+to this repository, confirm your saved SDK/JDK paths, and repeat this command.
 
 ### Step 3: wait for the result and cleanup
 
@@ -353,6 +820,55 @@ Some long commands buffer their output until they finish. A quiet terminal durin
 image downloads or a cold Android build is not by itself proof of a hang. Check
 the run folder/logs rather than launching a second run. Wait for the final
 `Reports:` and `cleanup:` lines before judging completion or sharing the report.
+
+As soon as the command finishes and the PowerShell prompt returns, save its exit
+code before running another native command:
+
+```powershell
+$vocleExitCode = $LASTEXITCODE
+Write-Output "Vocle exit code: $vocleExitCode"
+```
+
+`0` means the selected session passed. `1` means a test/setup/coverage issue needs
+review. `3` means restart requested. A nonzero code is not automatically an
+installation problem: the app can have real failures after successful setup.
+
+### Step 4: open this run's dashboard
+
+Use the **new report directory printed by your invocation**. After a finished
+full-scope invocation, this convenience command opens its dashboard if present:
+
+```powershell
+if (Test-Path -LiteralPath .\test-results\LATEST_FULL_RUN.txt) {
+    $vocleLatest = Get-Content .\test-results\LATEST_FULL_RUN.txt
+    $vocleLatest
+    if ($vocleLatest.Count -ge 2 -and (Test-Path -LiteralPath $vocleLatest[1])) {
+        Start-Process -FilePath $vocleLatest[1]
+    } else {
+        Write-Output 'No dashboard yet. Open the printed report folder and read setup.log and local-session.json.'
+    }
+} else {
+    Write-Output 'No latest-run pointer yet. Open the report folder printed by the launcher.'
+}
+```
+
+The first printed line is the folder, the second is the dashboard, and the third
+is the summary. Confirm it matches the report path from the command you just ran.
+If the latest-pointer file does not exist, or the process stopped before updating
+it, open the report folder printed by the launcher in File Explorer instead.
+An older dashboard is not evidence for the new attempt.
+
+For a completed functional run, check **187 executed**, then review PASS, FAIL
+and NEEDS_DECISION separately. See section 9 for all statuses, raw evidence and
+the exact folder structure. Keep the report even if the gate is red.
+
+### Next time you test a new change
+
+You do not repeat the installers above. Open normal PowerShell, enter the repo
+root, confirm your committed changes and that no devices are connected, then
+repeat step 2. The launcher creates a fresh temporary session and a new result
+folder each time. It can download disposable tools/packages again, so internet
+and free temporary disk space are still needed.
 
 ## 7. Other useful commands
 
@@ -700,8 +1216,9 @@ Repository references:
 - [Developer launcher](../scripts/test_vocle.py)
 - [Runtime versions/checksums](../scripts/vocle-runtime-lock.json)
 
-Official setup references were checked on 18 October 2026: Microsoft WSL,
-Android Emulator acceleration, sdkmanager and Flutter manual installation linked
-above. Storage/time/hardware budgets in this guide are project planning estimates;
+Official setup references were checked on 18 October 2026: Python's Windows
+installer/runtime guidance, Git for Windows, Microsoft WSL/OpenJDK, Android Studio,
+Emulator acceleration, sdkmanager and Flutter manual installation linked above.
+Storage/time/hardware budgets in this guide are project planning estimates;
 the recorded 28-minute run and retained evidence size are observations from one
 machine. SDK availability, downloads and host policy can change.
