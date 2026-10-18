@@ -1,5 +1,20 @@
 # Local execution of the existing GitHub suites
 
+## Current report location
+
+New runs are stored under repository-root `test-results/`, separated by scope:
+`full-187/<UTC timestamp>-<id>/`, `functional-179/<timestamp>-<id>/`, `tooling/`
+or `security/`. A tooling run cannot replace the full-run location.
+`test-results/LATEST_FULL_RUN.txt` points to the latest 187-case invocation.
+
+Each full run has its own top-level `vocle-regression-dashboard.html` containing
+only the 187 functional catalog IDs, `functional-summary.json` with actual
+execution counts, QA findings, README and session/cleanup details. All supporting
+backend, Flutter, Android and optional security output is under the same run's
+`evidence/` directory. Android writes directly into that folder; it does not
+create a second native report elsewhere. The earlier output locations below
+describe historical validation and are not the default for new runs.
+
 The functional catalog contains **187 unique cases: 147 backend, 32 Flutter and
 8 Android**. The retained 48 sanity assertions are included in the backend scope.
 Security suites and tooling checks have their own counts; they are additional to

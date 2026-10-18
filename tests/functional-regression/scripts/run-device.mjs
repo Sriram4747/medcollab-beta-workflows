@@ -8,6 +8,7 @@ import { prepareDeviceWorkspace, verifyDeviceSource, verifyDeviceCleanupPath, co
 
 const root = resolve(import.meta.dirname, '../../..');
 const option = (key) => process.argv.find((arg) => arg.startsWith(`--${key}=`))?.slice(key.length + 3);
+if (option('output') && existsSync(resolve(option('output')))) throw new Error('Native output must be a new directory; existing evidence cannot be overwritten');
 const selected = selectedDeviceCases(option('cases'));
 const flutter = option('flutter-bin') || (process.platform === 'win32' ? 'C:/flutter/bin/flutter.bat' : 'flutter');
 const adb = option('adb-bin') || (process.platform === 'win32'
@@ -105,7 +106,7 @@ try {
   if (!devices[0].startsWith(`${serial} `) && !devices[0].startsWith(`${serial}\t`)) throw new Error('Emulator does not match ADB inventory');
   // Existing user installs/data are never reused. Only our dedicated package
   // may be uninstalled or force-stopped by this runner.
-  workspace = await prepareDeviceWorkspace(option('source-sha'));
+  workspace = await prepareDeviceWorkspace(option('source-sha'), option('output'));
   await mkdir(join(workspace.runRoot, 'diagnostics'), { recursive: true });
   console.log(JSON.stringify({ deviceWorkspace: workspace.runRoot, selected, sourceSha: workspace.provenance.sourceSha }));
   const originalLock = await readFile(join(workspace.app, 'pubspec.lock'), 'utf8');
@@ -233,7 +234,7 @@ try {
     cleanup = { status: results.some((row) => row.cleanup?.status === 'ERROR') || phases.some((row) => row.ownedResourceCleanup?.status === 'ERROR') ? 'ERROR' : 'PASS',
       dedicatedTestAppRemoved: Boolean(serial), isolatedTargetRemoved: Boolean(workspace) };
   } catch (error) { cleanup = { status: 'ERROR', error: error.message }; }
-  const directory = workspace?.runRoot || resolve(root, 'tests/functional-regression/output/device-prerequisites');
+  const directory = workspace?.runRoot || (option('output') ? resolve(option('output')) : resolve(root, 'tests/functional-regression/output/device-prerequisites'));
   await mkdir(directory, { recursive: true });
   const counts = Object.fromEntries(['PASS', 'FAIL', 'ERROR', 'BLOCKED', 'NEEDS_DECISION', 'SKIP'].map((status) =>
     [status, results.filter((row) => row.status === status).length]));

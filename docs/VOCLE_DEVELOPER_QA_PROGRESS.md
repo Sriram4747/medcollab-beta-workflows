@@ -1,5 +1,21 @@
 # Developer to QA workflow progress
 
+## October 18: one complete invocation and one result folder
+
+User requested a fresh 187-case invocation and rejected a combined view of older
+partial runs as the primary answer. Default output now uses `test-results/`,
+separating full-187, working-tree functional-179, tooling and security runs. The
+full run gets a top-level 187-case dashboard, exact execution/count summary and QA
+findings; supporting evidence stays under the same folder. Native output is
+passed explicitly into that run instead of creating a separate d-* output and
+copying it later. Existing evidence cannot be overwritten. A latest-full-run
+pointer identifies the current full invocation independently of tooling checks.
+
+Next: execute the original 147 backend, 32 Flutter and eight Android cases together
+against the resolved committed source, investigate environment errors, and record
+the actual single-invocation result and cleanup in its own folder. No earlier
+case outcomes will be imported into this run.
+
 ## Phase 1: audit (2026-10-11)
 
 Repository: Sriram4747/medcollab-beta-workflows; upstream is read-only.

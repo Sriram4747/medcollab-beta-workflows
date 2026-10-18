@@ -216,13 +216,18 @@ def remove_session(scratch):
 
 
 def run_session(args):
-    output = args.output or ROOT / "tests/developer-workflow/output" / (
-        "python-" + datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ") + "-" + uuid.uuid4().hex[:8])
+    planned = 187 if args.profile == "full" and args.android else 179 if args.profile == "full" else 0
+    category = "full-187" if planned == 187 else "functional-179" if planned else args.profile
+    output = args.output or ROOT / "test-results" / category / (
+        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ") + "-" + uuid.uuid4().hex[:8])
     output.mkdir(parents=True, exist_ok=False)
     state = {"schemaVersion": 1, "startedAt": datetime.now(timezone.utc).isoformat(),
              "status": "ERROR", "profile": args.profile, "source": str(args.source),
              "python": sys.version.split()[0], "cleanup": "NOT_STARTED", "runnerExitCode": None}
     state["reproduction"] = reproduction_command(args)
+    state["functionalPlanned"] = planned
+    print("Reports for this invocation: " + str(output), flush=True)
+    (output / "README.md").write_text(f"# Local test run\n\nRUNNING. Profile: {args.profile}. Functional cases selected: {planned}.\n\nAll results from this invocation will be retained in this folder.\n", encoding="utf-8")
     scratch = None
     bootstrap = None
     code = 1
@@ -285,6 +290,11 @@ def run_session(args):
             state.update(gate=manifest["gate"], releaseGate=manifest.get("releaseGate"))
             report = json.loads((output / "evidence/results.json").read_text(encoding="utf-8"))
             state["counts"] = dict(Counter(row["status"] for row in report["results"]))
+            functional_path = output / "functional-summary.json"
+            if functional_path.exists():
+                functional = json.loads(functional_path.read_text(encoding="utf-8"))
+                state.update(functionalExecuted=functional["executed"], functionalCounts=functional["counts"])
+                print(f"Functional cases executed: {functional['executed']}/{functional['registered']}; " + ", ".join(f"{key}={value}" for key, value in functional["counts"].items()), flush=True)
             blockers = Counter(row.get("exclusion") or row.get("error") or row["id"] for row in report["results"] if row["required"] and row["status"] == "BLOCKED")
             print("Results: " + ", ".join(f"{status}={count}" for status, count in state["counts"].items()), flush=True)
             for reason, count in blockers.items():
@@ -336,6 +346,17 @@ def run_session(args):
             + ("Cleanup error: " + state["cleanupError"] + "\n" if state.get("cleanupError") else ""),
             encoding="utf-8",
         )
+        (output / "README.md").write_text(
+            "# Local test run\n\n"
+            + f"Profile: **{args.profile}**. Functional cases executed: **{state.get('functionalExecuted', 0)}/{planned}**. Cleanup: **{state['cleanup']}**.\n\n"
+            + ("Open [the functional dashboard](vocle-regression-dashboard.html) for the selected catalog cases.\n\n" if (output / "vocle-regression-dashboard.html").exists() else "No functional dashboard was produced; inspect the setup/session error.\n\n")
+            + "[Session and environment details](local-session.md) · [All checks, logs and original results](evidence/)\n\n"
+            + "This folder contains results from this invocation only. Prior runs are not imported.\n",
+            encoding="utf-8")
+        if planned == 187:
+            results_root = ROOT / "test-results"
+            results_root.mkdir(exist_ok=True)
+            (results_root / "LATEST_FULL_RUN.txt").write_text(str(output) + "\n" + str(output / "vocle-regression-dashboard.html") + "\n" + f"Executed: {state.get('functionalExecuted', 0)}/187; session: {state['status']}; cleanup: {state['cleanup']}\n", encoding="utf-8")
         print(f"Reports: {output}\nSession: {state['status']}; cleanup: {state['cleanup']}", flush=True)
         if state.get("error"):
             print(state["error"], file=sys.stderr)

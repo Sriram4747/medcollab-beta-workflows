@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { prepareDeviceWorkspace } from './prepare-device-workspace.mjs';
 import { deviceCases, emulatorOrigin, emulatorSerial, selectedDeviceCases, validateRestart, resumedActivityState, activityLifecycleStates, classifyDeviceDiagnostics } from './device-contracts.mjs';
 
 test('device registry matches the exact eight catalog IDs, files and phases', async () => {
@@ -12,6 +15,15 @@ test('device registry matches the exact eight catalog IDs, files and phases', as
     assert.match(source, new RegExp(`deviceCase\\('${id}'`));
     assert.ok(item.phases.every((phase) => source.includes(`'${phase}'`)));
   }
+});
+
+test('native output refuses to overwrite an existing run directory', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'vocle-output-contract-'));
+  try {
+    await writeFile(join(directory, 'results.json'), 'existing evidence');
+    await assert.rejects(prepareDeviceWorkspace('a'.repeat(40), directory), { code: 'EEXIST' });
+    assert.equal(await readFile(join(directory, 'results.json'), 'utf8'), 'existing evidence');
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
 test('device driver rejects provider, physical-device and malformed origins', () => {

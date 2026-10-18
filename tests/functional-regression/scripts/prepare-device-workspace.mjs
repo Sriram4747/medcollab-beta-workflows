@@ -19,14 +19,14 @@ export function command(bin, args, cwd, timeout = 30000) {
   return result.stdout.trim();
 }
 
-export async function prepareDeviceWorkspace(sha = command('git', ['rev-parse', 'HEAD'], root)) {
+export async function prepareDeviceWorkspace(sha = command('git', ['rev-parse', 'HEAD'], root), output) {
   if (!/^[a-f0-9]{40}$/.test(sha)) throw new Error('A complete source SHA is required');
-  const runRoot = resolve(root, 'tests/functional-regression/output', `d-${randomUUID().slice(0, 8)}`);
-  if (!runRoot.startsWith(`${resolve(root, 'tests/functional-regression/output')}${sep}`)) throw new Error('Unsafe workspace');
+  const runRoot = output ? resolve(output) : resolve(root, 'tests/functional-regression/output', `d-${randomUUID().slice(0, 8)}`);
   // Keep transient Flutter projects outside the IDE's watched repository tree.
   // This limits path length and avoids repository project discovery. Cleanup
   // still verifies deletion; retaining a target is never a PASS.
-  await mkdir(runRoot, { recursive: true });
+  await mkdir(resolve(runRoot, '..'), { recursive: true });
+  await mkdir(runRoot, { recursive: false });
   const target = await mkdtemp(join(tmpdir(), 'vocle-device-'));
   if (!resolve(target).startsWith(`${resolve(tmpdir())}${sep}vocle-device-`)) throw new Error('Unsafe isolated temporary target');
   const archive = join(runRoot, 'source.tar');

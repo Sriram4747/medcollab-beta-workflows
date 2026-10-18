@@ -200,11 +200,11 @@ try {
     if (options.android && sourceInfo.kind === 'commit' && source === root) {
       const androidSdk = env.ANDROID_HOME || env.ANDROID_SDK_ROOT;
       const adb = androidSdk ? ['--adb-bin=' + join(androidSdk, 'platform-tools', process.platform === 'win32' ? 'adb.exe' : 'adb')] : [];
-      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter, ...adb], root, true);
+      const device = await command('android-driver', process.execPath, [join(root, 'tests/functional-regression/scripts/run-device.mjs'), '--source-sha=' + sha, '--flutter-bin=' + flutter, '--output=' + join(output, 'android'), ...adb], root, true);
       let deviceReport; try { deviceReport = JSON.parse(device.stdout.trim().split(/\r?\n/).at(-1)); } catch { /* explicit missing report */ }
       if (deviceReport?.reportDirectory) {
         const report = JSON.parse(await readFile(join(deviceReport.reportDirectory, 'results.json')));
-        await cp(deviceReport.reportDirectory, join(output, 'android'), { recursive: true });
+        if (resolve(deviceReport.reportDirectory) !== join(output, 'android')) throw new Error('Android results escaped the current run folder');
         for (const c of catalog.filter(c => c.tier === 'D')) { const actual = report.cases.find(r => r.id === c.id); add(c.id, actual?.status || 'ERROR', true, { ...c, ...actual, executed: assertionExecuted(actual), artifacts: ['android/'] }); }
       } else unavailable(catalog.filter(c => c.tier === 'D'), 'Android runner produced no usable report', true);
     } else unavailable(catalog.filter(c => c.tier === 'D'), options.android ? 'Existing Android runner requires a committed source revision available in this harness checkout' : 'Optional Android lane: rerun with --android on an isolated emulator', Boolean(options.android));
@@ -300,6 +300,17 @@ const report = { scope: options.profile || 'full', source: sourceInfo, harness: 
 const manifest = await writeEvidence(output, report);
 await writeQA(output, report, JSON.parse(await readFile(join(root, 'tests/developer-workflow/ownership.json'))));
 await generateDetailedReport({ inputObject: report, output: join(output, 'detailed'), suite: 'developer', artifact: 'developer-qa evidence (detailed directory)' });
+if ((options.profile || 'full') === 'full') {
+  const selected = catalog.filter(c => options.android || c.tier !== 'D');
+  const ids = new Set(selected.map(c => c.id));
+  const functional = rows.filter(row => ids.has(row.id));
+  if (functional.length !== selected.length) throw new Error('Functional report is missing selected catalog IDs');
+  await generateDetailedReport({ inputObject: { ...report, results: functional, selectedIds: selected.map(c => c.id) }, output: dirname(output), suite: 'developer', artifact: 'Functional cases from this invocation only; original evidence under evidence/' });
+  await writeQA(dirname(output), { ...report, results: functional }, JSON.parse(await readFile(join(root, 'tests/developer-workflow/ownership.json'))));
+  await writeFile(join(dirname(output), 'functional-summary.json'), JSON.stringify({ source: sourceInfo, harness: harnessInfo, registered: selected.length, executed: functional.filter(row => row.executed).length,
+    counts: Object.fromEntries(['PASS', 'FAIL', 'ERROR', 'BLOCKED', 'NEEDS_DECISION', 'SKIP'].map(status => [status, functional.filter(row => row.status === status).length])),
+    unexecuted: functional.filter(row => !row.executed).map(row => ({ id: row.id, status: row.status, error: row.error || row.exclusion })) }, null, 2) + '\n');
+}
 if (options.previous) { try { await compareEvidence(resolve(options.previous), output, join(output, 'comparison')); } catch (error) { await writeFile(join(output, 'comparison-error.md'), 'Comparison rejected: ' + error.message); console.error('Comparison rejected: ' + error.message); process.exitCode = 1; } }
 console.log(JSON.stringify({ output, gate: manifest.gate, scope: report.scope, executed: manifest.executedIds.length, source: sourceInfo.sha, kind: sourceInfo.kind }, null, 2));
 if (manifest.gate !== 'PASS') process.exitCode = 1;
