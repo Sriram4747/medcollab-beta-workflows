@@ -1,0 +1,62 @@
+{
+  "runId": 39108261936,
+  "url": "https://github.com/Sriram4747/medcollab-beta-workflows/actions/runs/39108261936",
+  "candidateSha": "0ee30b08447d782919a740020979da520aa2a860",
+  "status": "PASS",
+  "scope": "Independent final tooling, lifecycle, real Docker smoke and cold SDK setup; application outcomes are the separate measured local results",
+  "artifacts": [
+    {
+      "platform": "ubuntu",
+      "archiveSha256": "ed629ed77e2b52367a86a3b2dad2bffe13dac85886b15d4708736625448af857",
+      "sessions": [
+        {
+          "path": "developer-qa-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS"
+        },
+        {
+          "path": "developer-runtime-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS"
+        }
+      ],
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "executedRows": 18,
+          "checksum": "60a3a1680f0f5e83ab54edbd11c1b0877a1a47cfc4a966a908ac48a2f90b3b0e"
+        },
+        {
+          "scope": "backend-smoke",
+          "gate": "PASS",
+          "executedRows": 22,
+          "checksum": "0e2f189edc122fe5f9c886d7a96125b2e25892f5732a5a80b39722d3e6b9aaa1"
+        }
+      ],
+      "bootstrapEvidenceFiles": []
+    },
+    {
+      "platform": "windows",
+      "archiveSha256": "9f641c1f9a2bfe20fbf44bd4ce6c045173606c3ae3784ff777b79e0a34bb212b",
+      "sessions": [
+        {
+          "path": "developer-qa-output/local-session.json",
+          "cleanup": "PASS",
+          "status": "PASS"
+        }
+      ],
+      "reports": [
+        {
+          "scope": "tooling",
+          "gate": "PASS",
+          "executedRows": 18,
+          "checksum": "88b5218b3207672f1e40bb94c8b878d937d7509e60d999f864dcc479c9d26f5a"
+        }
+      ],
+      "bootstrapEvidenceFiles": [
+        "bootstrap-download-output/validation.json"
+      ]
+    }
+  ]
+}

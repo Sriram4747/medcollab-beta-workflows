@@ -1,0 +1,29 @@
+{
+  "ownedSessions": [
+    {
+      "session": "python-2026-10-18T04-58-30Z-ba98396d",
+      "temporaryDirectoryRemoved": true,
+      "cleanup": "PASS"
+    },
+    {
+      "session": "python-2026-10-18T05-49-40Z-4e921232",
+      "temporaryDirectoryRemoved": true,
+      "cleanup": "PASS"
+    },
+    {
+      "session": "python-2026-10-18T07-36-12Z-60703307",
+      "temporaryDirectoryRemoved": true,
+      "cleanup": "PASS"
+    },
+    {
+      "session": "android-clean-validation-2026-10-18",
+      "temporaryDirectoryRemoved": true,
+      "cleanup": "PASS"
+    },
+    {
+      "session": "android-link-followup-2026-10-18",
+      "temporaryDirectoryRemoved": true,
+      "cleanup": "PASS"
+    }
+  ]
+}

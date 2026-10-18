@@ -1,0 +1,10 @@
+{
+  "candidateSha": "0ee30b08447d782919a740020979da520aa2a860",
+  "gate": "PASS",
+  "cleanup": "PASS",
+  "executedRows": 18,
+  "report": "tests/developer-workflow/output/python-2026-10-18T07-36-12Z-60703307/evidence/results.json",
+  "reportSha256": "f045f3be90b6d2bf7796396aa3a6780920369b41f1a80606325d9ca7c89dfdc3",
+  "reproductionCommandParsesInPowerShell": true,
+  "scope": "Tooling lifecycle verification; no full application pass claimed"
+}

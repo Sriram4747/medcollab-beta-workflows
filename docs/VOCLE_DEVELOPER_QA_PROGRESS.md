@@ -491,3 +491,18 @@ directory; ephemeral Docker proxy/SDK paths and the private cloud name are exclu
 A mistyped-SHA tooling probe was rejected before application execution and cleaned
 up PASS; it contributes no testcase evidence. A final real launcher check uses
 the resolved Git SHA, and hosted integration independently checks the saved code.
+
+Final launcher validation on resolved commit 0ee30b0: 18/18 tooling rows PASS,
+source/harness checksums verified, reusable PowerShell reproduction command parses,
+cleanup PASS. Independent saved-code CI run 39108261936: Windows, Ubuntu and
+visual reporting SUCCESS. Downloaded artifact/report checksums and exact candidate
+bindings verified; both OS tooling 18/18 PASS, Linux real Docker smoke 22/22 PASS,
+Windows cold Node/Flutter setup completed. Saved sanitized evidence records.
+
+Final inventory confirms no test emulator/private WSL distro, no owned runtime
+process, and all recorded owned temporary session directories absent. The existing
+reporter generated the 187-case review dashboard and 51 unassigned QA findings
+without creating a merged release/submission manifest. Original attempt hashes
+remain linked. Read VOCLE_LOCAL_VALIDATION_RESULTS.md for the concise complete
+result table and future one-command invocation. All task commits preserve the
+user's uncommitted application work; no application files changed in those commits.
