@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import shlex
 import signal
 import stat
 import subprocess
@@ -24,7 +25,7 @@ from vocle_bootstrap import Bootstrap, SetupRequired
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "docker_proxy", "gitleaks_bin", "cloudinary_output", "apk", "profile")
+VALUE_OPTIONS = ("commit", "previous", "flutter_bin", "docker_bin", "docker_proxy", "gitleaks_bin", "cloudinary_output", "reproduction", "apk", "profile")
 ENV_KEYS = {
     "PATH", "PATHEXT", "SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PROGRAMFILES",
     "PROGRAMFILES(X86)", "PROGRAMW6432", "LANG", "LC_ALL", "JAVA_HOME",
@@ -107,6 +108,23 @@ def session_environment(scratch, environment=None):
     if docker_config.is_dir():
         env["DOCKER_CONFIG"] = str(docker_config.resolve())
     return env
+
+
+def reproduction_command(args):
+    # Reproduce through the launcher: resolved Docker/SDK paths disappear during
+    # cleanup. A new invocation must create a fresh output/session directory.
+    argv = ["python", str(ROOT / "scripts/test_vocle.py"), "--source", str(args.source)]
+    for name in ("commit", "previous", "flutter_bin", "apk"):
+        if getattr(args, name, None):
+            argv += ["--" + name.replace("_", "-"), str(getattr(args, name))]
+    argv += ["--runtime", args.runtime, "--profile", args.profile]
+    for name in (("all",) if args.all else ("android", "security", "ci_checks")):
+        if getattr(args, name):
+            argv.append("--" + name.replace("_", "-"))
+    if args.cloudinary:
+        argv += ["--cloudinary", "--test-cloud", "APPROVED_TEST_CLOUD"]
+    quote = (lambda value: "'" + value.replace("'", "''") + "'") if os.name == "nt" else shlex.quote
+    return ("& " if os.name == "nt" else "") + " ".join(quote(value) for value in argv)
 
 
 class ManagedCommand:
@@ -204,6 +222,7 @@ def run_session(args):
     state = {"schemaVersion": 1, "startedAt": datetime.now(timezone.utc).isoformat(),
              "status": "ERROR", "profile": args.profile, "source": str(args.source),
              "python": sys.version.split()[0], "cleanup": "NOT_STARTED", "runnerExitCode": None}
+    state["reproduction"] = reproduction_command(args)
     scratch = None
     bootstrap = None
     code = 1
@@ -223,7 +242,7 @@ def run_session(args):
         node = bootstrap.node()
         state["node"] = bootstrap.details["node"]["version"]
         config = {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
-        config.update(output=str(output), node=node)
+        config.update(output=str(output), node=node, reproduction=state["reproduction"])
         if args.cloudinary:
             # Prompt in the user's terminal before invoking the noninteractive
             # worker. Neither credentials nor the cloud name enter its config.
@@ -310,6 +329,7 @@ def run_session(args):
             "# Disposable local test session\n\n"
             + f"Session: **{state['status']}**. Profile: {args.profile}. "
             + f"Test gate: {state.get('gate', 'NO_EVIDENCE')}. Cleanup: {state['cleanup']}.\n\n"
+            + "Reproduce from the recorded harness revision (replace APPROVED_TEST_CLOUD for a live provider run):\n\n```\n" + state["reproduction"] + "\n```\n\n"
             + evidence_links
             + "A tooling/smoke PASS does not certify the full application or release.\n\n"
             + ("Error: " + state["error"] + "\n" if state.get("error") else "")

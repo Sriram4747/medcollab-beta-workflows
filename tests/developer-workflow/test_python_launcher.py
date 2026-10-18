@@ -89,6 +89,17 @@ class PythonLauncherTests(unittest.TestCase):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "true"}), self.assertRaisesRegex(RuntimeError, "existing guarded Cloudinary workflow"):
             provider.run_session(args)
 
+    def test_reproduction_uses_fresh_launcher_resources_without_private_cloud_values(self):
+        args = launcher.parse_args(["--all", "--cloudinary", "--test-cloud", "synthetic-offline-cloud", "--commit", "a" * 40, "--output", "old-report"])
+        command = launcher.reproduction_command(args)
+        self.assertIn("test_vocle.py", command)
+        self.assertIn("a" * 40, command)
+        self.assertIn("--all", command)
+        self.assertIn("APPROVED_TEST_CLOUD", command)
+        self.assertNotIn("synthetic-offline-cloud", command)
+        self.assertNotIn("old-report", command)
+        self.assertNotIn("docker-proxy", command)
+
     def test_cleanup_removes_owned_readonly_files_and_refuses_other_paths(self):
         scratch = Path(tempfile.mkdtemp(prefix="vocle-python-"))
         readonly = scratch / "readonly.txt"

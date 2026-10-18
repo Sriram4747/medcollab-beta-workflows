@@ -466,3 +466,28 @@ Queued a once-only focused retry of unexecuted startup errors after full cleanup
 using a fresh four-core / 4 GB AVD (host has 64 GB RAM, about 30 GB free). Only
 immutable completed Gradle module artifacts and hosted Pub packages were copied
 before cleanup; no mutable transforms, indexes or locks enter the retry cache.
+
+### October 18 completion
+
+The fresh four-core / 4 GB Android startup follow-up executed all three previously
+unexecuted IDs: FR-LINK-04, FR-JRN-05 and FR-JRN-06. All three recorded original
+behavioral FAIL results, no ERROR/BLOCKED, with provenance and cleanup PASS. The
+first native run's five completed cases remain unchanged; combined device scope
+is eight executed, two PASS / six FAIL. Both owned AVDs and temporary directories
+were removed. No original assertion or application code changed to obtain results.
+
+Across the explicitly linked measured runs, all **187 unique functional IDs have
+execution evidence: 136 PASS, 30 FAIL, 21 NEEDS_DECISION, zero remaining setup
+ERROR/BLOCKED**. Backend 119/10/18; Flutter 15/14/3; Android 2/6/0. Retained sanity
+48/48 and retained Flutter 33/33 PASS. Security adds 819 executions (725 PASS,
+94 original observations); live Cloudinary adds 34 (26 PASS, eight observations).
+These counts do not certify release readiness. The initial full run's ERROR and
+all original setup/failure reports remain preserved. See local-execution.json
+for each functional ID's original report path and SHA256.
+
+Local workflow/reporting integration contracts: 41 Node and 25 Python PASS. The
+launcher now records a reusable Python reproduction command with a fresh output
+directory; ephemeral Docker proxy/SDK paths and the private cloud name are excluded.
+A mistyped-SHA tooling probe was rejected before application execution and cleaned
+up PASS; it contributes no testcase evidence. A final real launcher check uses
+the resolved Git SHA, and hosted integration independently checks the saved code.

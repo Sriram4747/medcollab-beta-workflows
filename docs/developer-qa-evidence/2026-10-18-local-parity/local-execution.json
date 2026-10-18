@@ -1,0 +1,2012 @@
+{
+  "sourceSha": "9f1738809d2d0ab2bd04f5b45938ec312827bdd1",
+  "scope": "Measured local execution across the preserved initial run and explicit setup follow-ups; not a merged submission or release certificate",
+  "originalFullRun": {
+    "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+    "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+  },
+  "originalFullGate": "ERROR",
+  "functionalRegistered": 187,
+  "functionalExecutedAcrossRuns": 187,
+  "functionalCounts": {
+    "PASS": 136,
+    "NEEDS_DECISION": 21,
+    "FAIL": 30
+  },
+  "tiers": {
+    "B": {
+      "PASS": 119,
+      "NEEDS_DECISION": 18,
+      "FAIL": 10
+    },
+    "F": {
+      "PASS": 15,
+      "FAIL": 14,
+      "NEEDS_DECISION": 3
+    },
+    "D": {
+      "FAIL": 6,
+      "PASS": 2
+    }
+  },
+  "cases": [
+    {
+      "id": "FR-AUTH-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-06",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-AUTH-07",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-CH-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-CH-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-CH-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-CH-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-CH-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DISC-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DISC-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DISC-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DISC-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-05",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-06",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-07",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-08",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-DM-09",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-05",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-06",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-07",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-08",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-09",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-10",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-11",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-12",
+      "tier": "F",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOF-13",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOME-01",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOME-02",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-HOME-03",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-JRN-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-JRN-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-JRN-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-JRN-04",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-JRN-05",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-c1ca36fc/results.json",
+        "sha256": "559384e1cfe93ad6f98e9fcbf61fce8fd443355c9a1362e5abcdf9f1e05f011d"
+      }
+    },
+    {
+      "id": "FR-JRN-06",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-c1ca36fc/results.json",
+        "sha256": "559384e1cfe93ad6f98e9fcbf61fce8fd443355c9a1362e5abcdf9f1e05f011d"
+      }
+    },
+    {
+      "id": "FR-LINK-01",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-LINK-02",
+      "tier": "F",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-LINK-03",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-LINK-04",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-c1ca36fc/results.json",
+        "sha256": "559384e1cfe93ad6f98e9fcbf61fce8fd443355c9a1362e5abcdf9f1e05f011d"
+      }
+    },
+    {
+      "id": "FR-MED-01",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-02",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-03",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-04",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-06",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-07",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MED-08",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-b650a00f/results.json",
+        "sha256": "fe9c5c6f44628ce335ee04f9da3bcfcd07fce208982ee3d32bde2f0bf0322620"
+      }
+    },
+    {
+      "id": "FR-MSG-01",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-05",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-06",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-07",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-MSG-08",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NAV-01",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NAV-02",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NAV-03",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NAV-04",
+      "tier": "D",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-b650a00f/results.json",
+        "sha256": "fe9c5c6f44628ce335ee04f9da3bcfcd07fce208982ee3d32bde2f0bf0322620"
+      }
+    },
+    {
+      "id": "FR-NAV-05",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-b650a00f/results.json",
+        "sha256": "fe9c5c6f44628ce335ee04f9da3bcfcd07fce208982ee3d32bde2f0bf0322620"
+      }
+    },
+    {
+      "id": "FR-NOT-01",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NOT-02",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NOT-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NOT-04",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NOT-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-NOT-06",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-01",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-02",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-03",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-04",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-05",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-OFF-06",
+      "tier": "F",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PRO-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PRO-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PRO-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PRO-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PRO-05",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PUSH-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PUSH-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PUSH-03",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PUSH-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-PUSH-05",
+      "tier": "D",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-b650a00f/results.json",
+        "sha256": "fe9c5c6f44628ce335ee04f9da3bcfcd07fce208982ee3d32bde2f0bf0322620"
+      }
+    },
+    {
+      "id": "FR-PUSH-06",
+      "tier": "D",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/functional-regression/output/d-b650a00f/results.json",
+        "sha256": "fe9c5c6f44628ce335ee04f9da3bcfcd07fce208982ee3d32bde2f0bf0322620"
+      }
+    },
+    {
+      "id": "FR-REQ-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-REQ-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-REQ-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-REQ-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-REQ-05",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-REQ-06",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-03",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-04",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-05",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-06",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RT-07",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-RUN-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/runtime-linux-storage-validation-2026-10-18/runtime-localruntimestorage/results.json",
+        "sha256": "d618ac7cd95b96d099ef0fe55d9f4bdda26d09b53810e9d493485da980a17a18"
+      }
+    },
+    {
+      "id": "FR-RUN-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/runtime-linux-storage-validation-2026-10-18/runtime-localruntimestorage/results.json",
+        "sha256": "d618ac7cd95b96d099ef0fe55d9f4bdda26d09b53810e9d493485da980a17a18"
+      }
+    },
+    {
+      "id": "FR-RUN-03",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SAVE-01",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SAVE-02",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SAVE-03",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-01",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SOC-06",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-03",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SPC-06",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SRCH-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SRCH-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SRCH-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SRCH-04",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SUP-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SUP-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SUP-03",
+      "tier": "B",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-SUP-04",
+      "tier": "F",
+      "status": "FAIL",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-THR-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-THR-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-THR-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-THR-04",
+      "tier": "B",
+      "status": "NEEDS_DECISION",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "FR-THR-05",
+      "tier": "F",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-06",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "authentication-and-profiles-07",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "channels-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "channels-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "channels-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "direct-and-group-conversations-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "direct-and-group-conversations-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "direct-and-group-conversations-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "direct-and-group-conversations-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "direct-and-group-conversations-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "handoffs-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "handoffs-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "handoffs-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "handoffs-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "handoffs-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "media-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "media-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "media-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "message-requests-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "message-requests-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "message-requests-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-06",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "messaging-and-needl-07",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "notifications-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "notifications-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "notifications-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "realtime-and-availability-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "realtime-and-availability-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "realtime-and-availability-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "search-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "search-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "spaces-and-invitations-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "spaces-and-invitations-02",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "spaces-and-invitations-03",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "spaces-and-invitations-04",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "spaces-and-invitations-05",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "startup-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    },
+    {
+      "id": "support-01",
+      "tier": "B",
+      "status": "PASS",
+      "executed": true,
+      "evidence": {
+        "path": "tests/developer-workflow/output/python-2026-10-18T04-58-30Z-ba98396d/evidence/results.json",
+        "sha256": "a8e76834a0f711bfd813293deba738eb5f15433d8fbec42a4195f660939d2002"
+      }
+    }
+  ],
+  "security": [
+    {
+      "path": "tests/developer-workflow/output/python-2026-10-18T05-49-40Z-4e921232/evidence/security/vocle-media-results/results.json",
+      "sha256": "95065c0c3a3803c0fc07cd0bfdd5a2da53981adc3acf3ccf9dfa067933c234f1",
+      "planned": 97,
+      "executed": 97,
+      "passed": 67,
+      "suite": "vocle-media-results",
+      "observations": 30
+    },
+    {
+      "path": "tests/developer-workflow/output/python-2026-10-18T05-49-40Z-4e921232/evidence/security/vocle-data-results/results.json",
+      "sha256": "f67ab0448b5309c3d0de3b840587fc1aa09d88508742cebff520939d4aeb62d3",
+      "planned": 31,
+      "executed": 31,
+      "passed": 23,
+      "suite": "vocle-data-results",
+      "observations": 8
+    },
+    {
+      "path": "tests/developer-workflow/output/python-2026-10-18T05-49-40Z-4e921232/evidence/security/vocle-security-results/results.json",
+      "sha256": "c1072f91b6b80bceb7b37007b64b2beed6d04ce6d060e32c4281ce9a967c22c8",
+      "planned": 691,
+      "executed": 691,
+      "passed": 635,
+      "suite": "vocle-security-results",
+      "observations": 56
+    }
+  ],
+  "securitySuiteExecutions": 819,
+  "native": {
+    "path": "tests/developer-workflow/output/android-clean-validation-2026-10-18/local-session.json",
+    "sha256": "9eaf8decc4ece4b6554a70989101f7154da7057d4e1df97c0f73346db155eda0",
+    "counts": {
+      "PASS": 2,
+      "FAIL": 3,
+      "ERROR": 3,
+      "BLOCKED": 0,
+      "NEEDS_DECISION": 0,
+      "SKIP": 0
+    },
+    "executed": 5,
+    "runtimeCleanup": "PASS",
+    "temporaryDirectoryRemoved": true
+  },
+  "nativeStartupFollowup": {
+    "path": "tests/developer-workflow/output/android-link-followup-2026-10-18/local-session.json",
+    "sha256": "dc12c88d1fb3c7536e93d8c361300b5c0ab4045ad2deed2ee483bbc73e1dbf42",
+    "counts": {
+      "PASS": 0,
+      "FAIL": 3,
+      "ERROR": 0,
+      "BLOCKED": 0,
+      "NEEDS_DECISION": 0,
+      "SKIP": 0
+    },
+    "executed": 3,
+    "runtimeCleanup": "PASS",
+    "temporaryDirectoryRemoved": true,
+    "selected": [
+      "FR-LINK-04",
+      "FR-JRN-05",
+      "FR-JRN-06"
+    ]
+  },
+  "primarySessionCleanup": "PASS",
+  "securitySessionCleanup": "PASS",
+  "cloudinaryOffline": {
+    "path": "tests/developer-workflow/output/cloudinary-2026-10-18T05-33-20Z-35adbcf9/local-session.json",
+    "sha256": "24843ee7cd37440b00b04fbbca8e2142beca18e54dd063e80dc2f204be658391",
+    "status": "PASS",
+    "cleanup": "PASS",
+    "providerExecuted": false
+  },
+  "applicationAssertionsChanged": false,
+  "liveCloudinary": {
+    "sourceSha": "a0c15e1aa595a0b59974c6ae2bd17d685f2d53ff",
+    "harnessSha": "a0c15e1aa595a0b59974c6ae2bd17d685f2d53ff",
+    "status": "PASS",
+    "cleanup": "PASS",
+    "providerCleanup": "PASS",
+    "counts": {
+      "registered": 34,
+      "executed": 34,
+      "pass": 26,
+      "observations": 8,
+      "infrastructureFailures": 0
+    },
+    "report": "tests/developer-workflow/output/cloudinary-2026-10-18T05-41-16Z-2b93a58f/vocle-cloudinary-results/results.json",
+    "reportSha256": "baab01295cc23b7e047e0b2b3806c2bdb480df8c9d59653b66d042656d92ed22",
+    "executionMode": "local",
+    "safety": {
+      "positiveAllowlistMatched": true,
+      "approvedTestCloudOnly": true,
+      "network": {
+        "apiRequests": 65,
+        "deliveryRequests": 14,
+        "blocked": 0,
+        "approvedCloudOnly": true
+      },
+      "syntheticFixturesOnly": true,
+      "appSourceUnchanged": true,
+      "appSourceSHA256": "97f2289c191e024e1f1cf6dc2ead50f6a8c2f1e7fee8a23768cfa46fa841e5a5"
+    },
+    "independentCleanupProven": true,
+    "applicationFilesUnchangedSinceFunctionalSource": true,
+    "originalAssertionsChanged": false
+  }
+}

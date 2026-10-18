@@ -11,7 +11,7 @@ import { providerEvidence } from './cloudinary-evidence.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const args = process.argv.slice(2), options = {};
 const flags = new Set(['android', 'security', 'ci-checks']);
-const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'docker-proxy', 'gitleaks-bin', 'cloudinary-output', 'apk', 'profile']);
+const values = new Set(['source', 'commit', 'output', 'previous', 'flutter-bin', 'docker-bin', 'docker-proxy', 'gitleaks-bin', 'cloudinary-output', 'reproduction', 'apk', 'profile']);
 for (let i = 0; i < args.length; i++) {
   const key = args[i].replace(/^--/, '');
   if (flags.has(key)) options[key] = true;
@@ -27,7 +27,7 @@ await mkdir(dirname(output), { recursive: true });
 await mkdir(output, { recursive: false });
 await mkdir(join(output, 'diagnostics'));
 const catalog = JSON.parse(await readFile(join(root, 'tests/functional-regression/catalog.json'))).cases;
-const rows = [], commandLine = 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
+const rows = [], commandLine = options.reproduction || 'node tests/developer-workflow/run.mjs ' + args.map(a => JSON.stringify(a)).join(' ');
 let scratch, target, harness, sourceInfo, harnessInfo, sourcePaths, before, docker, integrity = 'PASS', environment = {};
 const ownedContainers = [];
 const dockerOption = options['docker-bin'] || 'docker';

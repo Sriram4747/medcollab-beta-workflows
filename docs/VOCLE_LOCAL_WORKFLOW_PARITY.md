@@ -125,8 +125,18 @@ application PASS. GitHub still independently validates submitted commits.
 After the October 18 reboot, the actual private WSL engine started. Validation
 found and corrected native Docker argument transport, Windows executable lookup
 and slow backend imports across Windows mounts. A fresh Android AVD booted and was
-removed successfully. The first full attempt measured 147 backend cases (two
-setup errors) and all 32 Flutter cases, plus 33 retained Flutter tests and the
-existing CI checks. Both backend setup errors passed a focused rerun after moving
-Mongo persistence onto the Linux disk. Original application failures and reports
-remain preserved. Android/security follow-up validation is in progress.
+removed successfully. All 187 functional cases have measured execution across the
+preserved initial run and explicit setup follow-ups: **136 PASS, 30 FAIL,
+21 NEEDS_DECISION**. Backend: 119/10/18; Flutter: 15/14/3; Android: 2/6/0.
+Retained sanity: 48/48 PASS; retained Flutter: 33/33 PASS. The fresh Android retry
+executed the three prior driver startup errors using a four-core / 4 GB AVD;
+behavioral failures remain unchanged.
+
+Security completed all 819 media/data/discovery executions; live Cloudinary
+completed all 34 cases in the user's isolated test cloud. Original observations
+remain observations. Runtime cleanup PASS. These are measured results across
+separate attempts, with exact report references in
+`docs/developer-qa-evidence/2026-10-18-local-parity/local-execution.json`.
+The original failed full report remains preserved; this summary is not a
+submission or release pass certificate. Read `VOCLE_LOCAL_VALIDATION_RESULTS.md`
+for the concise result table and review report.
