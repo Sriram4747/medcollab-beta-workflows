@@ -11,10 +11,33 @@ passed explicitly into that run instead of creating a separate d-* output and
 copying it later. Existing evidence cannot be overwritten. A latest-full-run
 pointer identifies the current full invocation independently of tooling checks.
 
-Next: execute the original 147 backend, 32 Flutter and eight Android cases together
-against the resolved committed source, investigate environment errors, and record
-the actual single-invocation result and cleanup in its own folder. No earlier
-case outcomes will be imported into this run.
+Completed the original 147 backend, 32 Flutter and eight Android cases together
+against source/harness `ef2c295e4dd2181f1d7d233d96faa7cd7093c5f4`.
+The fresh invocation ran from 09:58:50 to 10:26:55 UTC. All **187 executed**:
+**135 PASS, 31 FAIL, 21 NEEDS_DECISION, zero ERROR/BLOCKED/SKIP**. Backend:
+119/10/18; Flutter: 15/14/3; Android: 1/7/0. The native resume case initially
+emitted PASS, then failed on a subsequent application exception; its original
+runner's final FAIL is preserved. No old case outcomes were imported.
+
+All output is in
+`test-results/full-187/2026-10-18T09-58-50Z-17dfb426/`. The root dashboard has
+187 rows; the supporting combined report includes tooling and unselected optional
+coverage separately. All 187 statuses were checked against 71 original report
+files. JSON, embedded dashboard data and JUnit agree. Existing offline Chromium
+checks passed for all IDs, charts, filters, download links and inert hostile text.
+Original provenance and cleanup PASS. Private WSL guest, emulator, temporary
+session and browser profile are independently verified absent.
+
+This invocation also passed 15 original CI/native contracts, 41 workflow/reporting
+contracts, 25 Python contracts, retained sanity 48/48, retained Flutter 33/33 and
+Gitleaks (244 commits; zero findings). Independent GitHub integration run
+39117439256 succeeded on Windows, Ubuntu and visual reporting. Compact checksums
+and original result references are saved in
+`docs/developer-qa-evidence/2026-10-18-local-parity/single-invocation.json`.
+The earlier 136/30/21 combined review remains historical; this fresh run's
+135/31/21 is the current measured result. No application behavior or assertion
+was changed. Setup needs no further fix for these 187 cases; application failures
+and undecided expectations remain for QA/product review.
 
 ## Phase 1: audit (2026-10-11)
 

@@ -48,9 +48,10 @@ def run_session(args):
         raise RuntimeError("Use the existing guarded Cloudinary workflow in GitHub Actions; the local launcher requires a developer terminal.")
     if not args.offline_check and not sys.stdin.isatty():
         raise RuntimeError("Run this command in your own terminal for hidden credential entry; credentials cannot be supplied in chat, arguments or files.")
-    output = (args.output or ROOT / "tests/developer-workflow/output" / (
-        "cloudinary-" + datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ") + "-" + uuid.uuid4().hex[:8])).resolve()
+    output = (args.output or ROOT / "test-results/cloudinary" / (
+        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ") + "-" + uuid.uuid4().hex[:8])).resolve()
     output.mkdir(parents=True, exist_ok=False)
+    print("Reports for this invocation: " + str(output), flush=True)
     state = {"sourceSha": args.commit, "executionMode": "local", "status": "ERROR", "cleanup": "NOT_STARTED", "providerExecuted": False}
     scratch = None
     setup = None

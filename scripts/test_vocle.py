@@ -296,7 +296,10 @@ def run_session(args):
                 state.update(functionalExecuted=functional["executed"], functionalCounts=functional["counts"])
                 print(f"Functional cases executed: {functional['executed']}/{functional['registered']}; " + ", ".join(f"{key}={value}" for key, value in functional["counts"].items()), flush=True)
             blockers = Counter(row.get("exclusion") or row.get("error") or row["id"] for row in report["results"] if row["required"] and row["status"] == "BLOCKED")
-            print("Results: " + ", ".join(f"{status}={count}" for status, count in state["counts"].items()), flush=True)
+            print("All report rows (functional, tooling and optional coverage): " + ", ".join(f"{status}={count}" for status, count in state["counts"].items()), flush=True)
+            optional = [row["id"] for row in report["results"] if not row["required"] and row["status"] == "BLOCKED"]
+            if optional:
+                print("Optional coverage not executed: " + ", ".join(optional), flush=True)
             for reason, count in blockers.items():
                 print(f"Required coverage blocked ({count}): {reason}", flush=True)
         else:

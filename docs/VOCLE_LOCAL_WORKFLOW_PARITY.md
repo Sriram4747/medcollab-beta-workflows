@@ -3,8 +3,8 @@
 ## Current report location
 
 New runs are stored under repository-root `test-results/`, separated by scope:
-`full-187/<UTC timestamp>-<id>/`, `functional-179/<timestamp>-<id>/`, `tooling/`
-or `security/`. A tooling run cannot replace the full-run location.
+`full-187/<UTC timestamp>-<id>/`, `functional-179/<timestamp>-<id>/`, `tooling/`,
+`security/` or `cloudinary/`. A tooling run cannot replace the full-run location.
 `test-results/LATEST_FULL_RUN.txt` points to the latest 187-case invocation.
 
 Each full run has its own top-level `vocle-regression-dashboard.html` containing
@@ -23,7 +23,14 @@ the 187. Repeated security catalog IDs across suites retain their original
 
 ## One command for a committed revision
 
-Run in the testing fork's repository root, in PowerShell:
+Run the 187 functional cases and CI tooling checks in the testing fork's
+repository root, in PowerShell:
+
+```powershell
+python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --android --ci-checks
+```
+
+To include the additional isolated security suites as well:
 
 ```powershell
 python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --all
@@ -109,7 +116,9 @@ GitHub environment identity. The existing hosted repository/ref/event/workflow
 restrictions still apply in hosted mode. The provider assertions, network
 allowlist, manifests and resource boundaries are reused.
 
-Reports are under `tests/developer-workflow/output/cloudinary-*/`. If cleanup is
+Standalone reports are under `test-results/cloudinary/<UTC timestamp>-<id>/`.
+When selected through the main launcher, they stay inside that invocation's
+folder. If cleanup is
 unproven, retry the recorded resource journal with the same cloud and source:
 
 ```powershell
@@ -128,30 +137,32 @@ python .\scripts\test_vocle.py --source . --commit (git rev-parse HEAD) --profil
 
 ## Reports
 
-Each run prints its new report directory under
-`tests/developer-workflow/output/python-*/`. Open `local-session.md` and
-`evidence/detailed/vocle-regression-dashboard.html`. Reports bind source/harness
+Each run prints its new report directory under repository-root `test-results/`.
+For all 187 functional cases, open the folder named in
+`test-results/LATEST_FULL_RUN.txt`, then open its top-level
+`vocle-regression-dashboard.html`. Its `functional-summary.json` records actual
+execution counts; `local-session.md` records environment and cleanup. The
+`evidence/detailed/` dashboard includes supporting checks as well. Reports bind source/harness
 fingerprints, original IDs, outcome classifications and cleanup. Application
 failures and undecided requirements remain red; setup completion is not a full
 application PASS. GitHub still independently validates submitted commits.
 
 ## Validation status
 
-After the October 18 reboot, the actual private WSL engine started. Validation
-found and corrected native Docker argument transport, Windows executable lookup
-and slow backend imports across Windows mounts. A fresh Android AVD booted and was
-removed successfully. All 187 functional cases have measured execution across the
-preserved initial run and explicit setup follow-ups: **136 PASS, 30 FAIL,
-21 NEEDS_DECISION**. Backend: 119/10/18; Flutter: 15/14/3; Android: 2/6/0.
-Retained sanity: 48/48 PASS; retained Flutter: 33/33 PASS. The fresh Android retry
-executed the three prior driver startup errors using a four-core / 4 GB AVD;
-behavioral failures remain unchanged.
+The fresh single invocation
+`test-results/full-187/2026-10-18T09-58-50Z-17dfb426/` executed **187/187**:
+**135 PASS, 31 FAIL, 21 NEEDS_DECISION, zero ERROR/BLOCKED/SKIP**. Source and
+harness: `ef2c295e4dd2181f1d7d233d96faa7cd7093c5f4`. Backend: 119/10/18;
+Flutter: 15/14/3; Android: 1/7/0. Retained sanity: 48/48 PASS; retained Flutter:
+33/33 PASS. Original assertions were reused. There were no environment errors in
+these 187 cases. Original result fidelity, offline browser rendering, provenance
+and disposable cleanup all verified PASS. See
+`docs/developer-qa-evidence/2026-10-18-local-parity/single-invocation.json`.
 
-Security completed all 819 media/data/discovery executions; live Cloudinary
+Earlier separate security validation completed all 819 media/data/discovery executions; live Cloudinary
 completed all 34 cases in the user's isolated test cloud. Original observations
-remain observations. Runtime cleanup PASS. These are measured results across
-separate attempts, with exact report references in
+remain observations. Runtime cleanup PASS. Those historical results and the
+earlier combined functional review retain their exact report references in
 `docs/developer-qa-evidence/2026-10-18-local-parity/local-execution.json`.
-The original failed full report remains preserved; this summary is not a
-submission or release pass certificate. Read `VOCLE_LOCAL_VALIDATION_RESULTS.md`
-for the concise result table and review report.
+The application gate remains FAIL. Read `VOCLE_LOCAL_VALIDATION_RESULTS.md`
+for the latest single-invocation result table and dashboard location.

@@ -8,7 +8,7 @@ import { generate } from './report.mjs';
 
 const browser = process.argv[2] || (existsSync('C:/Program Files/Google/Chrome/Application/chrome.exe') ? 'C:/Program Files/Google/Chrome/Application/chrome.exe' : 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe');
 if (!existsSync(browser)) throw new Error('Pass the path to a compatible Chromium/Chrome/Edge binary');
-const output = resolve('tests/reporting/output/browser-check');
+const output = resolve(process.argv[4] || 'tests/reporting/output/browser-check');
 await mkdir(output,{recursive:true});
 const report=process.argv[3] ? JSON.parse(await readFile(process.argv[3],'utf8')) : (await generate({input:'docs/functional-regression-evidence/upstream-da2baff-batch5-local-full-147.json',suite:'backend',output})).report;
 const caseCount=report.results.length;
