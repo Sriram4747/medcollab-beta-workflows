@@ -78,3 +78,11 @@ All 54 new cases contain executable assertions, are registered in the existing c
 The user's original checkout, its branch/remotes and untracked files remain untouched. Both remote master branches remain unchanged; upstream is strictly read-only. No PR, deployment, hosted provider workflow or production operation was performed.
 
 Exact next action: review the temporary branch and the five failures; decide NDL-D1 before implementing an archival-expansion policy. Application fixes and any PR creation require a separate request. Remaining platform limits: component/widget coverage uses controlled repositories/HTTP/socket inputs; backend coverage uses real Express and disposable MongoDB; no new real-device/iOS journey execution. This is broad source-based regression coverage, not a claim of exhaustive input combinations or 241 passing cases.
+
+## Whole-catalog local follow-up — in progress
+
+User requested all 241 cases locally and any additional test fixes on the same temporary branch. Started all177 backend cases (including the retained48), all56 Flutter catalog cases, retained Flutter tests and all8 LOCAL_ONLY Android cases. Isolated Flutter3.29.3 and disposable Mongo7.0.14 remain in use.
+
+Initial Windows sandbox attempt could not launch MongoDB (fassert) and Flutter child compilation stalled; these attempts are environmental evidence, not application verdicts. Host-access reruns resolve these restrictions. The initial host journey run exposed missing synthetic fixture labels J4A/J4B before its behavioral assertions. Added dedicated unique phone fixtures without changing the journey assertions; unknown fixture errors now classify ERROR rather than application FAIL. Two harness contracts verify all literal suite identity references and the ERROR/FAIL distinction.
+
+The device launcher uses a new disposable AVD, a dedicated com.vocle.regression package and PID/serial-scoped cleanup. It does not invoke existing launchers that globally terminate shared Java/Dart/emulator processes. Full execution results and final evidence are pending; this follow-up is not complete yet.
