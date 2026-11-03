@@ -49,7 +49,10 @@ export async function main(args = process.argv.slice(2)) {
     { tier: 'F', rows: flutter.cases.map(row => ({ ...row, executionSourceSha: flutter.source.sha, executionHarnessSha: flutter.harnessSha })) },
     { tier: 'D', rows: device.cases.map(row => ({ ...row, executionMode: 'LOCAL_ONLY', executionSourceSha: device.sourceSha, executionHarnessSha: device.harnessSha })) },
   ];
-  const baseline = '4c01dc24247aa95a73e286a2b42c7f2f81257c7a';
+  // Default to this run's application snapshot so future developer fixes can
+  // be tested. An explicit historical baseline still requires identical trees.
+  const baseline = process.env.VOCLE_APPLICATION_BASELINE_SHA || lanes[0].rows[0].executionSourceSha;
+  assert.match(baseline, /^[a-f0-9]{40}$/);
   const repo = resolve(harnessRoot, '../..');
   const git = (...args) => execFileSync('git', ['-C', repo, ...args], { encoding: 'utf8', windowsHide: true }).trim();
   const appPaths = ['medcollab-backend/src', 'medcollab-backend/package.json', 'medcollab-backend/package-lock.json', 'medcollab-app/lib', 'medcollab-app/pubspec.yaml', 'medcollab-app/pubspec.lock'];
