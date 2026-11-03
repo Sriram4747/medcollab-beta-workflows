@@ -147,3 +147,8 @@ npm.cmd test --prefix tests/functional-regression
 Additional test changes: **345b679** (fixtures/classification/identity contracts), **c9a1931** (full local aggregation/completeness contracts/default harness command), **618bc75** (use the run application snapshot by default, with an optional pinned historical baseline), plus this final evidence checkpoint. Push destination remains only origin/temp/needl-functional-regression-20261103; no master push, upstream write, PR or hosted run is authorized by this follow-up.
 
 Exact next action after delivery: developer fixes for the five recorded Needl defects, plus a product decision on NDL-D1, followed by affected-case reruns and a fresh full gate. No further local environment repair is currently blocking the catalog. Original checkout, unrelated Flutter/Android user work and production systems remain untouched.
+
+
+## Manual workflow restoration follow-up
+
+Owner changed upstream default branch to master; upstream master4c01dc2 still has PR-only routine triggers. Added manual entry points and exact-commit source/provenance handling on the same temporary fork branch. All14 real Bash context guards passed154 scenarios, and82/82 relevant local contracts plus10 YAML parses passed. No application code/case assertions changed or241-case execution relabeled. See VOCLE_MANUAL_WORKFLOW_RESTORATION.md and docs/workflow-manual-evidence/2026-11-03/. Exact next action: owner review/integration into upstream master, then an actual hosted manual run. No upstream push, PR, merge, workflow dispatch, settings change or production operation was performed by this session.
