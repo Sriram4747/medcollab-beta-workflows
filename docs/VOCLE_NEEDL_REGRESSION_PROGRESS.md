@@ -23,6 +23,58 @@ Catalog: **241 total = original 187 + 54 Needl cases**; B177/F56/D8; hosted233/l
 - Infrastructure contracts: 41/41 PASS. Includes catalog completeness, report normalization/provenance, migration/coverage and developer policies; Windows CRLF handling and sandbox-only Git fixture permissions repaired.
 - NDL-D1 remains NEEDS_DECISION; Q1–Q14 founder decisions unchanged.
 
-## Current checkpoint
+## Final executed evidence
 
-Implementation checkpoint awaiting final committed-harness execution. Exact next action: commit the test-only implementation, run new backend and full Flutter functional cases against that revision, preserve genuine failures, generate sanitized structured/detailed reports and record actual counts. Then commit evidence/documentation and push only the temporary fork branch. No claim of complete/passing device or real-provider coverage.
+Tested implementation revision: **4765df8b89912dcb48f377fc184f83041f0decc0**. Application source trees and dependency lockfile Git objects are identical to upstream baseline **4c01dc24247aa95a73e286a2b42c7f2f81257c7a**. Upstream master rechecked unchanged before delivery. Evidence/documentation commits are later than the tested harness and do not relabel the execution revision.
+
+| Scope | Executed | PASS | FAIL | NEEDS_DECISION | ERROR/BLOCKED/SKIP |
+| --- | ---: | ---: | ---: | ---: | --- |
+| New Needl backend FR-NDL-01..30 | 30 | 27 | 2 | 1 | 0/0/0 |
+| New Needl Flutter FR-NDL-31..54 | 24 | 21 | 3 | 0 | 0/0/0 |
+| Combined new Needl | 54 | 48 | 5 | 1 | 0/0/0 |
+| Full Flutter catalog, including new Needl | 56 | 53 | 3 | 0 | 0/0/0 |
+| Existing unchanged backend conversations/threads | 13 | 13 | 0 | 0 | 0/0/0 |
+| Infrastructure/reporting contracts | 41 | 41 | 0 | 0 | 0/0/0 |
+
+The scopes overlap: do not add the new Flutter row to the full Flutter row. The 13 related existing backend cases ran at cb8c5fc before the final badge/search strengthening; their source and harness revisions remain in their records. The full 177-backend/241-case catalog was not executed; the 48 retained sanity cases were preserved, not rerun as a complete suite. Android/iOS and real-provider execution are not claimed.
+
+Observed application failures preserved:
+
+- **FR-NDL-28**: concurrent expansion does not return a usable successful response for both intents. The controller's separate find/create path is a likely race location, not an independently proven root cause.
+- **FR-NDL-29**: a deliberately interrupted MongoDB history copy leaves a destination that is reused on retry with zero copied messages, although one source message was requested. The fixture removes its temporary unique index before retry; no application source is patched.
+- **FR-NDL-39**: an old name-search response replaces the newer result. The test explicitly proves Doctor Z was visible before completing the older response, then verifies it must remain.
+- **FR-NDL-50**: successful add-people submission uses the modal context with `GoRouterState.of`, raising “There is no GoRouterState above the current context” instead of opening the returned Needl.
+- **FR-NDL-53**: the actual members sheet produces a RenderFlex bottom overflow (91 px at the recorded 1200×1800 logical test surface). Member count, self-first ordering and presence checks execute; rendering failure remains FAIL.
+
+**NDL-D1**: archived conversation detail intentionally permits authorized historical reading. Whether archived Needls may be expanded is unresolved. FR-NDL-10 verifies safe behavior, records HTTP 200 for expansion on this source, and remains NEEDS_DECISION. No founder/developer approval was invented.
+
+All 30 final backend modules confirmed stopped backend/MongoDB and removed runtime directories. No production services or provider delivery were used. The unchanged lockfile was successfully used with Flutter3.29.3; no application source or dependency fixes were made. Windows PowerShell UTF-16 reporter stdout was losslessly converted to UTF-8 before hashing/aggregation. The Node migration contract's CRLF parser and local temporary-Git fixture sandbox permissions were repaired as harness/environment issues.
+
+## Reports and reproducible commands
+
+Committed evidence: `docs/needl-regression-evidence/2026-11-03-4765df8/`. Includes the five existing visual/detailed/JSON/JUnit/summary formats, full Flutter results/provenance, backend module and related-case records, exact input hashes, source-tree/cleanup verification, 41-contract output and offline Chrome dashboard receipt. The dashboard's filters/charts/drill-down and safe offline rendering PASS. Raw Flutter NDJSON and backend logs remain in ignored `test-results/`; their original local paths/checksums are recorded. The checked-in bundle contains sanitized structured evidence rather than provider inboxes or credentials.
+
+Example commands from this checkout (use a compatible Flutter3.29.3 path):
+
+```powershell
+node tests/functional-regression/scripts/validate-catalog.mjs
+npm.cmd ci --ignore-scripts --prefix medcollab-backend
+npm.cmd ci --ignore-scripts --prefix tests/sanity
+$env:VOCLE_OUTPUT_DIR = "$PWD/test-results/needl-backend"
+node tests/functional-regression/suites/needl.mjs
+# From medcollab-app; capture JSON using UTF-8 when invoking in Windows PowerShell:
+flutter test --no-pub --reporter json test/functional_regression
+# Aggregate the reporter using a runner-owned provenance JSON bound to event checksum and source SHA:
+node tests/functional-regression/scripts/aggregate-flutter.mjs EVENTS_NDJSON FLUTTER_REPORT_BASE RUNNER_PROVENANCE_JSON
+node tests/functional-regression/scripts/report-needl.mjs BACKEND_OUTPUT_DIR FLUTTER_REPORT_JSON REPORT_DIRECTORY
+```
+
+Nonzero exits are expected while the recorded failures/decision remain. No repeat-until-green mutation or weakened assertions are used. CI's existing full backend scheduler now includes NDL and requires 177 backend records; Flutter gates require 56. Full-suite reports declare 241 total / 233 hosted / 8 LOCAL_ONLY and cannot treat this 54-case subset as a full-suite success.
+
+## Delivery and next action
+
+All 54 new cases contain executable assertions, are registered in the existing catalog, and were executed locally. AGENTS.md updated. Implementation commits cb8c5fc and 4765df8 plus the final evidence checkpoint are pushed only to **origin/temp/needl-functional-regression-20261103**. Find the final evidence commit with `git log -1 --format=%H -- docs/VOCLE_NEEDL_REGRESSION_PROGRESS.md`.
+
+The user's original checkout, its branch/remotes and untracked files remain untouched. Both remote master branches remain unchanged; upstream is strictly read-only. No PR, deployment, hosted provider workflow or production operation was performed.
+
+Exact next action: review the temporary branch and the five failures; decide NDL-D1 before implementing an archival-expansion policy. Application fixes and any PR creation require a separate request. Remaining platform limits: component/widget coverage uses controlled repositories/HTTP/socket inputs; backend coverage uses real Express and disposable MongoDB; no new real-device/iOS journey execution. This is broad source-based regression coverage, not a claim of exhaustive input combinations or 241 passing cases.
