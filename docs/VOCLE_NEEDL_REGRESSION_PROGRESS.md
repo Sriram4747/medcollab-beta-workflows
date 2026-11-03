@@ -1,5 +1,7 @@
 # Needl functional regression expansion
 
+**Latest status:** the whole-catalog follow-up below executed all241 locally: 235 PASS / 5 FAIL / 1 NEEDS_DECISION. Earlier sections retain the original Needl-only checkpoint.
+
 ## Baseline and authorization — 3 November 2026
 
 - Upstream master fetched read-only: `4c01dc24247aa95a73e286a2b42c7f2f81257c7a`. User checkout already matched it, with origin pointing upstream; that checkout/untracked work was preserved.
@@ -79,10 +81,69 @@ The user's original checkout, its branch/remotes and untracked files remain unto
 
 Exact next action: review the temporary branch and the five failures; decide NDL-D1 before implementing an archival-expansion policy. Application fixes and any PR creation require a separate request. Remaining platform limits: component/widget coverage uses controlled repositories/HTTP/socket inputs; backend coverage uses real Express and disposable MongoDB; no new real-device/iOS journey execution. This is broad source-based regression coverage, not a claim of exhaustive input combinations or 241 passing cases.
 
-## Whole-catalog local follow-up — in progress
+## Whole-catalog local follow-up — completed execution, non-green verdict
 
-User requested all 241 cases locally and any additional test fixes on the same temporary branch. Started all177 backend cases (including the retained48), all56 Flutter catalog cases, retained Flutter tests and all8 LOCAL_ONLY Android cases. Isolated Flutter3.29.3 and disposable Mongo7.0.14 remain in use.
+User requested all 241 catalog cases locally and any additional test fixes on the same temporary branch. **All 241 executed: 235 PASS, 5 FAIL, 1 NEEDS_DECISION; ERROR/BLOCKED/SKIP all zero. All original 187 cases PASS.** This supersedes the earlier Needl-only checkpoint's execution limitations. The catalog remains 241; harness contracts and retained tests outside the catalog do not increase its case count.
 
-Initial Windows sandbox attempt could not launch MongoDB (fassert) and Flutter child compilation stalled; these attempts are environmental evidence, not application verdicts. Host-access reruns resolve these restrictions. The initial host journey run exposed missing synthetic fixture labels J4A/J4B before its behavioral assertions. Added dedicated unique phone fixtures without changing the journey assertions; unknown fixture errors now classify ERROR rather than application FAIL. Two harness contracts verify all literal suite identity references and the ERROR/FAIL distinction.
+| Tier | Executed | PASS | FAIL | NEEDS_DECISION | ERROR/BLOCKED/SKIP |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Backend (retained sanity included) | 177 | 174 | 2 | 1 | 0/0/0 |
+| Flutter catalog | 56 | 53 | 3 | 0 | 0/0/0 |
+| Android LOCAL_ONLY device | 8 | 8 | 0 | 0 | 0/0/0 |
+| **Entire catalog** | **241** | **235** | **5** | **1** | **0/0/0** |
 
-The device launcher uses a new disposable AVD, a dedicated com.vocle.regression package and PID/serial-scoped cleanup. It does not invoke existing launchers that globally terminate shared Java/Dart/emulator processes. Full execution results and final evidence are pending; this follow-up is not complete yet.
+Additional independent checks: **33 retained Flutter tests PASS**, **67 infrastructure/reporting contracts PASS**, default functional harness test PASS (classification self-check plus 17 contracts), and real offline Chromium dashboard PASS with all241 result rows. Deliberately supplied partial device evidence was rejected without producing a complete report. These checks are not additional catalog cases.
+
+### Failure assessment and repairs
+
+Final application failures are unchanged: FR-NDL-28 concurrent expansion responses; FR-NDL-29 incomplete history-copy recovery after a removed database fault; FR-NDL-39 stale search overwriting newer results; FR-NDL-50 add-people modal GoRouter context exception; FR-NDL-53 members-sheet layout overflow. Their assertions and application code remain unchanged. FR-NDL-10 remains NEEDS_DECISION for NDL-D1, archived Needl expansion policy; this is not classified as an application defect.
+
+Problems fixed or recovered during this execution:
+
+- Windows sandbox MongoDB startup failed (fassert), and sandbox Flutter compilation stalled before execution. Host-access runs with the same disposable services and synthetic provider interception completed. Failed initial attempts remain in ignored test-results; they are not application verdicts or final coverage.
+- FR-JRN-04 requested undefined synthetic users J4A/J4B, failing before its behavioral assertions. Added dedicated unique phone fixtures without changing journey assertions. Unknown fixtures now raise FixtureError and classify ERROR instead of application FAIL. Added a registry contract covering every literal backend identity reference and an ERROR-versus-FAIL classification guard. The **entire backend177 was rerun** after the committed repair and FR-JRN-04 PASS.
+- One Android session-restore driver attachment timed out before its test body started. The existing bounded infrastructure-only retry recovered; subsequent restoration and logged-out cold launch assertions PASS. The original failed attachment diagnostic and retry diagnostic are both retained. No assertion failure was retried. Invite startup was also slow but completed successfully without retry. Read-only VM inspection queried isolate/extension/stack metadata only; it did not resume or modify application execution.
+- New report-local-catalog.mjs verifies exact B177/F56/D8 ID sets, completion, original lane gates, cleanup and identical application/lock Git objects across lane revisions. It preserves non-pass outcomes, rejects incomplete/unexecuted evidence, and exits nonzero for this FAIL verdict. Its three contracts are included in the normal functional harness test command.
+- PowerShell reporter output was losslessly converted from UTF-16 to UTF-8 before event hashing/aggregation. Test publication uses the existing sanitizer; raw event files/logs remain local, while portable copies may have different bytes after redaction.
+
+### Exact provenance and cleanup
+
+Application baseline remains upstream master **4c01dc24247aa95a73e286a2b42c7f2f81257c7a**. Git objects for backend src/package/lock and Flutter lib/pubspec/lock match that baseline at every execution revision. There were no application functional/security/dependency changes.
+
+- Backend177 and Flutter56 final execution source/harness: **345b6797ab4fb26979a5958836cb2b76f1254999**.
+- Android8 and retained Flutter33 execution source/harness: **26118b40f388769eca30c9cb23f590379d8adf41**. The device process started before the fixture repair, and its exact revision is retained. The new J4 fixtures are irrelevant to its cases. No execution is relabeled to a later commit.
+- Combined report generator checkout: **618bc75** (full SHA in local-execution-provenance.json). This is a local complete-catalog aggregation across recorded lane revisions with identical application objects, not a hosted success marker or single-harness-revision success claim. Per-case source/harness SHAs remain in the detailed/JSON reports.
+- Runtime: isolated Flutter3.29.3 / SDK commit ea121f8859e4b13e47a8f845e4586164519588bc; MongoDB7.0.14; Node24.14.1; owned WHPX Android36.1 x86_64 emulator. Original lockfiles unchanged. iOS and real provider delivery are not claimed.
+- All **99 backend module reports** have PASS cleanup/provenance and no remaining runtime directories. Device source verification/cleanup PASS, dedicated test app uninstalled, isolated application archive workspace removed, owned emulator exited, and owned AVD plus temporary truststore removed. Shared processes and user AVDs were not stopped or reused.
+
+### Evidence and reproduction
+
+Portable evidence: **docs/needl-regression-evidence/full-241-2026-11-03/**. Combined five-format report/dashboard and local-execution-provenance.json are under combined/. Includes99 backend module records, execution inventory, full Flutter results/provenance, retained-test summary, complete Android results/coverage/JUnit/phase logs/events, cleanup receipts, contracts and offline browser receipt. Input hashes identify the original raw local inputs; sanitized copies do not claim byte identity to them.
+
+Local original outputs: test-results/full-241-final/backend, test-results/full-241-final/flutter, test-results/full-241-host/device and test-results/full-241-final/combined. The owned-emulator launcher is test-results/full-241-host/launch_device.py; it uses serial/PID ownership and does not invoke legacy wrappers that globally terminate Java/Dart/emulator processes.
+
+```powershell
+# From repository root, using a host shell that permits disposable Mongo child processes:
+$env:MONGOMS_SYSTEM_BINARY = 'C:/Users/delll/AndroidStudioProjects/Vocle/medcollab-beta-workflows/tests/functional-regression/output/mongo-binaries/mongod-x64-win32-7.0.14.exe'
+$env:MONGOMS_VERSION = '7.0.14'
+$env:VOCLE_TARGET_DIR = $PWD.Path
+$env:VOCLE_OUTPUT_DIR = "$PWD/test-results/NEW-RUN/backend"
+$env:VOCLE_SCOPE = 'backend-all'
+node tests/functional-regression/scripts/run-backend.mjs
+# From medcollab-app, using isolated compatible Flutter3.29.3:
+flutter test --no-pub --reporter json test/functional_regression
+# Aggregate UTF-8 reporter bytes with runner-owned checksum/source provenance:
+node tests/functional-regression/scripts/aggregate-flutter.mjs EVENTS_NDJSON FLUTTER_REPORT_BASE RUNNER_PROVENANCE_JSON
+# With a fresh owned emulator, test-only package, JAVA_HOME and synthetic provider configuration:
+node tests/functional-regression/scripts/run-device.mjs --source-sha=EXACT_SHA --flutter-bin=SDK_PATH --adb-bin=ADB_PATH --emulator=OWNED_EMULATOR_SERIAL --output=NEW_DEVICE_DIR
+# Seal all three complete lanes; FAIL exit is expected until genuine failures/decision are resolved:
+# Optional: $env:VOCLE_APPLICATION_BASELINE_SHA pins a historical application snapshot.
+node tests/functional-regression/scripts/report-local-catalog.mjs BACKEND_DIR FLUTTER_REPORT_JSON DEVICE_DIR REPORT_DIR
+npm.cmd test --prefix tests/functional-regression
+```
+
+### Delivery and exact next action
+
+Additional test changes: **345b679** (fixtures/classification/identity contracts), **c9a1931** (full local aggregation/completeness contracts/default harness command), **618bc75** (use the run application snapshot by default, with an optional pinned historical baseline), plus this final evidence checkpoint. Push destination remains only origin/temp/needl-functional-regression-20261103; no master push, upstream write, PR or hosted run is authorized by this follow-up.
+
+Exact next action after delivery: developer fixes for the five recorded Needl defects, plus a product decision on NDL-D1, followed by affected-case reruns and a fresh full gate. No further local environment repair is currently blocking the catalog. Original checkout, unrelated Flutter/Android user work and production systems remain untouched.
