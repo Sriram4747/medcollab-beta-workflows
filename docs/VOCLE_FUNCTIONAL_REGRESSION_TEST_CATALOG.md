@@ -480,7 +480,7 @@ Sources: backend channels routes/controller, channelAccess, knownUsers, messagin
 | FR-NDL-33 | Use legacy creation alias only for not-found | 404 triggers exactly one alias call; validation/forbidden/server failures propagate without fallback mutations | F/P1 | NEW |
 | FR-NDL-34 | Serialize all history modes and device midnight | All/today/none payloads preserved; only today includes UTC ISO representing local midnight; returned group parsed | F/P1 | NEW |
 | FR-NDL-35 | Parse list detail member and rename contracts | Correct routes/bodies and typed results; malformed data raises a client error, never fabricated empty success | F/P1 | NEW |
-| FR-NDL-36 | Separate Needl tab from Direct and space channels | Only group DMs rendered under Needl with correct group identity, count and draft preview; 1:1 stays Direct | F/P0 | NEW |
+| FR-NDL-36 | Separate Needl tab from Direct and space channels | Only group DMs rendered under Needl with correct group identity, member count, draft preview and per-conversation unread badge; 1:1 stays Direct | F/P0 | NEW |
 | FR-NDL-37 | Show Needl empty and error states with recovery | Empty create CTA navigates to Start DM; repository failure shows error; refresh success restores correct group | F/P0 | NEW |
 | FR-NDL-38 | Preload only distinct Vocle colleague suggestions | Self/empty IDs excluded; repeated colleagues deduplicated; no device address-book dependency | F/P1 | NEW |
 | FR-NDL-39 | Debounce name search and discard stale responses | Two-character Start DM query executes after controlled debounce; newer query results survive older response completion | F/P1 | NEW |

@@ -285,7 +285,7 @@
       "id": "FR-NDL-36",
       "title": "Separate Needl tab from Direct and space channels",
       "actions": "Separate Needl tab from Direct and space channels",
-      "expected": "Only group DMs rendered under Needl with correct group identity, count and draft preview; 1:1 stays Direct",
+      "expected": "Only group DMs rendered under Needl with correct group identity, member count, draft preview and per-conversation unread badge; 1:1 stays Direct",
       "tier": "F",
       "priority": "P0"
     },

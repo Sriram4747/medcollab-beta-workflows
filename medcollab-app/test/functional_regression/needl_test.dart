@@ -37,6 +37,7 @@ import 'package:medcollab_app/features/shell/presentation/cubit/nav_badges_cubit
 import 'package:medcollab_app/features/spaces/data/models/channel_model.dart';
 import 'package:medcollab_app/features/spaces/data/repositories/space_repository.dart';
 import 'package:medcollab_app/shared/presentation/widgets/app_avatar.dart';
+import 'package:medcollab_app/shared/presentation/widgets/dm_row.dart';
 import 'fakes/chat_fakes.dart';
 
 Map<String, dynamic> user(String id) =>
@@ -376,6 +377,27 @@ void main() {
       },
       {...group('space'), 'spaceId': 's', 'name': 'Space channel'}
     ];
+    transport.handler = (r) => r.path.endsWith('/notifications')
+        ? reply({
+            'notifications': [
+              for (var i = 0; i < 2; i++)
+                {
+                  '_id': 'needl-notification-$i',
+                  'type': 'new_message',
+                  'read': false,
+                  'metadata': {'channelId': 'g1'}
+                },
+              {
+                '_id': 'other-chat',
+                'type': 'new_message',
+                'read': false,
+                'metadata': {'channelId': 'pair'}
+              }
+            ],
+            'hasMore': false,
+            'unreadCount': 3
+          })
+        : null;
     await AppDependencies.instance.draftMessageService
         .saveDraft('g1', 'Synthetic draft');
     await mount(t, const MessagesHubPage());
@@ -386,6 +408,8 @@ void main() {
       expect(find.byKey(ValueKey('needl-$id')), findsNothing);
     expect(find.textContaining('3 people'), findsOneWidget);
     expect(find.textContaining('Draft'), findsWidgets);
+    expect(
+        t.widget<DMRow>(find.byKey(const ValueKey('needl-g1'))).unreadCount, 2);
   });
   testWidgets('FR-NDL-37 empty Needl create and failed load recovery',
       (t) async {
@@ -444,7 +468,10 @@ void main() {
     await t.pump(const Duration(milliseconds: 2));
     await t.enterText(input, 'Ze');
     await t.pump(const Duration(milliseconds: 210));
-    await t.pump();
+    await t.pumpAndSettle();
+    expect(find.text('Doctor Z'), findsOneWidget,
+        reason:
+            'New query must already be displayed before completing the older response');
     old.complete(reply({
       'users': [user('B')]
     }));

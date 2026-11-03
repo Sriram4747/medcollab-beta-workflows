@@ -3953,7 +3953,7 @@
       "fixtureProfile": "F0",
       "title": "Separate Needl tab from Direct and space channels",
       "actions": "Separate Needl tab from Direct and space channels",
-      "expected": "Only group DMs rendered under Needl with correct group identity, count and draft preview; 1:1 stays Direct",
+      "expected": "Only group DMs rendered under Needl with correct group identity, member count, draft preview and per-conversation unread badge; 1:1 stays Direct",
       "sourceReference": "25. Needl group conversations — latest master expansion: Sources: backend channels routes/controller, channelAccess, knownUsers, messaging/socket handlers; Flutter ChannelRepository, ChannelModel, MessagesHubPage, StartDmPage, needl_manage_sheets.dart and ChannelChatPage. Baseline source 4c01dc24247aa95a73e286a2b42c7f2f81257c7a. The older Threads/Needl inbox remains separate; all original IDs and assertions are retained. Prior October manual Needl bullets are addressed here. Fixtures C/F0, synthetic only.",
       "catalogLine": 483,
       "questionIds": [],
